@@ -1,0 +1,228 @@
+package views
+
+templ About(){
+    @Header(){
+    }
+    <style>
+       body {
+        background-color: #1e1e1e; 
+        color: #e0e0e0; 
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    .feature-card {
+        background: rgba(44, 44, 44, 0.6);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #4a54f1;
+    }
+    </style>
+<div class="text-white py-12">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h1 class="text-4xl font-bold mb-6">About CypherGoat</h1>
+
+      <p class="text-lg text-gray-300 mb-8">
+        Swap your crypto at the best rate on the market. Fast, Private, Open source!
+      </p>
+
+      <div class="mb-12">
+        <h2 class="text-3xl font-bold mb-6">What is CypherGoat?</h2>
+        <p class="text-lg text-gray-300 mb-6">
+          CypherGoat is a cryptocurrency exchange aggregator designed to help you find the best exchange rates across multiple platforms. Unlike traditional exchanges, we don't hold your funds - we simply connect you to the best rates available.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-12">
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3 class="text-xl font-bold mb-2">Privacy-Focused</h3>
+          <p class="text-gray-300">No KYC required, no personal data stored. Your privacy matters to us.</p>
+        </div>
+
+         <div class="feature-card">
+          <div class="feature-icon">🔐</div>
+          <h3 class="text-xl font-bold mb-2">Non-Custodial</h3>
+          <p class="text-gray-300">We never hold your funds. Swaps occur directly between you and the exchange, eliminating custody risk.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="text-xl font-bold mb-2">Lightning Fast</h3>
+          <p class="text-gray-300">Get quotes instantly and complete swaps in minutes, not hours.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3 class="text-xl font-bold mb-2">Best Rates</h3>
+          <p class="text-gray-300">Compare rates across multiple exchanges to get the best deal every time.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3 class="text-xl font-bold mb-2">Transparent</h3>
+          <p class="text-gray-300">Open source code and clear fee structure with no hidden costs.</p>
+        </div>
+      </div>
+      
+      <div class="mb-12">
+        <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
+        <p class="text-lg text-gray-300 mb-6">
+          Our mission is to make cryptocurrency exchanges accessible, private, and fair for everyone. We believe in financial freedom and aim to provide tools that help users maintain control of their assets while getting the best deals possible.
+        </p>
+      </div>
+
+      <div class="mb-12">
+        <h2 class="text-3xl font-bold mb-6">Our Partners</h2>
+        <p class="text-lg text-gray-300 mb-6">
+          We work with trusted exchange partners including StealthEx, ChangeNOW, Changehero, FixedFloat, and many more to ensure you always have options for your cryptocurrency swaps.
+        </p>
+      </div>
+
+      <p class="text-lg text-gray-300 mb-6"> Developed by <a href="https://4rkal.com" class="text-blue-400 hover:text-blue-500">4rkal</a></p>
+
+    </div>
+  </div>
+  <div class="text-white py-12">
+</div>
+@Footer(){}
+}
+
+templ Contact() {
+    @Header(){}
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .contact-method {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            margin: 2.5rem 0;
+        }
+        
+        .contact-button {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-right: 1rem;
+        }
+        
+        .contact-link {
+            color: #4a54f1;
+            transition: color 0.2s ease;
+        }
+        
+        .contact-link:hover {
+            color: #6a74ff;
+            text-decoration: underline;
+        }
+    </style>
+    
+    <div class="text-white py-12">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-6">Contact Us</h1>
+            
+            <p class="text-lg text-gray-300 mb-8">
+                Have questions about CypherGoat? We're here to help! Reach out through any of the channels below.
+            </p>
+            
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-6">Get in Touch</h2>
+                
+                <div class="max-w-2xl mx-auto mb-8">
+                    <div class="contact-method">
+                        <h3 class="text-xl font-bold mb-2">Email Support</h3>
+                        <p class="text-lg text-gray-300">
+                            <a href="mailto:support@cyphergoat.com" class="text-blue-400 hover:text-blue-500">support@cyphergoat.com</a>
+                        </p>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <h3 class="text-xl font-bold mb-2">Twitter/X</h3>
+                        <p class="text-lg text-gray-300">
+                            <a href="https://x.com/cyphergoatcom" class="text-blue-400 hover:text-blue-500">cyphergoatcom</a>
+                        </p>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <h3 class="text-xl font-bold mb-2">Telegram</h3>
+                        <p class="text-lg text-gray-300">
+                            <a href="https://t.me/cyphergoatsupport" class="text-blue-400 hover:text-blue-500">cyphergoatsupport</a>
+                        </p>
+                    </div>
+                    <div class="contact-method">
+                        <h3 class="text-xl font-bold mb-2">Signal</h3>
+                        <p class="text-lg text-gray-300">
+                            <a href="https://signal.me/#eu/JDYDkfCrShaw4HJ_T0NayoTcTuVOowaCQNk0wk5xN1W_n3WINA5Pp5qqGEPBkVnF" class="text-blue-400 hover:text-blue-500">cyphergoat.01</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-6">Report an Issue</h2>
+                
+                <p class="text-lg text-gray-300 mb-6">
+                    If you've encountered any issues while using CypherGoat, please let us know so we can fix it.
+                </p>
+                
+                <div class="mb-8">
+                    <a href="https://github.com/cyphergoat/web/issues" class="contact-button bg-blue-600 hover:bg-blue-700 text-white">
+                        Report on GitHub
+                    </a>
+                    <a href="mailto:support@cyphergoat.com" class="contact-button bg-gray-700 hover:bg-gray-800 text-white">
+                        Email Us
+                    </a>
+                </div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-6">Frequently Asked Questions</h2>
+                <p class="text-lg text-gray-300 mb-6">
+                    Before reaching out, you might find your answer in our <a href="https://cyphergoat.com/#faq-section" class="text-blue-400 hover:text-blue-500">FAQ section</a>.
+                </p>
+            </div>
+            
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-6">Response Times</h2>
+                <p class="text-lg text-gray-300 mb-6">
+                    We typically respond to all inquiries within 24-48 hours. For urgent issues, please mention "URGENT" in your subject line.
+                </p>
+            </div>
+        </div>
+    </div>
+    @Footer(){}
+}

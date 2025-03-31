@@ -1,0 +1,189 @@
+package views 
+
+import (
+    "github.com/CypherGoat/web/cmd/api"
+    "fmt"
+    "strings"
+)
+
+templ AddressForm(estimate api.Estimate, err bool){
+<style>
+    body {
+        background-color: #1c1c1c;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 1rem;
+        color: #f5f5f5;
+    }
+
+    .card {
+        max-width: 600px;
+        background: #2c2c2c;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    }
+
+    .card h2 {
+        color: #3b2dfd;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #2e2e2e;
+        color: #e0e0e0;
+        border: 1px solid #555;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input:focus {
+        border-color: #4a54f1;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+    }
+
+    .btn-primary {
+    background: linear-gradient(45deg, #00bfff, #1e90ff, #4682b4, #0000ff);
+    background-size: 400% 400%;
+    color: #fff;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    background-clip: padding-box;
+    position: relative;
+    animation: rgbAnimation 10s ease infinite;
+}
+
+    .btn-primary:hover {
+        transform: scale(1.02);
+    }
+
+    .btn-primary:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.3);
+    }
+
+    @keyframes rgbAnimation {
+        0% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+        100% { background-position: 0% 0%; }
+    }
+
+.exchange-logo {
+    height: 32px;
+    width: auto;
+    max-width: 100px;
+    object-fit: contain;
+    filter: grayscale(20%) brightness(1.1);
+}
+
+.partner-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 1.5rem;
+    background-color: #252525;
+    border-radius: 8px;
+    padding: 0.75rem;
+}
+
+.partner-label {
+    color: #a0a0a0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.partner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+</style>
+@Header(){
+    if err{
+        <div class="bg-red-500 text-white p-4 text-center">
+            <p>There was an error while creating your trade. Please check that you have entered a valid { strings.ToUpper(estimate.Network2) } address. If the issue persists try a different exchange.</p>
+        </div>
+    }
+    <div class="flex items-center justify-center min-h-screen bg-[#1c1c1c]">
+        <div class="w-[600px] bg-[#2c2c2c] rounded-2xl p-8 shadow-lg transition-shadow hover:shadow-xl text-white">
+            <div class="flex justify-center items-center gap-4 mb-6">
+                <h2 class="text-3xl font-bold text-white">Create Trade</h2>
+            </div>
+            <form class="grid gap-6" method="GET" action="/step3">
+                <input type="hidden" name="coin1" value={ estimate.Coin1 }>
+                <input type="hidden" name="coin2" value={ estimate.Coin2 }>
+                <input type="hidden" name="amount" value={ fmt.Sprintf("%f",estimate.SendAmount) }>
+                <input type="hidden" name="partner" value={ estimate.ExchangeName }>
+                <input type="hidden" name="network1" value={ estimate.Network1 }>
+                <input type="hidden" name="network2" value={ estimate.Network2 }>
+
+                <div>
+                    <label class="block text-gray-300 font-semibold mb-2">Amount</label>
+                    <p class="w-full p-3 bg-[#2e2e2e] text-gray-300 border border-gray-600 rounded-lg">{ fmt.Sprintf("%f",estimate.ReceiveAmount) }</p>
+                </div>
+
+                <div>
+                    <label for="address" class="block text-gray-300 font-semibold mb-2">Address</label>
+                    <input type="text" id="address" name="address" placeholder={ strings.ToUpper(estimate.Coin2) + " address " } required step="any"
+                        class="w-full p-3 bg-[#2e2e2e] text-gray-300 border border-gray-600 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                </div>
+
+                <button class="w-full bg-gradient-to-r from-blue-400 to-blue-700 text-white font-bold py-3 rounded-lg transition-transform transform hover:scale-105">
+                    Create Trade
+                </button>
+// <div class="partner-section">
+    // <p class="partner-label">Partner Selected</p>
+    // <div class="partner-container">
+    //     <img src={ estimate.ImageURL } alt={ estimate.ExchangeName } class="exchange-logo">
+    // </div>
+// </div>
+<div class="text-center text-gray-400 mt-4">
+                    <p>The exchange service is provided by { estimate.ExchangeName }. Creating an order confirms your agreement with the { estimate.ExchangeName } rules.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@Footer(){}
+
+}

@@ -1,0 +1,122 @@
+package views
+import (
+    "github.com/CypherGoat/web/cmd/api"
+    "math"
+    "fmt"
+    "strings"
+)
+
+script toggleQRCodeHandler(msg string) {
+  toggleQRCode(msg);
+}
+
+templ TransactionPage(transaction api.Transaction){
+    <!-- TrustBox script -->
+<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+<!-- End TrustBox script -->
+
+    @Header(){
+
+    <form action="" method="get">
+        <div class="flex items-center justify-center min-h-screen bg-[#1c1c1c] pb-4 sm:pb-0">
+            <div class="w-3/5 bg-[#2c2c2c] rounded-2xl p-4 sm:p-8 shadow-lg transition-shadow hover:shadow-xl text-white mx-auto mb-4 sm:mb-0">
+                <h2 class="text-4xl font-bold text-center text-white mb-4">{ transaction.Provider }</h2>
+                <div class="mb-4">
+                    <p class="text-gray-400 text-xl font-medium">Transaction Status:</p>
+                    <p class="text-white font-semibold text-xl">if transaction.Status == ""{
+                        Created
+                    } else{
+                        { transaction.Status }
+                    }
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400 text-xl font-medium">Send:</p>
+                    <p class="text-white text-xl font-semibold">
+                        if transaction.SendAmount == math.Floor(transaction.SendAmount) {
+                            {fmt.Sprintf("%.0f", transaction.SendAmount)}
+                        } else {
+                            {fmt.Sprintf("%f", transaction.SendAmount)}
+                        } { strings.ToUpper(transaction.Coin1)}
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400 text-xl font-medium">Receive:</p>
+                    <p class="text-white text-xl font-semibold">
+                        if transaction.EstimateAmount == math.Floor(transaction.EstimateAmount) {
+                            {fmt.Sprintf("%.0f", transaction.EstimateAmount)}
+                        } else {
+                            {fmt.Sprintf("%f", transaction.EstimateAmount)}
+                        } { strings.ToUpper(transaction.Coin2)}
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400 text-xl font-medium">Send Address:</p>
+                    <code class="text-white font-semibold break-words block bg-gray-650 p-2 rounded">{ transaction.Address }</code>
+                </div>
+                <div class="mb-4 text-center">
+                    <button id="toggleButton" type="button" onclick={ toggleQRCodeHandler(transaction.Address) } 
+                            class="text-green-400 hover:text-green-300 font-medium transition duration-300">Show QR Code</button>
+                    <br>
+                    <img id="qrcode" src="" alt="QR Code" class="mt-4 hidden mx-auto">
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400 text-xl font-medium">Exchange Link:</p>
+                    <a href={ templ.URL(transaction.Track) } class="text-blue-400 font-semibold hover:underline">
+                        { strings.ToLower(transaction.Provider) }
+                    </a>
+                </div>
+                <div class="mb-4">
+                    <p class="text-gray-400 text-xl font-medium">CypherGoat ID:</p>
+                    <p class="text-white font-semibold">{ transaction.CGID }</p>
+                </div>
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-400 to-blue-700 text-white font-bold py-3 rounded-lg transition-transform transform hover:scale-105">
+                    Refresh Status
+                </button>
+                if transaction.Done == true{
+                    <div class="my-6 border-t border-gray-700"></div>
+                    <div class="mb-6 text-center p-4 bg-gradient-to-r from-green-900/30 to-green-800/30 rounded-lg shadow-inner">
+                        <div class="inline-flex items-center justify-center bg-green-500/20 rounded-full p-3 mb-3">
+                            <i class="fas fa-check text-green-400 text-2xl"></i>
+                        </div>
+                        <p class="text-2xl font-bold text-green-400 mb-2">Transaction Complete</p>
+                        <p class="text-gray-300">Thank you for using CypherGoat</p>
+                    </div>
+
+                <div class="my-6 border-t border-gray-700"></div>
+                <!-- TrustBox widget - Review Collector -->
+                <div class="trustpilot-widget bg-[#2c2c2c] p-3 rounded-lg overflow-hidden" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="67c09c2e5186fc26ff296bcc" data-style-height="52px" data-style-width="100%" data-theme="dark">
+                  <a href="https://www.trustpilot.com/review/cyphergoat.com" target="_blank" rel="noopener">Trustpilot</a>
+                </div>
+                <!-- End TrustBox widget -->
+                }
+            </div>
+        </div>
+    </form>
+    <br/>
+
+    <script>
+        let qrCodeVisible = false;
+        function toggleQRCode(text) {
+            const img = document.getElementById('qrcode');
+            const button = document.getElementById('toggleButton');
+            if (qrCodeVisible) {
+                img.classList.add('hidden');
+                button.textContent = 'Show QR Code';
+            } else {
+                fetch('/generate?text=' + encodeURIComponent(text))
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        img.src = url;
+                        img.classList.remove('hidden');
+                        button.textContent = 'Hide QR Code';
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+            qrCodeVisible = !qrCodeVisible;
+        }
+    </script>
+}
+}

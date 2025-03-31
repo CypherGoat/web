@@ -1,0 +1,10 @@
+*_templ.go
+tmp/
+cmd/tmp/
+
+*.log
+*.tmp
+
+*.env
+.env
+

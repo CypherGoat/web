@@ -1,0 +1,107 @@
+package views
+
+templ Footer(){
+    <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-content {
+        flex-grow: 1;  
+    }
+
+    footer {
+        margin-top: auto;
+        background-color: #000000; 
+        color: #cbd5e0; 
+        padding: 2rem 0; 
+    }
+
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .footer-links {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .footer-links a {
+        color: #cbd5e0;
+        text-decoration: none;
+        transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .footer-links a:hover {
+        color: #ffffff;
+    }
+
+    .social-icons {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .social-icons a {
+        color: #cbd5e0;
+        transition: color 0.3s;
+    }
+
+    .social-icons a:hover {
+        color: #ffffff;
+    }
+
+    .footer-notice {
+        margin-top: 1rem;
+        font-size: 0.875rem;
+    }
+    </style>
+
+    <footer id="hide-on-swap">
+        <div class="footer-container">
+            <p>&copy; 2025 CypherGoat. All Rights Reserved.</p>
+
+            <div class="social-icons">
+                <a href="https://github.com/cyphergoat" target="_blank">
+                    <i class="fab fa-github fa-2x"></i>
+                </a>
+                <a href="https://x.com/cyphergoatcom" target="_blank">
+                    <i class="fab fa-twitter fa-2x"></i>
+                </a>
+                <a href="https://reddit.com/r/cyphergoat" target="_blank">
+                    <i class="fab fa-reddit fa-2x"></i>
+                </a>
+            </div>
+
+            <div class="footer-links">
+                <a href="https://cyphergoat.com/terms">
+                    <i class="fas fa-file-contract"></i> Terms of Service
+                </a>
+                <a href="https://cyphergoat.com/contact">
+                    <i class="fas fa-envelope"></i> Contact Us
+                </a>
+                <a href="https://cyphergoat.com/affiliate">
+                    <i class="fas fa-dollar"></i> Affiliate
+                </a>
+                 <a href="https://nojs.cyphergoat.com">
+                    <i class="fa-solid fa-shield-halved"></i> JS-free
+                </a>
+            </div>
+
+            <p class="footer-notice">
+                Made and hosted in the EU 🇪🇺
+            </p>
+        </div>
+    </footer>
+}

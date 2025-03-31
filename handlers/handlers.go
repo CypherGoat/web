@@ -1,0 +1,230 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package handlers
+
+import (
+	"fmt"
+	"net/http"
+	"strconv"
+	"strings"
+	"sync"
+
+	"github.com/CypherGoat/web/views"
+
+	"github.com/CypherGoat/web/cmd/api"
+
+	"github.com/labstack/echo/v4"
+)
+
+var (
+	transactions = make(map[string]api.Transaction)
+	mu           sync.Mutex
+)
+
+func IndexHandler(c echo.Context) error {
+	return views.IndexTempl().Render(c.Request().Context(), c.Response())
+}
+
+func ContactHandler(c echo.Context) error {
+	return views.Contact().Render(c.Request().Context(), c.Response())
+}
+
+func AffiliateTerms(c echo.Context) error {
+	return views.AffiliateTerms().Render(c.Request().Context(), c.Response())
+}
+
+func AboutHandler(c echo.Context) error {
+	return views.About().Render(c.Request().Context(), c.Response())
+
+}
+
+func TermsHandler(c echo.Context) error {
+	return views.Terms().Render(c.Request().Context(), c.Response())
+
+}
+
+func AffiliateHandler(c echo.Context) error {
+	return views.Affiliate().Render(c.Request().Context(), c.Response())
+}
+
+func NotFoundHandler(c echo.Context) error {
+	return views.NotFoundPage().Render(c.Request().Context(), c.Response())
+
+}
+
+type ExchangeInfo struct {
+	ImageURL  string
+	RequireIP bool
+}
+
+var exchangeInfo = map[string]ExchangeInfo{
+	"alfacash":     {"/exchanges/alfacash.svg", true},
+	"changee":      {"/exchanges/changee.svg", true},
+	"changehero":   {"/exchanges/changehero.svg", true},
+	"changenow":    {"/exchanges/changenow.svg", true},
+	"coincraddle":  {"/exchanges/coincraddle.png", true},
+	"exch.cx":      {"/exchanges/exchcx.png", false},
+	"fixedfloat":   {"/exchanges/fixedfloat-v2.svg", true},
+	"majesticbank": {"exchanges/majesticbank.png", true},
+	"nanswap":      {"/exchanges/nanswap.svg", true},
+	"simpleswap":   {"/exchanges/simpleswap.svg", true},
+	"wizardswap":   {"/exchanges/wizardswap.png", false},
+	"stealthex":    {"/exchanges/stealthex.svg", true},
+	"exolix":       {"/exchanges/exolix.png", true},
+	"swapuz":       {"/exchanges/swapuz.svg", false},
+}
+
+func EstimateHandler(c echo.Context) error {
+	coin1 := c.QueryParam("coin1")
+	coin2 := c.QueryParam("coin2")
+	amountStr := c.QueryParam("amount")
+	network1 := c.QueryParam("network1")
+	network2 := c.QueryParam("network2")
+
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "Error parsing amount")
+	}
+
+	apiEstimates, err := api.FetchEstimateFromAPI(coin1, coin2, amount, false, network1, network2)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, fmt.Sprintf("%s", err.Error()))
+	}
+	for i := range apiEstimates {
+
+		name := strings.ToLower(apiEstimates[i].ExchangeName)
+
+		if info, ok := exchangeInfo[name]; ok {
+			apiEstimates[i].ImageURL = info.ImageURL
+		} else {
+			apiEstimates[i].ImageURL = "https://example.com/images/default.png"
+		}
+	}
+
+	return views.EstimateCard(apiEstimates).Render(c.Request().Context(), c.Response())
+}
+
+func Step2Handler(c echo.Context) error {
+	coin1 := c.QueryParam("coin1")
+	coin2 := c.QueryParam("coin2")
+	network1 := c.QueryParam("network1")
+	network2 := c.QueryParam("network2")
+	amountStr := c.QueryParam("amount")
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "Error parsing amount")
+	}
+	partner := c.QueryParam("partner")
+	receiveamountStr := c.QueryParam("receiveamount")
+	receiveamount, err := strconv.ParseFloat(receiveamountStr, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "Error parsing receive amount")
+	}
+
+	var estimate api.Estimate
+	estimate.Coin1 = coin1
+	estimate.Coin2 = coin2
+	estimate.SendAmount = amount
+	estimate.ExchangeName = partner
+	estimate.ReceiveAmount = receiveamount
+	estimate.Network1 = network1
+	estimate.Network2 = network2
+
+	name := strings.ToLower(estimate.ExchangeName)
+	if info, ok := exchangeInfo[name]; ok {
+		estimate.ImageURL = info.ImageURL
+	}
+
+	return views.AddressForm(estimate, false).Render(c.Request().Context(), c.Response())
+}
+
+func Step3Handler(c echo.Context) error {
+	coin1 := c.QueryParam("coin1")
+	coin2 := c.QueryParam("coin2")
+	network1 := c.QueryParam("network1")
+	network2 := c.QueryParam("network2")
+	amountStr := c.QueryParam("amount")
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "error parsing amount")
+	}
+	partner := c.QueryParam("partner")
+	address := c.QueryParam("address")
+
+	info := api.Info{
+		IP:        "",
+		UserAgent: "",
+		LangList:  "",
+	}
+	partnerLower := strings.ToLower(partner)
+
+	if exchangeData, ok := exchangeInfo[partnerLower]; ok && exchangeData.RequireIP {
+		ip := c.RealIP()
+		userAgent := c.Request().Header.Get("User-Agent")
+		langList := c.Request().Header.Get("Accept-Language")
+
+		info = api.Info{
+			IP:        ip,
+			UserAgent: userAgent,
+			LangList:  langList,
+		}
+	}
+
+	affiliate := ""
+	affiliateCookie, err := c.Cookie("affiliate")
+	if err == nil && affiliateCookie.Value != "" {
+		affiliate = affiliateCookie.Value
+	}
+
+	err, transaction := api.CreateTradeFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info)
+	if err != nil || transaction.Id == "" {
+		var estimate api.Estimate
+		estimate.Coin1 = coin1
+		estimate.Coin2 = coin2
+		estimate.SendAmount = amount
+		estimate.ExchangeName = partner
+		estimate.ReceiveAmount = amount
+		estimate.Network1 = network1
+		estimate.Network2 = network2
+
+		return views.AddressForm(estimate, true).Render(c.Request().Context(), c.Response())
+	}
+
+	fmt.Printf("Redirecting to transaction: /transaction/%s\n", transaction.CGID)
+
+	return c.Redirect(http.StatusSeeOther, "/transaction/"+transaction.CGID)
+}
+
+func containsIgnoreCase(s, substr string) bool {
+	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
+}
+
+func GetTransactionHandler(c echo.Context) error {
+	id := c.Param("id")
+
+	err, transaction := api.GetTransactionFromAPI(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, fmt.Sprintf("error getting transaction: %v", err))
+	}
+
+	return views.TransactionPage(transaction).Render(c.Request().Context(), c.Response())
+
+}
+
+func HealthHandler(c echo.Context) error {
+	c.String(http.StatusOK, "OK")
+	return nil
+}

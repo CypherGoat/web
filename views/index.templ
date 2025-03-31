@@ -1,0 +1,851 @@
+package views
+
+templ IndexTempl() {
+    
+		@Header(){
+			
+		}
+            <style>
+.rgb-effect {
+    color: #1e90ff;
+    font-weight: 800;
+}
+
+@keyframes rgbAnimation {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #1c1c1c;
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex-grow: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.swap-form-section {
+    display: block;
+    width: 100%;
+}
+
+.container {
+    max-width: 700px;
+    height: auto;
+    margin: 0 auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
+
+.container2 {
+    max-width:90%;
+    height: auto;
+    margin: 2rem auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
+
+.container3 {
+    max-width:70%;
+    height: auto;
+    margin: 2rem auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
+
+    .card {
+        background: #2c2c2c;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    }
+
+    .card h2 {
+        color: #ffffff;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .input-group .form-label {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 150px;
+        padding: 0.75rem;
+        background-color: #2e2e2e;
+        color: #e0e0e0;
+        border: 1px solid #555;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input:focus {
+        border-color: #4a54f1;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+    }
+
+    .form-input:focus-visible {
+    border-color: #4a54f1;
+    box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+}
+
+    .searchable-dropdown {
+        position: relative;
+        flex: 1;
+    }
+.searchable-dropdown input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #555;
+    border-radius: 12px;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-size: 20px 20px;
+    background-position: left 10px center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+    .searchable-dropdown input:focus {
+        border-color: #4a54f1;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+    }
+
+    .dropdown-options {
+        position: absolute;
+        top: calc(100% + 0.25rem);
+        left: 0;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        background: #2e2e2e;
+        border: 1px solid #555;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        display: none;
+        z-index: 10;
+    }
+
+    .dropdown-options div {
+        padding: 0.75rem;
+        display: flex;
+        align-items: center;
+        color: #e0e0e0;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.2s ease;
+    }
+
+    .dropdown-options div:hover {
+        background: #444;
+    }
+
+    .dropdown-options img {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.75rem;
+    }
+
+    .btn-primary {
+    background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
+    background-size: 400% 400%;
+    color: #ffffff;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    background-clip: padding-box;
+    position: relative;
+    animation: rgbAnimation 6s ease infinite;
+    text-shadow: 1px 1px 4px rgba(30, 144, 255, 0.7);
+}
+
+    .btn-primary:hover {
+        transform: scale(1.02);
+    }
+
+    .btn-primary:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.3);
+    }
+
+    .form-input.read-only {
+        background-color: #1c1c1c;
+        color: #888;
+        cursor: not-allowed;
+    }
+
+    @keyframes rgbAnimation {
+        0% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+        100% { background-position: 0% 0%; }
+    }
+
+    .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 4px solid #3498db;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .spinner-hidden {
+        display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .hidden {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .dropdown-options {
+        position: fixed;
+        top: 10%;
+                left: 50%;
+        width: 90%;
+        height: 80vh;
+        max-height: none;
+        overflow-y: scroll;
+        z-index: 100;
+        display: none;
+        transform: translateX(-50%);
+    }
+
+    .dropdown-options div {
+        font-size: 1.25rem;
+        padding: 1rem;
+        border-bottom: 1px solid #444;
+    }
+
+    .input-group {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .input-group > div:first-child {
+        width: 30%;
+    }
+
+    .input-group > div:last-child {
+        width: 70%;
+    }
+
+    .form-input#amount,
+    .form-input#estimated-amount {
+        width: 100%;
+    }
+
+    .searchable-dropdown {
+        width: 100%;
+    }
+
+    .form-input#dropdown-search-send,
+    .form-input#dropdown-search-receive {
+        width: 100%;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    #scroll-to-faq-container {
+        position: relative;
+        bottom: auto;
+        left: 50%;
+        transform: translateY(-50%);
+        margin-top: 5rem;
+    }
+}
+
+.coin-selection-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 5%;
+    z-index: 10000;
+}
+
+.modal-content {
+    background: #2e2e2e;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #555;
+    border-radius: 12px;
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+    font-size: 1rem;
+        max-height: 90vh;
+    margin-bottom: 1rem;
+}
+
+.modal-options {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.modal-options div {
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s ease;
+}
+
+.modal-options div:hover {
+    background: #444;
+}
+
+.modal-options img {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.75rem;
+}
+
+
+    </style>
+     <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
+    <p id="error-text"></p>
+</div>
+<div class="pt-0 container mx-auto p-7 min-h-screen">
+    <div class="text-center">
+        <h1 class="text-6xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 inline-block rgb-effect leading-tight">
+            CypherGoat
+        </h1>
+        <p class="text-gray-300 mt-4 text-xl">
+            Find the <span class="font-semibold rgb-effect">beeeeee-st</span> rates for your crypto swaps!
+        </p>
+    </div>
+
+   
+
+    <div class="swap-form-section mt-6">
+        <div class="container">
+            <div class="card">
+                <h1 class="hidden">Swap</h1>
+               <form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
+    <div class="input-group">
+        <div>
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="0.00">
+        </div>
+        <div class="searchable-dropdown">
+            <label class="form-label">Send Coin</label>
+            <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
+            <div class="dropdown-options" id="dropdown-options-send"></div>
+            <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div>
+            <label for="estimated-amount" class="form-label">Estimated</label>
+            <input type="text" id="estimated-amount" class="form-input read-only" placeholder="0.00" readonly>
+        </div>
+        <div class="searchable-dropdown">
+            <label class="form-label">Receive Coin</label>
+            <input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off">
+            <div class="dropdown-options" id="dropdown-options-receive"></div>
+            <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
+        </div>
+    </div>
+
+    <input type="hidden" id="network-send" name="network1">
+    <input type="hidden" id="network-receive" name="network2">
+    <button type="submit" class="btn-primary">Swap</button>
+</form>
+
+            </div>
+        </div>
+
+       <div id="loading-spinner" class="spinner spinner-hidden"></div>
+<div id="estimate-container"></div>
+    </div>
+
+    <div class="hide-on-swap text-center mt-8 fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50" id="scroll-to-faq-container">
+    <button onclick="scrollToFAQ()" class="text-sm font-semibold text-white bg-transparent hover:underline focus:outline-none">
+        Scroll to learn more
+    </button>
+    <a href="#faq-section" class="group mt-2 block">
+        <div class="relative inline-block">
+            <div class="w-10 h-10 rounded-full bg-gray-700 flex justify-center items-center group-hover:bg-gray-600 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="text-white w-6 h-6 group-hover:translate-y-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        </div>
+    </a>
+</div>
+
+</div>
+
+<div id="faq-section" class="py-12 mt-16">
+    <div class="container2 mx-auto flex flex-wrap lg:flex-nowrap justify-between">
+        <div class="w-full lg:w-2/4 px-8">
+            <h2 class="text-4xl font-extrabold mb-6">Frequently Asked Questions</h2>
+
+            <div class="faq-item mb-6">
+                <h3 class="text-xl font-semibold">What is CypherGoat?</h3>
+                <p class="text-gray-300 mt-2">CypherGoat is a platform that provides the best rates for crypto swaps. We find the best rate from our partnered exchanges.</p>
+            </div>
+
+            <div class="faq-item mb-6">
+                <h3 class="text-xl font-semibold">How do I use CypherGoat?</h3>
+                <p class="text-gray-300 mt-2">Simply enter the amount and select the coins you want to swap. CypherGoat will automatically find the best rate for you and allows you to perform the swap.</p>
+            </div>
+
+            <div class="faq-item mb-6">
+                <h3 class="text-xl font-semibold">Are there any fees for using CypherGoat?</h3>
+                <p class="text-gray-300 mt-2">Cyphergoat has no access to your funds. All swaps are handled by the exchange of your choice. We do not charge any extra fee above the standard fee of the exchanges and network transaction fees.</p>
+            </div>
+
+            <div class="faq-item mb-6">
+                <h3 class="text-xl font-semibold">What cryptocurrencies are supported?</h3>
+                <p class="text-gray-300 mt-2">We currently support 50+ coins and 12+ exchanges.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3 class="text-xl font-semibold">Is CypherGoat safe to use?</h3>
+                <p class="text-gray-300 mt-2">Yes. CypherGoat does not get access to your funds at any stage of the swap. We are simply an aggregator interface. We are also the only exchange aggregator that is open source. Which means that anyone can audit our code at any time.</p>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-2/4 px-8 mt-12 lg:mt-0">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h1 class="text-2xl font-bold mb-4">Swap your crypto in 4 Simple Steps</h1>
+                <ol class="text-left text-gray-300 space-y-4">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-2xl">🤔</span>
+                        <p><span class="font-semibold">Step 1:</span> Select the pair of cryptocurrencies that you want to swap and the amount you want to swap.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-2xl">🔎</span>
+                        <p><span class="font-semibold">Step 2:</span> Review all offers from different exchanges and select the one that best fits your needs.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-2xl">🔄</span>
+                        <p><span class="font-semibold">Step 3:</span> Click on swap and send crypto to the specified address.</p>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-2xl">🎉</span>
+                        <p><span class="font-semibold">Step 4:</span> Wait for confirmations and done!</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-16 container3 hide-on-swap mb-50">
+    <h2 class="text-4xl text-white text-center mb-16">Our Partners</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 place-items-center">
+        <a href="https://www.alfacash.com" target="_blank">
+            <img src="/exchanges/alfacash.svg" alt="Alfacash" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://changehero.io" target="_blank">
+            <img src="/exchanges/changehero.svg" alt="ChangeHero" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://coincraddle.com" target="_blank">
+            <img src="/exchanges/coincraddle.svg" alt="CoinCraddle" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://majesticbank.sc" target="_blank">
+            <img src="/exchanges/majesticbank.png" alt="Majestic Bank" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://simpleswap.io" target="_blank">
+            <img src="/exchanges/simpleswap.svg" alt="SimpleSwap" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://changee.io" target="_blank">
+            <img src="/exchanges/changee.svg" alt="Changee" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://changenow.io" target="_blank">
+            <img src="/exchanges/changenow.svg" alt="ChangeNOW" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://fixedfloat.com" target="_blank">
+            <img src="/exchanges/fixedfloat.svg" alt="FixedFloat" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://nanswap.com" target="_blank">
+            <img src="/exchanges/nanswap.svg" alt="Nanswap" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://wizardswap.io" target="_blank">
+            <img src="/exchanges/wizardswap.png" alt="WizardSwap" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://stealthex.io" target="_blank">
+            <img src="/exchanges/stealthex.svg" alt="StealthEx" class="h-16 object-contain" loading="lazy">
+        </a>
+        <a href="https://exch.cx/" target="_blank">
+            <img src="/exchanges/exchcx.png" alt="StealthEx" class="h-16 object-contain" loading="lazy">
+        </a>
+         <a href="https://exolix.com/" target="_blank">
+            <img src="/exchanges/exolix.png" alt="Exolix" class="h-16 object-contain" loading="lazy">
+        </a>
+          <a href="https://swapuz.com" target="_blank">
+            <img src="/exchanges/swapuz.svg" alt="Swapuz" class="h-16 object-contain" loading="lazy">
+        </a>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<div class="hide-on-swap mt-16">
+@Footer(){}
+</div>
+
+<div id="coin-selection-modal" class="coin-selection-modal hidden">
+    <div class="modal-content">
+        <input type="text" id="modal-search" placeholder="Search coin..." onkeyup="filterModalOptions()" autocomplete="off">
+        <div id="modal-options" class="modal-options"></div>
+    </div>
+</div>
+
+<script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const selectElementSend = document.getElementById('crypto-send');
+    const selectElementReceive = document.getElementById('crypto-receive');
+    const scrollButton = document.getElementById("hide-on-swap");
+    const faqSection = document.getElementById("faq-section");
+
+    function updateNetworkFields(type, network) {
+        if (type === 'send') {
+            document.getElementById('network-send').value = network;
+        } else if (type === 'receive') {
+            document.getElementById('network-receive').value = network;
+        }
+    }
+
+    function closeAllDropdowns() {
+        document.getElementById('dropdown-options-send').style.display = 'none';
+        document.getElementById('dropdown-options-receive').style.display = 'none';
+    }
+
+    function handleClickOutside(event) {
+        const target = event.target;
+        const isClickInsideSend = document.getElementById('dropdown-search-send').contains(target) ||
+            document.getElementById('dropdown-options-send').contains(target);
+        const isClickInsideReceive = document.getElementById('dropdown-search-receive').contains(target) ||
+            document.getElementById('dropdown-options-receive').contains(target);
+
+        if (!isClickInsideSend) {
+            document.getElementById('dropdown-options-send').style.display = 'none';
+        }
+
+        if (!isClickInsideReceive) {
+            document.getElementById('dropdown-options-receive').style.display = 'none';
+        }
+    }
+
+    document.addEventListener('click', handleClickOutside);
+
+    document.addEventListener('htmx:beforeRequest', function() {
+        document.getElementById('loading-spinner').classList.remove('spinner-hidden');
+        document.getElementById('error-message').classList.add('hidden');
+    });
+
+    document.addEventListener('htmx:afterSwap', function() {
+        document.getElementById('loading-spinner').classList.add('spinner-hidden');
+        document.querySelectorAll('.hide-on-swap').forEach(element => {
+            element.classList.add('hidden');
+        });
+        document.getElementById('faq-section').classList.add('hidden');
+
+        setTimeout(function() {
+            document.body.style.display = 'none';
+            document.body.offsetHeight;
+            document.body.style.display = '';
+        }, 0);
+    });
+
+    document.addEventListener('htmx:responseError', function(event) {
+        document.getElementById('loading-spinner').classList.add('spinner-hidden');
+        if (event.detail.xhr.status === 500) {
+            const errorMessage = event.detail.xhr.responseText || 'An internal server error occurred.';
+            document.getElementById('error-text').innerHTML = errorMessage;
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+    });
+
+    const modal = document.getElementById('coin-selection-modal');
+    const modalSearch = document.getElementById('modal-search');
+    const modalOptions = document.getElementById('modal-options');
+    let currentSelectElement = null;
+
+    function openModal(selectElement) {
+        currentSelectElement = selectElement;
+        modal.classList.remove('hidden');
+        modalSearch.value = '';
+        filterModalOptions();
+        setTimeout(() => modalSearch.focus(), 0);
+    }
+
+    function closeModal() {
+        modal.classList.add('hidden');
+    }
+
+    function filterModalOptions() {
+        const filter = modalSearch.value.toLowerCase();
+        const options = modalOptions.getElementsByTagName('div');
+        let found = false;
+
+        Array.from(options).forEach(option => {
+            const optionText = option.dataset.text.toLowerCase();
+            option.style.display = optionText.includes(filter) ? 'flex' : 'none';
+            found = found || option.style.display === 'flex';
+        });
+    }
+
+    function createModalOptions(jsonData) {
+        modalOptions.innerHTML = '';
+
+        jsonData.forEach(item => {
+            const displayText = item.network ? `${item.name} (${item.network.toUpperCase()})` : `${item.name}`;
+            const displayTextWithTicker = `${displayText} (${item.ticker})`;
+
+            const optionDiv = document.createElement('div');
+            optionDiv.innerHTML = `<img src="${item.icon}" alt="${item.name} icon"> ${displayText}`;
+            optionDiv.dataset.ticker = item.ticker;
+            optionDiv.dataset.network = item.network;
+            optionDiv.dataset.text = displayTextWithTicker;
+
+            optionDiv.onclick = () => {
+                currentSelectElement.value = item.ticker;
+                const inputField = document.querySelector(`#dropdown-search-${currentSelectElement.id.split('-')[1]}`);
+                inputField.value = displayText;
+                inputField.style.backgroundImage = `url(${item.icon})`;
+                inputField.style.backgroundRepeat = 'no-repeat';
+                inputField.style.backgroundPosition = 'left 10px center';
+                inputField.style.paddingLeft = '40px';
+
+                const selectElement = document.getElementById(`crypto-${currentSelectElement.id.split('-')[1]}`);
+                selectElement.innerHTML = `<option value="${item.ticker}" selected>${displayText}</option>`;
+                selectElement.classList.add('hidden');
+
+                closeModal();
+                updateNetworkFields(currentSelectElement.id.split('-')[1], item.network);
+            };
+
+            modalOptions.appendChild(optionDiv);
+        });
+
+        setDefaultCoins(jsonData);
+    }
+
+    function setDefaultCoins(jsonData) {
+        const defaultSendCoin = 'btc';
+        const defaultReceiveCoin = 'xmr';
+        
+        const sendCoin = jsonData.find(item => item.ticker.toLowerCase() === defaultSendCoin);
+        const receiveCoin = jsonData.find(item => item.ticker.toLowerCase() === defaultReceiveCoin);
+        
+        if (sendCoin) {
+            const sendDisplayText = sendCoin.network ? 
+                `${sendCoin.name} (${sendCoin.network.toUpperCase()})` : 
+                `${sendCoin.name}`;
+                
+            const selectSend = document.getElementById('crypto-send');
+            selectSend.value = sendCoin.ticker;
+            
+            let option = selectSend.querySelector(`option[value="${sendCoin.ticker}"]`);
+            if (!option) {
+                option = document.createElement('option');
+                option.value = sendCoin.ticker;
+                option.textContent = sendDisplayText;
+                option.selected = true;
+                selectSend.appendChild(option);
+            } else {
+                option.selected = true;
+            }
+                
+            const sendInputField = document.getElementById('dropdown-search-send');
+            sendInputField.value = sendDisplayText;
+            sendInputField.style.backgroundImage = `url(${sendCoin.icon})`;
+            sendInputField.style.backgroundRepeat = 'no-repeat';
+            sendInputField.style.backgroundPosition = 'left 10px center';
+            sendInputField.style.paddingLeft = '40px';
+            updateNetworkFields('send', sendCoin.network);
+        }
+        
+        if (receiveCoin) {
+            const receiveDisplayText = receiveCoin.network ? 
+                `${receiveCoin.name} (${receiveCoin.network.toUpperCase()})` : 
+                `${receiveCoin.name}`;
+            
+            const selectReceive = document.getElementById('crypto-receive');
+            selectReceive.value = receiveCoin.ticker;
+            
+            let option = selectReceive.querySelector(`option[value="${receiveCoin.ticker}"]`);
+            if (!option) {
+                option = document.createElement('option');
+                option.value = receiveCoin.ticker;
+                option.textContent = receiveDisplayText;
+                option.selected = true;
+                selectReceive.appendChild(option);
+            } else {
+                option.selected = true;
+            }
+                
+            const receiveInputField = document.getElementById('dropdown-search-receive');
+            receiveInputField.value = receiveDisplayText;
+            receiveInputField.style.backgroundRepeat = 'no-repeat';
+            receiveInputField.style.backgroundImage = `url(${receiveCoin.icon})`;
+            receiveInputField.style.backgroundPosition = 'left 10px center';
+            receiveInputField.style.paddingLeft = '40px';
+            updateNetworkFields('receive', receiveCoin.network);
+        }
+    }
+
+    async function loadCoins() {
+        try {
+            const response = await fetch('/static/coins.json');
+            const jsonData = await response.json();
+            createModalOptions(jsonData);
+        } catch (error) {
+            console.error('Error loading coins:', error);
+        }
+    }
+
+    loadCoins();
+
+    document.getElementById('dropdown-search-send').addEventListener('click', () => openModal(document.getElementById('crypto-send')));
+    document.getElementById('dropdown-search-receive').addEventListener('click', () => openModal(document.getElementById('crypto-receive')));
+
+    modalSearch.addEventListener('keyup', filterModalOptions);
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.getElementById('swap-form').addEventListener('submit', function() {
+        document.getElementById('crypto-send').classList.remove('hidden');
+        document.getElementById('crypto-receive').classList.remove('hidden');
+    });
+
+    document.getElementById('dropdown-search-send').setAttribute('readonly', true);
+    document.getElementById('dropdown-search-receive').setAttribute('readonly', true);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollButtonContainer = document.getElementById('scroll-to-faq-container');
+    const faqSection = document.getElementById('faq-section');
+    
+    function checkFAQVisibility() {
+        if (!scrollButtonContainer || !faqSection) return;
+        
+        const faqRect = faqSection.getBoundingClientRect();
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        
+        if (faqRect.top < windowHeight * 1.1) {
+            scrollButtonContainer.classList.add('hidden');
+        } else {
+            scrollButtonContainer.classList.remove('hidden');
+        }
+    }
+    
+    let scrollTimeout;
+    window.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(checkFAQVisibility, 50);
+    });
+    
+    checkFAQVisibility();
+    
+    window.addEventListener('resize', checkFAQVisibility);
+});
+
+function scrollToFAQ() {
+    const faqSection = document.getElementById('faq-section');
+    if (faqSection) {
+        faqSection.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+</script>
+}

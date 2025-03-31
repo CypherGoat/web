@@ -1,0 +1,435 @@
+package views
+
+templ Affiliate() {
+    @Header(){
+    }
+    <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: #1c1c1c;
+        font-family: 'Inter', 'Arial', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    footer {
+        margin-top: auto;
+        width: 100%;
+    }
+
+    .container {
+        max-width: 700px;
+        height: auto;
+        margin: 0 auto;
+        padding: 1rem;
+        color: #f5f5f5;
+        align-items: center;
+    }
+
+    .container2 {
+        max-width: 90%;
+        height: auto;
+        margin: 2rem auto;
+        padding: 1rem;
+        color: #f5f5f5;
+        align-items: center;
+    }
+
+    .container3 {
+        max-width: 80%;
+        height: auto;
+        margin: 2rem auto;
+        padding: 1rem;
+        color: #f5f5f5;
+        align-items: center;
+    }
+
+    .card {
+        background: linear-gradient(145deg, #2c2c2c, #252525);
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card:hover {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        transform: translateY(-2px);
+    }
+
+    .rgb-effect {
+        background: linear-gradient(90deg, #00bfff, #1e90ff, #4a54f1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradientFlow 6s ease infinite;
+        background-size: 200% auto;
+    }
+
+    @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @keyframes rgbAnimation {
+        0% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+        100% { background-position: 0% 0%; }
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
+        background-size: 400% 400%;
+        color: #ffffff;
+        padding: 0.85rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        width: auto;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+        background-clip: padding-box;
+        position: relative;
+        animation: rgbAnimation 6s ease infinite;
+        text-shadow: 1px 1px 4px rgba(30, 144, 255, 0.7);
+        text-decoration: none;
+        display: inline-block;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-primary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-primary:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.3);
+    }
+
+    .feature-card {
+        background: linear-gradient(145deg, #2c2c2c, #252525);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, #00bfff, #4a54f1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.85rem;
+        background-color: #2e2e2e;
+        color: #e0e0e0;
+        border: 1px solid #555;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input:focus {
+        border-color: #4a54f1;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+    }
+
+    .form-label {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .step-card {
+        position: relative;
+        padding-left: 4rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .step-number {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3rem;
+        height: 3rem;
+        background: linear-gradient(45deg, #00bfff, #4a54f1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 12px rgba(0, 191, 255, 0.3);
+    }
+
+    .testimonial-card {
+        background: rgba(44, 44, 44, 0.6);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .testimonial-card:before {
+        content: '"';
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        font-size: 3rem;
+        color: rgba(74, 84, 241, 0.2);
+        font-family: Georgia, serif;
+    }
+
+    .highlight {
+        color: #00bfff;
+        font-weight: bold;
+    }
+
+    .faq-item {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .container2 {
+            max-width: 100%;
+            padding: 0.5rem;
+            margin: 1rem auto;
+        }
+        
+        .container3 {
+            max-width: 100%;
+            padding: 0.5rem;
+            margin: 1rem auto;
+        }
+        
+        .card {
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+        
+        .step-card {
+            padding-left: 3.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .step-number {
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem !important;
+            line-height: 1.2 !important;
+        }
+
+        h2 {
+            font-size: 1.75rem !important;
+        }
+
+        h3 {
+            font-size: 1.25rem !important;
+        }
+
+        p {
+            font-size: 1rem !important;
+        }
+
+        .btn-primary {
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .text-6xl {
+            font-size: 2.5rem !important;
+        }
+
+        .text-xl {
+            font-size: 1rem !important;
+        }
+
+        .mb-16 {
+            margin-bottom: 2rem !important;
+        }
+        
+        .mb-8 {
+            margin-bottom: 1rem !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .card {
+            padding: 1.25rem;
+        }
+        
+        .step-card {
+            padding-left: 3rem;
+        }
+        
+        .step-number {
+            width: 2.25rem;
+            height: 2.25rem;
+        }
+        
+        h1 {
+            font-size: 2rem !important;
+        }
+    }
+    </style>
+
+    <div class="pt-0 container2 mx-auto p-7 min-h-screen main-content">
+        <div class="text-center mb-16">
+            <h1 class="text-6xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 inline-block rgb-effect leading-tight">
+                Affiliate Program
+            </h1>
+            <p class="text-gray-300 mt-6 text-xl max-w-3xl mx-auto">
+                Partner with CypherGoat and <span class="rgb-effect">earn up to 50% commission</span> while helping others find the best rates for their crypto swaps.
+            </p>
+        </div>
+
+        <div class="container3 mx-auto mb-20">
+            <div class="card">
+                <h2 class="text-3xl font-bold text-center text-white mb-8">How Our Affiliate Program Works</h2>
+                <br/>
+                <div class="step-card"> 
+                    <div class="step-number">1</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Apply</h3>
+                    <p class="text-gray-300">Complete the form listed below.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Get Your Unique Links</h3>
+                    <p class="text-gray-300">Once approved, we will send you your unique links so you can start earning</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Promote CypherGoat</h3>
+                    <p class="text-gray-300">Share your links through your website, blog, social media, or other channels to your audience.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Track & Earn</h3>
+                    <p class="text-gray-300">Monitor performance in real-time and receive up to 50% of our fees for every successful transaction.</p>
+                </div>
+                
+                <div class="text-center mt-8">
+                    <a href="https://tally.so/r/wQkXbG" class="btn-primary">Become an Affiliate</a>
+                </div>
+                <br/>
+                <div class="text-center mt-4">
+                    <p class="text-gray-300">Have questions? <a href="mailto:support@cypherglass.com" class="text-blue-400">Contact us</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+templ AffiliateTerms(){
+    @Header(){}
+    <style>
+    body {
+        background-color: #1c1c1c;
+        font-family: 'Arial', sans-serif;
+    }
+    </style>
+    <div class="text-gray-100 font-sans py-8 px-4">
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl font-bold text-white mb-4">CypherGoat Affiliate Program Terms & Conditions</h1>
+            <p class="text-lg text-gray-400">By signing up for the CypherGoat Affiliate Program, you agree to comply with the following terms and conditions.</p>
+        </header>
+
+        <ul class="space-y-8 max-w-4xl mx-auto">
+            <li>
+                <strong class="text-white text-xl">1. Eligibility</strong>
+                <ul class="list-disc list-inside text-base text-gray-300">
+                    <li>CypherGoat reserves the right to reject any application at its sole discretion.</li>
+                </ul>
+            </li>
+            <li>
+                <strong class="text-white text-xl">2. Affiliate Responsibilities</strong>
+                <ul class="list-disc list-inside text-base text-gray-300">
+                    <li>You agree to promote CypherGoat in a lawful and ethical manner.</li>
+                    <li>You may not engage in spam, misleading advertising, or fraudulent activities.</li>
+                    <li>You are responsible for ensuring compliance with all applicable laws and regulations.</li>
+                </ul>
+            </li>
+            <li>
+                <strong class="text-white text-xl">3. Commission Structure & Payouts</strong>
+                <ul class="list-disc list-inside text-base text-gray-300">
+                    <li>Affiliates earn a commission for each qualifying transaction made through their referral link.</li>
+                    <li>Payments are made in cryptocurrency, with a minimum payout threshold of 0.002 Bitcoin.</li>
+                    <li>CypherGoat reserves the right to adjust commission rates at any time.</li>
+                </ul>
+            </li>
+            <li>
+                <strong class="text-white text-xl">4. Restrictions</strong>
+                <ul class="list-disc list-inside text-base text-gray-300">
+                    <li>Affiliates may not bid on CypherGoat’s brand name or variations in paid advertising campaigns.</li>
+                    <li>Any attempt to impersonate CypherGoat or mislead users is strictly prohibited.</li>
+                    <li>Self-referrals or fraudulent transactions will result in immediate disqualification.</li>
+                </ul>
+            </li>
+            <li>
+                <strong class="text-white text-xl">5. Termination & Modifications</strong>
+                <ul class="list-disc list-inside text-base text-gray-300">
+                    <li>CypherGoat reserves the right to terminate or modify this affiliate program at any time.</li>
+                    <li>Affiliates who violate these terms may have their accounts suspended without prior notice.</li>
+                    <li>Unclaimed commissions may be forfeited in cases of rule violations.</li>
+                </ul>
+            </li>
+            <li>
+                <strong class="text-white text-xl">6. Liability & Disclaimer</strong>
+                <ul class="list-disc list-inside text-base text-gray-300">
+                    <li>CypherGoat is not liable for any indirect damages resulting from participation in the program.</li>
+                    <li>Affiliates are independent contractors and not employees or partners of CypherGoat.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <p class="text-base text-center text-gray-400 mt-8">By utilizing CypherGoat, you acknowledge and agree to these terms. Should you have any questions or concerns, feel free to contact us.</p>
+    </div>
+}

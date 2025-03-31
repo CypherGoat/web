@@ -1,0 +1,66 @@
+package views
+
+templ NotFoundPage() {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 Not Found</title>
+        <link href="/static/tailwind.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        <style>
+            body {
+                background-color: #1c1c1c;
+                color: #e0e0e0;
+                font-family: 'Arial', sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .container {
+                text-align: center;
+            }
+            .container h1 {
+                font-size: 6rem;
+                margin-bottom: 1rem;
+            }
+            .container p {
+                font-size: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            .container a {
+                display: inline-block;
+                padding: 0.75rem 1.5rem;
+                background-color: #00bfff;
+                color: #fff;
+                border-radius: 12px;
+                text-decoration: none;
+                font-size: 1.1rem;
+                transition: background-color 0.3s ease;
+            }
+            .container a:hover {
+                background-color: #007bff;
+            }
+            .cute-image {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 2rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <img src="/static/icons/logo-v3.svg" class="cute-image text-center">
+            <h1>404</h1>
+            <p>Oops! The page you're looking for doesn't exist.</p>
+            <a href="/">Go Home</a>
+        </div>
+    </body>
+    </html>
+}
