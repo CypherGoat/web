@@ -56,6 +56,11 @@ func TermsHandler(c echo.Context) error {
 
 }
 
+func PrivacyPolicyHandler(c echo.Context) error {
+	return views.Privacy().Render(c.Request().Context(), c.Response())
+
+}
+
 func AffiliateHandler(c echo.Context) error {
 	return views.Affiliate().Render(c.Request().Context(), c.Response())
 }
@@ -78,7 +83,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"coincraddle":  {"/exchanges/coincraddle.png", true},
 	"exch.cx":      {"/exchanges/exchcx.png", false},
 	"fixedfloat":   {"/exchanges/fixedfloat-v2.svg", true},
-	"majesticbank": {"exchanges/majesticbank.png", true},
+	"majesticbank": {"exchanges/majesticbank.png", false},
 	"nanswap":      {"/exchanges/nanswap.svg", true},
 	"simpleswap":   {"/exchanges/simpleswap.svg", true},
 	"wizardswap":   {"/exchanges/wizardswap.png", false},

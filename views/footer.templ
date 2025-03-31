@@ -1,5 +1,4 @@
 package views
-
 templ Footer(){
     <style>
     html, body {
@@ -23,17 +22,30 @@ templ Footer(){
     .footer-container {
         max-width: 1200px;
         margin: 0 auto;
-        text-align: center;
-    }
-
-    .footer-links {
-        margin-top: 1rem;
         display: flex;
-        justify-content: center;
-        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 2rem;
     }
 
-    .footer-links a {
+    .footer-section {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .footer-section h4 {
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        color: #ffffff;
+    }
+
+    .footer-links, .social-icons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .footer-links a, .social-icons a {
         color: #cbd5e0;
         text-decoration: none;
         transition: color 0.3s;
@@ -42,66 +54,64 @@ templ Footer(){
         gap: 0.5rem;
     }
 
-    .footer-links a:hover {
-        color: #ffffff;
-    }
-
-    .social-icons {
-        margin-top: 1rem;
-        display: flex;
-        justify-content: center;
-        gap: 1.5rem;
-    }
-
-    .social-icons a {
-        color: #cbd5e0;
-        transition: color 0.3s;
-    }
-
-    .social-icons a:hover {
+    .footer-links a:hover, .social-icons a:hover {
         color: #ffffff;
     }
 
     .footer-notice {
-        margin-top: 1rem;
+        margin-top: 2rem;
+        text-align: center;
         font-size: 0.875rem;
     }
     </style>
 
     <footer id="hide-on-swap">
         <div class="footer-container">
-            <p>&copy; 2025 CypherGoat. All Rights Reserved.</p>
-
-            <div class="social-icons">
-                <a href="https://github.com/cyphergoat" target="_blank">
-                    <i class="fab fa-github fa-2x"></i>
-                </a>
-                <a href="https://x.com/cyphergoatcom" target="_blank">
-                    <i class="fab fa-twitter fa-2x"></i>
-                </a>
-                <a href="https://reddit.com/r/cyphergoat" target="_blank">
-                    <i class="fab fa-reddit fa-2x"></i>
-                </a>
+            <!-- Social Media Section -->
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="https://github.com/cyphergoat" target="_blank">
+                        <i class="fab fa-github fa-2x"></i> GitHub
+                    </a>
+                    <a href="https://x.com/cyphergoatcom" target="_blank">
+                        <i class="fab fa-twitter fa-2x"></i> Twitter
+                    </a>
+                </div>
             </div>
 
-            <div class="footer-links">
-                <a href="https://cyphergoat.com/terms">
-                    <i class="fas fa-file-contract"></i> Terms of Service
-                </a>
-                <a href="https://cyphergoat.com/contact">
-                    <i class="fas fa-envelope"></i> Contact Us
-                </a>
-                <a href="https://cyphergoat.com/affiliate">
-                    <i class="fas fa-dollar"></i> Affiliate
-                </a>
-                 <a href="https://nojs.cyphergoat.com">
-                    <i class="fa-solid fa-shield-halved"></i> JS-free
-                </a>
+            <!-- Quick Links Section -->
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <div class="footer-links">
+                    <a href="https://cyphergoat.com/terms">
+                        <i class="fas fa-file-contract"></i> Terms of Service
+                    </a>
+                    <a href="https://cyphergoat.com/privacy">
+                        <i class="fas fa-lock"></i> Privacy Policy
+                    </a>
+                    <a href="https://cyphergoat.com/contact">
+                        <i class="fas fa-envelope"></i> Contact Us
+                    </a>
+                    <a href="https://cyphergoat.com/affiliate">
+                        <i class="fas fa-dollar"></i> Affiliate
+                    </a>
+                    <a href="https://nojs.cyphergoat.com">
+                        <i class="fa-solid fa-shield-halved"></i> JS-free
+                    </a>
+                </div>
             </div>
 
-            <p class="footer-notice">
-                Made and hosted in the EU 🇪🇺
-            </p>
+            <!-- About Section -->
+            <div class="footer-section">
+                <h4>About</h4>
+                <p>&copy; 2025 CypherGoat. All Rights Reserved.</p>
+                <p>Made and hosted in the EU 🇪🇺</p>
+            </div>
         </div>
+
+       <p class="footer-notice">
+    Built with ❤️ by 4rkal. Proudly open-source on <a href="https://github.com/cyphergoat" target="_blank" style="color: #cbd5e0; text-decoration: underline;">GitHub</a>.
+</p>
     </footer>
 }

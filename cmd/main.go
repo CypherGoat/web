@@ -68,6 +68,8 @@ func main() {
 	e.GET("/terms", handlers.TermsHandler)
 	e.GET("/contact", handlers.ContactHandler)
 
+	e.GET("/privacy", handlers.PrivacyPolicyHandler)
+
 	e.GET("/affiliate", handlers.AffiliateHandler)
 
 	e.GET("/health", handlers.HealthHandler)
