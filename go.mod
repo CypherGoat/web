@@ -6,7 +6,6 @@ toolchain go1.23.5
 
 require (
 	github.com/a-h/templ v0.3.833
-	github.com/google/uuid v1.6.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 )
