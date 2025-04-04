@@ -12,6 +12,15 @@ templ Header() {
         <script src="/static/htmx.min.js"></script>
         <link rel="canonical" href="https://cyphergoat.com">
 
+        <meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
+        <meta property="og:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta property="og:image" content="/static/icons/logo-v3.svg">
+        <meta property="og:url" content="https://cyphergoat.com">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
+        <meta name="twitter:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta name="twitter:image" content="/static/icons/logo-v3.svg">
+
         <script src="https://kit.fontawesome.com/bb99b98513.js" crossorigin="anonymous"></script>
         <meta name="keywords" content="swap crypto, crypto exchange, best crypto rates, cryptocurrency swap, crypto trading, crypto aggregator">
         <meta name="author" content="CypherGoat">
@@ -19,6 +28,90 @@ templ Header() {
         <meta name="description" content="Swap your crypto at the best rate on the market. No account, no KYC, free and open source crypto exchange aggregator. 50+ coins supported.">
 
         <title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
+
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "FinancialService",
+            "name": "CypherGoat",
+            "url": "https://cyphergoat.com",
+            "description": "Swap your crypto at the best rate on the market. No account, no KYC, free and open source. 50+ coins supported.",
+            "sameAs": [
+                "https://x.com/cyphergoatcom",
+                "https://github.com/cyphergoat",
+                "https://medium.com/@cyphergoat"
+            ]
+        }
+        </script>
+
+        <script defer data-domain="cyphergoat.com" src="https://stats.4rkal.eu.org/js/script.js"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const menuToggle = document.getElementById("menu-toggle");
+                const navMenu = document.getElementById("nav-menu");
+
+                menuToggle.addEventListener("click", function () {
+                    navMenu.classList.toggle("hidden");
+                });
+            });
+        </script>
+    </head>
+    <body>
+    <header class="flex flex-wrap items-center w-full text-sm py-2 shadow-md" style="background-color:#222222">
+        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
+            <a class="flex items-center font-semibold text-3xl text-white" href="/" aria-label="Brand">
+                <img src="/static/icons/logo-v3.svg" alt="CypherGoat Logo" class="w-10 h-10 object-cover object-center rounded-full mr-3">
+                CypherGoat
+            </a>
+            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-600 dark:text-neutral-400 hover:text-gray-800 dark:hover:text-neutral-200 focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+
+            <div id="nav-menu" class="hidden lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-6 mt-5 lg:mt-0 lg:gap-10">
+                <a class="font-medium text-white hover:text-gray-300 focus:outline-none" href="/">Home</a>
+                <a class="font-medium text-white hover:text-gray-300 focus:outline-none" href="/about">About CypherGoat</a>
+                <a class="font-medium text-white hover:text-gray-300 focus:outline-none" href="/blog">CypherGoat Blog</a>
+            </div>
+        </nav>
+    </header>
+
+
+    { children... }
+    </body>
+    </html>
+}
+
+templ HeaderCustomTitle(title string) {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/static/icons/logo-v3.svg">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="/static/tailwind.css" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        <script src="/static/htmx.min.js"></script>
+        <link rel="canonical" href="https://cyphergoat.com">
+
+        <meta property="og:title" content="Cyphergoat - { title }">
+        <meta property="og:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta property="og:image" content="/static/icons/logo-v3.svg">
+        <meta property="og:url" content="https://cyphergoat.com">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
+        <meta name="twitter:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta name="twitter:image" content="/static/icons/logo-v3.svg">
+
+        <script src="https://kit.fontawesome.com/bb99b98513.js" crossorigin="anonymous"></script>
+        <meta name="keywords" content="swap crypto, crypto exchange, best crypto rates, cryptocurrency swap, crypto trading, crypto aggregator">
+        <meta name="author" content="CypherGoat">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Swap your crypto at the best rate on the market. No account, no KYC, free and open source crypto exchange aggregator. 50+ coins supported.">
+
+        <title>Cyphergoat - { title }</title>
 
         <script type="application/ld+json">
         {

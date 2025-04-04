@@ -1,0 +1,871 @@
+package views 
+
+import (
+    "strings"
+    "fmt"
+)
+
+templ CoinExchangeScreen(coin string, coinName string) {
+    @HeaderCustomTitle(fmt.Sprintf("Swap %v (%v) at the best rate on the market", coinName, strings.ToUpper(coin))){}
+
+                <style>
+.rgb-effect {
+    color: #1e90ff;
+    font-weight: 800;
+}
+
+@keyframes rgbAnimation {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #1c1c1c;
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex-grow: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.swap-form-section {
+    display: block;
+    width: 100%;
+}
+
+.container {
+    max-width: 700px;
+    height: auto;
+    margin: 0 auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
+
+.container2 {
+    max-width:90%;
+    height: auto;
+    margin: 2rem auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
+
+.container3 {
+    max-width:70%;
+    height: auto;
+    margin: 2rem auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
+
+    .card {
+        background: #2c2c2c;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card:hover {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        transform: translateY(-3px);
+    }
+
+    .card h2 {
+        color: #ffffff;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .input-group .form-label {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 150px;
+        padding: 0.75rem;
+        background-color: #2e2e2e;
+        color: #e0e0e0;
+        border: 1px solid #555;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-input:focus {
+        border-color: #4a54f1;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+    }
+
+    .form-input:focus-visible {
+    border-color: #4a54f1;
+    box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+}
+
+    .searchable-dropdown {
+        position: relative;
+        flex: 1;
+    }
+.searchable-dropdown input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #555;
+    border-radius: 12px;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-size: 20px 20px;
+    background-position: left 10px center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+    .searchable-dropdown input:focus {
+        border-color: #4a54f1;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+    }
+
+    .dropdown-options {
+        position: absolute;
+        top: calc(100% + 0.25rem);
+        left: 0;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: auto;
+        background: #2e2e2e;
+        border: 1px solid #555;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        display: none;
+        z-index: 10;
+    }
+
+    .dropdown-options div {
+        padding: 0.75rem;
+        display: flex;
+        align-items: center;
+        color: #e0e0e0;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.2s ease;
+    }
+
+    .dropdown-options div:hover {
+        background: #444;
+    }
+
+    .dropdown-options img {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.75rem;
+    }
+
+    .btn-primary {
+    background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
+    background-size: 400% 400%;
+    color: #ffffff;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    background-clip: padding-box;
+    position: relative;
+    animation: rgbAnimation 6s ease infinite;
+    text-shadow: 1px 1px 4px rgba(30, 144, 255, 0.7);
+}
+
+    .btn-primary:hover {
+        transform: scale(1.02);
+    }
+
+    .btn-primary:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.3);
+    }
+
+    .form-input.read-only {
+        background-color: #1c1c1c;
+        color: #888;
+        cursor: not-allowed;
+    }
+
+    @keyframes rgbAnimation {
+        0% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+        100% { background-position: 0% 0%; }
+    }
+
+    .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 4px solid #3498db;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .spinner-hidden {
+        display: none;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .hidden {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .dropdown-options {
+        position: fixed;
+        top: 10%;
+                left: 50%;
+        width: 90%;
+        height: 80vh;
+        max-height: none;
+        overflow-y: scroll;
+        z-index: 100;
+        display: none;
+        transform: translateX(-50%);
+    }
+
+    .dropdown-options div {
+        font-size: 1.25rem;
+        padding: 1rem;
+        border-bottom: 1px solid #444;
+    }
+
+    .input-group {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    .input-group > div:first-child {
+        width: 30%;
+    }
+
+    .input-group > div:last-child {
+        width: 70%;
+    }
+
+    .form-input#amount,
+    .form-input#estimated-amount {
+        width: 100%;
+    }
+
+    .searchable-dropdown {
+        width: 100%;
+    }
+
+    .form-input#dropdown-search-send,
+    .form-input#dropdown-search-receive {
+        width: 100%;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+}
+
+.coin-selection-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 5%;
+    z-index: 10000;
+}
+
+.modal-content {
+    background: #2c2c2c;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 0.875rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.modal-content input:focus {
+    border-color: #4a54f1;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+}
+
+.modal-options {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.modal-options div {
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s ease;
+}
+
+.modal-options div:hover {
+    background: #444;
+}
+
+.modal-options img {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.75rem;
+}
+
+.coin-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+.coin-header h1 {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 800;
+    background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.coin-description {
+    max-width: 800px;
+    margin: 0 auto 2.5rem;
+    padding: 1.75rem;
+    background: rgba(44, 44, 44, 0.7);
+    border-radius: 16px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.advantages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+    margin: 2.5rem 0;
+}
+
+.advantage-card {
+    background: #2c2c2c;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.advantage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.advantage-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    color: #1e90ff;
+}
+
+.faq-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-card {
+    background: rgba(44, 44, 44, 0.7);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.faq-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+    .container2 {
+        max-width: 100%;
+        padding: 1rem;
+    }
+    
+    .container3 {
+        max-width: 100%;
+        padding: 1rem;
+    }
+    
+    .coin-description {
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+    }
+    
+    .advantages {
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+    
+    .advantage-card {
+        padding: 1.25rem;
+    }
+    
+    .faq-card {
+        padding: 1.25rem;
+    }
+}
+
+    </style>
+
+    <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
+    <p id="error-text"></p>
+</div>
+
+    <div class="container2 mx-auto px-4 py-8">
+        <div class="coin-header">
+            <h1>Exchange {strings.ToUpper(coin)} at the Best Rate on the Market</h1>
+            <p class="text-xl text-gray-300">Get the best {coinName} exchange rates with no KYC and lowest fees</p>
+        </div>
+
+                <div class="swap-form-section mt-6">
+            <div class="container">
+                <div class="card">
+                    <h2>Swap {coinName}</h2>
+                    <form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
+                        <div class="input-group">
+                            <div>
+                                <label for="amount" class="form-label">Amount</label>
+                                <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="0.00">
+                            </div>
+                            <div class="searchable-dropdown">
+                                <label class="form-label">Send Coin</label>
+                                <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
+                                <div class="dropdown-options" id="dropdown-options-send"></div>
+                                <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <div>
+                                <label for="estimated-amount" class="form-label">Estimated</label>
+                                <input type="text" id="estimated-amount" class="form-input read-only" placeholder="0.00" readonly>
+                            </div>
+                            <div class="searchable-dropdown">
+                                <label class="form-label">Receive Coin</label>
+                                <input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off">
+                                <div class="dropdown-options" id="dropdown-options-receive"></div>
+                                <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="network-send" name="network1">
+                        <input type="hidden" id="network-receive" name="network2">
+                        <button type="submit" class="btn-primary">Swap {strings.ToUpper(coin)}</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="loading-spinner" class="spinner spinner-hidden"></div>
+            <div id="error-message" class="hidden">
+                <p id="error-text"></p>
+            </div>
+            <div id="estimate-container"></div>
+        </div>
+
+<br/>
+<br/>
+        <div class="coin-description">
+            <h2 class="text-2xl font-bold mb-4">About {strings.ToUpper(coin)} Exchange</h2>
+            <p class="text-gray-300 mb-3">
+                Looking to exchange {coinName} at the best possible rate? CypherGoat compares all major exchanges 
+                in real-time to find you the absolute best deal for your {strings.ToUpper(coin)} swap.
+            </p>
+            <p class="text-gray-300 mb-3">
+                Our platform aggregates rates from 12+ exchanges including StealthEx, ChangeNOW, FixedFloat, 
+                and many more to ensure you're getting the most value for your {coinName} ({strings.ToUpper(coin)}).
+            </p>
+            <p class="text-gray-300">
+                No registration needed, no KYC requirements, and completely open source - start your {strings.ToUpper(coin)} 
+                exchange in seconds with complete privacy.
+            </p>
+        </div>
+
+        <div class="advantages">
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Instant {strings.ToUpper(coin)} Swap</h3>
+                <p class="text-gray-300">Exchange {strings.ToUpper(coin)} quickly with no waiting periods or account setup</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i class="fas fa-search-dollar"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Best {strings.ToUpper(coin)} Rates</h3>
+                <p class="text-gray-300">We compare all major exchanges to find you the absolute best rate</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">No KYC Required</h3>
+                <p class="text-gray-300">Exchange {coinName} ({strings.ToUpper(coin)}) privately without identity verification</p>
+            </div>
+        </div>
+
+        <div class="faq-section mt-12 mb-16">
+            <h2 class="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="faq-card">
+                    <h3 class="text-lg font-semibold mb-2">How long does a {strings.ToUpper(coin)} swap take?</h3>
+                    <p class="text-gray-300">Most {strings.ToUpper(coin)} swaps are completed within 10-30 minutes, depending on network confirmation times and exchange processing.</p>
+                </div>
+                <div class="faq-card">
+                    <h3 class="text-lg font-semibold mb-2">Is there a minimum amount to exchange?</h3>
+<p class="text-gray-300">Yes, the minimum amount to exchange is approximately $5 worth of any cryptocurrency.</p>                </div>
+                <div class="faq-card">
+                    <h3 class="text-lg font-semibold mb-2">Are there any hidden fees?</h3>
+                    <p class="text-gray-300">No hidden fees. The rate you see includes all exchange fees. You'll only pay network transaction fees which vary by blockchain.</p>
+                </div>
+                <div class="faq-card">
+                    <h3 class="text-lg font-semibold mb-2">Is KYC required for {strings.ToUpper(coin)} swaps?</h3>
+                    <p class="text-gray-300">CypherGoat prioritizes no-KYC exchanges, displaying KYC score for each option so you can choose exchanges that respect your privacy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="coin-selection-modal" class="coin-selection-modal hidden">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Select Coin</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <input type="text" id="modal-search" placeholder="Search coin..." onkeyup="filterModalOptions()" autocomplete="off">
+            <div id="modal-options" class="modal-options"></div>
+        </div>
+    </div>
+
+    <script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const selectElementSend = document.getElementById('crypto-send');
+    const selectElementReceive = document.getElementById('crypto-receive');
+    
+    function filterModalOptions() {
+        const filter = document.getElementById('modal-search').value.toLowerCase();
+        const options = document.getElementById('modal-options').getElementsByTagName('div');
+        let found = false;
+
+        Array.from(options).forEach(option => {
+            const optionText = option.dataset.text.toLowerCase();
+            option.style.display = optionText.includes(filter) ? 'flex' : 'none';
+            found = found || option.style.display === 'flex';
+        });
+    }
+    
+    window.filterModalOptions = filterModalOptions;
+
+    function updateNetworkFields(type, network) {
+        if (type === 'send') {
+            document.getElementById('network-send').value = network;
+        } else if (type === 'receive') {
+            document.getElementById('network-receive').value = network;
+        }
+    }
+
+    function closeAllDropdowns() {
+        document.getElementById('dropdown-options-send').style.display = 'none';
+        document.getElementById('dropdown-options-receive').style.display = 'none';
+    }
+
+    function handleClickOutside(event) {
+        const target = event.target;
+        const isClickInsideSend = document.getElementById('dropdown-search-send').contains(target) ||
+            document.getElementById('dropdown-options-send').contains(target);
+        const isClickInsideReceive = document.getElementById('dropdown-search-receive').contains(target) ||
+            document.getElementById('dropdown-options-receive').contains(target);
+
+        if (!isClickInsideSend) {
+            document.getElementById('dropdown-options-send').style.display = 'none';
+        }
+
+        if (!isClickInsideReceive) {
+            document.getElementById('dropdown-options-receive').style.display = 'none';
+        }
+    }
+
+    document.addEventListener('click', handleClickOutside);
+
+    document.addEventListener('htmx:beforeRequest', function() {
+        document.getElementById('loading-spinner').classList.remove('spinner-hidden');
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) {
+            errorMessage.classList.add('hidden');
+        }
+    });
+
+    document.addEventListener('htmx:afterSwap', function() {
+        document.getElementById('loading-spinner').classList.add('spinner-hidden');
+        document.querySelectorAll('.hide-on-swap').forEach(element => {
+            element.classList.add('hidden');
+        });
+
+        setTimeout(function() {
+            document.body.style.display = 'none';
+            document.body.offsetHeight;
+            document.body.style.display = '';
+        }, 0);
+    });
+
+    document.addEventListener('htmx:responseError', function(event) {
+        document.getElementById('loading-spinner').classList.add('spinner-hidden');
+        const errorMessage = document.getElementById('error-message');
+        const errorText = document.getElementById('error-text');
+        
+        if (errorMessage && errorText && event.detail.xhr.status === 500) {
+            const errText = event.detail.xhr.responseText || 'An internal server error occurred.';
+            errorText.innerHTML = errText;
+            errorMessage.classList.remove('hidden');
+        }
+    });
+
+    const modal = document.getElementById('coin-selection-modal');
+    const modalSearch = document.getElementById('modal-search');
+    const modalOptions = document.getElementById('modal-options');
+    let currentSelectElement = null;
+
+    function openModal(selectElement) {
+        currentSelectElement = selectElement;
+        modal.classList.remove('hidden');
+        modalSearch.value = '';
+        filterModalOptions();
+        setTimeout(() => modalSearch.focus(), 0);
+    }
+
+    function closeModal() {
+        modal.classList.add('hidden');
+    }
+
+    function createModalOptions(jsonData) {
+        modalOptions.innerHTML = '';
+
+        jsonData.forEach(item => {
+            const displayText = item.network ? `${item.name} (${item.network.toUpperCase()})` : `${item.name}`;
+            const displayTextWithTicker = `${displayText} (${item.ticker})`;
+
+            const iconUrl = item.icon.startsWith('/') ? item.icon : `/${item.icon.replace(/^static\//, 'static/')}`;
+            
+            const optionDiv = document.createElement('div');
+            optionDiv.innerHTML = `<img src="${iconUrl}" alt="${item.name} icon"> ${displayText}`;
+            optionDiv.dataset.ticker = item.ticker;
+            optionDiv.dataset.network = item.network;
+            optionDiv.dataset.text = displayTextWithTicker;
+
+            optionDiv.onclick = () => {
+                currentSelectElement.value = item.ticker;
+                const inputField = document.querySelector(`#dropdown-search-${currentSelectElement.id.split('-')[1]}`);
+                inputField.value = displayText;
+                inputField.style.backgroundImage = `url(${iconUrl})`;
+                inputField.style.backgroundRepeat = 'no-repeat';
+                inputField.style.backgroundPosition = 'left 10px center';
+                inputField.style.paddingLeft = '40px';
+
+                const selectElement = document.getElementById(`crypto-${currentSelectElement.id.split('-')[1]}`);
+                selectElement.innerHTML = `<option value="${item.ticker}" selected>${displayText}</option>`;
+                selectElement.classList.add('hidden');
+
+                closeModal();
+                updateNetworkFields(currentSelectElement.id.split('-')[1], item.network);
+            };
+
+            modalOptions.appendChild(optionDiv);
+        });
+
+        setDefaultCoins(jsonData);
+    }
+
+function setDefaultCoins(jsonData) {
+    const defaultSendCoin = 'btc';
+    
+    const coinFromUrl = document.querySelector('h1').textContent.split(' ')[1].toLowerCase();
+    
+    const sendCoin = jsonData.find(item => item.ticker.toLowerCase() === defaultSendCoin);
+    const receiveCoin = jsonData.find(item => item.ticker.toLowerCase() === coinFromUrl);
+    
+    if (sendCoin) {
+        const sendDisplayText = sendCoin.network ? 
+            `${sendCoin.name} (${sendCoin.network.toUpperCase()})` : 
+            `${sendCoin.name}`;
+        
+        const sendIconUrl = sendCoin.icon.startsWith('/') ? sendCoin.icon : `/${sendCoin.icon.replace(/^static\//, 'static/')}`;
+            
+        const selectSend = document.getElementById('crypto-send');
+        selectSend.value = sendCoin.ticker;
+        
+        let option = selectSend.querySelector(`option[value="${sendCoin.ticker}"]`);
+        if (!option) {
+            option = document.createElement('option');
+            option.value = sendCoin.ticker;
+            option.textContent = sendDisplayText;
+            option.selected = true;
+            selectSend.appendChild(option);
+        } else {
+            option.selected = true;
+        }
+            
+        const sendInputField = document.getElementById('dropdown-search-send');
+        sendInputField.value = sendDisplayText;
+        sendInputField.style.backgroundImage = `url(${sendIconUrl})`;
+        sendInputField.style.backgroundRepeat = 'no-repeat';
+        sendInputField.style.backgroundPosition = 'left 10px center';
+        sendInputField.style.paddingLeft = '40px';
+        updateNetworkFields('send', sendCoin.network);
+    }
+    
+    if (receiveCoin) {
+        const receiveDisplayText = receiveCoin.network ? 
+            `${receiveCoin.name} (${receiveCoin.network.toUpperCase()})` : 
+            `${receiveCoin.name}`;
+        
+        const receiveIconUrl = receiveCoin.icon.startsWith('/') ? receiveCoin.icon : `/${receiveCoin.icon.replace(/^static\//, 'static/')}`;
+            
+        const selectReceive = document.getElementById('crypto-receive');
+        selectReceive.value = receiveCoin.ticker;
+        
+        let option = selectReceive.querySelector(`option[value="${receiveCoin.ticker}"]`);
+        if (!option) {
+            option = document.createElement('option');
+            option.value = receiveCoin.ticker;
+            option.textContent = receiveDisplayText;
+            option.selected = true;
+            selectReceive.appendChild(option);
+        } else {
+            option.selected = true;
+        }
+            
+        const receiveInputField = document.getElementById('dropdown-search-receive');
+        receiveInputField.value = receiveDisplayText;
+        receiveInputField.style.backgroundImage = `url(${receiveIconUrl})`;
+        receiveInputField.style.backgroundRepeat = 'no-repeat';
+        receiveInputField.style.backgroundPosition = 'left 10px center';
+        receiveInputField.style.paddingLeft = '40px';
+        updateNetworkFields('receive', receiveCoin.network);
+    }
+}
+
+async function loadCoins() {
+    try {
+        const response = await fetch('/static/coins.json');
+        const jsonData = await response.json();
+        createModalOptions(jsonData);
+    } catch (error) {
+        console.error('Error loading coins:', error);
+    }
+}
+
+    loadCoins();
+
+    document.getElementById('dropdown-search-send').addEventListener('click', () => openModal(document.getElementById('crypto-send')));
+    document.getElementById('dropdown-search-receive').addEventListener('click', () => openModal(document.getElementById('crypto-receive')));
+
+    modalSearch.addEventListener('keyup', filterModalOptions);
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.getElementById('swap-form').addEventListener('submit', function() {
+        document.getElementById('crypto-send').classList.remove('hidden');
+        document.getElementById('crypto-receive').classList.remove('hidden');
+    });
+
+    document.getElementById('dropdown-search-send').setAttribute('readonly', true);
+    document.getElementById('dropdown-search-receive').setAttribute('readonly', true);
+});
+</script>
+    
+    @Footer(){}
+}

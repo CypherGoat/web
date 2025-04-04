@@ -16,8 +16,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -83,7 +85,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"coincraddle":  {"/exchanges/coincraddle.png", true},
 	"exch.cx":      {"/exchanges/exchcx.png", false},
 	"fixedfloat":   {"/exchanges/fixedfloat-v2.svg", true},
-	"majesticbank": {"exchanges/majesticbank.png", false},
+	"majesticbank": {"/exchanges/majesticbank.png", false},
 	"nanswap":      {"/exchanges/nanswap.svg", true},
 	"simpleswap":   {"/exchanges/simpleswap.svg", true},
 	"wizardswap":   {"/exchanges/wizardswap.png", false},
@@ -229,7 +231,166 @@ func GetTransactionHandler(c echo.Context) error {
 
 }
 
+func getCoinName(ticker string) string {
+	defaultName := strings.ToUpper(ticker)
+
+	jsonFile, err := os.ReadFile("static/coins.json")
+	if err != nil {
+		fmt.Printf("Error reading coins.json: %v\n", err)
+		return defaultName
+	}
+
+	type Coin struct {
+		Ticker  string `json:"ticker"`
+		Name    string `json:"name"`
+		Network string `json:"network"`
+	}
+
+	var coins []Coin
+	if err := json.Unmarshal(jsonFile, &coins); err != nil {
+		fmt.Printf("Error parsing coins.json: %v\n", err)
+		return defaultName
+	}
+
+	for _, coin := range coins {
+		if strings.EqualFold(coin.Ticker, ticker) &&
+			(coin.Network == ticker || coin.Network == "") {
+			return coin.Name
+		}
+	}
+
+	for _, coin := range coins {
+		if strings.EqualFold(coin.Ticker, ticker) {
+			return coin.Name
+		}
+	}
+
+	return defaultName
+}
+
+func CoinExchangeScreenHandler(c echo.Context) error {
+	coin := c.Param("coin")
+
+	coinName, exists := coinExists(coin)
+	if !exists {
+		return c.Redirect(http.StatusSeeOther, "/")
+	}
+
+	return views.CoinExchangeScreen(coin, coinName).Render(c.Request().Context(), c.Response())
+}
+
+func coinExists(ticker string) (string, bool) {
+	jsonFile, err := os.ReadFile("static/coins.json")
+	if err != nil {
+		fmt.Printf("Error reading coins.json: %v\n", err)
+		return "", false
+	}
+
+	type Coin struct {
+		Ticker  string `json:"ticker"`
+		Name    string `json:"name"`
+		Network string `json:"network"`
+	}
+
+	var coins []Coin
+	if err := json.Unmarshal(jsonFile, &coins); err != nil {
+		fmt.Printf("Error parsing coins.json: %v\n", err)
+		return "", false
+	}
+
+	for _, coin := range coins {
+		if strings.EqualFold(coin.Ticker, ticker) &&
+			(coin.Network == ticker || coin.Network == "") {
+			return coin.Name, true
+		}
+	}
+
+	for _, coin := range coins {
+		if strings.EqualFold(coin.Ticker, ticker) {
+			return coin.Name, true
+		}
+	}
+
+	return "", false
+}
+
 func HealthHandler(c echo.Context) error {
 	c.String(http.StatusOK, "OK")
 	return nil
+}
+
+func RobotsHandler(c echo.Context) error {
+	c.Response().Header().Set(echo.HeaderContentType, "text/plain")
+
+	robots := `User-agent: *
+Allow: /
+Sitemap: https://cyphergoat.com/sitemap.xml
+`
+
+	return c.String(http.StatusOK, robots)
+}
+func SitemapHandler(c echo.Context) error {
+	c.Response().Header().Set(echo.HeaderContentType, "application/xml")
+
+	sitemap := `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`
+
+	// Add static pages
+	staticPages := []struct {
+		Path       string
+		ChangeFreq string
+		Priority   string
+	}{
+		{"/", "daily", "1.0"},
+		{"/about", "monthly", "0.8"},
+		{"/terms", "monthly", "0.7"},
+		{"/privacy", "monthly", "0.7"},
+		{"/contact", "monthly", "0.8"},
+		{"/affiliate", "weekly", "0.9"},
+		{"/affiliate/terms", "monthly", "0.7"},
+	}
+
+	baseURL := "https://cyphergoat.com"
+
+	for _, page := range staticPages {
+		sitemap += fmt.Sprintf(`
+  <url>
+    <loc>%s%s</loc>
+    <changefreq>%s</changefreq>
+    <priority>%s</priority>
+  </url>`, baseURL, page.Path, page.ChangeFreq, page.Priority)
+	}
+
+	jsonFile, err := os.ReadFile("static/coins.json")
+	if err == nil {
+		type Coin struct {
+			Ticker  string `json:"ticker"`
+			Name    string `json:"name"`
+			Network string `json:"network"`
+		}
+
+		var coins []Coin
+		if err := json.Unmarshal(jsonFile, &coins); err == nil {
+			uniqueTickers := make(map[string]bool)
+
+			for _, coin := range coins {
+				ticker := strings.ToLower(coin.Ticker)
+				if _, exists := uniqueTickers[ticker]; !exists {
+					uniqueTickers[ticker] = true
+
+					sitemap += fmt.Sprintf(`
+  <url>
+    <loc>%s/swap/%s</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`, baseURL, ticker)
+				}
+			}
+		}
+	}
+
+	sitemap += `
+</urlset>`
+
+	return c.String(http.StatusOK, sitemap)
 }
