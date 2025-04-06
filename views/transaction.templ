@@ -54,6 +54,11 @@ templ TransactionPage(transaction api.Transaction){
                 <p class="text-gray-400 text-xl font-medium">Send Address:</p>
                 <code class="text-white font-semibold break-words block bg-gray-650 p-2 rounded">{ transaction.Address }</code>
             </div>
+            if transaction.Memo != ""{
+            <div class="mb-4">
+<p class="text-gray-400 text-xl font-medium">Memo <span class="text-red-900 font-semibold">REQUIRED</span></p>                <code class="text-white font-semibold break-words block bg-gray-650 p-2 rounded">{ transaction.Memo }</code>
+            </div>
+            }
             <div class="mb-4 text-center">
                 <button id="toggleButton" type="button" onclick={ toggleQRCodeHandler(transaction.Address) } 
                         class="text-green-400 hover:text-green-300 font-medium transition duration-300">Show QR Code</button>

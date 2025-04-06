@@ -5,7 +5,7 @@
         "network": "btc",
         "isStable": false,
         "icon": "icons/btc.png",
-        "min": 5.958e-05
+        "min": 6.037e-05
     },
     {
         "ticker": "btc",
@@ -13,7 +13,7 @@
         "network": "lightning",
         "isStable": false,
         "icon": "icons/btc.png",
-        "min": 5.958e-05,
+        "min": 6.037e-05,
         "alfacash": "",
         "changee": "btclightning",
         "changehero": "",
@@ -25,7 +25,8 @@
         "nanswap": "",
         "simpleswap": "btc-lightning",
         "stealthex": "",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn": "LN-BTC"
     },
     {
         "ticker": "eth",
@@ -33,7 +34,7 @@
         "network": "eth",
         "isStable": false,
         "icon": "icons/eth.png",
-        "min": 0.002548
+        "min": 0.002795
     },
     {
         "ticker": "xmr",
@@ -41,7 +42,7 @@
         "network": "xmr",
         "isStable": false,
         "icon": "icons/xmr.png",
-        "min": 0.02372
+        "min": 0.02329
     },
     {
         "ticker": "ltc",
@@ -49,7 +50,7 @@
         "network": "ltc",
         "isStable": false,
         "icon": "icons/ltc.png",
-        "min": 0.05342
+        "min": 0.06156
     },
     {
         "ticker": "bch",
@@ -64,7 +65,7 @@
         "network": "doge",
         "isStable": false,
         "icon": "icons/doge.png",
-        "min": 29.92
+        "min": 30.44
     },
     {
         "ticker": "pol",
@@ -86,7 +87,7 @@
         "network": "sol",
         "isStable": false,
         "icon": "icons/sol.png",
-        "min": 0.03965
+        "min": 0.04201
     },
     {
         "ticker": "xtz",
@@ -94,7 +95,7 @@
         "network": "xtz",
         "isStable": false,
         "icon": "icons/xtz.png",
-        "min": 7.247
+        "min": 7.746
     },
     {
         "ticker": "ada",
@@ -102,7 +103,7 @@
         "network": "ada",
         "isStable": false,
         "icon": "icons/ada.png",
-        "min": 7.061
+        "min": 7.843
     },
     {
         "ticker": "xrp",
@@ -110,7 +111,7 @@
         "network": "xrp",
         "isStable": false,
         "icon": "icons/xrp.png",
-        "min": 2.092
+        "min": 2.392
     },
     {
         "ticker": "trx",
@@ -118,7 +119,7 @@
         "network": "trx",
         "isStable": false,
         "icon": "icons/trx.png",
-        "min": 21.2
+        "min": 20.93
     },
     {
         "ticker": "link",
@@ -126,7 +127,7 @@
         "network": "link",
         "isStable": false,
         "icon": "icons/link.png",
-        "min": 0.3582
+        "min": 0.3968
     },
     {
         "ticker": "hbar",
@@ -149,7 +150,7 @@
         "network": "xno",
         "isStable": false,
         "icon": "icons/xno.webp",
-        "min": 4.625
+        "min": 6.241
     },
     {
         "ticker": "usdc",
@@ -505,7 +506,7 @@
         "network": "dot",
         "isStable": false,
         "icon": "icons/dot.png",
-        "min": 1.119
+        "min": 1.269
     },
     {
         "ticker": "etc",
@@ -521,7 +522,7 @@
         "network": "hive",
         "isStable": false,
         "icon": "icons/hive.webp",
-        "min": 21.1
+        "min": 22.97
     },
     {
         "ticker": "wow",
@@ -529,7 +530,7 @@
         "network": "wow",
         "isStable": false,
         "icon": "icons/wow.png",
-        "min": 127.4
+        "min": 125.6
     },
     {
         "ticker": "ban",
@@ -537,7 +538,7 @@
         "network": "banano",
         "isStable": false,
         "icon": "icons/ban.webp",
-        "min": 2539.0,
+        "min": 3234.0,
         "exolix": "ban",
         "nanswap": "ban"
     },
@@ -555,6 +556,77 @@
         "network": "dcr",
         "isStable": false,
         "icon": "icons/dcr.webp",
+        "min": 0.4195
+    },
+    {
+        "ticker": "aave",
+        "name": "Aave",
+        "network": "aave",
+        "isStable": false,
+        "icon": "icons/aave.webp",
+        "min": 0.03394
+    },
+    {
+        "ticker": "avax",
+        "name": "Avalanche",
+        "network": "avax",
+        "isStable": false,
+        "icon": "icons/avax.webp",
         "min": 0.4263
+    },
+    {
+        "ticker": "bat",
+        "name": "Basic Attention Token",
+        "network": "bat",
+        "isStable": false,
+        "icon": "icons/bat.webp",
+        "min": 12
+    },
+    {
+        "ticker": "link",
+        "name": "Chainlink",
+        "network": "link",
+        "isStable": false,
+        "icon": "icons/link.webp",
+        "min": 0.3968
+    },
+    {
+        "ticker": "gusd",
+        "name": "Gemini Dollar",
+        "network": "gusd",
+        "isStable": true,
+        "icon": "icons/gusd.webp"
+    },
+    {
+        "ticker": "paxg",
+        "name": "Paxos Gold",
+        "network": "paxg",
+        "isStable": false,
+        "icon": "icons/paxg.webp",
+        "min": 0.002
+    },
+    {
+        "ticker": "hbar",
+        "name": "Hedera",
+        "network": "hbar",
+        "isStable": false,
+        "icon": "icons/hbar.webp",
+        "min": 12
+    },
+    {
+        "ticker": "hbar",
+        "name": "Hedera",
+        "network": "hbar",
+        "isStable": false,
+        "icon": "icons/hbar.webp",
+        "min": 12
+    },
+    {
+        "ticker": "ark",
+        "name": "Ark",
+        "network": "ark",
+        "isStable": false,
+        "icon": "icons/ark.webp",
+        "min": 14.24
     }
 ]

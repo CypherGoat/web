@@ -80,6 +80,7 @@ type Transaction struct {
 	CGID           string    `json:"CGID,omitempty"`
 	CreatedAt      time.Time `json:"CreatedAt,omitempty"`
 	Affiliate      string    `json:"Affiliate,omitempty"`
+	Memo           string    `json:"Memo,omitempty"`
 }
 
 func SendRequest(url string) ([]byte, error) {
