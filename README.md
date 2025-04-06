@@ -38,6 +38,31 @@ Start the development server
 
 If you head to http://localhost:4200 you should see cyphergoat up and running
 
+## Add support for a coin
+To add support for a new coin, it must first be available on at least one of our partnered exchanges. You can view the list of supported exchanges [here](https://cyphergoat.com/#our-partners).
+
+Once confirmed, follow these steps:
+
+1. **Edit the `coins.json` File**  
+   Add your coin to the [`coins.json`](https://github.com/CypherGoat/web/blob/main/static/coins.json) file. Use the following format as a template:
+
+
+```json
+   {
+     "ticker": "xmr",
+     "name": "Monero",
+     "network": "xmr",
+     "isStable": false,
+     "icon": "icons/xmr.webp",
+     "min": 0
+   }
+```
+
+> Note: you should leave the min as 0 and it will be completed by our automated system.
+
+2. **Add the Coin Icon**
+
+Upload the coin’s logo (preferably from coingecko) to the [icons folder](https://github.com/CypherGoat/web/tree/main/static/icons).
 
 ## API intergration
 CypherGoat requires an API key for fetching exchange rates and executing trades. The API provides endpoints for
