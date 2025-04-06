@@ -316,7 +316,7 @@ templ EstimateCard(offers []api.Estimate) {
 </div>
         
 <div id="estimates-container">
-    for i, offer := range offers {
+for i, offer := range offers {
         if !(offer.SendAmount == 0) {
             <form method="GET" action="/step2" class="estimate-form" data-kyc={ fmt.Sprintf("%d", offer.KYCScore) } data-rate={ fmt.Sprintf("%f", offer.ReceiveAmount) } data-is-top={ fmt.Sprintf("%t", i == 0) }>
                 <input type="hidden" name="coin1" value={ offer.Coin1 }>
@@ -330,11 +330,11 @@ templ EstimateCard(offers []api.Estimate) {
                     <h2 class="text-5xl font-bold text-center text-white mb-6">
                         { offer.ExchangeName }
                         if offer.KYCScore == 0 {
-                            <span class="kyc-badge kyc-0" data-tooltip="Exchange never asks for KYC">0</span>
+                            <span class="kyc-badge kyc-0" data-tooltip={ fmt.Sprintf("Exchange never asks for KYC. %s", LogText(offer.Log) ) }>0</span>
                         } else if offer.KYCScore == 1 {
-                            <span class="kyc-badge kyc-1" data-tooltip="Exchange may ask for KYC very rarely or never">1</span>
+                            <span class="kyc-badge kyc-1" data-tooltip={ fmt.Sprintf("Exchange may ask for KYC very rarely or never. %s", LogText(offer.Log)) }>1</span>
                         } else {
-                            <span class="kyc-badge kyc-2" data-tooltip="Exchange may rarely ask for KYC">2</span>
+                            <span class="kyc-badge kyc-2" data-tooltip={ fmt.Sprintf("Exchange may rarely ask for KYC. %s", LogText(offer.Log)) }>2</span>
                         }
                     </h2>
                     <div class="estimate-details">
@@ -446,4 +446,11 @@ templ EstimateCard(offers []api.Estimate) {
         });
     })();
 </script>
+}
+
+func LogText(log bool) string {
+    if log {
+        return "Exchange requires IP logging"
+    }
+    return "Exchange does not require IP logging"
 }

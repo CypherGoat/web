@@ -51,6 +51,7 @@ type Estimate struct {
 	Address       string
 	ImageURL      string
 	KYCScore      int `json:"KYCScore"`
+	Log           bool
 }
 
 type Info struct {
@@ -159,6 +160,7 @@ func FetchEstimateFromAPI(coin1, coin2 string, amount float64, best bool, networ
 		result.Rates[i].SendAmount = amount
 		result.Rates[i].Network1 = network1
 		result.Rates[i].Network2 = network2
+
 	}
 
 	return result.Rates, nil

@@ -119,6 +119,9 @@ func EstimateHandler(c echo.Context) error {
 		} else {
 			apiEstimates[i].ImageURL = "https://example.com/images/default.png"
 		}
+
+		apiEstimates[i].Log = exchangeInfo[name].RequireIP
+
 	}
 
 	return views.EstimateCard(apiEstimates).Render(c.Request().Context(), c.Response())
