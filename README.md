@@ -62,7 +62,7 @@ Once confirmed, follow these steps:
 
 2. **Add the Coin Icon**
 
-Upload the coin’s logo (preferably from coingecko) to the [icons folder](https://github.com/CypherGoat/web/tree/main/static/icons).
+Upload the coin’s logo (preferably from coingecko) to the [icons folder](https://github.com/CypherGoat/web/tree/main/static/icons)
 
 ## API intergration
 CypherGoat requires an API key for fetching exchange rates and executing trades. The API provides endpoints for
