@@ -92,6 +92,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"stealthex":    {"/exchanges/stealthex.svg", true},
 	"exolix":       {"/exchanges/exolix.png", true},
 	"swapuz":       {"/exchanges/swapuz.svg", false},
+	"bitcoinvn":    {"/exchanges/bitcoinvn.png", false},
 }
 
 func EstimateHandler(c echo.Context) error {
