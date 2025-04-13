@@ -790,6 +790,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectElementReceive = document.getElementById('crypto-receive');
     const scrollButton = document.getElementById("hide-on-swap");
     const faqSection = document.getElementById("faq-section");
+    
+    // Track if options are currently visible and which one is active
+    let activeOptionIndex = 0;
 
     function updateNetworkFields(type, network) {
         if (type === 'send') {
@@ -861,6 +864,9 @@ document.addEventListener('DOMContentLoaded', function() {
         modalSearch.value = '';
         filterModalOptions();
         setTimeout(() => modalSearch.focus(), 0);
+        
+        // Reset active option index
+        activeOptionIndex = 0;
     }
 
     function closeModal() {
@@ -871,12 +877,36 @@ document.addEventListener('DOMContentLoaded', function() {
         const filter = modalSearch.value.toLowerCase();
         const options = modalOptions.getElementsByTagName('div');
         let found = false;
+        let visibleCount = 0;
 
-        Array.from(options).forEach(option => {
+        Array.from(options).forEach((option, index) => {
             const optionText = option.dataset.text.toLowerCase();
-            option.style.display = optionText.includes(filter) ? 'flex' : 'none';
-            found = found || option.style.display === 'flex';
+            const isVisible = optionText.includes(filter);
+            option.style.display = isVisible ? 'flex' : 'none';
+            
+            if (isVisible) {
+                visibleCount++;
+                if (!found) {
+                    // Mark the first visible option with a class
+                    option.classList.add('active-option');
+                    activeOptionIndex = index;
+                    found = true;
+                } else {
+                    option.classList.remove('active-option');
+                }
+            }
         });
+        
+        // Add styling for the active option
+        const styleEl = document.getElementById('active-option-style');
+        if (!styleEl) {
+            const style = document.createElement('style');
+            style.id = 'active-option-style';
+            style.textContent = '.active-option { background-color: #2a3042; }';
+            document.head.appendChild(style);
+        }
+        
+        return visibleCount;
     }
 
     function createModalOptions(jsonData) {
@@ -893,20 +923,7 @@ document.addEventListener('DOMContentLoaded', function() {
             optionDiv.dataset.text = displayTextWithTicker;
 
             optionDiv.onclick = () => {
-                currentSelectElement.value = item.ticker;
-                const inputField = document.querySelector(`#dropdown-search-${currentSelectElement.id.split('-')[1]}`);
-                inputField.value = displayText;
-                inputField.style.backgroundImage = `url(${item.icon})`;
-                inputField.style.backgroundRepeat = 'no-repeat';
-                inputField.style.backgroundPosition = 'left 10px center';
-                inputField.style.paddingLeft = '40px';
-
-                const selectElement = document.getElementById(`crypto-${currentSelectElement.id.split('-')[1]}`);
-                selectElement.innerHTML = `<option value="${item.ticker}" selected>${displayText}</option>`;
-                selectElement.classList.add('hidden');
-
-                closeModal();
-                updateNetworkFields(currentSelectElement.id.split('-')[1], item.network);
+                selectOption(optionDiv);
             };
 
             modalOptions.appendChild(optionDiv);
@@ -914,6 +931,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
         setDefaultCoins(jsonData);
     }
+    
+    function selectOption(optionDiv) {
+        if (!optionDiv || optionDiv.style.display === 'none') return;
+        
+        const ticker = optionDiv.dataset.ticker;
+        const network = optionDiv.dataset.network;
+        const displayText = optionDiv.textContent.trim();
+        const icon = optionDiv.querySelector('img').src;
+        
+        currentSelectElement.value = ticker;
+        const inputField = document.querySelector(`#dropdown-search-${currentSelectElement.id.split('-')[1]}`);
+        inputField.value = displayText;
+        inputField.style.backgroundImage = `url(${icon})`;
+        inputField.style.backgroundRepeat = 'no-repeat';
+        inputField.style.backgroundPosition = 'left 10px center';
+        inputField.style.paddingLeft = '40px';
+
+        const selectElement = document.getElementById(`crypto-${currentSelectElement.id.split('-')[1]}`);
+        selectElement.innerHTML = `<option value="${ticker}" selected>${displayText}</option>`;
+        selectElement.classList.add('hidden');
+
+        closeModal();
+        updateNetworkFields(currentSelectElement.id.split('-')[1], network);
+    }
+
+    // Handle keyboard events in the modal
+    modalSearch.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            
+            // Get all visible options
+            const options = Array.from(modalOptions.getElementsByTagName('div'))
+                .filter(opt => opt.style.display !== 'none');
+            
+            // If there's at least one visible option, select the first one
+            if (options.length > 0) {
+                selectOption(options[0]);
+            }
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            
+            // Remove active class from all options
+            const options = Array.from(modalOptions.getElementsByTagName('div'))
+                .filter(opt => opt.style.display !== 'none');
+            
+            options.forEach(opt => opt.classList.remove('active-option'));
+            
+            // Calculate new index
+            const direction = e.key === 'ArrowDown' ? 1 : -1;
+            activeOptionIndex = (activeOptionIndex + direction + options.length) % options.length;
+            
+            // Add active class to new option
+            if (options[activeOptionIndex]) {
+                options[activeOptionIndex].classList.add('active-option');
+                options[activeOptionIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
+    });
 
     function setDefaultCoins(jsonData) {
         const defaultSendCoin = 'btc';
@@ -994,7 +1069,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('dropdown-search-send').addEventListener('click', () => openModal(document.getElementById('crypto-send')));
     document.getElementById('dropdown-search-receive').addEventListener('click', () => openModal(document.getElementById('crypto-receive')));
 
-    modalSearch.addEventListener('keyup', filterModalOptions);
+    modalSearch.addEventListener('keyup', function(e) {
+        // Don't process Enter key in keyup as we handle it in keydown
+        if (e.key !== 'Enter' && e.key !== 'ArrowDown' && e.key !== 'ArrowUp') {
+            filterModalOptions();
+        }
+    });
 
     modal.addEventListener('click', (event) => {
         if (event.target === modal) {
