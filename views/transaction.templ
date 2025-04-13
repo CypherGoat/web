@@ -16,8 +16,6 @@
 package views
 import (
     "github.com/CypherGoat/web/cmd/api"
-    "math"
-    "fmt"
     "strings"
 )
 
@@ -237,22 +235,14 @@ templ TransactionPage(transaction api.Transaction){
             <div class="transaction-section">
                 <div class="section-label">You Send</div>
                 <div class="section-value">
-                    if transaction.SendAmount == math.Floor(transaction.SendAmount) {
-                        {fmt.Sprintf("%.0f", transaction.SendAmount)}
-                    } else {
-                        {fmt.Sprintf("%.8f", transaction.SendAmount)}
-                    } { strings.ToUpper(transaction.Coin1)}
+                    { FormatFloat(transaction.SendAmount) } { strings.ToUpper(transaction.Coin1) }
                 </div>
             </div>
             
             <div class="transaction-section">
                 <div class="section-label">You Receive</div>
                 <div class="section-value">
-                    if transaction.EstimateAmount == math.Floor(transaction.EstimateAmount) {
-                        {fmt.Sprintf("%.0f", transaction.EstimateAmount)}
-                    } else {
-                        {fmt.Sprintf("%.8f", transaction.EstimateAmount)}
-                    } { strings.ToUpper(transaction.Coin2)}
+                    { FormatFloat(transaction.EstimateAmount) } { strings.ToUpper(transaction.Coin2) }
                 </div>
             </div>
             

@@ -19,7 +19,19 @@ import (
     "fmt"
     "github.com/CypherGoat/web/cmd/api"
     "strings"
+    "strconv"
 )
+
+func FormatFloat(num float64) string {
+    str := strconv.FormatFloat(num, 'f', -1, 64)
+    
+    if !strings.Contains(str, ".") {
+        return str + ".0"
+    }
+    
+    return str
+}
+
 templ EstimateCard(offers []api.Estimate) {
      <style>
         body {
@@ -437,13 +449,13 @@ for i, offer := range offers {
                         }
                     </h2>
                     <div class="coin-symbols">
-                        <span class="coin-symbol">{ fmt.Sprintf("%f", offer.SendAmount) } { strings.ToUpper(offer.Coin1) }</span>
+                        <span class="coin-symbol">{ FormatFloat(offer.SendAmount) } { strings.ToUpper(offer.Coin1) }</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         <span class="coin-symbol">{ strings.ToUpper(offer.Coin2) }</span>
                     </div>
                     <div class="estimate-details">
                         <div class="amount-highlight">
-                            { fmt.Sprintf("%f", offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }
+                            { FormatFloat(offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }
                         </div>
                         <div>
                             <img src={ offer.ImageURL } alt="{ offer.ExchangeName }" class="estimate-image">

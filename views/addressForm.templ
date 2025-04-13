@@ -255,11 +255,11 @@ templ AddressForm(estimate api.Estimate, err bool){
             <div class="trade-summary mb-6">
                 <div class="trade-row">
                     <span class="trade-label">You Send</span>
-                    <span class="trade-value">{ fmt.Sprintf("%.8f", estimate.SendAmount) } { strings.ToUpper(estimate.Coin1) }</span>
+                    <span class="trade-value">{ FormatFloat(estimate.SendAmount) } { strings.ToUpper(estimate.Coin1) }</span>
                 </div>
                 <div class="trade-row">
                     <span class="trade-label">You Receive</span>
-                    <span class="trade-value">{ fmt.Sprintf("%.8f", estimate.ReceiveAmount) } { strings.ToUpper(estimate.Coin2) }</span>
+                    <span class="trade-value">{ FormatFloat(estimate.ReceiveAmount) } { strings.ToUpper(estimate.Coin2) }</span>
                 </div>
                 <div class="trade-row">
                     <span class="trade-label">Exchange</span>
