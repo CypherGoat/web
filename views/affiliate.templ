@@ -1,3 +1,18 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package views
 
 templ Affiliate() {
@@ -11,8 +26,8 @@ templ Affiliate() {
     }
 
     body {
-        background-color: #1c1c1c;
-        font-family: 'Inter', 'Arial', sans-serif;
+        background-color: #121520;
+    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -30,45 +45,53 @@ templ Affiliate() {
         width: 100%;
     }
 
-    .container {
-        max-width: 700px;
-        height: auto;
-        margin: 0 auto;
-        padding: 1rem;
-        color: #f5f5f5;
-        align-items: center;
-    }
+.container {
+    max-width: 700px;
+    height: auto;
+    margin: 0 auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
 
-    .container2 {
-        max-width: 90%;
-        height: auto;
-        margin: 2rem auto;
-        padding: 1rem;
-        color: #f5f5f5;
-        align-items: center;
-    }
+.container2 {
+    max-width:90%;
+    height: auto;
+    margin: 2rem auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
 
-    .container3 {
-        max-width: 80%;
-        height: auto;
-        margin: 2rem auto;
-        padding: 1rem;
-        color: #f5f5f5;
-        align-items: center;
-    }
+.container3 {
+    max-width:70%;
+    height: auto;
+    margin: 2rem auto;
+    padding: 1rem;
+    color: #f5f5f5;
+    align-items: center;
+}
 
     .card {
-        background: linear-gradient(145deg, #2c2c2c, #252525);
+        background: linear-gradient(145deg, #1a1f2e, #222633);
         border-radius: 16px;
-        padding: 2.5rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        transition: box-shadow 0.3s ease, transform 0.2s ease;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
         border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
         transform: translateY(-2px);
+    }
+
+    .card h2 {
+        color: #ffffff;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        text-align: center;
     }
 
     .rgb-effect {

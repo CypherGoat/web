@@ -130,14 +130,6 @@
         "min": 0.4115
     },
     {
-        "ticker": "hbar",
-        "name": "Hedera",
-        "network": "hbar",
-        "isStable": false,
-        "icon": "icons/hbar.png",
-        "min": 0
-    },
-    {
         "ticker": "usdc",
         "name": "USDC Coin",
         "network": "usdc",
@@ -169,7 +161,8 @@
         "nanswap": "usdc-matic",
         "simpleswap": "usdcpoly",
         "stealthex": "usdcmatic",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdcpolygon2"
     },
     {
         "ticker": "usdc",
@@ -188,7 +181,8 @@
         "nanswap": "usdc-sol",
         "simpleswap": "usdcspl",
         "stealthex": "usdcsol",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdcsol"
     },
     {
         "ticker": "usdc",
@@ -207,7 +201,8 @@
         "nanswap": "usdc-algo",
         "simpleswap": "usdcalgo",
         "stealthex": "usdcalgo",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdcalgo"
     },
     {
         "ticker": "usdc",
@@ -226,7 +221,8 @@
         "nanswap": "usdc-bsc",
         "simpleswap": "usdcbep20",
         "stealthex": "usdcbsc",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdcbep20"
     },
     {
         "ticker": "usdc",
@@ -245,7 +241,8 @@
         "nanswap": "usdc-op",
         "simpleswap": "usdcop",
         "stealthex": "usdcop",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdcoptimism2"
     },
     {
         "ticker": "usdc",
@@ -264,7 +261,8 @@
         "nanswap": "usdc-base",
         "simpleswap": "usdcbase",
         "stealthex": "usdcbase",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdcbase"
     },
     {
         "ticker": "usdc",
@@ -283,7 +281,8 @@
         "nanswap": "usdc-trx",
         "simpleswap": "usdctrc20",
         "stealthex": "usdctrc20",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdctrc20"
     },
     {
         "ticker": "usdt",
@@ -309,7 +308,8 @@
         "nanswap": "usdt-trx",
         "simpleswap": "usdttrc20",
         "stealthex": "usdttrc20",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdttrc20"
     },
     {
         "ticker": "usdt",
@@ -328,7 +328,8 @@
         "nanswap": "usdt-matic",
         "simpleswap": "usdtpoly",
         "stealthex": "usdtmatic",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdtpolygon"
     },
     {
         "ticker": "usdt",
@@ -346,7 +347,8 @@
         "nanswap": "usdt-bsc",
         "simpleswap": "usdtbep20",
         "stealthex": "usdtbsc",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdtbep20"
     },
     {
         "ticker": "usdt",
@@ -364,7 +366,8 @@
         "nanswap": "usdt-sol",
         "simpleswap": "usdtspl",
         "stealthex": "usdtsol",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdtsol"
     },
     {
         "ticker": "usdt",
@@ -382,7 +385,8 @@
         "nanswap": "usdt-algo",
         "simpleswap": "usdtalgo",
         "stealthex": "usdtalgo",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"usdtalgo"
     },
     {
         "ticker": "busd",
@@ -400,7 +404,8 @@
         "nanswap": "busd-bsc",
         "simpleswap": "busd",
         "stealthex": "busd",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"busd"
     },
     {
         "ticker": "busd",
@@ -418,10 +423,11 @@
         "nanswap": "",
         "simpleswap": "busderc20",
         "stealthex": "busderc20",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"busderc20"
     },
     {
-        "ticker": "dai",
+        "ticker": "dai", 
         "name": "Dai",
         "network": "eth",
         "isStable": true,
@@ -436,7 +442,8 @@
         "nanswap": "dai-eth",
         "simpleswap": "dai",
         "stealthex": "dai",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"dai"
     },
     {
         "ticker": "dai",
@@ -454,7 +461,8 @@
         "nanswap": "dai-bsc",
         "simpleswap": "daibep20",
         "stealthex": "",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"daibep20"
     },
     {
         "ticker": "dai",
@@ -472,7 +480,8 @@
         "nanswap": "dai-matic",
         "simpleswap": "daimatic",
         "stealthex": "daimatic",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"daipolygon"
     },
     {
         "ticker": "dai",
@@ -490,7 +499,8 @@
         "nanswap": "dai-op",
         "simpleswap": "daiop",
         "stealthex": "daiop",
-        "wizardswap": ""
+        "wizardswap": "",
+        "bitcoinvn":"daioptimism"
     },
     {
         "ticker": "shib",
@@ -604,14 +614,6 @@
         "isStable": false,
         "icon": "icons/paxg.webp",
         "min": 0.002
-    },
-    {
-        "ticker": "hbar",
-        "name": "Hedera",
-        "network": "hbar",
-        "isStable": false,
-        "icon": "icons/hbar.webp",
-        "min": 12
     },
     {
         "ticker": "hbar",

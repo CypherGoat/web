@@ -1,3 +1,18 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package views 
 
 import (
@@ -9,8 +24,8 @@ import (
 templ AddressForm(estimate api.Estimate, err bool){
 <style>
     body {
-        background-color: #1c1c1c;
-        font-family: 'Arial', sans-serif;
+        background-color: #121520;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
     }
 
     .container {
@@ -22,19 +37,21 @@ templ AddressForm(estimate api.Estimate, err bool){
 
     .card {
         max-width: 600px;
-        background: #2c2c2c;
+        background: linear-gradient(145deg, #1a1f2e, #222633);
         border-radius: 16px;
         padding: 2rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        transition: box-shadow 0.3s ease;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
+        transform: translateY(-2px);
     }
 
     .card h2 {
-        color: #3b2dfd;
+        color: #ffffff;
         font-size: 1.75rem;
         margin-bottom: 1.5rem;
         font-weight: 700;
@@ -57,98 +74,199 @@ templ AddressForm(estimate api.Estimate, err bool){
     .form-input {
         width: 100%;
         padding: 0.75rem;
-        background-color: #2e2e2e;
+        background-color: #1a1f2e;
         color: #e0e0e0;
-        border: 1px solid #555;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         font-size: 1rem;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-input:focus {
-        border-color: #4a54f1;
+        border-color: #0066cc;
         outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
     }
 
     .btn-primary {
-    background: linear-gradient(45deg, #00bfff, #1e90ff, #4682b4, #0000ff);
-    background-size: 400% 400%;
-    color: #fff;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    width: 100%;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-    background-clip: padding-box;
-    position: relative;
-    animation: rgbAnimation 10s ease infinite;
-}
+        background: linear-gradient(135deg, #0088ff, #0055cc);
+        color: #ffffff;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
 
     .btn-primary:hover {
-        transform: scale(1.02);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
     }
 
     .btn-primary:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.3);
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3);
     }
 
-    @keyframes rgbAnimation {
-        0% { background-position: 0% 0%; }
-        50% { background-position: 100% 100%; }
-        100% { background-position: 0% 0%; }
+    .action-button {
+        background: linear-gradient(135deg, #0088ff, #0055cc);
+        color: #ffffff;
+        padding: 0.85rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 102, 204, 0.2);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .action-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s ease;
+    }
+    
+    .action-button:hover {
+        background: linear-gradient(135deg, #0099ff, #0066dd);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 102, 204, 0.3);
+    }
+    
+    .action-button:hover::before {
+        left: 100%;
+    }
+    
+    .action-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 102, 204, 0.2);
     }
 
-.exchange-logo {
-    height: 32px;
-    width: auto;
-    max-width: 100px;
-    object-fit: contain;
-    filter: grayscale(20%) brightness(1.1);
-}
+    .exchange-logo {
+        height: 40px;
+        width: auto;
+        max-width: 120px;
+        object-fit: contain;
+        filter: grayscale(20%) brightness(1.1);
+        transition: all 0.3s ease;
+    }
 
-.partner-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-top: 1.5rem;
-    background-color: #252525;
-    border-radius: 8px;
-    padding: 0.75rem;
-}
+    .exchange-logo:hover {
+        filter: grayscale(0%) brightness(1.2);
+        transform: scale(1.05);
+    }
 
-.partner-label {
-    color: #a0a0a0;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-}
+    .partner-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
-.partner-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-}
+    .partner-label {
+        color: #a0a0a0;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.75rem;
+    }
 
+    .partner-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .trade-summary {
+        background: rgba(0, 102, 204, 0.1);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(0, 102, 204, 0.15);
+    }
+
+    .trade-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .trade-row:last-child {
+        border-bottom: none;
+    }
+
+    .trade-label {
+        color: #b0b0b0;
+        font-size: 0.9rem;
+    }
+
+    .trade-value {
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    .error-message {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(200, 35, 51, 0.8));
+        border-left: 4px solid #dc3545;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+    }
 </style>
 @Header(){
     if err{
-        <div class="bg-red-500 text-white p-4 text-center">
+        <div class="error-message text-center">
             <p>There was an error while creating your trade. Please check that you have entered a valid { strings.ToUpper(estimate.Network2) } address. If the issue persists try a different exchange.</p>
         </div>
     }
-    <div class="flex items-center justify-center min-h-screen bg-[#1c1c1c]">
-        <div class="w-[600px] bg-[#2c2c2c] rounded-2xl p-8 shadow-lg transition-shadow hover:shadow-xl text-white">
+    <div class="flex items-center justify-center min-h-screen bg-[#121520]">
+        <div class="w-[600px] bg-gradient-to-br from-[#1a1f2e] to-[#222633] rounded-2xl p-8 shadow-lg border border-gray-800 transition-all hover:shadow-xl text-white hover:translate-y-[-2px]">
             <div class="flex justify-center items-center gap-4 mb-6">
-                <h2 class="text-3xl font-bold text-white">Create Trade</h2>
+                <h2 class="text-3xl font-bold text-white">Complete Your Trade</h2>
             </div>
+            
+            <div class="trade-summary mb-6">
+                <div class="trade-row">
+                    <span class="trade-label">You Send</span>
+                    <span class="trade-value">{ fmt.Sprintf("%.8f", estimate.SendAmount) } { strings.ToUpper(estimate.Coin1) }</span>
+                </div>
+                <div class="trade-row">
+                    <span class="trade-label">You Receive</span>
+                    <span class="trade-value">{ fmt.Sprintf("%.8f", estimate.ReceiveAmount) } { strings.ToUpper(estimate.Coin2) }</span>
+                </div>
+                <div class="trade-row">
+                    <span class="trade-label">Exchange</span>
+                    <span class="trade-value">{ estimate.ExchangeName }</span>
+                </div>
+            </div>
+            
             <form class="grid gap-6" method="GET" action="/step3">
                 <input type="hidden" name="coin1" value={ estimate.Coin1 }>
                 <input type="hidden" name="coin2" value={ estimate.Coin2 }>
@@ -158,27 +276,24 @@ templ AddressForm(estimate api.Estimate, err bool){
                 <input type="hidden" name="network2" value={ estimate.Network2 }>
 
                 <div>
-                    <label class="block text-gray-300 font-semibold mb-2">Amount</label>
-                    <p class="w-full p-3 bg-[#2e2e2e] text-gray-300 border border-gray-600 rounded-lg">{ fmt.Sprintf("%f",estimate.ReceiveAmount) }</p>
+                    <label for="address" class="block text-gray-300 font-semibold mb-2">Your { strings.ToUpper(estimate.Coin2) } Address</label>
+                    <input type="text" id="address" name="address" placeholder={ "Enter your " + strings.ToUpper(estimate.Coin2) + " address" } required step="any"
+                        class="w-full p-3 bg-[#1a1f2e] text-gray-300 border border-gray-700 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 transition-all">
                 </div>
 
-                <div>
-                    <label for="address" class="block text-gray-300 font-semibold mb-2">Address</label>
-                    <input type="text" id="address" name="address" placeholder={ strings.ToUpper(estimate.Coin2) + " address " } required step="any"
-                        class="w-full p-3 bg-[#2e2e2e] text-gray-300 border border-gray-600 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                </div>
-
-                <button class="w-full bg-gradient-to-r from-blue-400 to-blue-700 text-white font-bold py-3 rounded-lg transition-transform transform hover:scale-105">
+                <button class="action-button">
                     Create Trade
                 </button>
-// <div class="partner-section">
-    // <p class="partner-label">Partner Selected</p>
-    // <div class="partner-container">
-    //     <img src={ estimate.ImageURL } alt={ estimate.ExchangeName } class="exchange-logo">
-    // </div>
-// </div>
-<div class="text-center text-gray-400 mt-4">
-                    <p>The exchange service is provided by { estimate.ExchangeName }. Creating an order confirms your agreement with the { estimate.ExchangeName } rules.</p>
+
+                <div class="partner-section">
+                    <p class="partner-label">Powered By</p>
+                    <div class="partner-container">
+                        <img src={ estimate.ImageURL } alt={ estimate.ExchangeName } class="exchange-logo">
+                    </div>
+                </div>
+                
+                <div class="text-center text-gray-400 mt-4">
+                    <p>The exchange service is provided by { estimate.ExchangeName }. Creating an order confirms your agreement with the { estimate.ExchangeName } terms and conditions.</p>
                 </div>
             </form>
         </div>

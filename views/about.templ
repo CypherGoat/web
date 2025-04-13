@@ -1,48 +1,76 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package views
 
 templ About(){
     @Header(){
     }
     <style>
-       body {
-        background-color: #1e1e1e; 
-        color: #e0e0e0; 
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+html, body {
+    height: 100%;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #121520;
+    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
     
     .feature-card {
-        background: rgba(44, 44, 44, 0.6);
+        background: linear-gradient(145deg, #21283a, #282e40);
         border-radius: 16px;
         padding: 1.5rem;
         border: 1px solid rgba(255, 255, 255, 0.05);
         margin-bottom: 1.5rem;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     }
     
     .feature-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     }
     
     .feature-icon {
         font-size: 2rem;
         margin-bottom: 1rem;
-        color: #4a54f1;
+        color: #4d7cc7;
+    }
+
+    .section-title {
+        background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     </style>
 <div class="text-white py-12">
     <div class="max-w-4xl mx-auto px-4 text-center">
-      <h1 class="text-4xl font-bold mb-6">About CypherGoat</h1>
+      <h1 class="text-4xl font-bold mb-6 section-title">About CypherGoat</h1>
 
       <p class="text-lg text-gray-300 mb-8">
         Swap your crypto at the best rate on the market. Fast, Private, Open source!
       </p>
 
       <div class="mb-12">
-        <h2 class="text-3xl font-bold mb-6">What is CypherGoat?</h2>
+        <h2 class="text-3xl font-bold mb-6 section-title">What is CypherGoat?</h2>
         <p class="text-lg text-gray-300 mb-6">
           CypherGoat is a cryptocurrency exchange aggregator designed to help you find the best exchange rates across multiple platforms. Unlike traditional exchanges, we don't hold your funds - we simply connect you to the best rates available.
         </p>
@@ -81,20 +109,20 @@ templ About(){
       </div>
       
       <div class="mb-12">
-        <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
+        <h2 class="text-3xl font-bold mb-6 section-title">Our Mission</h2>
         <p class="text-lg text-gray-300 mb-6">
           Our mission is to make cryptocurrency exchanges accessible, private, and fair for everyone. We believe in financial freedom and aim to provide tools that help users maintain control of their assets while getting the best deals possible.
         </p>
       </div>
 
       <div class="mb-12">
-        <h2 class="text-3xl font-bold mb-6">Our Partners</h2>
+        <h2 class="text-3xl font-bold mb-6 section-title">Our Partners</h2>
         <p class="text-lg text-gray-300 mb-6">
           We work with trusted exchange partners including StealthEx, ChangeNOW, Changehero, FixedFloat, and many more to ensure you always have options for your cryptocurrency swaps.
         </p>
       </div>
 
-      <p class="text-lg text-gray-300 mb-6"> Developed by <a href="https://4rkal.com" class="text-blue-400 hover:text-blue-500">4rkal</a></p>
+      <p class="text-lg text-gray-300 mb-6"> Developed by <a href="https://4rkal.com" class="text-gray-400 hover:text-gray-300 transition-colors">4rkal</a></p>
 
     </div>
   </div>
@@ -107,9 +135,9 @@ templ Contact() {
     @Header(){}
     <style>
         body {
-            background-color: #1e1e1e;
+            background-color: #1a1d26;
             color: #e0e0e0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -125,6 +153,13 @@ templ Contact() {
             background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
             margin: 2.5rem 0;
         }
+
+        .section-title {
+            background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         
         .contact-button {
             display: inline-block;
@@ -137,52 +172,52 @@ templ Contact() {
         }
         
         .contact-link {
-            color: #4a54f1;
+            color: #4d7cc7;
             transition: color 0.2s ease;
         }
         
         .contact-link:hover {
-            color: #6a74ff;
+            color: #6b93d8;
             text-decoration: underline;
         }
     </style>
     
     <div class="text-white py-12">
         <div class="max-w-4xl mx-auto px-4 text-center">
-            <h1 class="text-4xl font-bold mb-6">Contact Us</h1>
+            <h1 class="text-4xl font-bold mb-6 section-title">Contact Us</h1>
             
             <p class="text-lg text-gray-300 mb-8">
                 Have questions about CypherGoat? We're here to help! Reach out through any of the channels below.
             </p>
             
             <div class="mb-12">
-                <h2 class="text-3xl font-bold mb-6">Get in Touch</h2>
+                <h2 class="text-3xl font-bold mb-6 section-title">Get in Touch</h2>
                 
                 <div class="max-w-2xl mx-auto mb-8">
                     <div class="contact-method">
                         <h3 class="text-xl font-bold mb-2">Email Support</h3>
                         <p class="text-lg text-gray-300">
-                            <a href="mailto:support@cyphergoat.com" class="text-blue-400 hover:text-blue-500">support@cyphergoat.com</a>
+                            <a href="mailto:support@cyphergoat.com" class="text-gray-400 hover:text-gray-300 transition-colors">support@cyphergoat.com</a>
                         </p>
                     </div>
                     
                     <div class="contact-method">
                         <h3 class="text-xl font-bold mb-2">Twitter/X</h3>
                         <p class="text-lg text-gray-300">
-                            <a href="https://x.com/cyphergoatcom" class="text-blue-400 hover:text-blue-500">cyphergoatcom</a>
+                            <a href="https://x.com/cyphergoatcom" class="text-gray-400 hover:text-gray-300 transition-colors">cyphergoatcom</a>
                         </p>
                     </div>
                     
                     <div class="contact-method">
                         <h3 class="text-xl font-bold mb-2">Telegram</h3>
                         <p class="text-lg text-gray-300">
-                            <a href="https://t.me/cyphergoatsupport" class="text-blue-400 hover:text-blue-500">cyphergoatsupport</a>
+                            <a href="https://t.me/cyphergoatsupport" class="text-gray-400 hover:text-gray-300 transition-colors">cyphergoatsupport</a>
                         </p>
                     </div>
                     <div class="contact-method">
                         <h3 class="text-xl font-bold mb-2">Signal</h3>
                         <p class="text-lg text-gray-300">
-                            <a href="https://signal.me/#eu/JDYDkfCrShaw4HJ_T0NayoTcTuVOowaCQNk0wk5xN1W_n3WINA5Pp5qqGEPBkVnF" class="text-blue-400 hover:text-blue-500">cyphergoat.01</a>
+                            <a href="https://signal.me/#eu/JDYDkfCrShaw4HJ_T0NayoTcTuVOowaCQNk0wk5xN1W_n3WINA5Pp5qqGEPBkVnF" class="text-gray-400 hover:text-gray-300 transition-colors">cyphergoat.01</a>
                         </p>
                     </div>
                 </div>
@@ -191,17 +226,17 @@ templ Contact() {
             <div class="section-divider"></div>
             
             <div class="mb-12">
-                <h2 class="text-3xl font-bold mb-6">Report an Issue</h2>
+                <h2 class="text-3xl font-bold mb-6 section-title">Report an Issue</h2>
                 
                 <p class="text-lg text-gray-300 mb-6">
                     If you've encountered any issues while using CypherGoat, please let us know so we can fix it.
                 </p>
                 
                 <div class="mb-8">
-                    <a href="https://github.com/cyphergoat/web/issues" class="contact-button bg-blue-600 hover:bg-blue-700 text-white">
+                    <a href="https://github.com/cyphergoat/web/issues" class="contact-button bg-gray-700 hover:bg-gray-600 text-white">
                         Report on GitHub
                     </a>
-                    <a href="mailto:support@cyphergoat.com" class="contact-button bg-gray-700 hover:bg-gray-800 text-white">
+                    <a href="mailto:support@cyphergoat.com" class="contact-button bg-gray-800 hover:bg-gray-700 text-white">
                         Email Us
                     </a>
                 </div>
@@ -210,14 +245,14 @@ templ Contact() {
             <div class="section-divider"></div>
             
             <div class="mb-12">
-                <h2 class="text-3xl font-bold mb-6">Frequently Asked Questions</h2>
+                <h2 class="text-3xl font-bold mb-6 section-title">Frequently Asked Questions</h2>
                 <p class="text-lg text-gray-300 mb-6">
-                    Before reaching out, you might find your answer in our <a href="https://cyphergoat.com/#faq-section" class="text-blue-400 hover:text-blue-500">FAQ section</a>.
+                    Before reaching out, you might find your answer in our <a href="https://cyphergoat.com/#faq-section" class="text-gray-400 hover:text-gray-300 transition-colors">FAQ section</a>.
                 </p>
             </div>
             
             <div class="mb-12">
-                <h2 class="text-3xl font-bold mb-6">Response Times</h2>
+                <h2 class="text-3xl font-bold mb-6 section-title">Response Times</h2>
                 <p class="text-lg text-gray-300 mb-6">
                     We typically respond to all inquiries within 24-48 hours. For urgent issues, please mention "URGENT" in your subject line.
                 </p>

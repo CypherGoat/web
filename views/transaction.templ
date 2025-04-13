@@ -1,3 +1,18 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package views
 import (
     "github.com/CypherGoat/web/cmd/api"
@@ -16,90 +31,307 @@ templ TransactionPage(transaction api.Transaction){
 <!-- End TrustBox script -->
 
     @Header(){
+ <style>
+    body {
+        background-color: #121520;
+        color: #e0e0e0;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        min-height: 100vh;
+    }
+
+    .transaction-card {
+        background: linear-gradient(145deg, #1a1f2e, #222633);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .transaction-card:hover {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .transaction-header {
+        font-size: 1.8rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #ffffff, #e0e0e0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .transaction-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-label {
+        color: #a0a0a0;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+    }
+
+    .section-value {
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        word-break: break-all;
+    }
+
+    .code-block {
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        padding: 0.8rem;
+        font-family: 'Courier New', monospace;
+        color: #e0e0e0;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        word-break: break-all;
+        overflow-wrap: break-word;
+    }
+
+    .qr-toggle-btn {
+        color: #0088ff;
+        font-weight: 600;
+        background: rgba(0, 136, 255, 0.1);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 136, 255, 0.2);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qr-toggle-btn svg {
+        margin-right: 0.5rem;
+        vertical-align: middle;
+    }
+
+    .qr-toggle-btn:hover {
+        background: rgba(0, 136, 255, 0.2);
+    }
+
+    .divider {
+        height: 1px;
+        background: linear-gradient(to right, rgba(255,255,255,0.05), rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+        margin: 1.5rem 0;
+    }
+
+    .success-container {
+        background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .success-icon {
+        background: rgba(16, 185, 129, 0.15);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+
+    .refresh-btn {
+        background: linear-gradient(135deg, #0088ff, #0055cc);
+        color: #ffffff;
+        padding: 0.85rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 102, 204, 0.2);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .refresh-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.7s ease;
+    }
+    
+    .refresh-btn:hover {
+        background: linear-gradient(135deg, #0099ff, #0066dd);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 102, 204, 0.3);
+    }
+    
+    .refresh-btn:hover::before {
+        left: 100%;
+    }
+    
+    .required-tag {
+        background-color: rgba(220, 38, 38, 0.2);
+        color: #ef4444;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-weight: 600;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        border: 1px solid rgba(220, 38, 38, 0.3);
+    }
+
+    .external-link {
+        color: #0088ff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .external-link:hover {
+        color: #0099ff;
+        text-decoration: underline;
+    }
+    
+    .trustpilot-container {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1.5rem;
+    }
+ </style>
 
  <form action="" method="get">
-    <div class="flex items-center justify-center min-h-screen bg-[#1c1c1c] pb-4 sm:pb-0">
-        <div class="w-auto max-w-md bg-[#2c2c2c] rounded-2xl p-4 sm:p-8 shadow-lg transition-shadow hover:shadow-xl text-white mx-auto mb-4 sm:mb-0">
-            <h2 class="text-4xl font-bold text-center text-white mb-4">{ transaction.Provider }</h2>
-            <div class="mb-4">
-                <p class="text-gray-400 text-xl font-medium">Transaction Status:</p>
-                <p class="text-white font-semibold text-xl">if transaction.Status == ""{
-                    Created
-                } else{
-                    { transaction.Status }
-                }
-                </p>
+    <div class="flex items-center justify-center min-h-screen bg-[#121520] pb-4 sm:pb-0">
+        <div class="transaction-card mx-4 my-6">
+            <h2 class="transaction-header">{ transaction.Provider }</h2>
+            
+            <div class="transaction-section">
+                <div class="section-label">Transaction Status</div>
+                <div class="section-value">
+                    if transaction.Status == "" {
+                        <span class="font-medium text-blue-400">Created</span>
+                    } else {
+                        <span class="font-medium text-blue-400">{ transaction.Status }</span>
+                    }
+                </div>
             </div>
-            <div class="mb-4">
-                <p class="text-gray-400 text-xl font-medium">Send:</p>
-                <p class="text-white text-xl font-semibold">
+            
+            <div class="transaction-section">
+                <div class="section-label">You Send</div>
+                <div class="section-value">
                     if transaction.SendAmount == math.Floor(transaction.SendAmount) {
                         {fmt.Sprintf("%.0f", transaction.SendAmount)}
                     } else {
-                        {fmt.Sprintf("%f", transaction.SendAmount)}
+                        {fmt.Sprintf("%.8f", transaction.SendAmount)}
                     } { strings.ToUpper(transaction.Coin1)}
-                </p>
+                </div>
             </div>
-            <div class="mb-4">
-                <p class="text-gray-400 text-xl font-medium">Receive:</p>
-                <p class="text-white text-xl font-semibold">
+            
+            <div class="transaction-section">
+                <div class="section-label">You Receive</div>
+                <div class="section-value">
                     if transaction.EstimateAmount == math.Floor(transaction.EstimateAmount) {
                         {fmt.Sprintf("%.0f", transaction.EstimateAmount)}
                     } else {
-                        {fmt.Sprintf("%f", transaction.EstimateAmount)}
+                        {fmt.Sprintf("%.8f", transaction.EstimateAmount)}
                     } { strings.ToUpper(transaction.Coin2)}
-                </p>
+                </div>
             </div>
-            <div class="mb-4">
-                <p class="text-gray-400 text-xl font-medium">Send Address:</p>
-                <code class="text-white font-semibold break-words block bg-gray-650 p-2 rounded">{ transaction.Address }</code>
+            
+            <div class="transaction-section">
+                <div class="section-label">Send Address</div>
+                <div class="code-block">{ transaction.Address }</div>
             </div>
-            if transaction.Memo != ""{
-            <div class="mb-4">
-<p class="text-gray-400 text-xl font-medium">Memo <span class="text-red-900 font-semibold">REQUIRED</span></p>                <code class="text-white font-semibold break-words block bg-gray-650 p-2 rounded">{ transaction.Memo }</code>
-            </div>
+            
+            if transaction.Memo != "" {
+                <div class="transaction-section">
+                    <div class="section-label">Memo <span class="required-tag">REQUIRED</span></div>
+                    <div class="code-block">{ transaction.Memo }</div>
+                </div>
             }
-            <div class="mb-4 text-center">
+            
+            <div class="transaction-section text-center">
                 <button id="toggleButton" type="button" onclick={ toggleQRCodeHandler(transaction.Address) } 
-                        class="text-green-400 hover:text-green-300 font-medium transition duration-300">Show QR Code</button>
-                <br>
-                <img id="qrcode" src="" alt="QR Code" class="mt-4 hidden mx-auto">
+                        class="qr-toggle-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"/>
+                        <path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"/>
+                    </svg>
+                    Show QR Code
+                </button>
+                <div class="mt-4">
+                    <img id="qrcode" src="" alt="QR Code" class="hidden mx-auto border-4 border-white rounded-lg">
+                </div>
             </div>
-            <div class="mb-4">
-                <p class="text-gray-400 text-xl font-medium">Exchange Link:</p>
-                <a href={ templ.URL(transaction.Track) } class="text-blue-400 font-semibold hover:underline">
-                    { strings.ToLower(transaction.Provider) }
-                </a>
+            
+            <div class="transaction-section">
+                <div class="section-label">Exchange Link</div>
+                <div class="section-value">
+                    <a href={ templ.URL(transaction.Track) } class="external-link" target="_blank">
+                        { strings.ToLower(transaction.Provider) }
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="inline-block ml-1">
+                          <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a.5.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                          <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
-            <div class="mb-4">
-                <p class="text-gray-400 text-xl font-medium">CypherGoat ID:</p>
-                <p class="text-white font-semibold">{ transaction.CGID }</p>
+            
+            <div class="transaction-section">
+                <div class="section-label">CypherGoat ID</div>
+                <div class="section-value font-mono">{ transaction.CGID }</div>
             </div>
-            <button type="submit" 
-                    class="w-full bg-gradient-to-r from-blue-400 to-blue-700 text-white font-bold py-3 rounded-lg transition-transform transform hover:scale-105">
+            
+            <button type="submit" class="refresh-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                </svg>
                 Refresh Status
             </button>
-            if transaction.Done == true{
-                <div class="my-6 border-t border-gray-700"></div>
-                <div class="mb-6 text-center p-4 bg-gradient-to-r from-green-900/30 to-green-800/30 rounded-lg shadow-inner">
-                    <div class="inline-flex items-center justify-center bg-green-500/20 rounded-full p-3 mb-3">
-                        <i class="fas fa-check text-green-400 text-2xl"></i>
+            
+            if transaction.Done == true {
+                <div class="divider"></div>
+                <div class="success-container">
+                    <div class="success-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-green-500">
+                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                        </svg>
                     </div>
-                    <p class="text-2xl font-bold text-green-400 mb-2">Transaction Complete</p>
+                    <p class="text-xl font-bold text-green-400 mb-2">Transaction Complete</p>
                     <p class="text-gray-300">Thank you for using CypherGoat</p>
                 </div>
 
-            <div class="my-6 border-t border-gray-700"></div>
-            <!-- TrustBox widget - Review Collector -->
-            <div class="trustpilot-widget bg-[#2c2c2c] p-3 rounded-lg overflow-hidden" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="67c09c2e5186fc26ff296bcc" data-style-height="52px" data-style-width="100%" data-theme="dark">
-              <a href="https://www.trustpilot.com/review/cyphergoat.com" target="_blank" rel="noopener">Trustpilot</a>
-            </div>
-            <!-- End TrustBox widget -->
+                <div class="divider"></div>
+                <!-- TrustBox widget - Review Collector -->
+                <div class="trustpilot-container">
+                    <div class="trustpilot-widget" data-locale="en-US" data-template-id="56278e9abfbbba0bdcd568bc" data-businessunit-id="67c09c2e5186fc26ff296bcc" data-style-height="52px" data-style-width="100%" data-theme="dark">
+                        <a href="https://www.trustpilot.com/review/cyphergoat.com" target="_blank" rel="noopener">Trustpilot</a>
+                    </div>
+                </div>
+                <!-- End TrustBox widget -->
             }
         </div>
     </div>
 </form>
-    <br/>
 
     <script>
         let qrCodeVisible = false;
@@ -108,7 +340,7 @@ templ TransactionPage(transaction api.Transaction){
             const button = document.getElementById('toggleButton');
             if (qrCodeVisible) {
                 img.classList.add('hidden');
-                button.textContent = 'Show QR Code';
+                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"/><path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"/></svg> Show QR Code';
             } else {
                 fetch('/generate?text=' + encodeURIComponent(text))
                     .then(response => response.blob())
@@ -116,7 +348,7 @@ templ TransactionPage(transaction api.Transaction){
                         const url = URL.createObjectURL(blob);
                         img.src = url;
                         img.classList.remove('hidden');
-                        button.textContent = 'Hide QR Code';
+                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg> Hide QR Code';
                     })
                     .catch(error => console.error('Error:', error));
             }

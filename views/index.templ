@@ -1,3 +1,18 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package views
 
 templ IndexTempl() {
@@ -7,7 +22,7 @@ templ IndexTempl() {
 		}
             <style>
 .rgb-effect {
-    color: #1e90ff;
+    color: #0066cc;
     font-weight: 800;
 }
 
@@ -24,8 +39,8 @@ html, body {
 }
 
 body {
-    background-color: #1c1c1c;
-    font-family: 'Arial', sans-serif;
+    background-color: #121520;
+    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -72,15 +87,17 @@ footer {
 }
 
     .card {
-        background: #2c2c2c;
+        background: linear-gradient(145deg, #1a1f2e, #222633);
         border-radius: 16px;
         padding: 2rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        transition: box-shadow 0.3s ease;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
+        transform: translateY(-2px);
     }
 
     .card h2 {
@@ -110,48 +127,49 @@ footer {
     .form-input {
         width: 150px;
         padding: 0.75rem;
-        background-color: #2e2e2e;
+        background-color: #1a1f2e;
         color: #e0e0e0;
-        border: 1px solid #555;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         font-size: 1rem;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-input:focus {
-        border-color: #4a54f1;
+        border-color: #0066cc;
         outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
     }
 
     .form-input:focus-visible {
-    border-color: #4a54f1;
-    box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
-}
+        border-color: #0066cc;
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+    }
 
     .searchable-dropdown {
         position: relative;
         flex: 1;
     }
-.searchable-dropdown input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #555;
-    border-radius: 12px;
-    background-color: #2e2e2e;
-    color: #e0e0e0;
-    font-size: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    background-size: 20px 20px;
-    background-position: left 10px center;
-    background-repeat: no-repeat;
-    padding-left: 40px;
-}
+    
+    .searchable-dropdown input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        background-color: #1a1f2e;
+        color: #e0e0e0;
+        font-size: 1rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        background-size: 20px 20px;
+        background-position: left 10px center;
+        background-repeat: no-repeat;
+        padding-left: 40px;
+    }
 
     .searchable-dropdown input:focus {
-        border-color: #4a54f1;
+        border-color: #0066cc;
         outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
     }
 
     .dropdown-options {
@@ -161,8 +179,8 @@ footer {
         width: 100%;
         max-height: 300px;
         overflow-y: auto;
-        background: #2e2e2e;
-        border: 1px solid #555;
+        background: #222633;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         display: none;
@@ -180,7 +198,7 @@ footer {
     }
 
     .dropdown-options div:hover {
-        background: #444;
+        background: #2a3042;
     }
 
     .dropdown-options img {
@@ -190,51 +208,46 @@ footer {
     }
 
     .btn-primary {
-    background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
-    background-size: 400% 400%;
-    color: #ffffff;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    width: 100%;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-    background-clip: padding-box;
-    position: relative;
-    animation: rgbAnimation 6s ease infinite;
-    text-shadow: 1px 1px 4px rgba(30, 144, 255, 0.7);
-}
+        background: linear-gradient(135deg, #0088ff, #0055cc);
+        color: #ffffff;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+        background-clip: padding-box;
+        position: relative;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+    }
 
     .btn-primary:hover {
-        transform: scale(1.02);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
+        background: linear-gradient(135deg, #0099ff, #0066dd);
     }
 
     .btn-primary:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.3);
+        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3), 0 4px 12px rgba(0, 102, 204, 0.25);
     }
 
     .form-input.read-only {
-        background-color: #1c1c1c;
-        color: #888;
+        background-color: rgba(26, 31, 46, 0.5);
+        color: #b0b0b0;
         cursor: not-allowed;
     }
 
-    @keyframes rgbAnimation {
-        0% { background-position: 0% 0%; }
-        50% { background-position: 100% 100%; }
-        100% { background-position: 0% 0%; }
-    }
-
     .spinner {
-        border: 4px solid rgba(0, 0, 0, 0.1);
+        border: 4px solid rgba(0, 102, 204, 0.1);
         border-radius: 50%;
-        border-top: 4px solid #3498db;
+        border-top: 4px solid #0066cc;
         width: 40px;
         height: 40px;
-        animation: spin 1s linear infinite;
+        animation: spin 0.8s linear infinite;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -262,8 +275,36 @@ footer {
     }
 
     .hidden {
-    display: none !important;
-}
+        display: none !important;
+    }
+
+    #error-message {
+        background-color: rgba(220, 53, 69, 0.9);
+        backdrop-filter: blur(5px);
+        border-left: 4px solid #dc3545;
+    }
+
+    .trust-badge {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        background: rgba(0, 102, 204, 0.1);
+        padding: 4px 10px;
+        border-radius: 16px;
+        margin: 0 6px;
+        font-size: 0.85rem;
+    }
+
+    .trust-badge svg {
+        width: 14px;
+        height: 14px;
+        margin-right: 5px;
+    }
+
+    .security-icon {
+        color: #0066cc;
+        margin-right: 5px;
+    }
 
 @media (max-width: 768px) {
     .dropdown-options {
@@ -282,7 +323,7 @@ footer {
     .dropdown-options div {
         font-size: 1.25rem;
         padding: 1rem;
-        border-bottom: 1px solid #444;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .input-group {
@@ -314,7 +355,7 @@ footer {
     }
 
     .card {
-        padding: 1rem;
+        padding: 1.5rem;
     }
 
     #scroll-to-faq-container {
@@ -332,7 +373,8 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(18, 21, 32, 0.95);
+    backdrop-filter: blur(5px);
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -341,31 +383,45 @@ footer {
 }
 
 .modal-content {
-    background: #2e2e2e;
+    background: linear-gradient(145deg, #1a1f2e, #222633);
     padding: 2rem;
-    border-radius: 12px;
+    border-radius: 16px;
     width: 90%;
     max-width: 600px;
     text-align: center;
     max-height: 80vh;
     overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .modal-content input {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #555;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    background-color: #1c1c1c;
+    background-color: #1a1f2e;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+    background-repeat: no-repeat;
+    background-position: 12px center;
     color: #e0e0e0;
     font-size: 1rem;
-        max-height: 90vh;
+    max-height: 90vh;
     margin-bottom: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modal-content input:focus {
+    border-color: #0066cc;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
 }
 
 .modal-options {
     max-height: 400px;
     overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .modal-options div {
@@ -379,7 +435,7 @@ footer {
 }
 
 .modal-options div:hover {
-    background: #444;
+    background: #2a3042;
 }
 
 .modal-options img {
@@ -388,24 +444,58 @@ footer {
     margin-right: 0.75rem;
 }
 
+.partner-logo {
+    filter: grayscale(20%);
+    opacity: 0.85;
+    transition: all 0.3s ease;
+}
 
+.partner-logo:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.faq-item {
+    padding: 1rem;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.faq-item:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
     </style>
      <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
     <p id="error-text"></p>
 </div>
 <div class="pt-0 container mx-auto p-7 min-h-screen">
     <div class="text-center">
-        <h1 class="text-6xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 inline-block rgb-effect leading-tight">
+        <h1 class="text-6xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600 inline-block rgb-effect leading-tight">
             CypherGoat
         </h1>
-        <p class="text-gray-300 mt-4 text-xl">
-            Find the <span class="font-semibold rgb-effect">beeeeee-st</span> rates for your crypto swaps!
+        <p class="text-gray-300 mt-3 mb-4 text-xl">
+            Trade crypto <span class="font-semibold rgb-effect">best</span> rate on the market
         </p>
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
+            <span class="trust-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.4 0 2.8 1.1 2.8 2.5V11h1.7v5H7.5v-5h1.7V9.5C9.2 8.1 10.6 7 12 7z"/></svg>
+                Non-Custodial
+            </span>
+            <span class="trust-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 12h2v2h-2v-2zm0-8h2v6h-2V6z"/></svg>
+                Open Source
+            </span>
+            <span class="trust-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M16 2v4h4v12H4V6h4V2h8zm-3 10h-2v6h2v-6zm0-4h-2v2h2V8z"/></svg>
+                15+ Exchanges
+            </span>
+        </div>
     </div>
 
    
 
-    <div class="swap-form-section mt-6">
+    <div class="swap-form-section mt-4">
         <div class="container">
             <div class="card">
                 <h1 class="hidden">Swap</h1>
@@ -454,7 +544,7 @@ footer {
     </button>
     <a href="#faq-section" class="group mt-2 block">
         <div class="relative inline-block">
-            <div class="w-10 h-10 rounded-full bg-gray-700 flex justify-center items-center group-hover:bg-gray-600 transition-all">
+            <div class="w-10 h-10 rounded-full bg-blue-900 bg-opacity-40 flex justify-center items-center group-hover:bg-opacity-60 transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="text-white w-6 h-6 group-hover:translate-y-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
@@ -477,7 +567,7 @@ footer {
 
             <div class="faq-item mb-6">
                 <h3 class="text-xl font-semibold">How do I use CypherGoat?</h3>
-                <p class="text-gray-300 mt-2">Simply enter the amount and select the coins you want to swap. CypherGoat will automatically find the best rate for you and allows you to perform the swap.</p>
+                <p class="text-gray-300 mt-2">Simply enter the amount and select the coins you want to swap. CypherGoat will automatically find the best rate for you and allows you to perform the swap securely.</p>
             </div>
 
             <div class="faq-item mb-6">
@@ -487,34 +577,34 @@ footer {
 
             <div class="faq-item mb-6">
                 <h3 class="text-xl font-semibold">What cryptocurrencies are supported?</h3>
-                <p class="text-gray-300 mt-2">We currently support 50+ coins and 12+ exchanges.</p>
+                <p class="text-gray-300 mt-2">We currently support 60+ coins and 15+ exchanges, covering all major cryptocurrencies and many altcoins.</p>
             </div>
 
             <div class="faq-item">
                 <h3 class="text-xl font-semibold">Is CypherGoat safe to use?</h3>
-                <p class="text-gray-300 mt-2">Yes. CypherGoat does not get access to your funds at any stage of the swap. We are simply an aggregator interface. We are also the only exchange aggregator that is open source. Which means that anyone can audit our code at any time.</p>
+                <p class="text-gray-300 mt-2">Yes. CypherGoat does not get access to your funds at any stage of the swap. We are simply an aggregator interface. We are also the only exchange aggregator that is fully open source, which means that anyone can audit our code at any time.</p>
             </div>
         </div>
 
         <div class="w-full lg:w-2/4 px-8 mt-12 lg:mt-0">
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h1 class="text-2xl font-bold mb-4">Swap your crypto in 4 Simple Steps</h1>
-                <ol class="text-left text-gray-300 space-y-4">
+            <div class="bg-gradient-to-br from-gray-800 to-gray-900 p-7 rounded-lg shadow-lg border border-gray-700">
+                <h1 class="text-2xl font-bold mb-6">Swap your crypto in 4 Simple Steps</h1>
+                <ol class="text-left text-gray-300 space-y-6">
                     <li class="flex items-start">
-                        <span class="mr-3 text-2xl">🤔</span>
-                        <p><span class="font-semibold">Step 1:</span> Select the pair of cryptocurrencies that you want to swap and the amount you want to swap.</p>
+                        <span class="mr-3 text-2xl flex-shrink-0 mt-1"></span>
+                        <p><span class="font-semibold text-blue-400">Step 1:</span> Select the pair of cryptocurrencies that you want to swap and the amount you want to exchange.</p>
                     </li>
                     <li class="flex items-start">
-                        <span class="mr-3 text-2xl">🔎</span>
-                        <p><span class="font-semibold">Step 2:</span> Review all offers from different exchanges and select the one that best fits your needs.</p>
+                        <span class="mr-3 text-2xl flex-shrink-0 mt-1"></span>
+                        <p><span class="font-semibold text-blue-400">Step 2:</span> Review all offers from different exchanges and select the one that best fits your needs.</p>
                     </li>
                     <li class="flex items-start">
-                        <span class="mr-3 text-2xl">🔄</span>
-                        <p><span class="font-semibold">Step 3:</span> Click on swap and send crypto to the specified address.</p>
+                        <span class="mr-3 text-2xl flex-shrink-0 mt-1"></span>
+                        <p><span class="font-semibold text-blue-400">Step 3:</span> Click on swap and send crypto to the specified address.</p>
                     </li>
                     <li class="flex items-start">
-                        <span class="mr-3 text-2xl">🎉</span>
-                        <p><span class="font-semibold">Step 4:</span> Wait for confirmations and done!</p>
+                        <span class="mr-3 text-2xl flex-shrink-0 mt-1"></span>
+                        <p><span class="font-semibold text-blue-400">Step 4:</span> Wait for confirmations and receive your exchanged cryptocurrency!</p>
                     </li>
                 </ol>
             </div>
@@ -523,55 +613,160 @@ footer {
 </div>
 
 <div class="mt-16 container3 hide-on-swap mb-50">
-    <h2 class="text-4xl text-white text-center mb-16">Our Partners</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 place-items-center">
-        <a href="https://www.alfacash.com" target="_blank">
-            <img src="/exchanges/alfacash.svg" alt="Alfacash" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://changehero.io" target="_blank">
-            <img src="/exchanges/changehero.svg" alt="ChangeHero" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://coincraddle.com" target="_blank">
-            <img src="/exchanges/coincraddle.svg" alt="CoinCraddle" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://majesticbank.sc" target="_blank">
-            <img src="/exchanges/majesticbank.png" alt="Majestic Bank" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://simpleswap.io" target="_blank">
-            <img src="/exchanges/simpleswap.svg" alt="SimpleSwap" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://changee.io" target="_blank">
-            <img src="/exchanges/changee.svg" alt="Changee" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://changenow.io" target="_blank">
-            <img src="/exchanges/changenow.svg" alt="ChangeNOW" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://fixedfloat.com" target="_blank">
-            <img src="/exchanges/fixedfloat.svg" alt="FixedFloat" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://nanswap.com" target="_blank">
-            <img src="/exchanges/nanswap.svg" alt="Nanswap" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://wizardswap.io" target="_blank">
-            <img src="/exchanges/wizardswap.png" alt="WizardSwap" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://stealthex.io" target="_blank">
-            <img src="/exchanges/stealthex.svg" alt="StealthEx" class="h-16 object-contain" loading="lazy">
-        </a>
-        <a href="https://exch.cx/" target="_blank">
-            <img src="/exchanges/exchcx.png" alt="StealthEx" class="h-16 object-contain" loading="lazy">
-        </a>
-         <a href="https://exolix.com/" target="_blank">
-            <img src="/exchanges/exolix.png" alt="Exolix" class="h-16 object-contain" loading="lazy">
-        </a>
-          <a href="https://swapuz.com" target="_blank">
-            <img src="/exchanges/swapuz.svg" alt="Swapuz" class="h-16 object-contain" loading="lazy">
-        </a>
-         <a href="https://bitcoinvn.io/" target="_blank">
-            <img src="/exchanges/bitcoinvn.png" alt="BitcoinVN" class="h-16 object-contain" loading="lazy">
-        </a>
+    <h2 class="text-4xl text-white text-center mb-12 font-bold">Exchange Partners</h2>
+    
+    <div class="partners-carousel">
+        <div class="partners-track">
+            <!-- First set of logos -->
+            <div class="partners-slide">
+                <a href="https://www.alfacash.com" target="_blank" class="partner-item">
+                    <img src="/exchanges/alfacash.svg" alt="Alfacash" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://changehero.io" target="_blank" class="partner-item">
+                    <img src="/exchanges/changehero.svg" alt="ChangeHero" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://coincraddle.com" target="_blank" class="partner-item">
+                    <img src="/exchanges/coincraddle.svg" alt="CoinCraddle" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://majesticbank.sc" target="_blank" class="partner-item">
+                    <img src="/exchanges/majesticbank.png" alt="Majestic Bank" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://simpleswap.io" target="_blank" class="partner-item">
+                    <img src="/exchanges/simpleswap.svg" alt="SimpleSwap" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://changee.io" target="_blank" class="partner-item">
+                    <img src="/exchanges/changee.svg" alt="Changee" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://changenow.io" target="_blank" class="partner-item">
+                    <img src="/exchanges/changenow.svg" alt="ChangeNOW" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://fixedfloat.com" target="_blank" class="partner-item">
+                    <img src="/exchanges/fixedfloat.svg" alt="FixedFloat" class="partner-logo" loading="lazy">
+                </a>
+            </div>
+            
+            <!-- Duplicated for seamless looping -->
+            <div class="partners-slide">
+                <a href="https://nanswap.com" target="_blank" class="partner-item">
+                    <img src="/exchanges/nanswap.svg" alt="Nanswap" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://wizardswap.io" target="_blank" class="partner-item">
+                    <img src="/exchanges/wizardswap.png" alt="WizardSwap" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://stealthex.io" target="_blank" class="partner-item">
+                    <img src="/exchanges/stealthex.svg" alt="StealthEx" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://exch.cx/" target="_blank" class="partner-item">
+                    <img src="/exchanges/exchcx.png" alt="ExchCX" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://exolix.com/" target="_blank" class="partner-item">
+                    <img src="/exchanges/exolix.png" alt="Exolix" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://swapuz.com" target="_blank" class="partner-item">
+                    <img src="/exchanges/swapuz.svg" alt="Swapuz" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://bitcoinvn.io/" target="_blank" class="partner-item">
+                    <img src="/exchanges/bitcoinvn.png" alt="BitcoinVN" class="partner-logo" loading="lazy">
+                </a>
+                <a href="https://www.alfacash.com" target="_blank" class="partner-item">
+                    <img src="/exchanges/alfacash.svg" alt="Alfacash" class="partner-logo" loading="lazy">
+                </a>
+            </div>
+        </div>
     </div>
+    
+    <style>
+        .partners-carousel {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            padding: 1.5rem 0;
+            margin: 0 auto;
+            background: linear-gradient(90deg, rgba(18, 21, 32, 0.9) 0%, rgba(18, 21, 32, 0) 5%, rgba(18, 21, 32, 0) 95%, rgba(18, 21, 32, 0.9) 100%);
+        }
+        
+        .partners-track {
+            display: flex;
+            width: max-content;
+            animation: scroll 30s linear infinite;
+            transition-timing-function: cubic-bezier(.25,.25,.75,.75);
+        }
+        
+        .partners-track:hover {
+            animation-play-state: paused;
+        }
+        
+        .partners-slide {
+            display: flex;
+            column-gap: 4rem;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        .partner-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.4s ease;
+            transform-origin: center center;
+            width: 120px;
+            height: 80px;
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        }
+        
+        .partner-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 102, 204, 0.15);
+            border-color: rgba(0, 102, 204, 0.2);
+            background: rgba(255, 255, 255, 0.07);
+            z-index: 2;
+        }
+        
+        .partner-logo {
+            height: 100%;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            filter: grayscale(30%) brightness(0.95);
+            transition: all 0.4s ease;
+        }
+        
+        .partner-item:hover .partner-logo {
+            filter: grayscale(0%) brightness(1.05);
+        }
+        
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .partners-slide {
+                column-gap: 2rem;
+            }
+            
+            .partner-item {
+                width: 90px;
+                height: 60px;
+            }
+            
+            .partners-track {
+                animation-duration: 20s;
+            }
+        }
+    </style>
 </div>
+
 <br/>
 <br/>
 
