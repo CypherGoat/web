@@ -5,7 +5,7 @@
         "network": "btc",
         "isStable": false,
         "icon": "icons/btc.png",
-        "min": 6.207e-05
+        "min": 5.921e-05
     },
     {
         "ticker": "btc",
@@ -13,7 +13,7 @@
         "network": "lightning",
         "isStable": false,
         "icon": "icons/btc.png",
-        "min": 6.207e-05,
+        "min": 5.921e-05,
         "alfacash": "",
         "changee": "btclightning",
         "changehero": "",
@@ -34,7 +34,7 @@
         "network": "eth",
         "isStable": false,
         "icon": "icons/eth.png",
-        "min": 0.00325
+        "min": 0.003068
     },
     {
         "ticker": "xmr",
@@ -42,7 +42,7 @@
         "network": "xmr",
         "isStable": false,
         "icon": "icons/xmr.png",
-        "min": 0.02483
+        "min": 0.02339
     },
     {
         "ticker": "ltc",
@@ -50,7 +50,7 @@
         "network": "ltc",
         "isStable": false,
         "icon": "icons/ltc.png",
-        "min": 0.06844
+        "min": 0.06548
     },
     {
         "ticker": "bch",
@@ -65,7 +65,7 @@
         "network": "doge",
         "isStable": false,
         "icon": "icons/doge.png",
-        "min": 32.51
+        "min": 31.12
     },
     {
         "ticker": "pol",
@@ -87,7 +87,7 @@
         "network": "sol",
         "isStable": false,
         "icon": "icons/sol.png",
-        "min": 0.04462
+        "min": 0.03865
     },
     {
         "ticker": "xtz",
@@ -95,7 +95,7 @@
         "network": "xtz",
         "isStable": false,
         "icon": "icons/xtz.png",
-        "min": 9.251
+        "min": 10.01
     },
     {
         "ticker": "ada",
@@ -103,7 +103,7 @@
         "network": "ada",
         "isStable": false,
         "icon": "icons/ada.png",
-        "min": 8.264
+        "min": 7.875
     },
     {
         "ticker": "xrp",
@@ -111,7 +111,7 @@
         "network": "xrp",
         "isStable": false,
         "icon": "icons/xrp.png",
-        "min": 2.525
+        "min": 2.347
     },
     {
         "ticker": "trx",
@@ -119,7 +119,7 @@
         "network": "trx",
         "isStable": false,
         "icon": "icons/trx.png",
-        "min": 21.06
+        "min": 19.74
     },
     {
         "ticker": "link",
@@ -127,7 +127,7 @@
         "network": "link",
         "isStable": false,
         "icon": "icons/link.png",
-        "min": 0.4115
+        "min": 0.3912
     },
     {
         "ticker": "usdc",
@@ -142,7 +142,7 @@
         "network": "xno",
         "isStable": false,
         "icon": "icons/xno.webp",
-        "min": 6.106
+        "min": 5.54
     },
     {
         "ticker": "usdc",
@@ -162,7 +162,7 @@
         "simpleswap": "usdcpoly",
         "stealthex": "usdcmatic",
         "wizardswap": "",
-        "bitcoinvn":"usdcpolygon2"
+        "bitcoinvn": "usdcpolygon2"
     },
     {
         "ticker": "usdc",
@@ -182,7 +182,7 @@
         "simpleswap": "usdcspl",
         "stealthex": "usdcsol",
         "wizardswap": "",
-        "bitcoinvn":"usdcsol"
+        "bitcoinvn": "usdcsol"
     },
     {
         "ticker": "usdc",
@@ -202,7 +202,7 @@
         "simpleswap": "usdcalgo",
         "stealthex": "usdcalgo",
         "wizardswap": "",
-        "bitcoinvn":"usdcalgo"
+        "bitcoinvn": "usdcalgo"
     },
     {
         "ticker": "usdc",
@@ -222,7 +222,7 @@
         "simpleswap": "usdcbep20",
         "stealthex": "usdcbsc",
         "wizardswap": "",
-        "bitcoinvn":"usdcbep20"
+        "bitcoinvn": "usdcbep20"
     },
     {
         "ticker": "usdc",
@@ -242,7 +242,7 @@
         "simpleswap": "usdcop",
         "stealthex": "usdcop",
         "wizardswap": "",
-        "bitcoinvn":"usdcoptimism2"
+        "bitcoinvn": "usdcoptimism2"
     },
     {
         "ticker": "usdc",
@@ -262,7 +262,7 @@
         "simpleswap": "usdcbase",
         "stealthex": "usdcbase",
         "wizardswap": "",
-        "bitcoinvn":"usdcbase"
+        "bitcoinvn": "usdcbase"
     },
     {
         "ticker": "usdc",
@@ -282,7 +282,7 @@
         "simpleswap": "usdctrc20",
         "stealthex": "usdctrc20",
         "wizardswap": "",
-        "bitcoinvn":"usdctrc20"
+        "bitcoinvn": "usdctrc20"
     },
     {
         "ticker": "usdt",
@@ -309,7 +309,7 @@
         "simpleswap": "usdttrc20",
         "stealthex": "usdttrc20",
         "wizardswap": "",
-        "bitcoinvn":"usdttrc20"
+        "bitcoinvn": "usdttrc20"
     },
     {
         "ticker": "usdt",
@@ -329,7 +329,7 @@
         "simpleswap": "usdtpoly",
         "stealthex": "usdtmatic",
         "wizardswap": "",
-        "bitcoinvn":"usdtpolygon"
+        "bitcoinvn": "usdtpolygon"
     },
     {
         "ticker": "usdt",
@@ -348,7 +348,7 @@
         "simpleswap": "usdtbep20",
         "stealthex": "usdtbsc",
         "wizardswap": "",
-        "bitcoinvn":"usdtbep20"
+        "bitcoinvn": "usdtbep20"
     },
     {
         "ticker": "usdt",
@@ -367,7 +367,7 @@
         "simpleswap": "usdtspl",
         "stealthex": "usdtsol",
         "wizardswap": "",
-        "bitcoinvn":"usdtsol"
+        "bitcoinvn": "usdtsol"
     },
     {
         "ticker": "usdt",
@@ -386,7 +386,7 @@
         "simpleswap": "usdtalgo",
         "stealthex": "usdtalgo",
         "wizardswap": "",
-        "bitcoinvn":"usdtalgo"
+        "bitcoinvn": "usdtalgo"
     },
     {
         "ticker": "busd",
@@ -405,7 +405,7 @@
         "simpleswap": "busd",
         "stealthex": "busd",
         "wizardswap": "",
-        "bitcoinvn":"busd"
+        "bitcoinvn": "busd"
     },
     {
         "ticker": "busd",
@@ -424,10 +424,10 @@
         "simpleswap": "busderc20",
         "stealthex": "busderc20",
         "wizardswap": "",
-        "bitcoinvn":"busderc20"
+        "bitcoinvn": "busderc20"
     },
     {
-        "ticker": "dai", 
+        "ticker": "dai",
         "name": "Dai",
         "network": "eth",
         "isStable": true,
@@ -443,7 +443,7 @@
         "simpleswap": "dai",
         "stealthex": "dai",
         "wizardswap": "",
-        "bitcoinvn":"dai"
+        "bitcoinvn": "dai"
     },
     {
         "ticker": "dai",
@@ -462,7 +462,7 @@
         "simpleswap": "daibep20",
         "stealthex": "",
         "wizardswap": "",
-        "bitcoinvn":"daibep20"
+        "bitcoinvn": "daibep20"
     },
     {
         "ticker": "dai",
@@ -481,7 +481,7 @@
         "simpleswap": "daimatic",
         "stealthex": "daimatic",
         "wizardswap": "",
-        "bitcoinvn":"daipolygon"
+        "bitcoinvn": "daipolygon"
     },
     {
         "ticker": "dai",
@@ -500,7 +500,45 @@
         "simpleswap": "daiop",
         "stealthex": "daiop",
         "wizardswap": "",
-        "bitcoinvn":"daioptimism"
+        "bitcoinvn": "daioptimism"
+    },
+    {
+        "ticker": "tusd",
+        "name": "True USD",
+        "network": "tusd",
+        "isStable": true,
+        "icon": "icons/tusd.webp",
+        "alfacash": "",
+        "changee": "tusd",
+        "changehero": "tusd",
+        "changenow": "tusd",
+        "coincraddle": "tusd",
+        "fixedfloat": "tusd",
+        "majesticbank": "",
+        "nanswap": "TUSD-ETH",
+        "simpleswap": "tusd",
+        "stealthex": "tusd",
+        "wizardswap": "",
+        "bitcoinvn": "tusd"
+    },
+    {
+        "ticker": "tusd",
+        "name": "True USD",
+        "network": "tron",
+        "isStable": true,
+        "icon": "icons/tusd.webp",
+        "alfacash": "",
+        "changee": "",
+        "changehero": "",
+        "changenow": "tusdtrc20",
+        "coincraddle": "",
+        "fixedfloat": "",
+        "majesticbank": "",
+        "nanswap": "",
+        "simpleswap": "",
+        "stealthex": "tusdtrc20",
+        "wizardswap": "",
+        "bitcoinvn": "tusdtrc20"
     },
     {
         "ticker": "shib",
@@ -516,7 +554,7 @@
         "network": "dot",
         "isStable": false,
         "icon": "icons/dot.png",
-        "min": 1.441
+        "min": 1.351
     },
     {
         "ticker": "etc",
@@ -532,7 +570,7 @@
         "network": "hive",
         "isStable": false,
         "icon": "icons/hive.webp",
-        "min": 23.56
+        "min": 22.47
     },
     {
         "ticker": "wow",
@@ -540,7 +578,7 @@
         "network": "wow",
         "isStable": false,
         "icon": "icons/wow.png",
-        "min": 135.3
+        "min": 126.5
     },
     {
         "ticker": "ban",
@@ -548,7 +586,7 @@
         "network": "banano",
         "isStable": false,
         "icon": "icons/ban.webp",
-        "min": 3921.0,
+        "min": 3823.0,
         "exolix": "ban",
         "nanswap": "ban"
     },
@@ -566,7 +604,7 @@
         "network": "dcr",
         "isStable": false,
         "icon": "icons/dcr.webp",
-        "min": 0.4016
+        "min": 0.4143
     },
     {
         "ticker": "aave",
@@ -574,7 +612,7 @@
         "network": "aave",
         "isStable": false,
         "icon": "icons/aave.webp",
-        "min": 0.0374
+        "min": 0.03604
     },
     {
         "ticker": "avax",
@@ -598,7 +636,7 @@
         "network": "link",
         "isStable": false,
         "icon": "icons/link.webp",
-        "min": 0.4115
+        "min": 0.3912
     },
     {
         "ticker": "gusd",
@@ -629,7 +667,7 @@
         "network": "ark",
         "isStable": false,
         "icon": "icons/ark.webp",
-        "min": 13.84
+        "min": 12.9
     },
     {
         "ticker": "firo",
@@ -638,5 +676,37 @@
         "isStable": false,
         "icon": "icons/firo.webp",
         "min": 14.24
+    },
+    {
+        "ticker": "wbtc",
+        "name": "Wrapped Bitcoin",
+        "network": "wbtc",
+        "isStable": false,
+        "icon": "icons/wbtc.webp",
+        "min": 5.921e-05
+    },
+    {
+        "ticker": "1inch",
+        "name": "1inch",
+        "network": "1inch",
+        "isStable": false,
+        "icon": "icons/1inch.webp",
+        "min": 29.27
+    },
+    {
+        "ticker": "dash",
+        "name": "Dash",
+        "network": "dash",
+        "isStable": false,
+        "icon": "icons/dash.webp",
+        "min": 0.242
+    },
+    {
+        "ticker": "zano",
+        "name": "Zano",
+        "network": "zano",
+        "isStable": false,
+        "icon": "icons/zano.webp",
+        "min": 0.7485
     }
 ]
