@@ -194,6 +194,8 @@ func Step3Handler(c echo.Context) error {
 		}
 	}
 
+	fmt.Printf("Partner: %s, Exists in map: %v, RequiresIP: %v\n", partner, partnerLower, exchangeInfo[partnerLower].RequireIP)
+
 	affiliate := ""
 	affiliateCookie, err := c.Cookie("affiliate")
 	if err == nil && affiliateCookie.Value != "" {
