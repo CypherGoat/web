@@ -18,7 +18,6 @@ package main
 import (
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/CypherGoat/web/handlers"
 
@@ -31,12 +30,8 @@ func AffiliateMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		affiliate := c.QueryParam("ref")
 		if affiliate != "" {
-			cookie := new(http.Cookie)
-			cookie.Name = "affiliate"
-			cookie.Value = affiliate
-			cookie.Expires = time.Now().Add(7 * 24 * time.Hour)
-			cookie.Path = "/"
-			c.SetCookie(cookie)
+			c.Set("affiliate", affiliate)
+
 		}
 		return next(c)
 	}
