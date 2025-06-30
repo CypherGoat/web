@@ -94,6 +94,8 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"swapuz":       {"/exchanges/swapuz.svg", false},
 	"bitcoinvn":    {"/exchanges/bitcoinvn.png", false},
 	"xgram":        {"/exchanges/xgram.svg", true},
+	"pegasusswap":  {"/exchanges/pegasusswap.png", false},
+	"godex":        {"/exchanges/godex.svg", true},
 }
 
 func EstimateHandler(c echo.Context) error {
@@ -118,8 +120,6 @@ func EstimateHandler(c echo.Context) error {
 
 		if info, ok := exchangeInfo[name]; ok {
 			apiEstimates[i].ImageURL = info.ImageURL
-		} else {
-			apiEstimates[i].ImageURL = "https://example.com/images/default.png"
 		}
 
 		apiEstimates[i].Log = exchangeInfo[name].RequireIP
