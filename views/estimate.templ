@@ -459,7 +459,7 @@ for i, offer := range offers {
                             { FormatFloat(offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }
                         </div>
                         <div>
-                            <img src={ offer.ImageURL } alt="{ offer.ExchangeName }" class="estimate-image">
+                            <img src={ offer.ImageURL } alt="{ offer.ExchangeName }" class="estimate-image" loading="lazy">
                         </div>
                     </div>
                     if i == 0 {
