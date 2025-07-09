@@ -878,20 +878,76 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('error-message').classList.add('hidden');
     });
 
-    document.addEventListener('htmx:afterSwap', function() {
-        document.getElementById('loading-spinner').classList.add('spinner-hidden');
-        document.querySelectorAll('.hide-on-swap').forEach(element => {
-            element.classList.add('hidden');
-        });
-        document.getElementById('faq-section').classList.add('hidden');
-
-        setTimeout(function() {
-            document.body.style.display = 'none';
-            document.body.offsetHeight;
-            document.body.style.display = '';
-        }, 0);
+document.addEventListener('htmx:afterSwap', function() {
+    document.getElementById('loading-spinner').classList.add('spinner-hidden');
+    document.querySelectorAll('.hide-on-swap').forEach(element => {
+        element.classList.add('hidden');
     });
+    document.getElementById('faq-section').classList.add('hidden');
+    
+    updateEstimatedAmountFromFirstCard();
+    
+    setTimeout(function() {
+        updateEstimatedAmountFromFirstCard();
+        document.body.style.display = 'none';
+        document.body.offsetHeight;
+        document.body.style.display = '';
+    }, 100);
+});
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+        if (event.target && (event.target.id === 'sort-rate' || event.target.id === 'sort-kyc')) {
+            setTimeout(function() {
+                document.dispatchEvent(new CustomEvent('estimatesSorted'));
+            }, 50);
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const estimateContainer = document.getElementById('estimate-container');
+    if (estimateContainer) {
+        const observer = new MutationObserver(function() {
+            setTimeout(updateEstimatedAmountFromFirstCard, 50);
+        });
+        
+        observer.observe(estimateContainer, {
+            childList: true,
+            subtree: true
+        });
+    }
+});
+
+document.addEventListener('estimatesSorted', function() {
+    updateEstimatedAmountFromFirstCard();
+});
+
+function updateEstimatedAmountFromFirstCard() {
+    const estimateForms = document.querySelectorAll('.estimate-form');
+    
+    if (estimateForms && estimateForms.length > 0) {
+        const firstForm = estimateForms[0];
+        const amountElement = firstForm.querySelector('.amount-highlight');
+        
+        if (amountElement) {
+            const estimatedAmount = amountElement.textContent.trim();
+            const estimatedField = document.getElementById('estimated-amount');
+            
+            if (estimatedField) {
+                estimatedField.value = estimatedAmount;
+                estimatedField.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                const currentValue = estimatedAmount;
+                setTimeout(function() {
+                    if (estimatedField.value !== currentValue) {
+                        estimatedField.value = currentValue;
+                    }
+                }, 100);
+            }
+        }
+    }
+}
     document.addEventListener('htmx:responseError', function(event) {
         document.getElementById('loading-spinner').classList.add('spinner-hidden');
         if (event.detail.xhr.status === 500) {

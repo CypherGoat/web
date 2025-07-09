@@ -550,6 +550,8 @@ for i, offer := range offers {
                     container.appendChild(br);
                 }
             });
+            document.dispatchEvent(new CustomEvent('estimatesSorted'));
+
         }
         
         if (document.readyState === 'loading') {
