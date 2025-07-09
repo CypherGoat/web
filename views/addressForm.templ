@@ -243,7 +243,7 @@ templ AddressForm(estimate api.Estimate, err bool){
 @Header(){
     if err{
         <div class="error-message text-center">
-            <p>There was an error while creating your trade. Please check that you have entered a valid { strings.ToUpper(estimate.Network2) } address. If the issue persists try a different exchange.</p>
+            <p>There was an error while creating your trade. Please check that you have entered a valid { strings.ToUpper(estimate.Network2) } address. If the issue persists try a different exchange or <a href="/contact/">contact us</a>.</p>
         </div>
     }
     <div class="flex items-center justify-center min-h-screen bg-[#121520]">
