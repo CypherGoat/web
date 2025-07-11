@@ -388,7 +388,7 @@ func SitemapHandler(c echo.Context) error {
 					sitemap += fmt.Sprintf(`
   <url>
     <loc>%s/swap/%s</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`, baseURL, ticker)
 				}
