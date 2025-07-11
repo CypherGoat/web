@@ -239,6 +239,30 @@ templ AddressForm(estimate api.Estimate, err bool){
         margin-bottom: 1.5rem;
         box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
     }
+
+        @media (max-width: 640px) {
+        .card, .main-form-container {
+            max-width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 0.5rem;
+        }
+        .trade-summary, .partner-section {
+            padding: 0.5rem;
+        }
+        h2, .text-3xl {
+            font-size: 1.25rem !important;
+        }
+        .action-button, .btn-primary {
+            font-size: 1rem;
+            padding: 0.65rem;
+        }
+        .exchange-logo {
+            height: 28px;
+            max-width: 80px;
+        }
+    }
+
 </style>
 @Header(){
     if err{
