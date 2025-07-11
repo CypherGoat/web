@@ -577,43 +577,44 @@ footer {
             <p class="text-xl text-gray-300">Get the best {coinName} exchange rates with no KYC and lowest fees</p>
         </div>
 
-                <div class="swap-form-section mt-6">
-            <div class="container">
-                <div class="card">
-                    <h2>Swap {coinName}</h2>
-                    <form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
-                        <div class="input-group">
-                            <div>
-                                <label for="amount" class="form-label">Amount</label>
-                                <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="0.00">
-                            </div>
-                            <div class="searchable-dropdown">
-                                <label class="form-label">Send Coin</label>
-                                <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
-                                <div class="dropdown-options" id="dropdown-options-send"></div>
-                                <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
-                            </div>
-                        </div>
+ <div class="swap-form-section mt-4">
+        <div class="container">
+            <div class="card">
+                <h1 class="hidden">Swap {coinName}</h1>
+               <form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
+    <div class="input-group">
+        <div>
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="0.00">
+        </div>
+        <div class="searchable-dropdown">
+            <label class="form-label">Send Coin</label>
+            <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
+            <div class="dropdown-options" id="dropdown-options-send"></div>
+            <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
+        </div>
+    </div>
 
-                        <div class="input-group">
-                            <div>
-                                <label for="estimated-amount" class="form-label">Estimated</label>
-                                <input type="text" id="estimated-amount" class="form-input read-only" placeholder="0.00" readonly>
-                            </div>
-                            <div class="searchable-dropdown">
-                                <label class="form-label">Receive Coin</label>
-                                <input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off">
-                                <div class="dropdown-options" id="dropdown-options-receive"></div>
-                                <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
-                            </div>
-                        </div>
+    <div class="input-group">
+        <div>
+            <label for="estimated-amount" class="form-label">Estimated</label>
+            <input type="text" id="estimated-amount" class="form-input read-only" placeholder="0.00" readonly>
+        </div>
+        <div class="searchable-dropdown">
+            <label class="form-label">Receive Coin</label>
+            <input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off">
+            <div class="dropdown-options" id="dropdown-options-receive"></div>
+            <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
+        </div>
+    </div>
 
-                        <input type="hidden" id="network-send" name="network1">
-                        <input type="hidden" id="network-receive" name="network2">
-                        <button type="submit" class="btn-primary">Swap {strings.ToUpper(coin)}</button>
-                    </form>
-                </div>
+    <input type="hidden" id="network-send" name="network1">
+    <input type="hidden" id="network-receive" name="network2">
+    <button type="submit" class="btn-primary">Swap</button>
+</form>
+
             </div>
+        </div>
 
             <div id="loading-spinner" class="spinner spinner-hidden"></div>
             <div id="error-message" class="hidden">
@@ -770,18 +771,70 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    document.addEventListener('htmx:afterSwap', function() {
-        document.getElementById('loading-spinner').classList.add('spinner-hidden');
-        document.querySelectorAll('.hide-on-swap').forEach(element => {
-            element.classList.add('hidden');
-        });
-
-        setTimeout(function() {
-            document.body.style.display = 'none';
-            document.body.offsetHeight;
-            document.body.style.display = '';
-        }, 0);
+   document.addEventListener('htmx:afterSwap', function() {
+    document.getElementById('loading-spinner').classList.add('spinner-hidden');
+    document.querySelectorAll('.hide-on-swap').forEach(element => {
+        element.classList.add('hidden');
     });
+    document.getElementById('faq-section').classList.add('hidden');
+    
+    updateEstimatedAmountFromFirstCard();
+    
+   document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+        if (event.target && (event.target.id === 'sort-rate' || event.target.id === 'sort-kyc')) {
+            setTimeout(function() {
+                document.dispatchEvent(new CustomEvent('estimatesSorted'));
+            }, 50);
+        }
+    });
+});
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const estimateContainer = document.getElementById('estimate-container');
+    if (estimateContainer) {
+        const observer = new MutationObserver(function() {
+            setTimeout(updateEstimatedAmountFromFirstCard, 50);
+        });
+        
+        observer.observe(estimateContainer, {
+            childList: true,
+            subtree: true
+        });
+    }
+});
+
+document.addEventListener('estimatesSorted', function() {
+    updateEstimatedAmountFromFirstCard();
+});
+
+function updateEstimatedAmountFromFirstCard() {
+    const estimateForms = document.querySelectorAll('.estimate-form');
+    
+    if (estimateForms && estimateForms.length > 0) {
+        const firstForm = estimateForms[0];
+        const amountElement = firstForm.querySelector('.amount-highlight');
+        
+        if (amountElement) {
+            const estimatedAmount = amountElement.textContent.trim();
+            const estimatedField = document.getElementById('estimated-amount');
+            
+            if (estimatedField) {
+                estimatedField.value = estimatedAmount;
+                estimatedField.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                const currentValue = estimatedAmount;
+                setTimeout(function() {
+                    if (estimatedField.value !== currentValue) {
+                        estimatedField.value = currentValue;
+                    }
+                }, 100);
+            }
+        }
+    }
+}
 
     document.addEventListener('htmx:responseError', function(event) {
         document.getElementById('loading-spinner').classList.add('spinner-hidden');
