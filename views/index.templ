@@ -539,20 +539,20 @@ footer {
 <div id="estimate-container"></div>
     </div>
 
-    <div class="hide-on-swap text-center mt-8 fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50" id="scroll-to-faq-container">
-    <button onclick="scrollToFAQ()" class="text-sm font-semibold text-white bg-transparent hover:underline focus:outline-none">
-        Scroll to learn more
-    </button>
-    <a href="#faq-section" class="group mt-2 block">
-        <div class="relative inline-block">
-            <div class="w-10 h-10 rounded-full bg-blue-900 bg-opacity-40 flex justify-center items-center group-hover:bg-opacity-60 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="text-white w-6 h-6 group-hover:translate-y-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
+    <div class="hide-on-swap text-center mt-8 mx-auto" id="scroll-to-faq-container" style="max-width: 320px;">
+        <button onclick="scrollToFAQ()" class="text-sm font-semibold text-white bg-transparent hover:underline focus:outline-none">
+            Scroll to learn more
+        </button>
+        <a href="#faq-section" class="group mt-2 block">
+            <div class="relative inline-block">
+                <div class="w-10 h-10 rounded-full bg-blue-900 bg-opacity-40 flex justify-center items-center group-hover:bg-opacity-60 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="text-white w-6 h-6 group-hover:translate-y-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
             </div>
-        </div>
-    </a>
-</div>
+        </a>
+    </div>
 
 </div>
 
@@ -1105,6 +1105,8 @@ function updateEstimatedAmountFromFirstCard() {
                 options[activeOptionIndex].classList.add('active-option');
                 options[activeOptionIndex].scrollIntoView({ block: 'nearest' });
             }
+        } else if (e.key === 'Escape') {
+            closeModal();
         }
     });
 
@@ -1201,9 +1203,11 @@ function updateEstimatedAmountFromFirstCard() {
     });
 
     document.getElementById('swap-form').addEventListener('submit', function() {
-        document.getElementById('crypto-send').classList.remove('hidden');
-        document.getElementById('crypto-receive').classList.remove('hidden');
-    });
+    document.getElementById('crypto-send').classList.remove('hidden');
+    document.getElementById('crypto-receive').classList.remove('hidden');
+    document.getElementById('scroll-to-faq-container').classList.add('hidden');
+    scrollButtonHiddenForever = true;
+});
 
     document.getElementById('dropdown-search-send').setAttribute('readonly', true);
     document.getElementById('dropdown-search-receive').setAttribute('readonly', true);
@@ -1211,30 +1215,33 @@ function updateEstimatedAmountFromFirstCard() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const scrollButtonContainer = document.getElementById('scroll-to-faq-container');
-    const faqSection = document.getElementById('faq-section');
-    
-    function checkFAQVisibility() {
-        if (!scrollButtonContainer || !faqSection) return;
-        
-        const faqRect = faqSection.getBoundingClientRect();
+    const swapFormSection = document.querySelector('.swap-form-section');
+
+    function checkSwapFormVisibility() {
+        if (!scrollButtonContainer || !swapFormSection) return;
+        if (scrollButtonHiddenForever) {
+            scrollButtonContainer.classList.add('hidden');
+            return;
+        }
+
+        const rect = swapFormSection.getBoundingClientRect();
         const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-        
-        if (faqRect.top < windowHeight * 1.1) {
+
+        if (rect.bottom < 0 || rect.top > windowHeight) {
             scrollButtonContainer.classList.add('hidden');
         } else {
             scrollButtonContainer.classList.remove('hidden');
         }
     }
-    
+
     let scrollTimeout;
     window.addEventListener('scroll', function() {
         clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkFAQVisibility, 50);
+        scrollTimeout = setTimeout(checkSwapFormVisibility, 50);
     });
-    
-    checkFAQVisibility();
-    
-    window.addEventListener('resize', checkFAQVisibility);
+
+    checkSwapFormVisibility();
+    window.addEventListener('resize', checkSwapFormVisibility);
 });
 
 function scrollToFAQ() {
