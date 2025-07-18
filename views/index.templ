@@ -359,11 +359,10 @@ footer {
         padding: 1.5rem;
     }
 
-    #scroll-to-faq-container {
-        position: relative;
-        bottom: auto;
-        left: 50%;
-        transform: translateY(-50%);
+  #scroll-to-faq-container {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
         margin-top: 5rem;
     }
 }
@@ -466,10 +465,81 @@ footer {
 .faq-item:hover {
     background-color: rgba(255, 255, 255, 0.03);
 }
+  .no-js-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    z-index: 9999;
+  }
+
+  .no-js-popup h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .no-js-popup p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-bottom: 1rem;
+  }
+
+  .no-js-popup .note {
+    font-size: 1.1rem;
+    max-width: 500px;
+    color: #ccc;
+    margin-top: 1rem;
+  }
+
+  .no-js-popup a {
+    color: #64b5f6;
+    text-decoration: underline;
+  }
+
+    .no-js-popup .emphasis {
+    display: inline-block;
+    font-weight: bold;
+    color: #4fc3f7;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
     </style>
      <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
     <p id="error-text"></p>
 </div>
+<noscript>
+  <div class="no-js-popup">
+    <h1>Hey there! JavaScript seems to be off</h1>
+    <p>
+      <span class="emphasis">No worries at all!</span>  
+      We’ve got you covered. For the fastest, most private and completely JavaScript free experience, head over to:<br>
+      <a href="https://nojs.cyphergoat.com" target="_blank" rel="noopener noreferrer">nojs.cyphergoat.com</a>
+    </p>
+    <p>
+        Or connect securely via our
+      <a href="http://cyphergmw4huw7jzhat3misfm5jj2m4nvafockqbj7i5rrlec6mobdid.onion/" target="_blank" rel="noopener noreferrer">Tor</a>  
+      or  
+      <a href="http://cjorx2hmv3jxs5sshxhw73nmkiayupim6gfye3sfts2pzmjgk5rq.b32.i2p/" target="_blank" rel="noopener noreferrer">I2P</a>  
+      versions.
+    </p>
+    <p class="note">
+      Your privacy matters to us.  
+      Enjoy the full experience with or without JavaScript, your choice!
+    </p>
+  </div>
+</noscript>
+
 <div class="pt-0 container mx-auto p-7 min-h-screen">
     <div class="text-center">
         <h1 class="text-6xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600 inline-block rgb-effect leading-tight">

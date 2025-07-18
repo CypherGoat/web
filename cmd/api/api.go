@@ -180,6 +180,8 @@ func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner st
 	params.Add("useragent", info.UserAgent)
 	params.Add("lang", info.LangList)
 
+	params.Add("source", "clearnet-main")
+
 	requestURL := fmt.Sprintf("%s/swap?%s", URL, params.Encode())
 
 	data, err := SendRequest(requestURL)
