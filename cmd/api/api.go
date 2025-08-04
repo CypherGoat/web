@@ -241,3 +241,37 @@ func GetTransactionFromAPI(id string) (error, Transaction) {
 	transaction := result["transaction"]
 	return nil, transaction
 }
+
+type AffiliateApplication struct {
+	Email     string `json:"email"`
+	Messenger string `json:"messenger"`
+	Promotion string `json:"promotion"`
+}
+
+func SendAffiliateApplication(app AffiliateApplication) error {
+	apiURL := fmt.Sprintf("%s/affiliate/apply", URL)
+	payload, err := json.Marshal(app)
+	if err != nil {
+		return err
+	}
+
+	req, err := http.NewRequest("POST", apiURL, strings.NewReader(string(payload)))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+API_KEY)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 300 {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("API error: %s", string(body))
+	}
+	return nil
+}

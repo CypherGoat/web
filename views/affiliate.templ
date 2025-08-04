@@ -380,11 +380,11 @@ templ Affiliate() {
                 </div>
                 
                 <div class="text-center mt-8">
-                    <a href="https://tally.so/r/wQkXbG" class="btn-primary">Become an Affiliate</a>
+                    <a href="/affiliate/new" class="btn-primary">Become an Affiliate</a>
                 </div>
                 <br/>
                 <div class="text-center mt-4">
-                    <p class="text-gray-300">Have questions? <a href="mailto:support@cypherglass.com" class="text-blue-400">Contact us</a></p>
+                    <p class="text-gray-300">Have questions? <a href="/contact/" class="text-blue-400">Contact us</a></p>
                 </div>
             </div>
         </div>
@@ -454,5 +454,196 @@ templ AffiliateTerms(){
         </ul>
 
         <p class="text-base text-center text-gray-400 mt-8">By utilizing CypherGoat, you acknowledge and agree to these terms. Should you have any questions or concerns, feel free to contact us.</p>
+    </div>
+}
+
+templ AffiliateForm(errors []string, success string){
+    @Header(){}
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-panel {
+            background: #181b28;
+            border-radius: 18px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.07);
+            max-width: 480px;
+            margin: 2rem auto;
+        }
+        .form-panel h2 {
+            color: #fff;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        .form-panel .subtitle {
+            color: #b0b8d1;
+            font-size: 1.08rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-divider {
+            border: none;
+            border-top: 1px solid #2e3448;
+            margin: 1.5rem 0 2rem 0;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: #23263a;
+            color: #e0e0e0;
+            border: 1px solid #555;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-input:focus {
+            border-color: #4a54f1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,84,241,0.15);
+        }
+        .form-helper {
+            color: #7ca2ff;
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.1rem;
+        }
+        .checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        .checkbox-row input[type="checkbox"] {
+            margin-right: 0.7rem;
+            margin-top: 0.2rem;
+            accent-color: #4a54f1;
+        }
+        .checkbox-row label {
+            color: #b0b8d1;
+            font-size: 0.98rem;
+            line-height: 1.4;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
+            background-size: 400% 400%;
+            color: #ffffff;
+            padding: 0.95rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.3s;
+            background-clip: padding-box;
+            position: relative;
+            animation: rgbAnimation 6s ease infinite;
+            text-shadow: 1px 1px 4px rgba(30,144,255,0.7);
+            text-decoration: none;
+            display: block;
+            letter-spacing: 0.5px;
+            margin-top: 0.5rem;
+        }
+        .btn-primary:hover {
+            transform: scale(1.04);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,84,241,0.3);
+        }
+        @keyframes rgbAnimation {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        @media (max-width: 600px) {
+            .form-panel {
+                padding: 1.2rem 0.7rem 1.5rem 0.7rem;
+                max-width: 98vw;
+            }
+        }
+        .alert-error {
+            background: #2e3448;
+            color: #ff6b6b;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 1.2rem;
+        }
+        .alert-success {
+            background: #223a2e;
+            color: #4be38c;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            margin-bottom: 1.2rem;
+        }
+    </style>
+    <div class="form-panel">
+        <h2>Affiliate Application</h2>
+        <div class="subtitle">
+            Fill out the form below to apply for the CypherGoat Affiliate Program.<br/>
+            We’ll review your application and get back to you within 48 hours.
+        </div>
+        <hr class="form-divider"/>
+        if len(errors) > 0 {
+            <div class="alert-error">
+                <ul style="margin:0;padding-left:1.2rem;">
+                    for _, err := range errors {
+                        <li>{err}</li>
+                    }
+                </ul>
+            </div>
+        }
+        if success != "" {
+            <div class="alert-success">
+                {success}
+            </div>
+        }
+        <form method="POST" action="/affiliate/new" autocomplete="off">
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input class="form-input" type="email" id="email" name="email" required placeholder="you@email.com" autocomplete="email"/>
+                <div class="form-helper">We'll use this to contact you about your application.</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="messenger">Telegram/Signal/SimpleX Username</label>
+                <input class="form-input" type="text" id="messenger" name="messenger" required placeholder="@yourusername" autocomplete="off"/>
+                <div class="form-helper">To contact you more easily</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="promotion">Where will you promote CypherGoat?</label>
+                <input class="form-input" type="text" id="promotion" name="promotion" required placeholder="Website, Twitter, etc" autocomplete="off"/>
+                <div class="form-helper">Include a link if possible</div>
+            </div>
+            <div class="checkbox-row">
+                <input type="checkbox" id="agree" name="agree" required/>
+                <label for="agree">
+                    I agree to the <a href="/affiliate/terms" class="text-blue-400 underline hover:text-blue-300" target="_blank">Affiliate Program Terms &amp; Conditions</a>
+                </label>
+            </div>
+            <button type="submit" class="btn-primary">Apply Now</button>
+        </form>
     </div>
 }
