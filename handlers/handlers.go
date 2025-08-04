@@ -401,3 +401,44 @@ func SitemapHandler(c echo.Context) error {
 
 	return c.String(http.StatusOK, sitemap)
 }
+
+func AffiliateForm(c echo.Context) error {
+	if c.Request().Method == "POST" {
+		email := c.FormValue("email")
+		messenger := c.FormValue("messenger")
+		promotion := c.FormValue("promotion")
+		agree := c.FormValue("agree")
+
+		var errors []string
+		if email == "" {
+			errors = append(errors, "Email is required.")
+		}
+		if messenger == "" {
+			errors = append(errors, "Messenger username is required.")
+		}
+		if promotion == "" {
+			errors = append(errors, "Promotion details are required.")
+		}
+		if agree != "on" {
+			errors = append(errors, "You must agree to the terms.")
+		}
+
+		if len(errors) > 0 {
+			return views.AffiliateForm(errors, "").Render(c.Request().Context(), c.Response())
+		}
+
+		// Send to API
+		app := api.AffiliateApplication{
+			Email:     email,
+			Messenger: messenger,
+			Promotion: promotion,
+		}
+		if err := api.SendAffiliateApplication(app); err != nil {
+			errors = append(errors, "Failed to submit application. Please try again later.")
+			return views.AffiliateForm(errors, "").Render(c.Request().Context(), c.Response())
+		}
+
+		return views.AffiliateForm(nil, "Thank you for applying! We'll review your application soon.").Render(c.Request().Context(), c.Response())
+	}
+	return views.AffiliateForm(nil, "").Render(c.Request().Context(), c.Response())
+}

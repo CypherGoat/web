@@ -31,6 +31,13 @@ func AffiliateMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		affiliate := c.QueryParam("ref")
 		if affiliate != "" {
 			c.Set("affiliate", affiliate)
+			cookie := new(http.Cookie)
+			cookie.Name = "affiliate"
+			cookie.Value = affiliate
+			cookie.Path = "/"
+			cookie.HttpOnly = true
+			cookie.Secure = true
+			c.SetCookie(cookie)
 
 		}
 		return next(c)
@@ -66,7 +73,9 @@ func main() {
 	e.GET("/privacy", handlers.PrivacyPolicyHandler)
 
 	e.GET("/affiliate", handlers.AffiliateHandler)
+	e.GET("/affiliate/new", handlers.AffiliateForm)
 
+	e.POST("/affiliate/new", handlers.AffiliateForm)
 	e.GET("/health", handlers.HealthHandler)
 	e.GET("/affiliate/terms", handlers.AffiliateTerms)
 
