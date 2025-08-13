@@ -45,7 +45,7 @@
         "min": 0.01473
     },
     {
-        "ticker": "BDX",
+        "ticker": "bdx",
         "name": "Beldex",
         "network": "bdx",
         "isStable": false,
