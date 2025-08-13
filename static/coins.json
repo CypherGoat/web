@@ -45,6 +45,14 @@
         "min": 0.01473
     },
     {
+        "ticker": "bdx",
+        "name": "Beldex",
+        "network": "bdx",
+        "isStable": false,
+        "icon": "icons/bdx.png",
+        "min": 0
+    }, 
+    {
         "ticker": "ltc",
         "name": "Litecoin",
         "network": "ltc",
