@@ -307,6 +307,134 @@ templ TransactionPage(transaction api.Transaction){
     .kycnotme-widget-container .review-widget-link:hover {
         background: linear-gradient(135deg, #daa520, #f4a460);
     }
+    
+    .contact-section {
+        margin-top: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.02);
+        transition: all 0.3s ease;
+    }
+    
+    .contact-header {
+        padding: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .contact-header:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+    
+    .contact-header-left {
+        display: flex;
+        align-items: center;
+    }
+    
+    .contact-title {
+        color: #e0e0e0;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-left: 0.5rem;
+    }
+    
+    .contact-chevron {
+        transition: transform 0.3s ease;
+        color: #a0a0a0;
+    }
+    
+    .contact-chevron.expanded {
+        transform: rotate(180deg);
+    }
+    
+    .contact-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    
+    .contact-content.expanded {
+        max-height: 300px;
+    }
+    
+    .contact-inner {
+        padding: 1.5rem;
+    }
+    
+    .contact-description {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.4;
+    }
+    
+    .contact-links {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr;
+    }
+    
+    @media (min-width: 640px) {
+        .contact-links {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    
+    .contact-link {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        text-decoration: none;
+        color: #e0e0e0;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .contact-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+    .contact-link-icon {
+        margin-right: 0.75rem;
+        flex-shrink: 0;
+    }
+    
+    .contact-link-content {
+        flex: 1;
+    }
+    
+    .contact-link-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .contact-link-subtitle {
+        font-size: 0.8rem;
+        color: #a0a0a0;
+    }
+    
+    .telegram-link:hover {
+        background: rgba(0, 136, 204, 0.1);
+        border-color: rgba(0, 136, 204, 0.3);
+    }
+    
+    .simplex-link:hover {
+        background: rgba(76, 175, 80, 0.1);
+        border-color: rgba(76, 175, 80, 0.3);
+    }
  </style>
 
  <form action="" method="get">
@@ -436,12 +564,57 @@ templ TransactionPage(transaction api.Transaction){
                     </div>
                 </div>
             }
+            
+            <!-- Contact Support Section -->
+            <div class="contact-section">
+                <div class="contact-header" onclick="toggleContactSection()">
+                    <div class="contact-header-left">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="text-yellow-500">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                        <span class="contact-title">Problem with your transaction?</span>
+                    </div>
+                    <svg id="contactChevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="contact-chevron">
+                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </div>
+                <div id="contactContent" class="contact-content">
+                    <div class="contact-inner">
+                        <p class="contact-description">
+                            Need help with your transaction? Our support team is available to assist you through secure messaging platforms.
+                        </p>
+                        <div class="contact-links">
+                            <a href="https://t.me/CypherGoatSupport" target="_blank" rel="noopener" class="contact-link telegram-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="contact-link-icon text-blue-400">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
+                                </svg>
+                                <div class="contact-link-content">
+                                    <div class="contact-link-title">Telegram</div>
+                                    <div class="contact-link-subtitle">CypherGoatSupport</div>
+                                </div>
+                            </a>
+                            <a href="https://smp15.simplex.im/a#x8Q20y3KcKabkLeCFyDMvUDgaf3EdQQh_0eE3xyxBYw" target="_blank" rel="noopener" class="contact-link simplex-link">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="contact-link-icon text-green-400">
+                                    <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                                </svg>
+                                <div class="contact-link-content">
+                                    <div class="contact-link-title">SimpleX Chat</div>
+                                    <div class="contact-link-subtitle">Private messaging</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </form>
 
     <script>
         let qrCodeVisible = false;
+        let contactExpanded = false;
+        
         function toggleQRCode(text) {
             const img = document.getElementById('qrcode');
             const button = document.getElementById('toggleButton');
@@ -460,6 +633,20 @@ templ TransactionPage(transaction api.Transaction){
                     .catch(error => console.error('Error:', error));
             }
             qrCodeVisible = !qrCodeVisible;
+        }
+        
+        function toggleContactSection() {
+            const content = document.getElementById('contactContent');
+            const chevron = document.getElementById('contactChevron');
+            
+            if (contactExpanded) {
+                content.classList.remove('expanded');
+                chevron.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                chevron.classList.add('expanded');
+            }
+            contactExpanded = !contactExpanded;
         }
     </script>
 }
