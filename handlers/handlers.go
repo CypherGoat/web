@@ -20,16 +20,29 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/CypherGoat/web/views"
+	"github.com/a-h/templ"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer/html"
+	"gopkg.in/yaml.v3"
 
 	"github.com/CypherGoat/web/cmd/api"
 
 	"github.com/labstack/echo/v4"
 )
+
+func render(c echo.Context, component templ.Component) error {
+	return component.Render(c.Request().Context(), c.Response())
+}
 
 var (
 	transactions = make(map[string]api.Transaction)
@@ -441,4 +454,122 @@ func AffiliateForm(c echo.Context) error {
 		return views.AffiliateForm(nil, "Thank you for applying! We'll review your application soon.").Render(c.Request().Context(), c.Response())
 	}
 	return views.AffiliateForm(nil, "").Render(c.Request().Context(), c.Response())
+}
+
+func BlogHandler(c echo.Context) error {
+	posts, err := loadAllBlogPosts()
+	if err != nil {
+		return echo.NewHTTPError(500, "Failed to load blog posts")
+	}
+	return render(c, views.Blog(posts))
+}
+
+func BlogPostHandler(c echo.Context) error {
+	slug := c.Param("slug")
+	post, err := loadBlogPost(slug)
+	if err != nil || post == nil {
+		return echo.NewHTTPError(404, "Blog post not found")
+	}
+	return render(c, views.BlogPost(post))
+}
+
+func loadAllBlogPosts() ([]*views.BlogPostData, error) {
+	var posts []*views.BlogPostData
+
+	blogDir := "content/blog"
+	entries, err := os.ReadDir(blogDir)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".md") {
+			continue
+		}
+
+		slug := strings.TrimSuffix(entry.Name(), ".md")
+		post, err := loadBlogPostFromFile(filepath.Join(blogDir, entry.Name()))
+		if err != nil {
+			continue
+		}
+
+		if post.Draft {
+			continue
+		}
+
+		post.Slug = slug
+		posts = append(posts, post)
+	}
+
+	sort.Slice(posts, func(i, j int) bool {
+		dateI, errI := time.Parse("2006-01-02", posts[i].Date)
+		dateJ, errJ := time.Parse("2006-01-02", posts[j].Date)
+
+		if errI != nil || errJ != nil {
+			return posts[i].Date > posts[j].Date
+		}
+
+		return dateI.After(dateJ)
+	})
+
+	return posts, nil
+}
+
+func loadBlogPost(slug string) (*views.BlogPostData, error) {
+	filename := filepath.Join("content/blog", slug+".md")
+	post, err := loadBlogPostFromFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	if post.Draft {
+		return nil, fmt.Errorf("post is draft")
+	}
+
+	post.Slug = slug
+	return post, nil
+}
+
+func loadBlogPostFromFile(filename string) (*views.BlogPostData, error) {
+	content, err := os.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	parts := strings.Split(string(content), "---")
+	if len(parts) < 3 {
+		return nil, fmt.Errorf("invalid markdown format: missing frontmatter")
+	}
+
+	var post views.BlogPostData
+	err = yaml.Unmarshal([]byte(parts[1]), &post)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse frontmatter: %w", err)
+	}
+
+	markdownContent := strings.TrimSpace(strings.Join(parts[2:], "---"))
+	post.Content = markdownContent
+
+	md := goldmark.New(
+		goldmark.WithExtensions(
+			extension.GFM,
+			extension.Typographer,
+		),
+		goldmark.WithParserOptions(
+			parser.WithAutoHeadingID(),
+		),
+		goldmark.WithRendererOptions(
+			html.WithUnsafe(), // Allow raw HTML in markdown
+			html.WithXHTML(),
+		),
+	)
+
+	var buf strings.Builder
+	err = md.Convert([]byte(markdownContent), &buf)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert markdown: %w", err)
+	}
+	post.HTMLContent = buf.String()
+
+	return &post, nil
 }

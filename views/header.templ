@@ -15,6 +15,10 @@
 
 package views
 
+    import (
+        "fmt"
+    )
+
 templ Header() {
     <!DOCTYPE html>
     <html lang="en">
@@ -22,8 +26,8 @@ templ Header() {
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css" rel="stylesheet">
-        <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/tailwind.css?v=20250819" rel="stylesheet">
+        <link href="/static/styles.css?v=20250819" rel="stylesheet">
         <script src="/static/htmx.min.js"></script>
 
         <meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
@@ -122,11 +126,66 @@ templ Header() {
                     padding: 0.75rem 1rem;
                     width: 100%;
                     border-radius: 0.375rem;
+                    position: relative;
+                    overflow: hidden;
                 }
                 
                 #nav-menu a:hover {
                     background-color: rgba(255, 255, 255, 0.05);
                 }
+            }
+
+            /* Desktop navigation enhancements */
+            @media (min-width: 1024px) {
+                #nav-menu a {
+                    position: relative;
+                    padding: 0.75rem 1.25rem;
+                    border-radius: 0.5rem;
+                    transition: all 0.3s ease;
+                    background: linear-gradient(145deg, transparent, transparent);
+                    border: 1px solid transparent;
+                }
+
+                #nav-menu a::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+                    border-radius: 0.5rem;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    z-index: -1;
+                }
+
+                #nav-menu a:hover {
+                    color: #ffffff;
+                    text-decoration: none;
+                    transform: translateY(-1px);
+                    border-color: rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+
+                #nav-menu a:hover::before {
+                    opacity: 1;
+                }
+
+                #nav-menu a:active {
+                    transform: translateY(0);
+                }
+
+                /* Add a subtle glow effect */
+                #nav-menu a:hover {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
+                }
+            }
+
+            /* Smooth focus states for accessibility */
+            #nav-menu a:focus {
+                outline: 2px solid rgba(255, 255, 255, 0.3);
+                outline-offset: 2px;
             }
         </style>
     </head>
@@ -143,10 +202,10 @@ templ Header() {
                 </svg>
             </button>
 
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-6 mt-5 lg:mt-0 lg:gap-10">
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/">Home</a>
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/about">About CypherGoat</a>
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/blog">CypherGoat Blog</a>
+            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/about">About CypherGoat</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/blog">CypherGoat Blog</a>
             </div>
         </nav>
     </header>
@@ -164,16 +223,16 @@ templ HeaderCustomTitle(title string) {
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css" rel="stylesheet">
-        <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/tailwind.css?v=20250819" rel="stylesheet">
+        <link href="/static/styles.css?v=20250819" rel="stylesheet">
         <script src="/static/htmx.min.js"></script>
 
-        <meta property="og:title" content="CypherGoat - { title }">
+        <meta property="og:title" content={fmt.Sprintf("CypherGoat - %s", title)}>
         <meta property="og:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
         <meta property="og:image" content="/static/icons/cg-notext.svg">
         <meta property="og:url" content="https://cyphergoat.com">
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="CypherGoat - { title }">
+        <meta name="twitter:title" content={fmt.Sprintf("CypherGoat - %s", title)}>
         <meta name="twitter:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
         <meta name="twitter:image" content="/static/icons/cg-notext.svg">
 
@@ -264,11 +323,66 @@ templ HeaderCustomTitle(title string) {
                     padding: 0.75rem 1rem;
                     width: 100%;
                     border-radius: 0.375rem;
+                    position: relative;
+                    overflow: hidden;
                 }
                 
                 #nav-menu a:hover {
                     background-color: rgba(255, 255, 255, 0.05);
                 }
+            }
+
+            /* Desktop navigation enhancements */
+            @media (min-width: 1024px) {
+                #nav-menu a {
+                    position: relative;
+                    padding: 0.75rem 1.25rem;
+                    border-radius: 0.5rem;
+                    transition: all 0.3s ease;
+                    background: linear-gradient(145deg, transparent, transparent);
+                    border: 1px solid transparent;
+                }
+
+                #nav-menu a::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+                    border-radius: 0.5rem;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    z-index: -1;
+                }
+
+                #nav-menu a:hover {
+                    color: #ffffff;
+                    text-decoration: none;
+                    transform: translateY(-1px);
+                    border-color: rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+
+                #nav-menu a:hover::before {
+                    opacity: 1;
+                }
+
+                #nav-menu a:active {
+                    transform: translateY(0);
+                }
+
+                /* Add a subtle glow effect */
+                #nav-menu a:hover {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
+                }
+            }
+
+            /* Smooth focus states for accessibility */
+            #nav-menu a:focus {
+                outline: 2px solid rgba(255, 255, 255, 0.3);
+                outline-offset: 2px;
             }
         </style>
     </head>
@@ -285,10 +399,10 @@ templ HeaderCustomTitle(title string) {
                 </svg>
             </button>
 
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-6 mt-5 lg:mt-0 lg:gap-10">
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/">Home</a>
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/about">About CypherGoat</a>
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/blog">CypherGoat Blog</a>
+            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/about">About CypherGoat</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/blog">CypherGoat Blog</a>
             </div>
         </nav>
     </header>
@@ -306,8 +420,8 @@ templ IndexHeader() {
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css" rel="stylesheet">
-        <link href="/static/styles.css" rel="stylesheet">
+        <link href="/static/tailwind.css?v=20250819" rel="stylesheet">
+        <link href="/static/styles.css?v=20250819" rel="stylesheet">
         <script src="/static/htmx.min.js"></script>
         <link rel="canonical" href="https://cyphergoat.com">
 
@@ -407,11 +521,66 @@ templ IndexHeader() {
                     padding: 0.75rem 1rem;
                     width: 100%;
                     border-radius: 0.375rem;
+                    position: relative;
+                    overflow: hidden;
                 }
                 
                 #nav-menu a:hover {
                     background-color: rgba(255, 255, 255, 0.05);
                 }
+            }
+
+            /* Desktop navigation enhancements */
+            @media (min-width: 1024px) {
+                #nav-menu a {
+                    position: relative;
+                    padding: 0.75rem 1.25rem;
+                    border-radius: 0.5rem;
+                    transition: all 0.3s ease;
+                    background: linear-gradient(145deg, transparent, transparent);
+                    border: 1px solid transparent;
+                }
+
+                #nav-menu a::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+                    border-radius: 0.5rem;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    z-index: -1;
+                }
+
+                #nav-menu a:hover {
+                    color: #ffffff;
+                    text-decoration: none;
+                    transform: translateY(-1px);
+                    border-color: rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+
+                #nav-menu a:hover::before {
+                    opacity: 1;
+                }
+
+                #nav-menu a:active {
+                    transform: translateY(0);
+                }
+
+                /* Add a subtle glow effect */
+                #nav-menu a:hover {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
+                }
+            }
+
+            /* Smooth focus states for accessibility */
+            #nav-menu a:focus {
+                outline: 2px solid rgba(255, 255, 255, 0.3);
+                outline-offset: 2px;
             }
         </style>
     </head>
@@ -428,10 +597,10 @@ templ IndexHeader() {
                 </svg>
             </button>
 
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-6 mt-5 lg:mt-0 lg:gap-10">
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/">Home</a>
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/about">About CypherGoat</a>
-                <a class="font-medium text-gray-300 hover:text-white hover:underline transition-colors focus:outline-none" href="/blog">CypherGoat Blog</a>
+            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/about">About CypherGoat</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/blog">CypherGoat Blog</a>
             </div>
         </nav>
     </header>

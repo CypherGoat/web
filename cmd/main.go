@@ -16,8 +16,10 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/CypherGoat/web/handlers"
 
@@ -25,6 +27,17 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/skip2/go-qrcode"
 )
+
+func CacheMiddleware(duration time.Duration) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			maxAge := int(duration.Seconds())
+			c.Response().Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", maxAge))
+			c.Response().Header().Set("Expires", time.Now().Add(duration).Format(http.TimeFormat))
+			return next(c)
+		}
+	}
+}
 
 func AffiliateMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -84,6 +97,11 @@ func main() {
 	e.GET("/robots.txt", handlers.RobotsHandler)
 
 	e.GET("/sitemap.xml", handlers.SitemapHandler)
+
+	e.GET("/blog", handlers.BlogHandler, CacheMiddleware(1*time.Hour))
+	e.GET("/blog/:slug", handlers.BlogPostHandler, CacheMiddleware(1*time.Hour))
+
+	e.Static("/blog/images", "static/blog")
 
 	e.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError

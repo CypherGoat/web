@@ -1,0 +1,341 @@
+package views
+
+import (
+    "time"
+)
+
+type BlogPostData struct {
+    Title       string
+    Slug        string
+    Date        string
+    Description string
+    Author      string
+    Tags        []string
+    Draft       bool
+    Content     string
+    HTMLContent string
+    Image       string  
+
+}
+
+func formatDate(dateStr string) string {
+    if t, err := time.Parse(time.RFC3339, dateStr); err == nil {
+        return t.Format("January 2 2006")
+    }
+    if t, err := time.Parse("2006-01-02", dateStr); err == nil {
+        return t.Format("January 2 2006")
+    }
+    return dateStr
+}
+
+templ Blog(posts []*BlogPostData) {
+    @HeaderCustomTitle("Blog") {
+        <main class="min-h-screen bg-[#121520] text-white pb-16">
+            <div class="container max-w-4xl mx-auto px-6 py-12">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                        CypherGoat Blog
+                    </h1>
+                    <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                        Explore insights on privacy, security, open source and the evolving landscape of cryptocurrency exchanges.
+                    </p>
+
+                    <div class="mt-8 w-20 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
+                </div>
+
+                <div class="space-y-8">
+                    for _, post := range posts {
+                        if !post.Draft {
+                            <a href={ templ.URL("/blog/" + post.Slug) } class="block group rounded-xl transition-all duration-300">
+                                <article class="flex flex-col p-8 rounded-xl bg-gradient-to-br from-[#1a1f2e] to-[#222633] group-hover:shadow-lg border border-gray-800/60 group-hover:border-blue-500/40 transition-all duration-300 shadow-md hover:shadow-blue-500/10">
+                                    if post.Image != "" {
+                                        <div class="mb-4 overflow-hidden rounded-lg">
+                                            <img src={ post.Image } alt={ post.Title } class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" />
+                                        </div>
+                                    }
+                                    
+                                    <div class="flex flex-wrap items-center gap-3 mb-2 text-sm text-gray-400">
+                                        <time class="font-medium">{ formatDate(post.Date) }</time>
+                                        <span class="text-gray-600">•</span>
+                                        <span>{ post.Author }</span>
+                                    </div>
+                                    
+                                    <h2 class="text-2xl md:text-3xl font-extrabold mb-4 bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent tracking-tight leading-tight">
+                                        { post.Title }
+                                    </h2>
+                                    
+                                    <p class="text-gray-300 mb-4 leading-relaxed flex-grow">
+                                        { post.Description }
+                                    </p>
+                                    
+                                    if len(post.Tags) > 0 {
+                                        <div class="flex flex-wrap gap-2 mb-4">
+                                            for _, tag := range post.Tags {
+                                                <span class="bg-blue-500/10 text-blue-300 px-3 py-1 rounded-full text-xs border border-blue-500/20">{ tag }</span>
+                                            }
+                                        </div>
+                                    }
+                                    
+                                    <div class="inline-flex items-center gap-2 text-blue-400 font-semibold group-hover:text-blue-300 transition-colors mt-auto">
+                                        <span>Read More</span>
+                                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </article>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </main>
+    }
+}
+
+
+templ BlogPost(post *BlogPostData) {
+    @HeaderCustomTitle(post.Title) {
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+        
+        <main class="min-h-screen bg-[#121520] text-white pb-16">
+            <div class="container max-w-4xl mx-auto px-6 py-12">
+                <nav class="mb-8">
+                    <a href="/blog" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-medium py-2">
+                        <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <span>All Articles</span>
+                    </a>
+                </nav>
+
+                <article class="bg-gradient-to-br from-[#1a1f2e] to-[#222633] rounded-xl p-8 md:p-12 border border-gray-800/60 shadow-xl">
+                    <header class="mb-10 pb-8 border-b border-gray-800/80">
+                        <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mb-6 text-sm text-gray-400">
+                            <time class="font-medium">{ formatDate(post.Date) }</time>
+                            <span class="hidden md:inline text-gray-600">•</span>
+                            <span>By { post.Author }</span>
+                        </div>
+                        
+                        <h1 class="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                            { post.Title }
+                        </h1>
+                        
+                        if post.Image != "" {
+                            <div class="mb-6 mt-8">
+                                <img src={ post.Image } alt={ post.Title } class="w-full rounded-lg object-cover max-h-96" />
+                            </div>
+                        }
+                        
+                        if len(post.Tags) > 0 {
+                            <div class="flex flex-wrap gap-2 mt-6">
+                                for _, tag := range post.Tags {
+                                    <span class="bg-blue-500/10 text-blue-300 px-3 py-1 rounded-full text-xs border border-blue-500/20">{ tag }</span>
+                                }
+                            </div>
+                        }
+                    </header>
+
+                    <div id="blog-content" class="prose prose-invert max-w-none">
+                        @templ.Raw(post.HTMLContent)
+                    </div>
+                </article>
+                
+                <div class="mt-12 flex justify-between items-center">
+                    <a href="/blog" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-semibold py-2 px-4 rounded-lg border border-blue-500/20 hover:border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20">
+                        <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        <span>Back to blog</span>
+                    </a>
+                    
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-semibold py-2 px-4 rounded-lg border border-blue-500/20 hover:border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20">
+                        <span>Back to top</span>
+                        <svg class="w-4 h-4 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <script>
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                document.getElementById("progressBar").style.width = scrolled + "%";
+            });
+        </script>
+        
+        <style>
+            #blog-content h1 {
+                font-size: 2rem;
+                line-height: 2.5rem;
+                font-weight: 700;
+                margin-top: 3rem;
+                margin-bottom: 1.5rem;
+                color: #ffffff;
+                background: linear-gradient(to right, #60a5fa, #3b82f6);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            
+            #blog-content h2 {
+                font-size: 1.75rem;
+                line-height: 2.25rem;
+                font-weight: 700;
+                margin-top: 2.5rem;
+                margin-bottom: 1rem;
+                color: #ffffff;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-bottom: 0.5rem;
+            }
+            
+            #blog-content h3 {
+                font-size: 1.5rem;
+                line-height: 2rem;
+                font-weight: 700;
+                margin-top: 2rem;
+                margin-bottom: 0.75rem;
+                color: #60a5fa;
+            }
+            
+            #blog-content p {
+                margin-top: 1.25rem;
+                margin-bottom: 1.25rem;
+                color: #e0e0e0;
+                line-height: 1.75;
+                font-size: 1.125rem;
+            }
+            
+            #blog-content strong {
+                font-weight: 700;
+                color: #ffffff;
+            }
+            
+            #blog-content em {
+                font-style: italic;
+            }
+            
+            #blog-content a {
+                color: #60a5fa;
+                text-decoration: underline;
+                text-decoration-thickness: 2px;
+                text-underline-offset: 2px;
+                transition: all 0.2s ease;
+            }
+            
+            #blog-content a:hover {
+                color: #3b82f6;
+                text-decoration-thickness: 3px;
+            }
+            
+            #blog-content ul {
+                list-style-type: disc;
+                padding-left: 1.75rem;
+                margin-top: 1.25rem;
+                margin-bottom: 1.25rem;
+                color: #e0e0e0;
+            }
+            
+            #blog-content ol {
+                list-style-type: decimal;
+                padding-left: 1.75rem;
+                margin-top: 1.25rem;
+                margin-bottom: 1.25rem;
+                color: #e0e0e0;
+            }
+            
+            #blog-content li {
+                margin: 0.5rem 0;
+                line-height: 1.75;
+            }
+            
+            #blog-content blockquote {
+                border-left: 4px solid #0066cc;
+                padding: 1rem 1.5rem;
+                margin: 2rem 0;
+                background: rgba(0, 102, 204, 0.1);
+                border-radius: 12px;
+                border: 1px solid rgba(0, 102, 204, 0.2);
+            }
+
+            #blog-content blockquote p {
+                color: #b0b0b0;
+                font-style: italic;
+                margin: 0.5rem 0;
+            }
+            
+            #blog-content pre {
+                background: linear-gradient(145deg, #1a1f2e, #222633);
+                border-radius: 12px;
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                overflow-x: auto;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            
+            #blog-content code {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 8px;
+                padding: 0.2rem 0.5rem;
+                font-size: 0.9rem;
+                color: #60a5fa;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            #blog-content img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 12px;
+                margin: 2rem auto;
+                display: block;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+                
+            .main-image {
+                width: 100%;
+                max-height: 450px;
+                object-fit: cover;
+                border-radius: 12px;
+                margin-bottom: 2.5rem;
+            }
+            
+            .table-of-contents {
+                background: linear-gradient(145deg, #1a1f2e, #222633);
+                border-radius: 12px;
+                padding: 1.5rem;
+                margin: 2rem 0;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+            }
+            
+            .table-of-contents h3 {
+                font-size: 1.25rem !important;
+                margin-top: 0 !important;
+                margin-bottom: 1rem !important;
+                color: #ffffff !important;
+            }
+            
+            .progress-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 3px;
+                z-index: 100;
+                background: rgba(26, 31, 46, 0.7);
+            }
+            
+            .progress-bar {
+                height: 3px;
+                background: linear-gradient(to right, #0066cc, #60a5fa);
+                width: 0%;
+            }
+        </style>
+    }
+}
