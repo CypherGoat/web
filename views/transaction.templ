@@ -563,8 +563,8 @@ templ TransactionPage(transaction api.Transaction){
                         </div>
                     </div>
                 </div>
-            }
-            
+            } 
+            if transaction.Done == false{
             <!-- Contact Support Section -->
             <div class="contact-section">
                 <div class="contact-header" onclick="toggleContactSection()">
@@ -607,6 +607,7 @@ templ TransactionPage(transaction api.Transaction){
                     </div>
                 </div>
             </div>
+            }
         </div>
     </div>
 </form>
