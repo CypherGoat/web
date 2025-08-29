@@ -50,7 +50,7 @@ templ Blog(posts []*BlogPostData) {
                                 <article class="flex flex-col p-8 rounded-xl bg-gradient-to-br from-[#1a1f2e] to-[#222633] group-hover:shadow-lg border border-gray-800/60 group-hover:border-blue-500/40 transition-all duration-300 shadow-md hover:shadow-blue-500/10">
                                     if post.Image != "" {
                                         <div class="mb-4 overflow-hidden rounded-lg">
-                                            <img src={ post.Image } alt={ post.Title } class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105" />
+                                            <img src={ post.Image } alt={ post.Title } class="w-full h-32 object-cover object-[center_30%] transition-transform duration-300 group-hover:scale-105" />
                                         </div>
                                     }
                                     
@@ -269,6 +269,7 @@ templ BlogPost(post *BlogPostData) {
                 margin-bottom: 1.25rem;
             }
             
+            /* Table styling */
             #blog-content table {
                 width: 100%;
                 margin-top: 1.5rem;
