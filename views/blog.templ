@@ -94,7 +94,7 @@ templ Blog(posts []*BlogPostData) {
 
 
 templ BlogPost(post *BlogPostData) {
-    @HeaderCustomTitle(post.Title) {
+    @BlogHeader(post) {
         <div class="progress-container">
             <div id="progressBar" class="progress-bar"></div>
         </div>

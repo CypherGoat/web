@@ -17,6 +17,8 @@ package views
 
     import (
         "fmt"
+        "strings"
+        "encoding/json"
     )
 
 templ Header() {
@@ -455,6 +457,241 @@ templ IndexHeader() {
             ]
         }
         </script>
+
+<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
+<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const menuToggle = document.getElementById("menu-toggle");
+                const navMenu = document.getElementById("nav-menu");
+
+                // Toggle menu with animation
+                menuToggle.addEventListener("click", function () {
+                    navMenu.classList.toggle("nav-active");
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener("click", function (e) {
+                    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains("nav-active")) {
+                        navMenu.classList.remove("nav-active");
+                    }
+                });
+
+                // Close menu when clicking on a menu item (mobile only)
+                const menuLinks = navMenu.querySelectorAll("a");
+                menuLinks.forEach(link => {
+                    link.addEventListener("click", function() {
+                        if (window.innerWidth < 1024) { // lg breakpoint
+                            navMenu.classList.remove("nav-active");
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <style>
+            /* Mobile navigation styles */
+            @media (max-width: 1023px) {
+                #nav-menu {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
+                    background: linear-gradient(145deg, #1a1f2e, #222633);
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                    padding: 1rem;
+                    border-bottom-left-radius: 0.5rem;
+                    border-bottom-right-radius: 0.5rem;
+                    z-index: 50;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-top: none;
+                    opacity: 0;
+                    transform: translateY(-10px);
+                    pointer-events: none;
+                    transition: opacity 0.2s ease, transform 0.2s ease;
+                    display: flex !important;
+                }
+                
+                #nav-menu.nav-active {
+                    opacity: 1;
+                    transform: translateY(0);
+                    pointer-events: auto;
+                }
+                
+                #nav-menu a {
+                    padding: 0.75rem 1rem;
+                    width: 100%;
+                    border-radius: 0.375rem;
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                #nav-menu a:hover {
+                    background-color: rgba(255, 255, 255, 0.05);
+                }
+            }
+
+            /* Desktop navigation enhancements */
+            @media (min-width: 1024px) {
+                #nav-menu a {
+                    position: relative;
+                    padding: 0.75rem 1.25rem;
+                    border-radius: 0.5rem;
+                    transition: all 0.3s ease;
+                    background: linear-gradient(145deg, transparent, transparent);
+                    border: 1px solid transparent;
+                }
+
+                #nav-menu a::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+                    border-radius: 0.5rem;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    z-index: -1;
+                }
+
+                #nav-menu a:hover {
+                    color: #ffffff;
+                    text-decoration: none;
+                    transform: translateY(-1px);
+                    border-color: rgba(255, 255, 255, 0.1);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+
+                #nav-menu a:hover::before {
+                    opacity: 1;
+                }
+
+                #nav-menu a:active {
+                    transform: translateY(0);
+                }
+
+                /* Add a subtle glow effect */
+                #nav-menu a:hover {
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
+                }
+            }
+
+            /* Smooth focus states for accessibility */
+            #nav-menu a:focus {
+                outline: 2px solid rgba(255, 255, 255, 0.3);
+                outline-offset: 2px;
+            }
+        </style>
+    </head>
+    <body class="bg-[#121520]">
+    <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
+            <a class="flex items-center font-semibold text-3xl text-white" href="/" aria-label="Brand">
+                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2"> 
+                CypherGoat               
+            </a>
+            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+
+            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/about">About CypherGoat</a>
+                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/blog">CypherGoat Blog</a>
+            </div>
+        </nav>
+    </header>
+
+
+    { children... }
+    </body>
+    </html>
+}
+
+func generateBlogPostJsonLD(post *BlogPostData) string {
+    jsonLD := map[string]interface{}{
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.Title,
+        "description": post.Description,
+        "image": post.Image,
+        "author": map[string]interface{}{
+            "@type": "Person",
+            "name": post.Author,
+        },
+        "publisher": map[string]interface{}{
+            "@type": "Organization",
+            "name": "CypherGoat",
+            "logo": map[string]interface{}{
+                "@type": "ImageObject",
+                "url": "https://cyphergoat.com/static/icons/cg-notext.svg",
+            },
+        },
+        "datePublished": post.Date,
+        "mainEntityOfPage": map[string]interface{}{
+            "@type": "WebPage",
+            "@id": fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug),
+        },
+    }
+    
+    jsonBytes, err := json.MarshalIndent(jsonLD, "", "  ")
+    if err != nil {
+        return "<script type=\"application/ld+json\">{}</script>"
+    }
+    
+    return "<script type=\"application/ld+json\">\n" + string(jsonBytes) + "\n</script>"
+}
+
+templ BlogHeader(post *BlogPostData) {
+    <!DOCTYPE html>
+    <html lang="en">
+       <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="/static/tailwind.css?v=20250819" rel="stylesheet">
+        <link href="/static/styles.css?v=20250819" rel="stylesheet">
+        <script src="/static/htmx.min.js"></script>
+
+        <title>{ post.Title } | CypherGoat Blog</title>
+        <meta name="title" content={ post.Title + " | CypherGoat Blog" }>
+        <meta name="description" content={ post.Description }>
+        <meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto, exchange, cryptocurrency" }>
+        <meta name="author" content={ post.Author }>
+        <link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+
+        <meta property="og:type" content="article">
+        <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        <meta property="og:title" content={ post.Title + " | CypherGoat Blog" }>
+        <meta property="og:description" content={ post.Description }>
+        if post.Image != "" {
+            <meta property="og:image" content={ post.Image }>
+        } else {
+            <meta property="og:image" content="/static/icons/cg-notext.svg">
+        }
+
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        <meta property="twitter:title" content={ post.Title + " | CypherGoat Blog" }>
+        <meta property="twitter:description" content={ post.Description }>
+        if post.Image != "" {
+            <meta property="twitter:image" content={ post.Image }>
+        } else {
+            <meta property="twitter:image" content="/static/icons/cg-notext.svg">
+        }
+
+        <meta property="article:published_time" content={ post.Date }>
+        <meta property="article:author" content={ post.Author }>
+        for _, tag := range post.Tags {
+            <meta property="article:tag" content={ tag }>
+        }
+
+@templ.Raw(generateBlogPostJsonLD(post))    
 
 <script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
 <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
