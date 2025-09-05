@@ -5,7 +5,8 @@
         "network": "btc",
         "isStable": false,
         "icon": "icons/btc.png",
-        "min": 4.449e-05
+        "min": 4.449e-05,
+        "coingecko_id": "bitcoin"
     },
     {
         "ticker": "btc",
@@ -26,7 +27,8 @@
         "simpleswap": "btc-lightning",
         "stealthex": "",
         "wizardswap": "",
-        "bitcoinvn": "ln-btc"
+        "bitcoinvn": "ln-btc",
+        "coingecko_id": "bitcoin"
     },
     {
         "ticker": "eth",
@@ -34,7 +36,8 @@
         "network": "eth",
         "isStable": false,
         "icon": "icons/eth.png",
-        "min": 0.001114
+        "min": 0.001114,
+        "coingecko_id": "ethereum"
     },
     {
         "ticker": "xmr",
@@ -42,7 +45,8 @@
         "network": "xmr",
         "isStable": false,
         "icon": "icons/xmr.png",
-        "min": 0.01886
+        "min": 0.01886,
+        "coingecko_id": "monero"
     },
     {
         "ticker": "ltc",
@@ -50,14 +54,16 @@
         "network": "ltc",
         "isStable": false,
         "icon": "icons/ltc.png",
-        "min": 0.04444
+        "min": 0.04444,
+        "coingecko_id": "litecoin"
     },
     {
         "ticker": "bch",
         "name": "Bitcoin Cash",
         "network": "bch",
         "isStable": false,
-        "icon": "icons/bch.png"
+        "icon": "icons/bch.png",
+        "coingecko_id": "bitcoin-cash"
     },
     {
         "ticker": "doge",
@@ -65,14 +71,16 @@
         "network": "doge",
         "isStable": false,
         "icon": "icons/doge.png",
-        "min": 22.59
+        "min": 22.59,
+        "coingecko_id": "dogecoin"
     },
     {
         "ticker": "pol",
         "name": "Polygon",
         "network": "pol",
         "isStable": false,
-        "icon": "icons/matic.png"
+        "icon": "icons/matic.png",
+        "coingecko_id": "matic-network"
     },
     {
         "ticker": "bnb",
@@ -80,7 +88,8 @@
         "network": "bnb",
         "isStable": false,
         "icon": "icons/bnb.png",
-        "min": 0.005711
+        "min": 0.005711,
+        "coingecko_id": "binancecoin"
     },
     {
         "ticker": "sol",
@@ -88,7 +97,8 @@
         "network": "sol",
         "isStable": false,
         "icon": "icons/sol.png",
-        "min": 0.0238
+        "min": 0.0238,
+        "coingecko_id": "solana"
     },
     {
         "ticker": "xtz",
@@ -96,7 +106,8 @@
         "network": "xtz",
         "isStable": false,
         "icon": "icons/xtz.png",
-        "min": 6.336
+        "min": 6.336,
+        "coingecko_id": "tezos"
     },
     {
         "ticker": "ada",
@@ -104,7 +115,8 @@
         "network": "ada",
         "isStable": false,
         "icon": "icons/ada.png",
-        "min": 5.868
+        "min": 5.868,
+        "coingecko_id": "cardano"
     },
     {
         "ticker": "xrp",
@@ -112,7 +124,8 @@
         "network": "xrp",
         "isStable": false,
         "icon": "icons/xrp.png",
-        "min": 1.678
+        "min": 1.678,
+        "coingecko_id": "binance-peg-xrp"
     },
     {
         "ticker": "trx",
@@ -120,7 +133,8 @@
         "network": "trx",
         "isStable": false,
         "icon": "icons/trx.png",
-        "min": 14.58
+        "min": 14.58,
+        "coingecko_id": "tron"
     },
     {
         "ticker": "link",
@@ -128,7 +142,8 @@
         "network": "link",
         "isStable": false,
         "icon": "icons/link.png",
-        "min": 0.2014
+        "min": 0.2014,
+        "coingecko_id": "chainlink"
     },
     {
         "ticker": "usdc",
@@ -143,7 +158,8 @@
         "network": "xno",
         "isStable": false,
         "icon": "icons/xno.webp",
-        "min": 5.393
+        "min": 5.393,
+        "coingecko_id": "nano"
     },
     {
         "ticker": "usdc",
@@ -547,7 +563,8 @@
         "network": "shib",
         "isStable": false,
         "icon": "icons/shib.png",
-        "min": 10000
+        "min": 10000,
+        "coingecko_id": "shiba-inu"
     },
     {
         "ticker": "dot",
@@ -555,7 +572,8 @@
         "network": "dot",
         "isStable": false,
         "icon": "icons/dot.png",
-        "min": 1.272
+        "min": 1.272,
+        "coingecko_id": "polkadot"
     },
     {
         "ticker": "etc",
@@ -563,7 +581,8 @@
         "network": "etc",
         "isStable": false,
         "icon": "icons/etc.png",
-        "min": 0.2318
+        "min": 0.2318,
+        "coingecko_id": "ethereum-classic"
     },
     {
         "ticker": "hive",
@@ -571,7 +590,8 @@
         "network": "hive",
         "isStable": false,
         "icon": "icons/hive.webp",
-        "min": 24.06
+        "min": 24.06,
+        "coingecko_id": "hive"
     },
     {
         "ticker": "bdx",
@@ -579,7 +599,8 @@
         "network": "bdx",
         "isStable": false,
         "icon": "icons/bdx.png",
-        "min": 65.93
+        "min": 65.93,
+        "coingecko_id": "beldex"
     },
     {
         "ticker": "wow",
@@ -587,7 +608,8 @@
         "network": "wow",
         "isStable": false,
         "icon": "icons/wow.png",
-        "min": 163.8
+        "min": 163.8,
+        "coingecko_id": "wownero"
     },
     {
         "ticker": "ban",
@@ -597,7 +619,8 @@
         "icon": "icons/ban.webp",
         "min": 2614.0,
         "exolix": "ban",
-        "nanswap": "ban"
+        "nanswap": "ban",
+        "coingecko_id": "banano"
     },
     {
         "ticker": "arrr",
@@ -605,7 +628,8 @@
         "network": "arrr",
         "isStable": false,
         "icon": "icons/arrr.webp",
-        "min": 4.8
+        "min": 4.8,
+        "coingecko_id": "pirate-chain"
     },
     {
         "ticker": "dcr",
@@ -613,7 +637,8 @@
         "network": "dcr",
         "isStable": false,
         "icon": "icons/dcr.webp",
-        "min": 0.3045
+        "min": 0.3045,
+        "coingecko_id": "decred"
     },
     {
         "ticker": "aave",
@@ -621,7 +646,8 @@
         "network": "aave",
         "isStable": false,
         "icon": "icons/aave.webp",
-        "min": 0.01574
+        "min": 0.01574,
+        "coingecko_id": "aave"
     },
     {
         "ticker": "avax",
@@ -629,7 +655,8 @@
         "network": "avax",
         "isStable": false,
         "icon": "icons/avax.webp",
-        "min": 0.4263
+        "min": 0.4263,
+        "coingecko_id": "avalanche-2"
     },
     {
         "ticker": "bat",
@@ -637,7 +664,8 @@
         "network": "bat",
         "isStable": false,
         "icon": "icons/bat.webp",
-        "min": 32.09
+        "min": 32.09,
+        "coingecko_id": "basic-attention-token"
     },
     {
         "ticker": "link",
@@ -645,7 +673,8 @@
         "network": "link",
         "isStable": false,
         "icon": "icons/link.webp",
-        "min": 0.2014
+        "min": 0.2014,
+        "coingecko_id": "chainlink"
     },
     {
         "ticker": "gusd",
@@ -660,7 +689,8 @@
         "network": "paxg",
         "isStable": false,
         "icon": "icons/paxg.webp",
-        "min": 0.002
+        "min": 0.002,
+        "coingecko_id": "pax-gold"
     },
     {
         "ticker": "hbar",
@@ -668,7 +698,8 @@
         "network": "hbar",
         "isStable": false,
         "icon": "icons/hbar.webp",
-        "min": 12
+        "min": 12,
+        "coingecko_id": "hedera-hashgraph"
     },
     {
         "ticker": "ark",
@@ -676,7 +707,8 @@
         "network": "ark",
         "isStable": false,
         "icon": "icons/ark.webp",
-        "min": 10.96
+        "min": 10.96,
+        "coingecko_id": "ark"
     },
     {
         "ticker": "firo",
@@ -684,7 +716,8 @@
         "network": "firo",
         "isStable": false,
         "icon": "icons/firo.webp",
-        "min": 14.24
+        "min": 14.24,
+        "coingecko_id": "zcoin"
     },
     {
         "ticker": "wbtc",
@@ -692,7 +725,8 @@
         "network": "wbtc",
         "isStable": false,
         "icon": "icons/wbtc.webp",
-        "min": 4.444e-05
+        "min": 4.444e-05,
+        "coingecko_id": "wrapped-bitcoin"
     },
     {
         "ticker": "1inch",
@@ -700,7 +734,8 @@
         "network": "1inch",
         "isStable": false,
         "icon": "icons/1inch.webp",
-        "min": 19.87
+        "min": 19.87,
+        "coingecko_id": "1inch"
     },
     {
         "ticker": "dash",
@@ -708,7 +743,8 @@
         "network": "dash",
         "isStable": false,
         "icon": "icons/dash.webp",
-        "min": 0.2152
+        "min": 0.2152,
+        "coingecko_id": "dash"
     },
     {
         "ticker": "zano",
@@ -716,7 +752,8 @@
         "network": "zano",
         "isStable": false,
         "icon": "icons/zano.webp",
-        "min": 0.3358
+        "min": 0.3358,
+        "coingecko_id": "zano"
     },
     {
         "ticker": "tel",
@@ -724,7 +761,8 @@
         "network": "tel",
         "isStable": false,
         "icon": "icons/tel.webp",
-        "min": 1001.0
+        "min": 1001.0,
+        "coingecko_id": "telcoin"
     },
     {
         "ticker": "leo",
@@ -732,7 +770,8 @@
         "network": "leo",
         "isStable": false,
         "icon": "icons/leo.webp",
-        "min": 2
+        "min": 2,
+        "coingecko_id": "leo-token"
     },
     {
         "ticker": "fusd",
@@ -748,7 +787,8 @@
         "network": "apt",
         "isStable": false,
         "icon": "icons/apt.webp",
-        "min": 1.134
+        "min": 1.134,
+        "coingecko_id": "aptos"
     },
     {
         "ticker": "sui",
@@ -756,7 +796,8 @@
         "network": "sui",
         "isStable": false,
         "icon": "icons/sui.webp",
-        "min": 1.449
+        "min": 1.449,
+        "coingecko_id": "sui"
     },
     {
         "ticker": "nvdax",
@@ -764,7 +805,8 @@
         "network": "nvdax",
         "isStable": false,
         "icon": "icons/nvdax.webp",
-        "min": 0.8
+        "min": 0.8,
+        "coingecko_id": "nvidia-xstock"
     },
     {
         "ticker": "spyx",
@@ -772,7 +814,8 @@
         "network": "spyx",
         "isStable": false,
         "icon": "icons/spyx.webp",
-        "min": 0.3
+        "min": 0.3,
+        "coingecko_id": "sp500-xstock"
     },
     {
         "ticker": "tslax",
@@ -780,7 +823,8 @@
         "network": "tslax",
         "isStable": false,
         "icon": "icons/tslax.webp",
-        "min": 0.4
+        "min": 0.4,
+        "coingecko_id": "tesla-xstock"
     },
     {
         "ticker": "qqqx",
@@ -788,7 +832,8 @@
         "network": "qqqx",
         "isStable": false,
         "icon": "icons/qqqx.webp",
-        "min": 0.3
+        "min": 0.3,
+        "coingecko_id": "nasdaq-xstock"
     },
     {
         "ticker": "crclx",
@@ -796,7 +841,8 @@
         "network": "crclx",
         "isStable": false,
         "icon": "icons/crclx.webp",
-        "min": 1.3
+        "min": 1.3,
+        "coingecko_id": "circle-xstock"
     },
     {
         "ticker": "mstrx",
@@ -804,15 +850,17 @@
         "network": "mstrx",
         "isStable": false,
         "icon": "icons/mstrx.webp",
-        "min": 0.4
+        "min": 0.4,
+        "coingecko_id": "microstrategy-xstock"
     },
     {
-        "ticker": "applx",
+        "ticker": "aaplx",
         "name": "Apple xStock",
-        "network": "applx",
+        "network": "aaplx",
         "isStable": false,
         "icon": "icons/applx.webp",
-        "min": 0.6
+        "min": 0.6,
+        "coingecko_id": "apple-xstock"
     },
     {
         "ticker": "coinx",
@@ -820,25 +868,26 @@
         "network": "coinx",
         "isStable": false,
         "icon": "icons/coinx.webp",
-        "min": 0.5
+        "min": 0.5,
+        "coingecko_id": "coinbase-xstock"
     },
-
     {
         "ticker": "googlx",
         "name": "Alphabet xStock",
         "network": "googlx",
         "isStable": false,
         "icon": "icons/googlx.webp",
-        "min": 0.7
+        "min": 0.7,
+        "coingecko_id": "alphabet-xstock"
     },
-
-        {
+    {
         "ticker": "amznx",
         "name": "Amazon xStock",
         "network": "amznx",
         "isStable": false,
         "icon": "icons/amznx.webp",
-        "min": 0.6
+        "min": 0.6,
+        "coingecko_id": "amazon-xstock"
     },
     {
         "ticker": "metax",
@@ -846,15 +895,17 @@
         "network": "metax",
         "isStable": false,
         "icon": "icons/metax.webp",
-        "min": 0.2
+        "min": 0.2,
+        "coingecko_id": "meta-xstock"
     },
-        {
+    {
         "ticker": "hoodx",
         "name": "Robinhood xStock",
         "network": "hoodx",
         "isStable": false,
         "icon": "icons/hoodx.webp",
-        "min": 1.3
+        "min": 1.3,
+        "coingecko_id": "robinhood-xstock"
     },
     {
         "ticker": "gmex",
@@ -862,7 +913,7 @@
         "network": "gmex",
         "isStable": false,
         "icon": "icons/gmex.webp",
-        "min": 5
+        "min": 5,
+        "coingecko_id": "gamestop-xstock"
     }
-
 ]

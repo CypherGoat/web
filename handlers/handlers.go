@@ -87,29 +87,31 @@ func NotFoundHandler(c echo.Context) error {
 
 type ExchangeInfo struct {
 	ImageURL  string
+	NoTextURL string
 	RequireIP bool
 }
 
 var exchangeInfo = map[string]ExchangeInfo{
-	"alfacash":     {"/exchanges/alfacash.svg", true},
-	"changee":      {"/exchanges/changee.svg", true},
-	"changehero":   {"/exchanges/changehero.svg", true},
-	"changenow":    {"/exchanges/changenow.svg", true},
-	"coincraddle":  {"/exchanges/coincraddle.png", true},
-	"exch.cx":      {"/exchanges/exchcx.png", false},
-	"fixedfloat":   {"/exchanges/fixedfloat-v2.svg", true},
-	"majesticbank": {"/exchanges/majesticbank.png", false},
-	"nanswap":      {"/exchanges/nanswap.svg", true},
-	"simpleswap":   {"/exchanges/simpleswap.svg", true},
-	"wizardswap":   {"/exchanges/wizardswap.png", false},
-	"stealthex":    {"/exchanges/stealthex.svg", true},
-	"exolix":       {"/exchanges/exolix.png", true},
-	"swapuz":       {"/exchanges/swapuz.svg", false},
-	"bitcoinvn":    {"/exchanges/bitcoinvn.png", false},
-	"xgram":        {"/exchanges/xgram.svg", true},
-	"pegasusswap":  {"/exchanges/pegasusswap.png", false},
-	"godex":        {"/exchanges/godex.svg", true},
-	"letsexchange": {"/exchanges/letsexchange.svg", true},
+	"alfacash":     {"/exchanges/alfacash.svg", "/exchanges/no-text/alfacash.jpg", true},
+	"changee":      {"/exchanges/changee.svg", "", true},
+	"changehero":   {"/exchanges/changehero.svg", "/exchanges/no-text/changehero.jpeg", true},
+	"changenow":    {"/exchanges/changenow.svg", "", true},
+	"coincraddle":  {"/exchanges/coincraddle.png", "", true},
+	"exch.cx":      {"/exchanges/exchcx.png", "", false},
+	"fixedfloat":   {"/exchanges/fixedfloat-v2.svg", "/exchanges/no-text/fixedfloat.svg", true},
+	"majesticbank": {"/exchanges/majesticbank.png", "", false},
+	"nanswap":      {"/exchanges/nanswap.svg", "", true},
+	"simpleswap":   {"/exchanges/simpleswap.svg", "/exchanges/no-text/simpleswap.svg", true},
+	"wizardswap":   {"/exchanges/wizardswap.png", "", false},
+	"stealthex":    {"/exchanges/stealthex.svg", "/exchanges/no-text/stealthex.png", true},
+	"exolix":       {"/exchanges/exolix.png", "/exchanges/no-text/exolix.png", true},
+	"swapuz":       {"/exchanges/swapuz.svg", "/exchanges/no-text/swapuz.png", false},
+	"bitcoinvn":    {"/exchanges/bitcoinvn.png", "/exchanges/no-text/bitcoinvn.png", false},
+	"xgram":        {"/exchanges/xgram.svg", "", true},
+	"pegasusswap":  {"/exchanges/pegasusswap.png", "", false},
+	"godex":        {"/exchanges/godex.svg", "/exchanges/no-text/godex.jpg", true},
+	"letsexchange": {"/exchanges/letsexchange.svg", "/exchanges/no-text/letsexchange.svg", true},
+	"quickex":      {"/exchanges/quickex.png", "", false},
 }
 
 func EstimateHandler(c echo.Context) error {
@@ -134,6 +136,7 @@ func EstimateHandler(c echo.Context) error {
 
 		if info, ok := exchangeInfo[name]; ok {
 			apiEstimates[i].ImageURL = info.ImageURL
+			apiEstimates[i].NoTextURL = info.NoTextURL
 		}
 
 		apiEstimates[i].Log = exchangeInfo[name].RequireIP
