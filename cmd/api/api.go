@@ -50,6 +50,7 @@ type Estimate struct {
 	SendAmount    float64
 	Address       string
 	ImageURL      string
+	NoTextURL     string
 	KYCScore      int `json:"KYCScore"`
 	Log           bool
 }

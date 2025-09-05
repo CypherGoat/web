@@ -34,257 +34,147 @@ func FormatFloat(num float64) string {
 
 templ EstimateCard(offers []api.Estimate) {
      <style>
-        body {
+        body-estimates {
             background-color: #121520;
             font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
         }
 
-        .container {
+        .container-estimates {
             max-width: 700px;
-            height: auto;
             margin: 0 auto;
             padding: 1rem;
             color: #f5f5f5;
-            align-items: center;
         }
 
-        .card {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .card-estimates {
+            background-color: #1a1f2e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.05);
             margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-gap: 1rem;
         }
 
-        .card:hover {
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
+        .card-estimates:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
             transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        .estimate-details {
+        .exchange-info-estimates {
+            grid-column: 1 / -1;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .amount-highlight {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .exchange-name-estimates {
+            font-size: 1.15rem;
+            font-weight: 600;
             color: #ffffff;
-            text-align: right;
             display: flex;
             align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.01em;
         }
 
-        .btn-select {
-            background: linear-gradient(135deg, #0088ff, #0055cc);
-            color: #ffffff;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        .estimate-image-estimates {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 4px;
         }
 
-        .btn-select2 {
-            background: #2a3042;
-            color: #fff;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
-        }
-
-        .btn-select:hover, .btn-select2:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
-        }
-
-        .btn-select:focus, .btn-select2:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3);
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(18, 21, 32, 0.95);
-            backdrop-filter: blur(5px);
-            justify-content: center;
+        .coin-symbols-estimates {
+            color: #d0d0d0;
+            font-size: 0.9rem;
+            display: flex;
             align-items: center;
-            z-index: 1000;
+            gap: 0.6rem;
+            grid-column: 1 / -1;
+            margin: 0.5rem 0;
+            padding: 0.4rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .popup-content {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            padding: 2rem;
-            border-radius: 16px;
-            width: 80%;
-            max-width: 400px;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        .coin-symbol-estimates {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
 
-        .popup-content input {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+        .amount-highlight-estimates {
+            font-size: 1.4rem;
+            font-weight: 700;
             color: #ffffff;
-            background: #1a1f2e;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.01em;
         }
 
-        .popup-content button {
-            background: linear-gradient(135deg, #0088ff, #0055cc);
-            color: #ffffff;
-            padding: 0.75rem;
+        .btn-select-estimates, .btn-select2-estimates {
+            background-color: #2a3042;
+            color: #fff;
+            padding: 0.7rem 1.2rem;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s ease, box-shadow 0.3s ease;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+            text-align: center;
+            transition: all 0.2s ease;
+            grid-column: 1 / -1;
+            justify-self: end;
+            min-width: 140px;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .popup-content button:hover {
+        .btn-select-estimates:hover, .btn-select2-estimates:hover {
+            background-color: #353d52;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
-        .popup-content .close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: #ffffff;
-            opacity: 0.7;
-            transition: opacity 0.2s ease;
+        .btn-primary-estimates {
+            background-color: #0066cc;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
         }
 
-        .popup-content .close:hover {
-            opacity: 1;
+        .btn-primary-estimates:hover {
+            background-color: #0077e6;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.35);
+        }
+        
+        .btn-select2-estimates:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #0088ff, #0055cc);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0099ff, #0066dd);
-        }
-
-        .estimate-image {
-            max-width: 100px;
-            max-height: 100px;
-            border-radius: 8px;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover .estimate-image {
-            transform: scale(1.05);
-        }
-
-        .exchange-name {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1.2rem;
-            background: linear-gradient(to right, #ffffff, #e0e0e0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
+        .kyc-badge-estimates {
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: help;
+            margin-left: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
         }
-
-        @media (max-width: 768px) {
-            .card {
-                padding: 1.5rem;
-            }
-
-            .estimate-details {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            .amount-highlight {
-                font-size: 1.25rem;
-                text-align: left;
-                margin-bottom: 0;
-                width: 70%;
-            }
-
-            .estimate-details > div:last-child {
-                width: 30%;
-                display: flex;
-                justify-content: flex-end;
-            }
-
-            .estimate-image {
-                max-width: 80px;
-                max-height: 80px;
-            }
-
-            .btn-select, .btn-select2 {
-                font-size: 1rem;
-                padding: 0.5rem;
-            }
-
-            .popup-content {
-                width: 90%;
-                max-width: 300px;
-            }
-        }
-
-.kyc-badge {
-    min-width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-left: 0.5rem;
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: help;
-    vertical-align: middle;
-}
         
-        .kyc-badge::after {
+        .kyc-badge-estimates::after {
             content: attr(data-tooltip);
             position: absolute;
             bottom: 130%;
@@ -292,187 +182,342 @@ templ EstimateCard(offers []api.Estimate) {
             transform: translateX(-50%);
             background-color: #1a1f2e;
             color: white;
-            padding: 0.75rem;
-            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
             width: max-content;
-            max-width: 250px;
-            font-size: 0.8rem;
+            max-width: 200px;
+            font-size: 0.75rem;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             pointer-events: none;
             z-index: 100;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
         
-        .kyc-badge:hover::after {
+        .kyc-badge-estimates:hover::after {
             opacity: 1;
             visibility: visible;
         }
         
-        .show-kyc .kyc-badge::after {
-            bottom: auto;
-            top: 130%;
-            background-color: #222633;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-weight: 500;
-            line-height: 1.4;
-            z-index: 1000;
-            width: 280px;
-            padding: 1rem;
-            text-align: left;
+        .kyc-0-estimates {
+            background-color: #1a9c51; 
+            color: white;
         }
-        
-        .show-kyc .kyc-badge:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .kyc-badge::after {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.95);
-            letter-spacing: 0.01rem;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        
-        .show-kyc .kyc-badge::after {
-            background-color: #1e2335;
-            backdrop-filter: none;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-            line-height: 1.5;
-            padding: 1rem 1.2rem;
-        }
-        
-.kyc-0 {
-    background-color: #1a9c51; 
-    color: white;
-    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-}
 
-.kyc-1 {
-    background-color: #4ca550; 
-    color: white;
-    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-}
+        .kyc-1-estimates {
+            background-color: #4ca550; 
+            color: white;
+        }
 
-.kyc-2 {
-    background-color: #ffc107; 
-    color: #333;
-    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-}
+        .kyc-2-estimates {
+            background-color: #ffc107; 
+            color: #333;
+        }
         
-        .sort-options {
+        .sort-options-estimates {
             display: flex;
             justify-content: flex-end;
             margin-bottom: 1.5rem;
-            gap: 0.8rem;
+            gap: 0.75rem;
         }
         
-        .sort-btn {
-            background-color: #2a3042;
+        .sort-btn-estimates {
+            background-color: #1a1f2e;
             color: #e0e0e0;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            padding: 0.6rem 1.2rem;
+            padding: 0.5rem 1rem;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.2s ease;
+            font-weight: 500;
         }
         
-        .sort-btn.active {
+        .sort-btn-estimates.active {
             background-color: rgba(0, 102, 204, 0.2);
-            border-color: rgba(0, 102, 204, 0.5);
+            border-color: rgba(0, 102, 204, 0.4);
             color: #ffffff;
-            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
         }
         
-        .sort-btn:hover {
-            background-color: #353d52;
-            transform: translateY(-1px);
+        .sort-btn-estimates:hover {
+            background-color: #232838;
         }
 
-        .kyc-badge {
+        .kyc-badge-estimates {
             display: none;
         }
 
-        .show-kyc .kyc-badge {
+        .show-kyc-estimates .kyc-badge-estimates {
             display: inline-flex;
         }
 
-        .coin-symbols {
-            color: #b0b0b0;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+        .estimate-details-estimates {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            grid-column: 1 / -1;
+        }
+
+        .exchange-meta-estimates {
+            display: flex;
+            align-items: center;
             gap: 0.5rem;
         }
 
-        .coin-symbol {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.25rem 0.5rem;
+        .arrow-icon-estimates {
+            color: #9fa3b8;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .guarantee-badge-estimates {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0, 153, 102, 0.15);
+            border: 1px solid rgba(0, 153, 102, 0.3);
+            color: #00cc88;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: auto;
+        }
+        
+        .no-guarantee-estimates {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #a0a0a0;
+        }
+        
+        .guarantee-icon-estimates {
+            font-size: 0.9rem;
+        }
+        
+        .exchange-features-estimates {
+            display: flex;
+            align-items: center;
+            grid-column: 1 / -1;
+            gap: 0.6rem;
+            padding-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .feature-tag-estimates {
+            font-size: 0.75rem;
+            color: #d0d0d0;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.2rem 0.5rem;
             border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .feature-tag-estimates.kyc {
+            background: rgba(26, 156, 81, 0.15);
+            color: #2ecc71;
+        }
+        
+        .feature-tag-estimates.log {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            .card-estimates {
+                padding: 1.2rem;
+                grid-gap: 0.8rem;
+            }
+
+            .amount-highlight-estimates {
+                font-size: 1.25rem;
+            }
+
+            .exchange-name-estimates {
+                font-size: 1.1rem;
+            }
+            
+            .estimate-details-estimates {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .btn-select-estimates, .btn-select2-estimates {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+                align-self: stretch;
+                width: 100%;
+            }
+            
+            .guarantee-badge-estimates {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.4rem;
+            }
+            
+            .exchange-features-estimates {
+                padding-top: 0.8rem;
+            }
+            
+            .sort-options-estimates {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .sort-btn-estimates {
+                flex-grow: 1;
+                text-align: center;
+            }
+            
+            .coin-symbols-estimates {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container-estimates {
+                padding: 0.5rem;
+            }
+            
+            .card-estimates {
+                padding: 1rem;
+                grid-gap: 0.6rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .exchange-info-estimates {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .exchange-name-estimates {
+                font-size: 1rem;
+            }
+            
+            .amount-highlight-estimates {
+                font-size: 1.2rem;
+            }
+            
+            .btn-select-estimates, .btn-select2-estimates {
+                padding: 0.7rem 0.8rem;
+                font-size: 0.9rem;
+                min-height: 44px;
+            }
+            
+            .feature-tag-estimates {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.4rem;
+            }
+            
+            .coin-symbol-estimates {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.85rem;
+            }
         }
     </style>
-    <div class="container">
-<div class="sort-options">
-    <button id="sort-rate" class="sort-btn active" type="button">Sort by Rate</button>
-    <button id="sort-kyc" class="sort-btn" type="button">Sort by KYC</button>
-</div>
+    <div class="container-estimates">
+        <div class="sort-options-estimates">
+            <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Sort by Rate</button>
+            <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Sort by KYC</button>
+        </div>
         
-<div id="estimates-container">
-for i, offer := range offers {
-        if !(offer.SendAmount == 0) {
-            <form method="GET" action="/step2" class="estimate-form" data-kyc={ fmt.Sprintf("%d", offer.KYCScore) } data-rate={ fmt.Sprintf("%f", offer.ReceiveAmount) } data-is-top={ fmt.Sprintf("%t", i == 0) }>
-                <input type="hidden" name="coin1" value={ offer.Coin1 }>
-                <input type="hidden" name="coin2" value={ offer.Coin2 }>
-                <input type="hidden" name="network1" value={ offer.Network1 }>
-                <input type="hidden" name="network2" value={ offer.Network2 }>
-                <input type="hidden" name="amount" value={ fmt.Sprintf("%f", offer.SendAmount) }>
-                <input type="hidden" name="receiveamount" value={ fmt.Sprintf("%v", offer.ReceiveAmount) }>
-                <input type="hidden" name="partner" value={ offer.ExchangeName }>
-                <div class="card border-green-500 p-4">
-                    <h2 class="exchange-name text-center">
-                        { offer.ExchangeName }
-                        if offer.KYCScore == 0 {
-                            <span class="kyc-badge kyc-0" data-tooltip={ fmt.Sprintf("Exchange never asks for KYC. %s", LogText(offer.Log) ) }>0</span>
-                        } else if offer.KYCScore == 1 {
-                            <span class="kyc-badge kyc-1" data-tooltip={ fmt.Sprintf("Exchange may ask for KYC very rarely or never. %s", LogText(offer.Log)) }>1</span>
-                        } else {
-                            <span class="kyc-badge kyc-2" data-tooltip={ fmt.Sprintf("Exchange may rarely ask for KYC. %s", LogText(offer.Log)) }>2</span>
-                        }
-                    </h2>
-                    <div class="coin-symbols">
-                        <span class="coin-symbol">{ FormatFloat(offer.SendAmount) } { strings.ToUpper(offer.Coin1) }</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        <span class="coin-symbol">{ strings.ToUpper(offer.Coin2) }</span>
-                    </div>
-                    <div class="estimate-details">
-                        <div class="amount-highlight">
-                            { FormatFloat(offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }
+        <div id="estimates-container-estimates">
+            for i, offer := range offers {
+                if !(offer.SendAmount == 0) {
+                    <form method="GET" action="/step2" class="estimate-form-estimates" data-kyc={ fmt.Sprintf("%d", offer.KYCScore) } data-rate={ fmt.Sprintf("%f", offer.ReceiveAmount) } data-is-top={ fmt.Sprintf("%t", i == 0) }>
+                        <input type="hidden" name="coin1" value={ offer.Coin1 }>
+                        <input type="hidden" name="coin2" value={ offer.Coin2 }>
+                        <input type="hidden" name="network1" value={ offer.Network1 }>
+                        <input type="hidden" name="network2" value={ offer.Network2 }>
+                        <input type="hidden" name="amount" value={ fmt.Sprintf("%f", offer.SendAmount) }>
+                        <input type="hidden" name="receiveamount" value={ fmt.Sprintf("%v", offer.ReceiveAmount) }>
+                        <input type="hidden" name="partner" value={ offer.ExchangeName }>
+                        <div class="card-estimates">
+                            <div class="exchange-info-estimates">
+                                <div class="exchange-name-estimates">
+                                    if offer.NoTextURL != "" {
+                                        <img src={ offer.NoTextURL } alt={ offer.ExchangeName } class="estimate-image-estimates" loading="lazy" width="32" height="32">
+                                    } else {
+                                        <img src={ offer.ImageURL } alt={ offer.ExchangeName } class="estimate-image-estimates" loading="lazy" width="32" height="32">
+                                    }
+                                    { offer.ExchangeName }
+                                    <span class={ fmt.Sprintf("kyc-badge-estimates kyc-%d-estimates", offer.KYCScore) } 
+                                          data-tooltip={ fmt.Sprintf("KYC Level %d: %s", offer.KYCScore, LogText(offer.Log)) }>
+                                        { fmt.Sprintf("%d", offer.KYCScore) }
+                                    </span>
+                                </div>
+                                
+                                <!-- Example guarantee  -->
+                                // if i % 3 == 0 {
+                                //     <div class="guarantee-badge-estimates">
+                                //         <span class="guarantee-icon-estimates">✓</span>
+                                //         Guaranteed (100%)
+                                //     </div>
+                                // } else if i % 3 == 1 {
+                                //     <div class="guarantee-badge-estimates">
+                                //         <span class="guarantee-icon-estimates">✓</span>
+                                //         Guaranteed (75%)
+                                //     </div>
+                                // } else {
+                                //     <div class="guarantee-badge-estimates no-guarantee-estimates">
+                                //         No Guarantee
+                                //     </div>
+                                // }
+                            </div>
+                            
+                            // <div class="coin-symbols-estimates">
+                            //     <span class="coin-symbol-estimates">{ FormatFloat(offer.SendAmount) } { strings.ToUpper(offer.Coin1) }</span>
+                            //     <span class="arrow-icon-estimates">→</span>
+                            //     <span class="coin-symbol-estimates">{ FormatFloat(offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }</span>
+                            // </div>
+                            
+                            <div class="estimate-details-estimates">
+                                <div class="amount-highlight-estimates">
+                                    { FormatFloat(offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }
+                                </div>
+                                if i == 0 {
+                                    <button class="btn-select2-estimates btn-primary-estimates" type="submit">Select</button>
+                                } else {
+                                    <button class="btn-select2-estimates" type="submit">Select</button>
+                                }
+                            </div>
+                            
+                            <div class="exchange-features-estimates">
+                                if offer.KYCScore == 0 {
+                                    <div class="feature-tag-estimates kyc" data-tooltip={ fmt.Sprintf("Exchange never asks for KYC. %s", LogText(offer.Log) ) }>
+                                        <span>KYC Level 0</span>
+                                    </div>
+                                } else if offer.KYCScore == 1 {
+                                    <div class="feature-tag-estimates kyc" data-tooltip={ fmt.Sprintf("Exchange may ask for KYC very rarely or never. %s", LogText(offer.Log)) }>
+                                        <span>KYC Level 1</span>
+                                    </div>
+                                } else {
+                                    <div class="feature-tag-estimates" data-tooltip={ fmt.Sprintf("Exchange may rarely ask for KYC. %s", LogText(offer.Log)) }>
+                                        <span>KYC Level { offer.KYCScore }</span>
+                                    </div>
+                                }
+                                
+                                // if !offer.Log {
+                                //     <div class="feature-tag-estimates">
+                                //         <span>No IP logging</span>
+                                //     </div>
+                                // } else {
+                                //     <div class="feature-tag-estimates log">
+                                //         <span>IP logging</span>
+                                //     </div>
+                                // }
+                            </div>
                         </div>
-                        <div>
-                            <img src={ offer.ImageURL } alt="{ offer.ExchangeName }" class="estimate-image" loading="lazy">
-                        </div>
-                    </div>
-                    if i == 0 {
-                        <button class="btn-select2 btn-primary" type="submit">Select Exchange</button>
-                    } else {
-                        <button class="btn-select2" type="submit">Select Exchange</button>
-                    }
-                </div>
-            </form>
-            <br/>
-        }
-    }
-</div>
+                    </form>
+                }
+            }
+        </div>
     </div>
 <script>
     (function() {
@@ -486,26 +531,26 @@ for i, offer := range offers {
         }
         
         function updateActiveButton(sortBy) {
-            document.querySelectorAll('.sort-btn').forEach(btn => {
+            document.querySelectorAll('.sort-btn-estimates').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            const buttonId = sortBy === 'kyc' ? 'sort-kyc' : 'sort-rate';
+            const buttonId = sortBy === 'kyc' ? 'sort-kyc-estimates' : 'sort-rate-estimates';
             const button = document.getElementById(buttonId);
             if (button) button.classList.add('active');
             
-            const container = document.getElementById('estimates-container');
+            const container = document.getElementById('estimates-container-estimates');
             if (sortBy === 'kyc') {
-                container.classList.add('show-kyc');
+                container.classList.add('show-kyc-estimates');
             } else {
-                container.classList.remove('show-kyc');
+                container.classList.remove('show-kyc-estimates');
             }
         }
         
-        document.querySelectorAll('.sort-btn').forEach(btn => {
+        document.querySelectorAll('.sort-btn-estimates').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const sortBy = this.id === 'sort-kyc' ? 'kyc' : 'rate';
+                const sortBy = this.id === 'sort-kyc-estimates' ? 'kyc' : 'rate';
                 sortEstimates(sortBy, true); 
             });
         });
@@ -517,11 +562,11 @@ for i, offer := range offers {
             
             updateActiveButton(sortBy);
             
-            const container = document.getElementById('estimates-container');
+            const container = document.getElementById('estimates-container-estimates');
             if (!container) return;
             
             const children = Array.from(container.children);
-            const forms = children.filter(el => el.classList.contains('estimate-form'));
+            const forms = children.filter(el => el.classList.contains('estimate-form-estimates'));
             
             while (container.firstChild) {
                 container.removeChild(container.firstChild);
@@ -538,9 +583,9 @@ for i, offer := range offers {
             forms.forEach((form, index) => {
                 const button = form.querySelector('button');
                 if (index === 0) {
-                    button.className = 'btn-select2 btn-primary';
+                    button.className = 'btn-select2-estimates btn-primary-estimates';
                 } else {
-                    button.className = 'btn-select2';
+                    button.className = 'btn-select2-estimates';
                 }
                 
                 container.appendChild(form);
