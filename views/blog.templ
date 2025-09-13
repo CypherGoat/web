@@ -186,8 +186,8 @@ templ BlogPost(post *BlogPostData) {
                 font-size: 1.75rem;
                 line-height: 2.25rem;
                 font-weight: 700;
-                margin-top: 2.5rem;
-                margin-bottom: 1rem;
+                margin-top: 3rem;
+                margin-bottom: 1.25rem;
                 color: #ffffff;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 padding-bottom: 0.5rem;
@@ -197,17 +197,19 @@ templ BlogPost(post *BlogPostData) {
                 font-size: 1.5rem;
                 line-height: 2rem;
                 font-weight: 700;
-                margin-top: 2rem;
-                margin-bottom: 0.75rem;
+                margin-top: 2.5rem;
+                margin-bottom: 1rem;
                 color: #60a5fa;
             }
             
             #blog-content p {
-                margin-top: 1.25rem;
-                margin-bottom: 1.25rem;
-                color: #e0e0e0;
-                line-height: 1.75;
+                margin-top: 1.75rem;
+                margin-bottom: 1.75rem;
+                color: #e8e8e8;
+                line-height: 1.85;
                 font-size: 1.125rem;
+                max-width: 70ch;
+                letter-spacing: 0.01em;
             }
             
             #blog-content strong {
@@ -217,14 +219,16 @@ templ BlogPost(post *BlogPostData) {
             
             #blog-content em {
                 font-style: italic;
+                color: #f0f0f0;
             }
             
             #blog-content a {
                 color: #60a5fa;
                 text-decoration: underline;
                 text-decoration-thickness: 2px;
-                text-underline-offset: 2px;
+                text-underline-offset: 3px;
                 transition: all 0.2s ease;
+                font-weight: 500;
             }
             
             #blog-content a:hover {
@@ -234,32 +238,34 @@ templ BlogPost(post *BlogPostData) {
             
             #blog-content ul {
                 list-style-type: disc;
-                padding-left: 1.75rem;
-                margin-top: 1.25rem;
-                margin-bottom: 1.25rem;
-                color: #e0e0e0;
+                padding-left: 2rem;
+                margin-top: 1.5rem;
+                margin-bottom: 1.5rem;
+                color: #e8e8e8;
             }
             
             #blog-content ol {
                 list-style-type: decimal;
-                padding-left: 1.75rem;
-                margin-top: 1.25rem;
-                margin-bottom: 1.25rem;
-                color: #e0e0e0;
+                padding-left: 2rem;
+                margin-top: 1.5rem;
+                margin-bottom: 1.5rem;
+                color: #e8e8e8;
             }
             
             #blog-content li {
-                margin: 0.5rem 0;
-                line-height: 1.75;
+                margin: 0.75rem 0;
+                line-height: 1.8;
+                font-size: 1.1rem;
             }
             
             #blog-content blockquote {
                 border-left: 4px solid #0066cc;
-                padding: 1rem 1.5rem;
-                margin: 2rem 0;
+                padding: 1.5rem 2rem;
+                margin: 2.5rem 0;
                 background: rgba(0, 102, 204, 0.1);
                 border-radius: 12px;
                 border: 1px solid rgba(0, 102, 204, 0.2);
+                font-style: italic;
             }
 
                         #blog-content ol {
@@ -318,13 +324,13 @@ templ BlogPost(post *BlogPostData) {
             }
             
             #blog-content code {
-                background: rgba(255, 255, 255, 0.05);
+                background: rgba(255, 255, 255, 0.08);
                 border-radius: 8px;
                 padding: 0.2rem 0.5rem;
                 font-size: 0.9rem;
                 color: #60a5fa;
                 font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.12);
             }
             
             #blog-content img {
