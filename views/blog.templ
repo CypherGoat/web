@@ -100,8 +100,8 @@ templ BlogPost(post *BlogPostData) {
         </div>
         
         <main class="min-h-screen bg-[#121520] text-white pb-16">
-            <div class="container max-w-4xl mx-auto px-6 py-12">
-                <nav class="mb-8">
+            <div class="container max-w-4xl mx-auto px-0 md:px-6 py-12">
+                <nav class="mb-8 px-4 md:px-0">
                     <a href="/blog" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-medium py-2">
                         <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -110,7 +110,7 @@ templ BlogPost(post *BlogPostData) {
                     </a>
                 </nav>
 
-                <article class="bg-gradient-to-br from-[#1a1f2e] to-[#222633] rounded-xl p-8 md:p-12 border border-gray-800/60 shadow-xl">
+                <article class="bg-[#121520] md:bg-gradient-to-br md:from-[#1a1f2e] md:to-[#222633] md:rounded-xl px-4 py-0 md:p-12 border-0 md:border md:border-gray-800/60 md:shadow-xl">
                     <header class="mb-10 pb-8 border-b border-gray-800/80">
                         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 mb-6 text-sm text-gray-400">
                             <time class="font-medium">{ formatDate(post.Date) }</time>
