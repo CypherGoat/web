@@ -1,5 +1,5 @@
 ---
-title: "The Monero Standard #1: 21 Aug 2025 - 28 Aug 2025"
+title: "This Week In Monero #1: 21 Aug 2025 - 28 Aug 2025"
 description: "New Monero release, plausible deniability in polls, and more."
 date: 2025-08-28T12:00:00+00:00
 image: "/blog/images/ms-1/cover.png"
@@ -8,7 +8,7 @@ author: "recanman"
 ---
 <!-- ![](/blog/images/ms-1/head.png) -->
 
-The Monero Standard is back! We're restarting with issue #1, bringing you the latest news and updates from the Monero ecosystem.
+Welcome to the first issue of This Week In Monero! Your new weekly update on everything Monero, brought to you by Cyphergoat.com and written by the author of the Monero Standard.
 
 ### Table of Contents
 
