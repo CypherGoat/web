@@ -98,6 +98,8 @@ func main() {
 
 	e.GET("/sitemap.xml", handlers.SitemapHandler)
 
+	e.POST("/challenge", handlers.ChallengeHandler)
+
 	e.GET("/blog", handlers.BlogHandler, CacheMiddleware(1*time.Hour))
 	e.GET("/blog/:slug", handlers.BlogPostHandler, CacheMiddleware(1*time.Hour))
 

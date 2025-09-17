@@ -1,0 +1,49 @@
+package views
+
+type FormData struct {
+    Nonce string
+    Email string
+    Name  string
+    Hp    string // Honeypot field
+}
+
+// Super basic bot protection
+
+templ JSChallenge(data FormData) {
+@Header(){
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Verifying your browser...</title>
+</head>
+<body>
+<p class="text-gray-300 text-center text-sm sm:text-base font-medium bg-gray-900 p-4 rounded-lg shadow-md">
+  Verifying your browser... <span class="text-blue-400">JavaScript is required</span>
+</p>
+
+<form id="challenge-form" method="POST" action="https://newsletter.cyphergoat.com/subscription/form">
+    <input type="hidden" name="nonce" value={ data.Nonce }>
+    <input type="hidden" name="email" value={ data.Email }>
+    <input type="hidden" name="name" value={ data.Name }>
+    <input type="hidden" name="l" value="306a7b72-6c08-4498-9128-fe4346712d56">
+    <input type="hidden" name="l" value="09048302-9f16-4cea-aa48-5a0f93012fd1">
+
+    <input type="hidden" name="js_passed" id="js_passed" value="0">
+
+   
+</form>
+
+<script>
+  document.getElementById('js_passed').value = "1";
+
+  document.cookie = "js_validated=1; max-age=300; path=/";
+
+  setTimeout(() => {
+      document.getElementById('challenge-form').submit();
+  }, 500);
+</script>
+</body>
+</html>
+}
+}

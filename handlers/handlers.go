@@ -577,3 +577,20 @@ func loadBlogPostFromFile(filename string) (*views.BlogPostData, error) {
 
 	return &post, nil
 }
+
+func ChallengeHandler(c echo.Context) error {
+	data := views.FormData{
+		Nonce: c.FormValue("nonce"),
+		Email: c.FormValue("email"),
+		Name:  c.FormValue("name"),
+		Hp:    c.FormValue("hp_field"),
+	}
+
+	// Honeypot check
+	if data.Hp != "" {
+		return c.String(http.StatusBadRequest, "Bot detected")
+	}
+
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTMLCharsetUTF8)
+	return render(c, views.JSChallenge(data))
+}
