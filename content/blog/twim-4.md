@@ -72,7 +72,7 @@ For lists of merchants and businesses related to Monero, consider [Monerica](htt
 - [Development of a Book on a Finality Layer (12.83 / 175 XMR)](https://ccs.getmonero.org/proposals/kayabaNerve-finality-layer-book.html)
 
 ### Meme of the Week
-![](/blog/images/ms-4/meme.png)
+![](/blog/images/ms-4/head.png)
 
 ### Study Time
 [Monero's "Big Tent" culture w/ Monero Matteo | EPI 362](https://redirect.invidious.io/watch?v=El9sTxt9tFI)
