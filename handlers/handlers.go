@@ -112,6 +112,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"godex":        {"/exchanges/godex.svg", "/exchanges/no-text/godex.jpg", true},
 	"letsexchange": {"/exchanges/letsexchange.svg", "/exchanges/no-text/letsexchange.svg", true},
 	"quickex":      {"/exchanges/quickex.png", "", false},
+	"silkbyte":     {"/exchanges/silkbyte.png", "", false},
 }
 
 func EstimateHandler(c echo.Context) error {

@@ -584,6 +584,15 @@
         "min": 0.2318,
         "coingecko_id": "ethereum-classic"
     },
+            {
+        "ticker": "zec",
+        "name": "Zcash",
+        "network": "zec",
+        "isStable": false,
+        "icon": "icons/zcash.webp",
+        "min": 0.2,
+        "coingecko_id": "zec"
+    },
     {
         "ticker": "hive",
         "name": "Hive",
