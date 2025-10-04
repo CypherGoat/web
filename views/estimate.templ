@@ -32,7 +32,14 @@ func FormatFloat(num float64) string {
     return str
 }
 
-templ EstimateCard(offers []api.Estimate) {
+func FormatCoveragePercent(num float64) string {
+    // Round to 1 decimal place
+    rounded := strconv.FormatFloat(num, 'f', 1, 64)
+    return rounded
+}
+
+
+templ EstimateCard(offers api.Estimates) {
      <style>
         body-estimates {
             background-color: #121520;
@@ -420,15 +427,111 @@ templ EstimateCard(offers []api.Estimate) {
                 font-size: 0.85rem;
             }
         }
+                .guarantee-icon-estimates {
+            font-size: 0.9rem;
+            margin-right: 0.1rem;
+            vertical-align: middle;
+        }
+        
+        svg.guarantee-icon-estimates {
+            width: 14px;
+            height: 14px;
+            stroke: #00cc88;
+            margin-bottom: -2px;
+        }
+
+                    .guarantee-badge-estimates {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0, 153, 102, 0.15);
+            border: 1px solid rgba(0, 153, 102, 0.3);
+            color: #00cc88;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: auto;
+            position: relative; /* For tooltip positioning */
+            cursor: help;
+        }
+        
+               .tooltip-content-estimates {
+            position: absolute;
+            bottom: 130%;
+            right: 0;
+            background-color: #1a1f2e;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            width: max-content;
+            max-width: 250px;
+            font-size: 0.75rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            pointer-events: none;
+        }
+        
+        /* Add invisible connector between badge and tooltip */
+        .guarantee-badge-estimates::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            height: 15px; /* Create an invisible bridge to the tooltip */
+            background: transparent;
+        }
+        
+        .guarantee-badge-estimates:hover .tooltip-content-estimates {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transition-delay: 0s;
+        }
+        
+        /* Keep tooltip visible while hovering over it */
+        .tooltip-content-estimates:hover {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        
+        /* Add significant delay before hiding */
+        .guarantee-badge-estimates.tooltip-active .tooltip-content-estimates {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+                .tooltip-content-estimates a {
+            color: #00cc88;
+            font-weight: 600;
+            text-decoration: underline;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .tooltip-content-estimates a:hover {
+            color: #00e699;
+            box-shadow: 0 0 0 2px rgba(0, 204, 136, 0.1);
+        }
     </style>
     <div class="container-estimates">
         <div class="sort-options-estimates">
             <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Sort by Rate</button>
             <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Sort by KYC</button>
         </div>
+
         
         <div id="estimates-container-estimates">
-            for i, offer := range offers {
+        <p>{offers.TradeValue_fiat}</p>
+            for i, offer := range offers.Results {
                 if !(offer.SendAmount == 0) {
                     <form method="GET" action="/step2" class="estimate-form-estimates" data-kyc={ fmt.Sprintf("%d", offer.KYCScore) } data-rate={ fmt.Sprintf("%f", offer.ReceiveAmount) } data-is-top={ fmt.Sprintf("%t", i == 0) }>
                         <input type="hidden" name="coin1" value={ offer.Coin1 }>
@@ -438,6 +541,8 @@ templ EstimateCard(offers []api.Estimate) {
                         <input type="hidden" name="amount" value={ fmt.Sprintf("%f", offer.SendAmount) }>
                         <input type="hidden" name="receiveamount" value={ fmt.Sprintf("%v", offer.ReceiveAmount) }>
                         <input type="hidden" name="partner" value={ offer.ExchangeName }>
+
+
                         <div class="card-estimates">
                             <div class="exchange-info-estimates">
                                 <div class="exchange-name-estimates">
@@ -453,29 +558,25 @@ templ EstimateCard(offers []api.Estimate) {
                                     </span>
                                 </div>
                                 
-                                <!-- Example guarantee  -->
-                                // if i % 3 == 0 {
-                                //     <div class="guarantee-badge-estimates">
-                                //         <span class="guarantee-icon-estimates">✓</span>
-                                //         Guaranteed (100%)
-                                //     </div>
-                                // } else if i % 3 == 1 {
-                                //     <div class="guarantee-badge-estimates">
-                                //         <span class="guarantee-icon-estimates">✓</span>
-                                //         Guaranteed (75%)
-                                //     </div>
-                                // } else {
-                                //     <div class="guarantee-badge-estimates no-guarantee-estimates">
-                                //         No Guarantee
-                                //     </div>
-                                // }
+                                
+
+                                                                 if offer.CGShield{
+                                     <div class="guarantee-badge-estimates">
+                                        <svg class="guarantee-icon-estimates" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        </svg>
+                                        Insured ({FormatCoveragePercent(offer.CoveragePercent)}%)
+                                        <div class="tooltip-content-estimates">
+                                            Insured under the CypherGoat Shield Program. Read more <a href="/cyphergoat-shield" target="_blank">here</a>.
+                                        </div>
+                                    </div>
+                                } else {
+                                    //  <div class="guarantee-badge-estimates no-guarantee-estimates">
+                                    //     No Guarantee
+                                    // </div>
+                                }
                             </div>
                             
-                            // <div class="coin-symbols-estimates">
-                            //     <span class="coin-symbol-estimates">{ FormatFloat(offer.SendAmount) } { strings.ToUpper(offer.Coin1) }</span>
-                            //     <span class="arrow-icon-estimates">→</span>
-                            //     <span class="coin-symbol-estimates">{ FormatFloat(offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }</span>
-                            // </div>
                             
                             <div class="estimate-details-estimates">
                                 <div class="amount-highlight-estimates">
@@ -608,6 +709,55 @@ templ EstimateCard(offers []api.Estimate) {
         document.addEventListener('htmx:afterSwap', function() {
             initSorting();
         });
+    })();
+
+    (function() {
+        // Initialize existing sorting code...
+        
+        // Add tooltip behavior for guarantee badges
+        function setupTooltips() {
+            const badges = document.querySelectorAll('.guarantee-badge-estimates');
+            
+            badges.forEach(badge => {
+                let tooltipTimer;
+                
+                badge.addEventListener('mouseenter', () => {
+                    clearTimeout(tooltipTimer);
+                    badge.classList.add('tooltip-active');
+                });
+                
+                badge.addEventListener('mouseleave', () => {
+                    tooltipTimer = setTimeout(() => {
+                        badge.classList.remove('tooltip-active');
+                    }, 1000); // 1 second delay before hiding tooltip
+                });
+                
+                const tooltip = badge.querySelector('.tooltip-content-estimates');
+                if (tooltip) {
+                    tooltip.addEventListener('mouseenter', () => {
+                        clearTimeout(tooltipTimer);
+                        badge.classList.add('tooltip-active');
+                    });
+                    
+                    tooltip.addEventListener('mouseleave', () => {
+                        tooltipTimer = setTimeout(() => {
+                            badge.classList.remove('tooltip-active');
+                        }, 500);
+                    });
+                }
+            });
+        }
+        
+        // Call setup on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupTooltips);
+        } else {
+            setupTooltips();
+        }
+        
+        // Call setup after htmx swaps content
+        document.addEventListener('htmx:afterSwap', setupTooltips);
+        document.addEventListener('estimatesSorted', setupTooltips);
     })();
 </script>
 }

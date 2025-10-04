@@ -514,6 +514,32 @@ footer {
     font-size: 1.6rem;
     margin-bottom: 0.5rem;
   }
+      .badge-info-popup {
+        position: absolute;
+        z-index: 100;
+        background: #1a1f2e;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px 16px;
+        width: 250px;
+        font-size: 0.9rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        color: #e0e0e0;
+        transform: translateX(-50%);
+        text-align: center;
+        line-height: 1.5;
+    }
+
+    .badge-info-popup:before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 8px solid rgba(26, 31, 46, 0.95);
+    }
     </style>
      <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
     <p id="error-text"></p>
@@ -551,19 +577,26 @@ footer {
         <p class="text-gray-300 mt-3 mb-4 text-3xl">
             Trade crypto at the <span class="font-semibold text-blue-400">best</span> rate on the market
         </p>
-        <div class="flex flex-wrap justify-center gap-2 mb-6">
-            <span class="trust-badge">
+         <div class="flex flex-wrap justify-center gap-2 mb-6">
+            <span class="trust-badge" 
+                  data-info="CypherGoat never holds your funds. All transactions occur directly between you and the exchange."
+                  onclick="showBadgeInfo(this)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.4 0 2.8 1.1 2.8 2.5V11h1.7v5H7.5v-5h1.7V9.5C9.2 8.1 10.6 7 12 7z"/></svg>
                 Non-Custodial
             </span>
-            <span class="trust-badge">
+            <span class="trust-badge"
+                  data-info="Our entire webui is open source and can be audited by anyone. Check out our code on GitHub."
+                  onclick="showBadgeInfo(this)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 12h2v2h-2v-2zm0-8h2v6h-2V6z"/></svg>
                 Open Source
             </span>
-            <span class="trust-badge">
+            <a class="trust-badge"
+               href="/exchanges/"
+               data-info="CypherGoat aggregates rates from over 20 different cryptocurrency exchanges to find you the best deal."
+               onclick="">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M16 2v4h4v12H4V6h4V2h8zm-3 10h-2v6h2v-6zm0-4h-2v2h2V8z"/></svg>
                 20+ Exchanges
-            </span>
+            </a>
         </div>
     </div>
 
@@ -658,6 +691,10 @@ footer {
                 <h3 class="text-xl font-semibold">Is CypherGoat safe to use?</h3>
                 <p class="text-gray-300 mt-2">Yes. CypherGoat does not get access to your funds at any stage of the swap. We are simply an aggregator interface. We are also the only exchange aggregator that is fully open source, which means that anyone can audit our code at any time.</p>
             </div>
+            <div class="faq-item mb-6">
+    <h3 class="text-xl font-semibold">What is the CypherGoat Shield program?</h3>
+    <p class="text-gray-300 mt-2">The CypherGoat Shield is our user protection program that guarantees you'll receive your funds or get reimbursed if an exchange fails to complete your transaction or holds your funds due to KYC issues. Look for the Shield icon next to exchange names to see the coverage amount. You can learn more about it in our <a href="/cyphergoat-shield" class="text-blue-400 hover:underline">Shield program terms</a>.</p>
+</div>
         </div>
 
         <div class="w-full lg:w-2/4 px-8 mt-12 lg:mt-0">
@@ -924,6 +961,40 @@ footer {
 </div>
 
 <script>
+
+function showBadgeInfo(element) {
+    const existingPopup = document.getElementById('badge-info-popup');
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+    
+    const info = element.getAttribute('data-info');
+    
+    const popup = document.createElement('div');
+    popup.id = 'badge-info-popup';
+    popup.className = 'badge-info-popup';
+    popup.textContent = info;
+    
+    const rect = element.getBoundingClientRect();
+    popup.style.top = (rect.bottom + 10) + 'px';
+    popup.style.left = (rect.left + rect.width/2) + 'px';
+    
+    document.body.appendChild(popup);
+    
+    setTimeout(() => {
+        document.addEventListener('click', closePopupOnClickOutside);
+    }, 100);
+    
+    event.stopPropagation();
+}
+
+function closePopupOnClickOutside(event) {
+    const popup = document.getElementById('badge-info-popup');
+    if (popup && !event.target.closest('.trust-badge')) {
+        popup.remove();
+        document.removeEventListener('click', closePopupOnClickOutside);
+    }
+}
 
 
 document.addEventListener('DOMContentLoaded', function() {

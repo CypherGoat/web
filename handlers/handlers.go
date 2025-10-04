@@ -18,6 +18,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -53,6 +54,10 @@ func IndexHandler(c echo.Context) error {
 	return views.IndexTempl().Render(c.Request().Context(), c.Response())
 }
 
+func CGShieldTermsHandler(c echo.Context) error {
+	return views.CGShield().Render(c.Request().Context(), c.Response())
+}
+
 func ContactHandler(c echo.Context) error {
 	return views.Contact().Render(c.Request().Context(), c.Response())
 }
@@ -82,7 +87,30 @@ func AffiliateHandler(c echo.Context) error {
 
 func NotFoundHandler(c echo.Context) error {
 	return views.NotFoundPage().Render(c.Request().Context(), c.Response())
+}
 
+func ExchangesHandler(c echo.Context) error {
+	return views.Exchanges().Render(c.Request().Context(), c.Response())
+}
+
+func ExchangeDetailHandler(c echo.Context) error {
+	shortCode := c.Param("shortcode")
+
+	var exchange views.Exchange
+	found := false
+	for _, ex := range views.ExchangesList {
+		if ex.ShortCode == shortCode {
+			exchange = ex
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return c.Redirect(http.StatusSeeOther, "/exchanges")
+	}
+
+	return views.ExchangeDetail(exchange).Render(c.Request().Context(), c.Response())
 }
 
 type ExchangeInfo struct {
@@ -127,24 +155,42 @@ func EstimateHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Error parsing amount")
 	}
 
-	apiEstimates, err := api.FetchEstimateFromAPI(coin1, coin2, amount, false, network1, network2)
+	estimates, err := api.FetchEstimateFromAPI(coin1, coin2, amount, false, network1, network2)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, fmt.Sprintf("%s", err.Error()))
 	}
-	for i := range apiEstimates {
 
-		name := strings.ToLower(apiEstimates[i].ExchangeName)
+	value_btc := estimates.TradeValue_btc
+	value_usd := estimates.TradeValue_fiat
+	for i := range estimates.Results {
+
+		name := strings.ToLower(estimates.Results[i].ExchangeName)
 
 		if info, ok := exchangeInfo[name]; ok {
-			apiEstimates[i].ImageURL = info.ImageURL
-			apiEstimates[i].NoTextURL = info.NoTextURL
+			estimates.Results[i].ImageURL = info.ImageURL
+			estimates.Results[i].NoTextURL = info.NoTextURL
+			for _, ex := range views.ExchangesList {
+				if strings.ToLower(ex.ShortCode) == name {
+					estimates.Results[i].CGShield = ex.CGShield
+					if ex.CGShield {
+						amount := ex.CGSAmountFloat
+						fiat := ex.CGSinStable
+						if fiat {
+							estimates.Results[i].CoveragePercent = math.Min(math.Max(amount/value_usd*100, 0), 100)
+						} else {
+							estimates.Results[i].CoveragePercent = math.Min(math.Max(amount/value_btc*100, 0), 100)
+						}
+					}
+					break
+				}
+			}
 		}
 
-		apiEstimates[i].Log = exchangeInfo[name].RequireIP
+		estimates.Results[i].Log = exchangeInfo[name].RequireIP
 
 	}
 
-	return views.EstimateCard(apiEstimates).Render(c.Request().Context(), c.Response())
+	return views.EstimateCard(estimates).Render(c.Request().Context(), c.Response())
 }
 
 func Step2Handler(c echo.Context) error {
@@ -173,6 +219,12 @@ func Step2Handler(c echo.Context) error {
 	estimate.Network1 = network1
 	estimate.Network2 = network2
 
+	for _, ex := range views.ExchangesList {
+		if strings.EqualFold(ex.ShortCode, partner) {
+			estimate.CGSAmount = ex.CGAmount
+			break
+		}
+	}
 	name := strings.ToLower(estimate.ExchangeName)
 	if info, ok := exchangeInfo[name]; ok {
 		estimate.ImageURL = info.ImageURL

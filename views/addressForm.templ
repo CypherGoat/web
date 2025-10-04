@@ -289,6 +289,12 @@ templ AddressForm(estimate api.Estimate, err bool){
                     <span class="trade-label">Exchange</span>
                     <span class="trade-value">{ estimate.ExchangeName }</span>
                 </div>
+                if estimate.CGSAmount != "" {
+                <div class="trade-row">
+                    <span class="trade-label">Insured up to</span>
+                    <span class="trade-value">{ estimate.CGSAmount }</span>
+                </div>
+                }
             </div>
             
             <form class="grid gap-6" method="GET" action="/step3">

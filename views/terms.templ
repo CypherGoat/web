@@ -16,7 +16,7 @@
 package views
 
 templ Terms(){
-    @Header(){
+    @HeaderCustomTitle("Terms of Service"){
 
     }
 <style>
@@ -83,7 +83,7 @@ templ Terms(){
 }
 
 templ Privacy(){
-    @Header(){
+    @HeaderCustomTitle("Privacy Policy"){
 
     }
 <style>
@@ -149,4 +149,158 @@ templ Privacy(){
 
 @Footer(){}
 
+}
+
+templ CGShield(){
+    @HeaderCustomTitle("CypherGoat Shield Program"){}
+
+    <style>
+    body {
+        background-color: #121520;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    }
+    .shield-icon {
+        color: #FFD700;
+        margin-right: 8px;
+    }
+    .section-card {
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        border-left: 3px solid #3182ce;
+    }
+    .highlight {
+        color: #4299e1;
+        font-weight: 500;
+    }
+    </style>
+
+    <div class="text-gray-100 font-sans py-12 px-6">
+        <header class="mb-16 text-center max-w-4xl mx-auto">
+            <div class="flex items-center justify-center mb-4">
+                <svg class="w-10 h-10 text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <h1 class="text-4xl font-bold text-white">CypherGoat Shield</h1>
+            </div>
+            <p class="text-lg text-gray-300 mt-4">Welcome to CypherGoat Shield, our program designed to give you peace of mind when trading. When you see the Shield icon next to an exchange, it means your transaction is protected by the following guarantee.</p>
+            <p class="text-sm text-gray-500 mt-4">Last Updated: September 18, 2025</p>
+        </header>
+
+        <div class="space-y-10 max-w-4xl mx-auto">
+            <div class="section-card">
+                <h2 class="text-2xl font-bold text-white mb-4">1. What is the CypherGoat Shield Guarantee?</h2>
+                <p class="text-base text-gray-300 mt-3">The CypherGoat Shield is our promise to you. If you complete a transaction and do not receive your funds, we will step in to help. This protection covers you if an exchange fails to complete your transaction <span class="highlight">or</span> they hold your funds due to a verification (KYC) issue and refuse to provide a refund. If the exchange cannot give us a valid reason for their action (like high AML risk or a legal order), CypherGoat will reimburse you up to the insured amount.</p>
+                
+                <div class="bg-blue-900 bg-opacity-20 p-4 rounded-lg mt-4 border-l-4 border-blue-500">
+                    <p class="text-base text-gray-200"><span class="font-bold">How to Check Coverage:</span> The protection amount is set by each exchange. You can see the exact amount covered directly next to the <span class="font-bold">Shield icon</span> in the exchange listing before you start your trade. This amount is locked in for you the moment you begin your transaction.</p>
+                </div>
+            </div>
+            
+            <div class="section-card">
+                <h2 class="text-2xl font-bold text-white mb-4">2. How to Make a Claim</h2>
+                <p class="text-base text-gray-300 mt-3">We keep the process as simple as possible:</p>
+                
+                <div class="mt-4 space-y-4">
+                    <div class="flex">
+                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">1</span>
+                        <p class="text-base text-gray-300"><span class="font-semibold text-white">Contact Us:</span> If you have a problem, you must contact our support team within <span class="highlight">four (4) weeks</span> of creating your transaction. Please provide your CypherGoat Transaction ID and explain the issue. You can reach us at <a href="mailto:support@cyphergoat.com" class="text-blue-400 hover:underline">support@cyphergoat.com</a>.</p>
+                    </div>
+                    
+                    <div class="flex">
+                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">2</span>
+                        <p class="text-base text-gray-300"><span class="font-semibold text-white">Mediation:</span> We will first talk to the exchange on your behalf to try and solve the problem directly. Our goal is always to get your transaction completed or refunded by the exchange.</p>
+                    </div>
+                    
+                    <div class="flex">
+                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">3</span>
+                        <p class="text-base text-gray-300"><span class="font-semibold text-white">Reimbursement:</span> If we can't solve the issue and the exchange doesn't provide a good reason for holding the funds, we will process your refund. The reimbursement will be for your lost amount, up to the covered limit that was shown when you started the trade. Please keep in mind the whole process can take a week or longer.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-card">
+                <h2 class="text-2xl font-bold text-white mb-4">3. What Is NOT Covered</h2>
+                <p class="text-base text-gray-300 mt-3">The CypherGoat Shield is here to protect you from unfair practices, but it doesn't cover every situation. Please understand that the guarantee <span class="font-bold">does not apply</span> to:</p>
+                
+                <ul class="text-base text-gray-300 space-y-3 mt-4 pl-6">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><span class="font-semibold text-white">High AML Risk:</span> Transactions that are blocked by the exchange because they have a high Anti-Money Laundering (AML) risk score.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><span class="font-semibold text-white">Prohibited Sources:</span> Funds that come from crypto mixers, tumblers, or sanctioned addresses (like those on the OFAC list).</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><span class="font-semibold text-white">Legal Orders:</span> Funds that are frozen because of a request from the police or a court order.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><span class="font-semibold text-white">User Error:</span> Mistakes like sending crypto to the wrong address or choosing the wrong network.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><span class="font-semibold text-white">Stolen Funds:</span> The program does not cover funds stolen from your personal wallet or accounts.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-red-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><span class="font-semibold text-white">Late Claims:</span> Any problems reported to us more than four weeks after the transaction was made.</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="section-card">
+                <h2 class="text-2xl font-bold text-white mb-4">4. Important Points to Remember</h2>
+                <ul class="text-base text-gray-300 space-y-3 mt-3">
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 text-yellow-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>Our guarantee <span class="font-bold">does not</span> cover cases where funds are legitimately blocked for AML or compliance reasons.</span>
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 text-yellow-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>We always try to solve your issue with the exchange first before issuing a refund.</span>
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 text-yellow-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span>The <span class="font-bold">4-week deadline</span> to report an issue is firm.</span>
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-5 h-5 text-yellow-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span><span class="font-bold">Always check the coverage amount</span> next to the Shield icon before you trade.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="text-center mt-16 max-w-4xl mx-auto">
+            <div class="bg-gradient-to-r from-blue-800 to-indigo-900 rounded-lg p-6 shadow-lg">
+                <p class="text-lg text-white">Our mission with CypherGoat Shield is to create a safer and more trustworthy trading environment for everyone.</p>
+            </div>
+        </div>
+    </div>
+
+    @Footer(){}
 }

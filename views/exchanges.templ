@@ -1,0 +1,1668 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+import (
+    "strconv"
+    "math/rand"
+    "time"
+    "fmt"
+
+)
+
+type Exchange struct{
+    Name string
+    ShortCode string
+    KYCScore int
+    URL string
+    LogoURL string
+    NoTextURL string
+    Description string
+
+    CGShield bool
+    CGAmount string
+    CGSinStable bool
+    CGSAmountFloat float64
+
+    TrustpilotURL string
+    TrustpilotRating float64
+    TrustpilotReviewCount int
+}
+
+func shuffleExchanges(exchanges []Exchange) []Exchange {
+    result := make([]Exchange, len(exchanges))
+    copy(result, exchanges)
+    
+    rand.Seed(time.Now().UnixNano())
+    
+    // Group exchanges by KYC score
+    kycGroups := make(map[int][]Exchange)
+    for _, exchange := range result {
+        kycGroups[exchange.KYCScore] = append(kycGroups[exchange.KYCScore], exchange)
+    }
+    
+    // Shuffle within each KYC group
+    for kycScore := range kycGroups {
+        group := kycGroups[kycScore]
+        for i := len(group) - 1; i > 0; i-- {
+            j := rand.Intn(i + 1)
+            group[i], group[j] = group[j], group[i]
+        }
+    }
+    
+    // Combine groups in KYC score order (0, 1, 2, etc.)
+    var finalResult []Exchange
+    for kycScore := 0; kycScore <= 2; kycScore++ {
+        if group, exists := kycGroups[kycScore]; exists {
+            finalResult = append(finalResult, group...)
+        }
+    }
+    
+    return finalResult
+}
+
+templ Exchanges(){
+    @HeaderCustomTitle("Exchange Partners - CypherGoat"){}
+    
+    <style>
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(45deg, #0088ff, #0066cc, #0055cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .page-description {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .filters-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filters-grid {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-option {
+            position: relative;
+        }
+
+        .filter-checkbox {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .filter-checkmark {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.4rem 0.7rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .filter-checkbox:checked + .filter-checkmark {
+            background: rgba(0, 136, 255, 0.15);
+            border-color: rgba(0, 136, 255, 0.4);
+            color: #0088ff;
+        }
+
+        .filter-checkmark:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .filter-icon-small {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+
+        .clear-filters {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+        }
+
+        .clear-filters:hover {
+            background: rgba(251, 191, 36, 0.15);
+            border-color: rgba(251, 191, 36, 0.4);
+        }
+
+        .sort-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 0.4rem 0.6rem;
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .sort-select:focus {
+            border-color: rgba(0, 136, 255, 0.4);
+            box-shadow: 0 0 0 2px rgba(0, 136, 255, 0.1);
+        }
+
+        .sort-select option {
+            background: #1a1f2e;
+            color: #e2e8f0;
+        }
+
+        .results-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .results-count {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .exchanges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .exchange-card.hidden {
+            display: none;
+        }
+
+        .exchange-card {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+        }
+
+        .exchange-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0088ff, #0055cc);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .exchange-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 102, 204, 0.3);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .exchange-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .exchange-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .exchange-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;  /* Reduced padding from 0.75rem */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .exchange-name {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .exchange-description {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .exchange-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .badge {
+            padding: 0.5rem 0.875rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid;
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .badge-info {
+            background: rgba(0, 136, 255, 0.15);
+            border-color: rgba(0, 136, 255, 0.3);
+            color: #0088ff;
+        }
+
+        .badge-warning {
+            background: rgba(251, 191, 36, 0.15);
+            border-color: rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+        }
+
+        .badge-premium {
+            background: rgba(0, 136, 255, 0.15);
+            border-color: rgba(0, 136, 255, 0.3);
+            color: #0088ff;
+        }
+
+        .trustpilot-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(34, 197, 94, 0.08);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 12px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .rating-star {
+            width: 16px;
+            height: 16px;
+            fill: #22c55e;
+        }
+
+        .rating-text {
+            font-weight: 700;
+            color: #22c55e;
+            font-size: 1rem;
+        }
+
+        .review-count {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .exchange-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .view-details-btn {
+            background: linear-gradient(135deg, #0088ff, #0055cc);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+        }
+
+        .view-details-btn:hover {
+            background: linear-gradient(135deg, #0099ff, #0066dd);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
+        }
+
+        .exchange-meta {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .badge-icon {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        /* Recently Added Exchange Card Styling */
+        .trustpilot-rating.recently-added {
+            background: rgba(0, 136, 255, 0.08); 
+            border: 1px solid rgba(0, 136, 255, 0.2);
+        }
+
+        .recently-added-content {
+            text-align: center;
+            padding: 1.5rem 1rem;
+        }
+
+        .recently-added-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .recently-added-title {
+            color: #0088ff;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .recently-added-description {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .verification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 0 1rem 1.5rem;
+            padding: 0;
+            list-style: none;
+        }
+
+        .verification-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .verification-icon {
+            width: 14px;
+            height: 14px;
+            fill: #22c55e;
+            flex-shrink: 0;
+        }
+
+        .trustpilot-check-btn {
+            margin: 1rem;
+            width: calc(100% - 2rem);
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .trustpilot-check-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .trustpilot-rating.recently-added {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(255, 149, 0, 0.08);
+    border: 1px solid rgba(255, 149, 0, 0.2);
+}
+
+.recently-added-icon {
+    font-size: 1.25rem;
+    margin-right: 0.25rem;
+    color: #ff9500;
+}
+
+.trustpilot-rating.recently-added .rating-text {
+    color: #ff9500;
+    font-weight: 700;
+}
+
+        .external-link-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .exchanges-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+
+            .exchange-card {
+                padding: 1.5rem;
+            }
+
+            .page-header {
+                padding: 1.5rem 0;
+                margin-bottom: 2rem;
+            }
+
+            .exchange-header {
+                gap: 0.75rem;
+            }
+
+            .exchange-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .exchange-name {
+                font-size: 1.25rem;
+            }
+
+            .exchange-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .view-details-btn {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .recently-added-content {
+                padding: 1rem 0.75rem;
+            }
+            
+            .verification-list {
+                margin: 0 0.75rem 1rem;
+            }
+            
+            .trustpilot-check-btn {
+                margin: 0.75rem;
+                width: calc(100% - 1.5rem);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .exchanges-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .hero-section {
+                padding: 2rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Exchange Partners</h1>
+                <p class="page-description">
+                    Discover our trusted exchange partners that power CypherGoat's competitive rates and secure transactions.
+                </p>
+            </div>
+
+            <div class="filters-section">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">Protection:</label>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="filter-cgshield" class="filter-checkbox" onchange="filterExchanges()">
+                                <label for="filter-cgshield" class="filter-checkmark">
+                                    <svg class="filter-icon-small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                        <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                                        <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                    </svg>
+                                    CG Protected
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">KYC Level:</label>
+                        <div class="filter-options">
+                            <div class="filter-option">
+                                <input type="checkbox" id="filter-kyc-0" class="filter-checkbox" onchange="filterExchanges()">
+                                <label for="filter-kyc-0" class="filter-checkmark">
+                                    Level 0
+                                </label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="filter-kyc-1" class="filter-checkbox" onchange="filterExchanges()">
+                                <label for="filter-kyc-1" class="filter-checkmark">
+                                    Level 1
+                                </label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="filter-kyc-2" class="filter-checkbox" onchange="filterExchanges()">
+                                <label for="filter-kyc-2" class="filter-checkmark">
+                                    Level 2
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Sort:</label>
+                        <div class="filter-options">
+                            <select id="sort-select" class="sort-select" onchange="sortExchanges()">
+                                <option value="default">KYC Level</option>
+                                <option value="rating-high">Rating ↓</option>
+                                <option value="rating-low">Rating ↑</option>
+                                <option value="reviews-high">Reviews ↓</option>
+                                <option value="name-asc">Name A-Z</option>
+                                <option value="name-desc">Name Z-A</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <button class="clear-filters" onclick="clearAllFilters()">
+                            <svg class="filter-icon-small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-summary">
+                <div class="results-count" id="results-count">
+                    Showing all { strconv.Itoa(len(ExchangesList)) } exchanges
+                </div>
+            </div>
+
+            <div class="exchanges-grid" id="exchanges-grid">
+                for _, exchange := range shuffleExchanges(ExchangesList) {
+                    <a href={ templ.URL("/exchange/" + exchange.ShortCode) } class="exchange-card" 
+                       data-kyc={ strconv.Itoa(exchange.KYCScore) } 
+                       data-cgshield={ strconv.FormatBool(exchange.CGShield) }
+                       data-rating={ fmt.Sprintf("%.1f", exchange.TrustpilotRating) }
+                       data-reviews={ strconv.Itoa(exchange.TrustpilotReviewCount) }
+                       data-name={ exchange.Name }>
+                        <div class="exchange-header">
+                            if exchange.NoTextURL != "" {
+                                <img src={ exchange.NoTextURL } alt={ exchange.Name } class="exchange-logo" loading="lazy">
+                            } else {
+                                <img src={ exchange.LogoURL } alt={ exchange.Name } class="exchange-logo" loading="lazy">
+                            }
+                            <h2 class="exchange-name">{ exchange.Name }</h2>
+                        </div>
+                        
+                        <p class="exchange-description">{ exchange.Description }</p>
+                        
+                        <div class="exchange-badges">
+                            if exchange.KYCScore == 0 {
+                                <span class="badge badge-success">
+                                    <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                    </svg>
+                                    KYC Risk Level 0
+                                </span>
+                            } else if exchange.KYCScore == 1 {
+                                <span class="badge badge-info">
+                                    <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                    </svg>
+                                    KYC Risk Level 1
+                                </span>
+                            } else {
+                                <span class="badge badge-info">
+                                    <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                    </svg>
+                                    KYC Risk Level { strconv.Itoa(exchange.KYCScore) }
+                            </span>
+                            }                            if exchange.CGShield {
+                                <span class="badge badge-premium">
+                                    <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                        <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                                        <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                    </svg>
+                                    CG Protected
+                                </span>
+                            }
+                        </div>
+                        
+                        if exchange.TrustpilotRating > 0 {
+                            <div class="trustpilot-rating">
+                                <div class="rating-stars">
+                                    for i := 1; i <= 5; i++ {
+                                        if float64(i) <= exchange.TrustpilotRating {
+                                            <svg class="rating-star" viewBox="0 0 24 24">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        } else if float64(i) - exchange.TrustpilotRating < 1 {
+                                            <svg class="rating-star" viewBox="0 0 24 24" style="fill: #fbbf24;">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        } else {
+                                            <svg class="rating-star" viewBox="0 0 24 24" style="fill: #374151;">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        }
+                                    }
+                                </div>
+                                <span class="rating-text">{ fmt.Sprintf("%.1f", exchange.TrustpilotRating) }</span>
+                                <span class="review-count">({ strconv.Itoa(exchange.TrustpilotReviewCount) } reviews)</span>
+                            </div>
+                            } else {
+    <div class="trustpilot-rating recently-added">
+        <div class="rating-text">Recently Added</div>
+        <span class="review-count">Reviews pending</span>
+    </div>
+}
+
+
+                        <div class="exchange-footer">
+                            <div class="exchange-meta">
+                                if exchange.CGShield {
+                                    CypherGoat Protected
+                                } else {
+                                    Standard Partner
+                                }
+                            </div>
+                            <span class="view-details-btn">
+                                View Details
+                                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterExchanges() {
+            const cgShieldFilter = document.getElementById('filter-cgshield').checked;
+            const kyc0Filter = document.getElementById('filter-kyc-0').checked;
+            const kyc1Filter = document.getElementById('filter-kyc-1').checked;
+            const kyc2Filter = document.getElementById('filter-kyc-2').checked;
+            
+            const exchangeCards = document.querySelectorAll('.exchange-card');
+            let visibleCount = 0;
+            
+            exchangeCards.forEach(card => {
+                const cgShield = card.dataset.cgshield === 'true';
+                const kycLevel = parseInt(card.dataset.kyc);
+                
+                let showCard = true;
+                
+                // CypherGoat Shield filter
+                if (cgShieldFilter && !cgShield) {
+                    showCard = false;
+                }
+                
+                // KYC filters - if any KYC filter is checked, only show matching levels
+                const anyKycFilterActive = kyc0Filter || kyc1Filter || kyc2Filter;
+                if (anyKycFilterActive) {
+                    const matchesKycFilter = 
+                        (kyc0Filter && kycLevel === 0) ||
+                        (kyc1Filter && kycLevel === 1) ||
+                        (kyc2Filter && kycLevel === 2);
+                    
+                    if (!matchesKycFilter) {
+                        showCard = false;
+                    }
+                }
+                
+                if (showCard) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            
+            // Update results count
+            const resultsCount = document.getElementById('results-count');
+            resultsCount.textContent = `Showing ${visibleCount} of ${exchangeCards.length} exchanges`;
+        }
+        
+        function sortExchanges() {
+            const sortBy = document.getElementById('sort-select').value;
+            const exchangesGrid = document.getElementById('exchanges-grid');
+            const exchangeCards = Array.from(exchangesGrid.children);
+            
+            exchangeCards.sort((a, b) => {
+                switch (sortBy) {
+                    case 'rating-high':
+                        return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+                    case 'rating-low':
+                        return parseFloat(a.dataset.rating) - parseFloat(b.dataset.rating);
+                    case 'reviews-high':
+                        return parseInt(b.dataset.reviews) - parseInt(a.dataset.reviews);
+                    case 'name-asc':
+                        return a.dataset.name.localeCompare(b.dataset.name);
+                    case 'name-desc':
+                        return b.dataset.name.localeCompare(a.dataset.name);
+                    case 'default':
+                    default:
+                        // Sort by KYC level (0, 1, 2) then by name
+                        const kycDiff = parseInt(a.dataset.kyc) - parseInt(b.dataset.kyc);
+                        if (kycDiff !== 0) return kycDiff;
+                        return a.dataset.name.localeCompare(b.dataset.name);
+                }
+            });
+            
+            // Clear and re-append sorted cards
+            exchangesGrid.innerHTML = '';
+            exchangeCards.forEach(card => {
+                exchangesGrid.appendChild(card);
+            });
+        }
+        
+        function clearAllFilters() {
+            // Clear all checkboxes
+            document.getElementById('filter-cgshield').checked = false;
+            document.getElementById('filter-kyc-0').checked = false;
+            document.getElementById('filter-kyc-1').checked = false;
+            document.getElementById('filter-kyc-2').checked = false;
+            
+            // Reset sort to default
+            document.getElementById('sort-select').value = 'default';
+            
+            // Apply filters and sort
+            filterExchanges();
+            sortExchanges();
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            filterExchanges();
+        });
+    </script>
+
+    @Footer(){}
+}
+
+templ ExchangeDetail(exchange Exchange) {
+    @HeaderCustomTitle(exchange.Name + " - Exchange Partner | CypherGoat"){}
+    
+        <style>
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #0088ff;
+        }
+
+        .breadcrumb-separator {
+            color: #475569;
+        }
+
+        .breadcrumb-current {
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .hero-section {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0088ff, #0055cc);
+        }
+
+        .hero-logo {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            margin: 0 auto 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;  /* Reduced padding from 0.75rem */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(45deg, #0088ff, #0066cc, #0055cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0088ff, #0055cc);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
+            background: linear-gradient(135deg, #0099ff, #0066dd);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+        }
+
+        .badge-info {
+            background: rgba(0, 136, 255, 0.15);
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            color: #0088ff;
+        }
+
+        .badge-warning {
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+        }
+
+        .badge-premium {
+            background: rgba(0, 136, 255, 0.15);
+            border: 1px solid rgba(0, 136, 255, 0.3);
+            color: #0088ff;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .main-content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 102, 204, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            color: #0088ff;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .card-content p {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .trustpilot-card {
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.05), rgba(26, 31, 46, 1));
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .trustpilot-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: rgba(34, 197, 94, 0.08);
+            border-radius: 12px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 3px;
+        }
+
+        .rating-star {
+            width: 20px;
+            height: 20px;
+            fill: #22c55e;
+        }
+
+        .rating-score {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #22c55e;
+        }
+
+        .rating-details {
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        .insurance-card {
+            background: linear-gradient(145deg, rgba(0, 136, 255, 0.05), rgba(26, 31, 46, 1));
+            border: 1px solid rgba(0, 136, 255, 0.2);
+        }
+
+        .insurance-amount {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .insurance-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0088ff;
+            display: block;
+        }
+
+        .insurance-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            width: 16px;
+            height: 16px;
+            color: #22c55e;
+            flex-shrink: 0;
+        }
+
+        .no-insurance-card {
+            background: linear-gradient(145deg, rgba(100, 116, 139, 0.05), rgba(26, 31, 46, 1));
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .warning-icon {
+            color: #f59e0b;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .hero-section {
+                padding: 1.25rem;
+            }
+            
+            .hero-title {
+                font-size: 1.75rem;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+
+    <div class="main-content">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="/exchanges">Exchange Partners</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current">{ exchange.Name }</span>
+            </nav>
+
+            <div class="hero-section">
+                if exchange.NoTextURL != "" {
+                    <img src={ exchange.NoTextURL } alt={ exchange.Name + " logo" } class="hero-logo">
+                } else {
+                    <img src={ exchange.LogoURL } alt={ exchange.Name + " logo" } class="hero-logo">
+                }
+                
+                <h1 class="hero-title">{ exchange.Name }</h1>
+                <p class="hero-description">{ exchange.Description }</p>
+                
+                <div class="hero-actions">
+                    <a href="/" class="btn btn-primary">
+                        Start Trading
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </a>
+                    <a href={ templ.URL(exchange.URL) } target="_blank" rel="noopener" class="btn btn-secondary">
+                        Visit Website
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                            <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="hero-badges">
+                    if exchange.KYCScore == 0 {
+                        <span class="badge badge-success">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                            </svg>
+                            KYC Risk Level 0
+                        </span>
+                    } else if exchange.KYCScore == 1 {
+                        <span class="badge badge-info">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 0 0 0 0 16z"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                            </svg>
+                            KYC Risk Level 1
+                        </span>
+                    } else {
+                        <span class="badge badge-info">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                            </svg>
+                            KYC Risk Level { strconv.Itoa(exchange.KYCScore) }
+                        </span>
+                    }                    if exchange.CGShield {
+                        <span class="badge badge-premium">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                                <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                            CG Protected
+                        </span>
+                    }
+                </div>
+            </div>
+
+            <div class="content-grid">
+                <div class="main-content-area">
+                    <div class="card">
+                        <div class="card-header">
+                            <svg class="card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <h2 class="card-title">About { exchange.Name }</h2>
+                        </div>
+                        <div class="card-content">
+                            <p>{ exchange.Description }</p>
+                            
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-label">KYC Risk Level</div>
+                                    <div class="stat-value">Level { strconv.Itoa(exchange.KYCScore) }</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Partnership</div>
+                                    <div class="stat-value">
+                                        if exchange.CGShield {
+                                            Protected
+                                        } else {
+                                            Standard
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <svg class="card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                            </svg>
+                            <h2 class="card-title">Privacy & KYC Information</h2>
+                        </div>
+                        <div class="card-content">
+                            if exchange.KYCScore == 0 {
+                                <p><strong>Excellent Privacy Protection:</strong> This exchange has minimal KYC requirements and rarely requests verification.</p>
+                                <ul class="feature-list">
+                                    <li>
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                        </svg>
+                                        Almost no risk of KYC verification
+                                    </li>
+                                    <li>
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                        </svg>
+                                        Minimal external compliance requirements
+                                    </li>
+                                    <li>
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                        </svg>
+                                        Best choice for privacy-conscious users
+                                    </li>
+                                </ul>
+                            } else if exchange.KYCScore == 1 {
+                                <p><strong>Balanced Approach:</strong> Some risk of KYC verification, particularly for larger transactions or unusual activity patterns.</p>
+                                <ul class="feature-list">
+                                    <li>
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                        </svg>
+                                        Moderate compliance monitoring
+                                    </li>
+                                    <li>
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                        </svg>
+                                        Generally smooth for typical transactions
+                                    </li>
+                                    <li>
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                        </svg>
+                                        Balanced privacy and compliance
+                                    </li>
+                                </ul>
+                            } else {
+                                   <p><strong>Higher KYC Risk:</strong> More likely to request verification, especially when deposits trigger external AML systems. Funds may be temporarily held until verification is completed.</p>
+    <ul class="feature-list">
+        <li>
+            <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+            </svg>
+            Greater chance of AML/KYC triggers
+        </li>
+        <li>
+            <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+            </svg>
+            Transactions may be paused until verified
+        </li>
+        <li>
+            <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+            </svg>
+            Higher privacy risk compared to lower tiers
+        </li>
+    </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar">
+                    if exchange.TrustpilotRating > 0 {
+                        <div class="card trustpilot-card">
+                            <div class="card-header">
+                                <svg class="card-icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <h3 class="card-title">Trustpilot Rating</h3>
+                            </div>
+                            
+                            <div class="trustpilot-rating">
+                                <div class="rating-stars">
+                                    for i := 1; i <= 5; i++ {
+                                        if float64(i) <= exchange.TrustpilotRating {
+                                            <svg class="rating-star" viewBox="0 0 24 24">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        } else if float64(i) - exchange.TrustpilotRating < 1 {
+                                            <svg class="rating-star" viewBox="0 0 24 24" style="fill: #fbbf24;">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        } else {
+                                            <svg class="rating-star" viewBox="0 0 24 24" style="fill: #374151;">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        }
+                                    }
+                                </div>
+                                <span class="rating-score">{ fmt.Sprintf("%.1f", exchange.TrustpilotRating) }</span>
+                            </div>
+                            
+                            <div class="rating-details">
+                                <p>Based on { strconv.Itoa(exchange.TrustpilotReviewCount) } verified reviews</p>
+                                <a href={ templ.URL(exchange.TrustpilotURL) } target="_blank" rel="noopener" class="btn btn-secondary" style="margin-top: 1rem; width: 100%; justify-content: center;">
+                                    View on Trustpilot
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+                    if exchange.CGShield {
+                        <div class="card insurance-card">
+                            <div class="card-header">
+                                <svg class="card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16-1.26 21-6.45 21-12V5L12,1M12,7C13.4,7 14.8,8.6 14.8,10V11.5C15.4,11.5 16,12.1 16,12.7V16.2C16,16.8 15.4,17.3 14.8,17.3H9.2C8.6,17.3 8,16.8 8,16.2V12.8C8,12.2 8.6,11.6 9.2,11.6V10C9.2,8.6 10.6,7 12,7Z"/>
+                                </svg>
+                                <h3 class="card-title">Insurance Protection</h3>
+                            </div>
+                            
+                            <div class="insurance-amount">
+                                <span class="insurance-value">{exchange.CGAmount}</span>
+                                <div class="insurance-label">Coverage Amount</div>
+                            </div>
+                            
+                            <div style="margin: 1.5rem 0;">
+                                <h4 style="color: #22c55e; font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">What's Protected:</h4>
+                                <ul class="feature-list" style="margin: 0;">
+                                    <li style="border: none; padding: 0.5rem 0;">
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                    </svg>
+                                    Funds lost due to exchange issues
+                                    </li>
+                                    <li style="border: none; padding: 0.5rem 0;">
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                    </svg>
+                                    Coverage for verification disputes
+                                    </li>
+                                    <li style="border: none; padding: 0.5rem 0;">
+                                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                                            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                    </svg>
+                                    Peace of mind guarantee
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <p style="color: #94a3b8; text-align: center; margin-bottom: 1.5rem;">
+                                Your funds are protected under our User Protection Program. This exchange participates in CypherGoat Shield, providing coverage for fund losses and verification-related issues.
+                            </p>
+                        </div>
+                    } else {
+                        <div class="card no-insurance-card">
+                            <div class="card-header">
+                                <svg class="warning-icon card-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                                <h3 class="card-title">Standard Partner</h3>
+                            </div>
+                            <p style="color: #94a3b8; text-align: center;">
+                                This exchange operates under standard partnership terms. While not covered by CypherGoat Shield, they maintain professional service standards.
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Footer(){}
+}

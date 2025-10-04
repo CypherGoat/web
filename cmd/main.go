@@ -98,6 +98,11 @@ func main() {
 
 	e.GET("/sitemap.xml", handlers.SitemapHandler)
 
+	e.GET("/exchanges", handlers.ExchangesHandler)
+	e.GET("/exchange/:shortcode", handlers.ExchangeDetailHandler)
+
+	e.GET("/cyphergoat-shield", handlers.CGShieldTermsHandler)
+
 	e.POST("/challenge", handlers.ChallengeHandler)
 
 	e.GET("/blog", handlers.BlogHandler, CacheMiddleware(1*time.Hour))

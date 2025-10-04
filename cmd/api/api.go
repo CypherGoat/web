@@ -39,20 +39,31 @@ func getEnv(key, defaultValue string) string {
 	return value
 }
 
+type Estimates struct {
+	Results         []Estimate
+	Min             float64
+	TradeValue_fiat float64
+	TradeValue_btc  float64
+	CGSinStable     bool `json:"CGSinStable"`
+}
+
 type Estimate struct {
-	ExchangeName  string  `json:"Exchange"`
-	ReceiveAmount float64 `json:"Amount"`
-	MinAmount     float64 `json:"MinAmount"`
-	Network1      string
-	Network2      string
-	Coin1         string
-	Coin2         string
-	SendAmount    float64
-	Address       string
-	ImageURL      string
-	NoTextURL     string
-	KYCScore      int `json:"KYCScore"`
-	Log           bool
+	ExchangeName    string  `json:"Exchange"`
+	ReceiveAmount   float64 `json:"Amount"`
+	MinAmount       float64 `json:"MinAmount"`
+	Network1        string
+	Network2        string
+	Coin1           string
+	Coin2           string
+	SendAmount      float64
+	Address         string
+	ImageURL        string
+	NoTextURL       string
+	KYCScore        int `json:"KYCScore"`
+	Log             bool
+	CGShield        bool `json:"CGShield,omitempty"`
+	CoveragePercent float64
+	CGSAmount       string
 }
 
 type Info struct {
@@ -118,7 +129,7 @@ func SendRequest(url string) ([]byte, error) {
 	return data, nil
 }
 
-func FetchEstimateFromAPI(coin1, coin2 string, amount float64, best bool, network1, network2 string) ([]Estimate, error) {
+func FetchEstimateFromAPI(coin1, coin2 string, amount float64, best bool, network1, network2 string) (Estimates, error) {
 	var url string
 	if best {
 		url = fmt.Sprintf("%s/estimate?coin1=%s&coin2=%s&amount=%f&network1=%s&network2=%s&best=true", URL, coin1, coin2, amount, network1, network2)
@@ -128,40 +139,39 @@ func FetchEstimateFromAPI(coin1, coin2 string, amount float64, best bool, networ
 
 	data, err := SendRequest(url)
 	if err != nil {
-		return nil, err
+		return Estimates{}, err
 	}
 
 	var responseMap map[string]interface{}
 	err = json.Unmarshal(data, &responseMap)
 	if err != nil {
-		return nil, err
+		return Estimates{}, err
 	}
 
 	if errStr, ok := responseMap["error"].(string); ok {
-		return nil, fmt.Errorf("%s", errStr)
+		return Estimates{}, fmt.Errorf("%s", errStr)
 	}
 
 	type ApiResponse struct {
-		Rates []Estimate `json:"rates"`
+		Rates Estimates `json:"rates"`
 	}
 
 	var result ApiResponse
 	err = json.Unmarshal(data, &result)
 	if err != nil {
-		return nil, err
+		return Estimates{}, err
 	}
 
-	sort.Slice(result.Rates, func(i, j int) bool {
-		return result.Rates[i].ReceiveAmount > result.Rates[j].ReceiveAmount
+	sort.Slice(result.Rates.Results, func(i, j int) bool {
+		return result.Rates.Results[i].ReceiveAmount > result.Rates.Results[j].ReceiveAmount
 	})
 
-	for i := range result.Rates {
-		result.Rates[i].Coin1 = coin1
-		result.Rates[i].Coin2 = coin2
-		result.Rates[i].SendAmount = amount
-		result.Rates[i].Network1 = network1
-		result.Rates[i].Network2 = network2
-
+	for i := range result.Rates.Results {
+		result.Rates.Results[i].Coin1 = coin1
+		result.Rates.Results[i].Coin2 = coin2
+		result.Rates.Results[i].SendAmount = amount
+		result.Rates.Results[i].Network1 = network1
+		result.Rates.Results[i].Network2 = network2
 	}
 
 	return result.Rates, nil
