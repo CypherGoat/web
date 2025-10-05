@@ -85,12 +85,12 @@ func main() {
 
 	e.GET("/privacy", handlers.PrivacyPolicyHandler)
 
-	e.GET("/affiliate", handlers.AffiliateHandler)
-	e.GET("/affiliate/new", handlers.AffiliateForm)
-
-	e.POST("/affiliate/new", handlers.AffiliateForm)
 	e.GET("/health", handlers.HealthHandler)
 	e.GET("/affiliate/terms", handlers.AffiliateTerms)
+
+	e.GET("/affiliate/payout", handlers.AffiliatePayoutHandler)
+	e.POST("/affiliate/payout", handlers.AffiliatePayoutHandler)
+	e.GET("/affiliate/payout/history", handlers.AffiliatePayoutHistoryHandler)
 
 	e.GET("/swap/:coin", handlers.CoinExchangeScreenHandler)
 
@@ -109,6 +109,17 @@ func main() {
 	e.GET("/blog/:slug", handlers.BlogPostHandler, CacheMiddleware(1*time.Hour))
 
 	e.Static("/blog/images", "static/blog")
+
+	e.GET("/affiliate", handlers.AffiliateHandler)
+
+	e.GET("/affiliate/login", handlers.AffiliateLoginHandler)
+	e.POST("/affiliate/login", handlers.AffiliateLoginHandler)
+	e.GET("/affiliate/register", handlers.AffiliateRegisterHandler)
+	e.POST("/affiliate/register", handlers.AffiliateRegisterHandler)
+	e.GET("/affiliate/dashboard", handlers.AffiliateDashboardHandler)
+	e.GET("/affiliate/logout", handlers.AffiliateLogoutHandler)
+
+	e.GET("/affiliate/terms", handlers.AffiliateTerms)
 
 	e.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError

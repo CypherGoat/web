@@ -569,9 +569,6 @@ footer {
 
 <div class="pt-0 container mx-auto p-7 min-h-screen">
     <div class="text-center">
-        // <h1 class="text-6xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600 inline-block rgb-effect leading-tight">
-        //     CypherGoat
-        // </h1>
         <br/>
         <br/>
         <p class="text-gray-300 mt-3 mb-4 text-3xl">
@@ -1045,9 +1042,12 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('htmx:afterSwap', function() {
     document.getElementById('loading-spinner').classList.add('spinner-hidden');
     document.querySelectorAll('.hide-on-swap').forEach(element => {
-        element.classList.add('hidden');
+        element.style.display = 'none';
     });
-    document.getElementById('faq-section').classList.add('hidden');
+    const faqSection = document.getElementById('faq-section');
+    if (faqSection) {
+        faqSection.style.display = 'none';
+    }
     
     updateEstimatedAmountFromFirstCard();
     
@@ -1355,7 +1355,10 @@ function updateEstimatedAmountFromFirstCard() {
     document.getElementById('swap-form').addEventListener('submit', function() {
     document.getElementById('crypto-send').classList.remove('hidden');
     document.getElementById('crypto-receive').classList.remove('hidden');
-    document.getElementById('scroll-to-faq-container').classList.add('hidden');
+    const scrollBtn = document.getElementById('scroll-to-faq-container');
+    if (scrollBtn) {
+        scrollBtn.style.display = 'none';
+    }
     scrollButtonHiddenForever = true;
 });
 
@@ -1378,9 +1381,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const windowHeight = window.innerHeight || document.documentElement.clientHeight;
 
         if (rect.bottom < 0 || rect.top > windowHeight) {
-            scrollButtonContainer.classList.add('hidden');
+            scrollButtonContainer.style.display = 'none';
         } else {
-            scrollButtonContainer.classList.remove('hidden');
+            scrollButtonContainer.style.display = 'block';
         }
     }
 

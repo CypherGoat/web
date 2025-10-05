@@ -15,6 +15,11 @@
 
 package views
 
+import (
+    "github.com/CypherGoat/web/cmd/api"
+    "fmt"
+)
+
 templ Affiliate() {
     @Header(){
     }
@@ -357,14 +362,14 @@ templ Affiliate() {
                 <br/>
                 <div class="step-card"> 
                     <div class="step-number">1</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Apply</h3>
-                    <p class="text-gray-300">Complete the form listed below.</p>
+                    <h3 class="text-xl font-bold text-white mb-3">Register</h3>
+                    <p class="text-gray-300">Register with your email address and create a password.</p>
                 </div>
                 
                 <div class="step-card">
                     <div class="step-number">2</div>
                     <h3 class="text-xl font-bold text-white mb-3">Get Your Unique Links</h3>
-                    <p class="text-gray-300">Once approved, we will send you your unique links so you can start earning</p>
+                    <p class="text-gray-300">Once logged in, you will get your unique links and can start earning</p>
                 </div>
                 
                 <div class="step-card">
@@ -380,7 +385,7 @@ templ Affiliate() {
                 </div>
                 
                 <div class="text-center mt-8">
-                    <a href="/affiliate/new" class="btn-primary">Become an Affiliate</a>
+                    <a href="/affiliate/register" class="btn-primary">Become an Affiliate</a>
                 </div>
                 <br/>
                 <div class="text-center mt-4">
@@ -457,7 +462,7 @@ templ AffiliateTerms(){
     </div>
 }
 
-templ AffiliateForm(errors []string, success string){
+templ AffiliateLogin(errors []string, success string) {
     @Header(){}
     <style>
         html, body {
@@ -472,32 +477,39 @@ templ AffiliateForm(errors []string, success string){
             display: flex;
             flex-direction: column;
         }
-        .form-panel {
-            background: #181b28;
-            border-radius: 18px;
-            padding: 2.5rem 2rem 2rem 2rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-            border: 1px solid rgba(255,255,255,0.07);
-            max-width: 480px;
-            margin: 2rem auto;
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 2rem;
         }
-        .form-panel h2 {
+        .login-panel {
+            background: linear-gradient(145deg, #181b28, #1e2235);
+            border-radius: 18px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            max-width: 420px;
+            width: 100%;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-title {
             color: #fff;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
             margin-bottom: 0.5rem;
-            text-align: left;
+            background: linear-gradient(45deg, #00bfff, #4a54f1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .form-panel .subtitle {
+        .login-subtitle {
             color: #b0b8d1;
-            font-size: 1.08rem;
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-        .form-divider {
-            border: none;
-            border-top: 1px solid #2e3448;
-            margin: 1.5rem 0 2rem 0;
+            font-size: 1.1rem;
         }
         .form-group {
             margin-bottom: 1.5rem;
@@ -511,139 +523,1132 @@ templ AffiliateForm(errors []string, success string){
         }
         .form-input {
             width: 100%;
-            padding: 0.85rem;
+            padding: 0.9rem;
             background-color: #23263a;
             color: #e0e0e0;
-            border: 1px solid #555;
+            border: 1px solid #3a3f54;
             border-radius: 12px;
             font-size: 1rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
+            box-sizing: border-box;
         }
         .form-input:focus {
             border-color: #4a54f1;
             outline: none;
             box-shadow: 0 0 0 3px rgba(74,84,241,0.15);
+            background-color: #2a2e42;
         }
-        .form-helper {
-            color: #7ca2ff;
-            font-size: 0.95rem;
-            margin-top: 0.25rem;
-            margin-bottom: 0.1rem;
-        }
-        .checkbox-row {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-        }
-        .checkbox-row input[type="checkbox"] {
-            margin-right: 0.7rem;
-            margin-top: 0.2rem;
-            accent-color: #4a54f1;
-        }
-        .checkbox-row label {
-            color: #b0b8d1;
-            font-size: 0.98rem;
-            line-height: 1.4;
-        }
-        .btn-primary {
+        .btn-login {
+            width: 100%;
             background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
             background-size: 400% 400%;
             color: #ffffff;
-            padding: 0.95rem 1.5rem;
+            padding: 0.95rem;
             border: none;
             border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.3s;
-            background-clip: padding-box;
-            position: relative;
+            transition: all 0.2s;
             animation: rgbAnimation 6s ease infinite;
-            text-shadow: 1px 1px 4px rgba(30,144,255,0.7);
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .login-links {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #2e3448;
+        }
+        .login-links a {
+            color: #4a94ff;
             text-decoration: none;
-            display: block;
-            letter-spacing: 0.5px;
-            margin-top: 0.5rem;
+            font-weight: 500;
         }
-        .btn-primary:hover {
-            transform: scale(1.04);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        .login-links a:hover {
+            text-decoration: underline;
         }
-        .btn-primary:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74,84,241,0.3);
+        .alert-error {
+            background: rgba(255,107,107,0.1);
+            border: 1px solid rgba(255,107,107,0.3);
+            color: #ff6b6b;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .alert-success {
+            background: rgba(75,227,140,0.1);
+            border: 1px solid rgba(75,227,140,0.3);
+            color: #4be38c;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
         }
         @keyframes rgbAnimation {
             0% { background-position: 0% 0%; }
             50% { background-position: 100% 100%; }
             100% { background-position: 0% 0%; }
         }
-        @media (max-width: 600px) {
-            .form-panel {
-                padding: 1.2rem 0.7rem 1.5rem 0.7rem;
-                max-width: 98vw;
+    </style>
+
+    <div class="login-container">
+        <div class="login-panel">
+            <div class="login-header">
+                <h1 class="login-title">Affiliate Login</h1>
+                <p class="login-subtitle">Access your affiliate dashboard</p>
+            </div>
+
+            if len(errors) > 0 {
+                <div class="alert-error">
+                    <ul style="margin:0;padding-left:1rem;">
+                        for _, err := range errors {
+                            <li>{err}</li>
+                        }
+                    </ul>
+                </div>
             }
+
+            if success != "" {
+                <div class="alert-success">
+                    {success}
+                </div>
+            }
+
+            <form method="POST" action="/affiliate/login">
+                <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input class="form-input" type="text" id="username" name="username" required placeholder="Enter your username" autocomplete="username"/>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-input" type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password"/>
+                </div>
+
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+
+            <div class="login-links">
+                <p style="color: #b0b8d1; margin-bottom: 0.5rem;">Don't have an account?</p>
+                <a href="/affiliate/register">Create an affiliate account</a>
+            </div>
+        </div>
+    </div>
+    @Footer(){}
+}
+
+templ AffiliateRegister(errors []string, success string, token string) {
+    @Header(){}
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .register-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 200px);
+            padding: 2rem;
+        }
+        .register-panel {
+            background: linear-gradient(145deg, #181b28, #1e2235);
+            border-radius: 18px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+            max-width: 450px;
+            width: 100%;
+        }
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .register-title {
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #00bfff, #4a54f1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .register-subtitle {
+            color: #b0b8d1;
+            font-size: 1.1rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #23263a;
+            color: #e0e0e0;
+            border: 1px solid #3a3f54;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        .form-input:focus {
+            border-color: #4a54f1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,84,241,0.15);
+            background-color: #2a2e42;
+        }
+        .btn-register {
+            width: 100%;
+            background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
+            background-size: 400% 400%;
+            color: #ffffff;
+            padding: 0.95rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            animation: rgbAnimation 6s ease infinite;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        .register-links {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #2e3448;
+        }
+        .register-links a {
+            color: #4a94ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .register-links a:hover {
+            text-decoration: underline;
         }
         .alert-error {
-            background: #2e3448;
+            background: rgba(255,107,107,0.1);
+            border: 1px solid rgba(255,107,107,0.3);
             color: #ff6b6b;
-            padding: 1rem 1.2rem;
+            padding: 1rem;
             border-radius: 10px;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
         }
         .alert-success {
-            background: #223a2e;
+            background: rgba(75,227,140,0.1);
+            border: 1px solid rgba(75,227,140,0.3);
             color: #4be38c;
-            padding: 1rem 1.2rem;
+            padding: 1rem;
             border-radius: 10px;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        @keyframes rgbAnimation {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
         }
     </style>
-    <div class="form-panel">
-        <h2>Affiliate Application</h2>
-        <div class="subtitle">
-            Fill out the form below to apply for the CypherGoat Affiliate Program.<br/>
-            We’ll review your application and get back to you within 48 hours.
+
+    <div class="register-container">
+        <div class="register-panel">
+            <div class="register-header">
+                <h1 class="register-title">Complete Registration</h1>
+                <p class="register-subtitle">Set up your affiliate account</p>
+            </div>
+
+            if len(errors) > 0 {
+                <div class="alert-error">
+                    <ul style="margin:0;padding-left:1rem;">
+                        for _, err := range errors {
+                            <li>{err}</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            if success != "" {
+                <div class="alert-success">
+                    {success}
+                    <div style="margin-top: 1rem;">
+                        <a href="/affiliate/login" style="color: #4a94ff; text-decoration: underline;">Login now</a>
+                    </div>
+                </div>
+            } else {
+                <form method="POST" action="/affiliate/register">
+                    <input type="hidden" name="token" value={token} />
+
+                    <div class="form-group">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-input" type="text" id="username" name="username" required placeholder="Choose a username" autocomplete="username"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-input" type="email" id="email" name="email" required placeholder="your@email.com" autocomplete="email"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input class="form-input" type="password" id="password" name="password" required placeholder="Create a strong password" autocomplete="new-password"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="confirm_password">Confirm Password</label>
+                        <input class="form-input" type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password" autocomplete="new-password"/>
+                    </div>
+
+                    <button type="submit" class="btn-register">Complete Registration</button>
+                </form>
+            }
+
+            <div class="register-links">
+                <p style="color: #b0b8d1; margin-bottom: 0.5rem;">Already have an account?</p>
+                <a href="/affiliate/login">Login here</a>
+            </div>
         </div>
-        <hr class="form-divider"/>
+    </div>
+    @Footer(){}
+}
+
+
+templ AffiliateDashboard(stats *api.AffiliateStats) {
+    @Header(){}
+    <style>
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .dashboard-title {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+        }
+        .logout-btn {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-title {
+            color: #b0b8d1;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        .stat-value {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        .stat-subtitle {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+        .referral-section {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .section-title {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .referral-link-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .referral-link {
+            flex: 1;
+            padding: 0.8rem;
+            background: #23263a;
+            border: 1px solid #3a3f54;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            min-width: 300px;
+        }
+        .copy-btn {
+            background: linear-gradient(45deg, #00bfff, #4a54f1);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .copy-btn:hover {
+            transform: translateY(-2px);
+        }
+        .recent-swaps {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .swaps-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .swaps-table th {
+            color: #b0b8d1;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #2e3448;
+        }
+        .swaps-table td {
+            color: #e0e0e0;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .commission-positive {
+            color: #22c55e;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+            .dashboard-title {
+                font-size: 2rem;
+            }
+            .referral-link-container {
+                flex-direction: column;
+            }
+            .referral-link {
+                min-width: unset;
+            }
+        }
+    </style>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Affiliate Dashboard</h1>
+            <a href="/affiliate/logout" class="logout-btn">Logout</a>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Swaps</div>
+                <div class="stat-value">{fmt.Sprintf("%d", stats.TotalClicks)}</div>
+                <div class="stat-subtitle">All referral swaps (including incomplete)</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Completed Swaps</div>
+                <div class="stat-value">{fmt.Sprintf("%d", stats.TotalSwaps)}</div>
+                <div class="stat-subtitle">Successfully completed swaps</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Total Commission</div>
+                <div class="stat-value">{fmt.Sprintf("$%.2f", stats.TotalCommission)}</div>
+                <div class="stat-subtitle">Total earnings to date</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Pending Payout</div>
+                <div class="stat-value">{fmt.Sprintf("$%.2f", stats.PendingPayout)}</div>
+                <div class="stat-subtitle">Available for withdrawal</div>
+            </div>
+        </div>
+
+        <div class="referral-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 class="section-title" style="margin-bottom: 0;">Your Referral Link</h2>
+                <div style="display: flex; gap: 0.5rem;">
+                    <a href="/affiliate/payout" style="background: linear-gradient(45deg, #22c55e, #16a34a); color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Request Payout</a>
+                    <a href="/affiliate/payout/history" style="background: linear-gradient(45deg, #6b7280, #4b5563); color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Payout History</a>
+                </div>
+            </div>
+            <p style="color: #b0b8d1; margin-bottom: 1rem;">
+                Share this link to earn commission on every successful swap:
+            </p>
+            if stats.ReferralLink != "" {
+                <div class="referral-link-container">
+                    <input type="text" class="referral-link" value={fmt.Sprintf("https://cyphergoat.com/?ref=%s", stats.ReferralLink)} readonly id="referral-link"/>
+                    <button class="copy-btn" onclick="copyReferralLink()">Copy Link</button>
+                </div>
+            } else {
+                <div style="color: #ff6b6b; padding: 1rem; background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); border-radius: 10px;">
+                    <p>Your referral link is being generated. Please contact support if this persists.</p>
+                    <p><strong>Debug Info:</strong></p>
+                    <p>Affiliate ID: {stats.AffiliateID}</p>
+                    <p>Referral Code: "{stats.ReferralLink}"</p>
+                </div>
+            }
+        </div>
+
+        if len(stats.AllTrades) > 0 {
+            <div class="recent-swaps">
+                <h2 class="section-title">All Referral Trades</h2>
+                <table class="swaps-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>ID</th>
+                            <th>Swap</th>
+                            <th>Amount</th>
+                            <th>Exchange</th>
+                            <th>Status</th>
+                            <th>Commission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        for _, trade := range stats.AllTrades {
+                            <tr>
+                                <td>{trade.Date}</td>
+                                <td style="font-family: 'Courier New', monospace; font-size: 0.8rem;">{trade.ID}</td>
+                                <td>{trade.Coin1} → {trade.Coin2}</td>
+                                <td>{fmt.Sprintf("%.4f", trade.Amount)}</td>
+                                <td>{trade.Exchange}</td>
+                                <td>
+                                    if trade.Complete {
+                                        <span style="color: #22c55e; font-weight: 600;">✓ Complete</span>
+                                    } else {
+                                        <span style="color: #f59e0b; font-weight: 600;">⏳ {trade.Status}</span>
+                                    }
+                                </td>
+                                <td>
+                                    if trade.Complete && trade.Commission > 0 {
+                                        <span class="commission-positive">{fmt.Sprintf("$%.2f", trade.Commission)}</span>
+                                    } else {
+                                        <span style="color: #6b7280;">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } else if len(stats.RecentSwaps) > 0 {
+            <div class="recent-swaps">
+                <h2 class="section-title">Recent Swaps</h2>
+                <table class="swaps-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Swap</th>
+                            <th>Amount</th>
+                            <th>Exchange</th>
+                            <th>Commission</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        for _, swap := range stats.RecentSwaps {
+                            <tr>
+                                <td>{swap.Date}</td>
+                                <td>{swap.Coin1} → {swap.Coin2}</td>
+                                <td>{fmt.Sprintf("%.4f", swap.Amount)}</td>
+                                <td>{swap.Exchange}</td>
+                                <td class="commission-positive">{fmt.Sprintf("$%.2f", swap.Commission)}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <script>
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referral-link');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(linkInput.value).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+
+    @Footer(){}
+}
+
+templ AffiliatePayout(errors []string, success string, stats *api.AffiliateStats) {
+    @Header(){}
+    <style>
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        }
+        .payout-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .payout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .payout-title {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+        }
+        .back-btn {
+            background: linear-gradient(45deg, #6b7280, #4b5563);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107,114,128,0.3);
+        }
+        .balance-card {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        .balance-amount {
+            color: #22c55e;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .balance-label {
+            color: #b0b8d1;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .payout-form {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.9rem;
+            background-color: #23263a;
+            color: #e0e0e0;
+            border: 1px solid #3a3f54;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        .form-input:focus {
+            border-color: #4a54f1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74,84,241,0.15);
+            background-color: #2a2e42;
+        }
+        .btn-payout {
+            width: 100%;
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            color: white;
+            padding: 0.95rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-payout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34,197,94,0.3);
+        }
+        .btn-payout:disabled {
+            background: #6b7280;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .alert-error {
+            background: rgba(255,107,107,0.1);
+            border: 1px solid rgba(255,107,107,0.3);
+            color: #ff6b6b;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .alert-success {
+            background: rgba(75,227,140,0.1);
+            border: 1px solid rgba(75,227,140,0.3);
+            color: #4be38c;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .info-box {
+            background: rgba(59,130,246,0.1);
+            border: 1px solid rgba(59,130,246,0.3);
+            color: #60a5fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .info-box ul {
+            margin: 0.5rem 0 0 1rem;
+        }
+        @media (max-width: 768px) {
+            .payout-container {
+                padding: 1rem;
+            }
+            .payout-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <div class="payout-container">
+        <div class="payout-header">
+            <h1 class="payout-title">Request Payout</h1>
+            <a href="/affiliate/dashboard" class="back-btn">← Back to Dashboard</a>
+        </div>
+
+        <div class="balance-card">
+            <div class="balance-amount">{fmt.Sprintf("$%.2f", stats.PendingPayout)}</div>
+            <div class="balance-label">Available Balance</div>
+        </div>
+
         if len(errors) > 0 {
             <div class="alert-error">
-                <ul style="margin:0;padding-left:1.2rem;">
+                <ul style="margin:0;padding-left:1rem;">
                     for _, err := range errors {
                         <li>{err}</li>
                     }
                 </ul>
             </div>
         }
+
         if success != "" {
             <div class="alert-success">
                 {success}
+                <div style="margin-top: 1rem;">
+                    <a href="/affiliate/payout/history" style="color: #4a94ff; text-decoration: underline;">View payout history</a>
+                </div>
             </div>
         }
-        <form method="POST" action="/affiliate/new" autocomplete="off">
+
+        <div class="info-box">
+            <strong>Payout Information:</strong>
+            <ul>
+                <li>Minimum payout: $200.00</li>
+                <li>Payments available in USDC (Solana) or Monero (XMR)</li>
+                <li>Processing time: 1-3 business days</li>
+                <li>All payouts are processed manually</li>
+            </ul>
+        </div>
+
+        <form method="POST" action="/affiliate/payout" class="payout-form">
             <div class="form-group">
-                <label class="form-label" for="email">Email Address</label>
-                <input class="form-input" type="email" id="email" name="email" required placeholder="you@email.com" autocomplete="email"/>
-                <div class="form-helper">We'll use this to contact you about your application.</div>
+                <label class="form-label" for="amount">Payout Amount (USD)</label>
+                <input class="form-input" type="number" id="amount" name="amount" step="0.01" min="200" 
+                       max={fmt.Sprintf("%.2f", stats.PendingPayout)} required 
+                       placeholder="Enter amount (minimum $200.00)"/>
             </div>
+
             <div class="form-group">
-                <label class="form-label" for="messenger">Telegram/Signal/SimpleX Username</label>
-                <input class="form-input" type="text" id="messenger" name="messenger" required placeholder="@yourusername" autocomplete="off"/>
-                <div class="form-helper">To contact you more easily</div>
+                <label class="form-label" for="payout_currency">Payout Currency</label>
+                <select class="form-input" id="payout_currency" name="payout_currency" required onchange="updateAddressPlaceholder()">
+                    <option value="">Select payout currency</option>
+                    <option value="USDC_SOL">USDC (Solana)</option>
+                    <option value="XMR">Monero (XMR)</option>
+                </select>
             </div>
+
             <div class="form-group">
-                <label class="form-label" for="promotion">Where will you promote CypherGoat?</label>
-                <input class="form-input" type="text" id="promotion" name="promotion" required placeholder="Website, Twitter, etc" autocomplete="off"/>
-                <div class="form-helper">Include a link if possible</div>
+                <label class="form-label" for="wallet_address">Wallet Address</label>
+                <input class="form-input" type="text" id="wallet_address" name="wallet_address" required 
+                       placeholder="Select currency first"/>
             </div>
-            <div class="checkbox-row">
-                <input type="checkbox" id="agree" name="agree" required/>
-                <label for="agree">
-                    I agree to the <a href="/affiliate/terms" class="text-blue-400 underline hover:text-blue-300" target="_blank">Affiliate Program Terms &amp; Conditions</a>
-                </label>
-            </div>
-            <button type="submit" class="btn-primary">Apply Now</button>
+
+            <button type="submit" class="btn-payout" 
+                    if stats.PendingPayout < 200.00 {
+                        disabled
+                    }>
+                if stats.PendingPayout < 200.00 {
+                    Insufficient Balance (Minimum $200.00)
+                } else {
+                    Request Payout
+                }
+            </button>
         </form>
+
+        <script>
+            function updateAddressPlaceholder() {
+                const currencySelect = document.getElementById('payout_currency');
+                const addressInput = document.getElementById('wallet_address');
+                
+                if (currencySelect.value === 'USDC_SOL') {
+                    addressInput.placeholder = 'Enter your Solana wallet address (32-44 characters)';
+                    addressInput.pattern = '[1-9A-HJ-NP-Za-km-z]{32,44}';
+                } else if (currencySelect.value === 'XMR') {
+                    addressInput.placeholder = 'Enter your Monero wallet address (95-106 characters)';
+                    addressInput.pattern = '[48][0-9AB][1-9A-HJ-NP-Za-km-z]{93,103}';
+                } else {
+                    addressInput.placeholder = 'Select currency first';
+                    addressInput.pattern = '';
+                }
+            }
+        </script>
     </div>
+
+    @Footer(){}
+}
+
+templ AffiliatePayoutHistory(history *api.PayoutHistory) {
+    @Header(){}
+    <style>
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        }
+        .history-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .history-title {
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+        }
+        .back-btn {
+            background: linear-gradient(45deg, #6b7280, #4b5563);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107,114,128,0.3);
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        .summary-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        .summary-label {
+            color: #b0b8d1;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .payouts-section {
+            background: linear-gradient(145deg, #1a1f2e, #222633);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .section-title {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .payouts-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .payouts-table th {
+            color: #b0b8d1;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #2e3448;
+        }
+        .payouts-table td {
+            color: #e0e0e0;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .status-pending {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .status-completed {
+            color: #22c55e;
+            font-weight: 600;
+        }
+        .status-approved {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        .status-rejected {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        .tx-hash {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #60a5fa;
+        }
+        .no-payouts {
+            text-align: center;
+            color: #6b7280;
+            padding: 2rem;
+            font-style: italic;
+        }
+        @media (max-width: 768px) {
+            .history-container {
+                padding: 1rem;
+            }
+            .history-title {
+                font-size: 2rem;
+            }
+            .payouts-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+
+    <div class="history-container">
+        <div class="history-header">
+            <h1 class="history-title">Payout History</h1>
+            <a href="/affiliate/dashboard" class="back-btn">← Back to Dashboard</a>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-amount" style="color: #22c55e;">{fmt.Sprintf("$%.2f", history.TotalPaidOut)}</div>
+                <div class="summary-label">Total Paid Out</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-amount" style="color: #f59e0b;">{fmt.Sprintf("$%.2f", history.PendingAmount)}</div>
+                <div class="summary-label">Pending Payouts</div>
+            </div>
+        </div>
+
+        if len(history.PendingPayouts) > 0 {
+            <div class="payouts-section">
+                <h2 class="section-title">Pending Payouts</h2>
+                <table class="payouts-table">
+                    <thead>
+                        <tr>
+                            <th>Date Requested</th>
+                            <th>Amount</th>
+                            <th>Currency</th>
+                            <th>Wallet Address</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        for _, payout := range history.PendingPayouts {
+                            <tr>
+                                <td>{payout.RequestedAt.Format("Jan 2, 2006")}</td>
+                                <td>{fmt.Sprintf("$%.2f", payout.Amount)}</td>
+                                <td>
+                                    if payout.PayoutCurrency == "USDC_SOL" {
+                                        <span style="color: #3b82f6;">USDC</span>
+                                    } else if payout.PayoutCurrency == "XMR" {
+                                        <span style="color: #ff6600;">XMR</span>
+                                    } else {
+                                        {payout.PayoutCurrency}
+                                    }
+                                </td>
+                                <td class="tx-hash">{payout.WalletAddress}</td>
+                                <td>
+                                    <span class="status-pending">⏳ {payout.Status}</span>
+                                </td>
+                                <td>{payout.AdminNotes}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        if len(history.CompletedPayouts) > 0 {
+            <div class="payouts-section">
+                <h2 class="section-title">Completed Payouts</h2>
+                <table class="payouts-table">
+                    <thead>
+                        <tr>
+                            <th>Date Requested</th>
+                            <th>Date Completed</th>
+                            <th>Amount</th>
+                            <th>Currency</th>
+                            <th>Status</th>
+                            <th>Transaction Hash</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        for _, payout := range history.CompletedPayouts {
+                            <tr>
+                                <td>{payout.RequestedAt.Format("Jan 2, 2006")}</td>
+                                <td>
+                                    if payout.ProcessedAt != nil {
+                                        {payout.ProcessedAt.Format("Jan 2, 2006")}
+                                    } else {
+                                        -
+                                    }
+                                </td>
+                                <td>{fmt.Sprintf("$%.2f", payout.Amount)}</td>
+                                <td>
+                                    if payout.PayoutCurrency == "USDC_SOL" {
+                                        <span style="color: #3b82f6;">USDC</span>
+                                    } else if payout.PayoutCurrency == "XMR" {
+                                        <span style="color: #ff6600;">XMR</span>
+                                    } else {
+                                        {payout.PayoutCurrency}
+                                    }
+                                </td>
+                                <td>
+                                    if payout.Status == "completed" {
+                                        <span class="status-completed">✓ Completed</span>
+                                    } else if payout.Status == "rejected" {
+                                        <span class="status-rejected">✗ Rejected</span>
+                                    } else {
+                                        <span class="status-approved">📋 {payout.Status}</span>
+                                    }
+                                </td>
+                                <td>
+                                    if payout.TxHash != "" {
+                                        <span class="tx-hash">{payout.TxHash}</span>
+                                    } else {
+                                        -
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } else {
+            <div class="payouts-section">
+                <div class="no-payouts">
+                    if len(history.PendingPayouts) == 0 && history.TotalPaidOut == 0 && history.PendingAmount == 0 {
+                        <p>No payout history available yet.</p>
+                        <p style="font-size: 0.9rem; color: #6b7280; margin-top: 0.5rem;">
+                            The payout system is ready - once you request a payout, it will appear here.
+                        </p>
+                    } else {
+                        No completed payouts yet.
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    @Footer(){}
 }

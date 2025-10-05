@@ -265,8 +265,6 @@ func Step3Handler(c echo.Context) error {
 		}
 	}
 
-	fmt.Printf("Partner: %s, Exists in map: %v, RequiresIP: %v\n", partner, partnerLower, exchangeInfo[partnerLower].RequireIP)
-
 	affiliate := ""
 	affiliateCookie, err := c.Cookie("affiliate")
 	if err == nil && affiliateCookie.Value != "" {
@@ -286,8 +284,6 @@ func Step3Handler(c echo.Context) error {
 
 		return views.AddressForm(estimate, true).Render(c.Request().Context(), c.Response())
 	}
-
-	fmt.Printf("Redirecting to transaction: /transaction/%s\n", transaction.CGID)
 
 	return c.Redirect(http.StatusSeeOther, "/transaction/"+transaction.CGID)
 }
@@ -472,46 +468,46 @@ func SitemapHandler(c echo.Context) error {
 	return c.String(http.StatusOK, sitemap)
 }
 
-func AffiliateForm(c echo.Context) error {
-	if c.Request().Method == "POST" {
-		email := c.FormValue("email")
-		messenger := c.FormValue("messenger")
-		promotion := c.FormValue("promotion")
-		agree := c.FormValue("agree")
+// func AffiliateForm(c echo.Context) error {
+// 	if c.Request().Method == "POST" {
+// 		email := c.FormValue("email")
+// 		messenger := c.FormValue("messenger")
+// 		promotion := c.FormValue("promotion")
+// 		agree := c.FormValue("agree")
 
-		var errors []string
-		if email == "" {
-			errors = append(errors, "Email is required.")
-		}
-		if messenger == "" {
-			errors = append(errors, "Messenger username is required.")
-		}
-		if promotion == "" {
-			errors = append(errors, "Promotion details are required.")
-		}
-		if agree != "on" {
-			errors = append(errors, "You must agree to the terms.")
-		}
+// 		var errors []string
+// 		if email == "" {
+// 			errors = append(errors, "Email is required.")
+// 		}
+// 		if messenger == "" {
+// 			errors = append(errors, "Messenger username is required.")
+// 		}
+// 		if promotion == "" {
+// 			errors = append(errors, "Promotion details are required.")
+// 		}
+// 		if agree != "on" {
+// 			errors = append(errors, "You must agree to the terms.")
+// 		}
 
-		if len(errors) > 0 {
-			return views.AffiliateForm(errors, "").Render(c.Request().Context(), c.Response())
-		}
+// 		if len(errors) > 0 {
+// 			return views.AffiliateForm(errors, "").Render(c.Request().Context(), c.Response())
+// 		}
 
-		// Send to API
-		app := api.AffiliateApplication{
-			Email:     email,
-			Messenger: messenger,
-			Promotion: promotion,
-		}
-		if err := api.SendAffiliateApplication(app); err != nil {
-			errors = append(errors, "Failed to submit application. Please try again later.")
-			return views.AffiliateForm(errors, "").Render(c.Request().Context(), c.Response())
-		}
+// 		// Send to API
+// 		app := api.AffiliateApplication{
+// 			Email:     email,
+// 			Messenger: messenger,
+// 			Promotion: promotion,
+// 		}
+// 		if err := api.SendAffiliateApplication(app); err != nil {
+// 			errors = append(errors, "Failed to submit application. Please try again later.")
+// 			return views.AffiliateForm(errors, "").Render(c.Request().Context(), c.Response())
+// 		}
 
-		return views.AffiliateForm(nil, "Thank you for applying! We'll review your application soon.").Render(c.Request().Context(), c.Response())
-	}
-	return views.AffiliateForm(nil, "").Render(c.Request().Context(), c.Response())
-}
+// 		return views.AffiliateForm(nil, "Thank you for applying! We'll review your application soon.").Render(c.Request().Context(), c.Response())
+// 	}
+// 	return views.AffiliateForm(nil, "").Render(c.Request().Context(), c.Response())
+// }
 
 func BlogHandler(c echo.Context) error {
 	posts, err := loadAllBlogPosts()
@@ -646,4 +642,187 @@ func ChallengeHandler(c echo.Context) error {
 
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTMLCharsetUTF8)
 	return render(c, views.JSChallenge(data))
+}
+
+func AffiliateLoginHandler(c echo.Context) error {
+	if c.Request().Method == "POST" {
+		username := c.FormValue("username")
+		password := c.FormValue("password")
+
+		var errors []string
+		if username == "" {
+			errors = append(errors, "Username is required.")
+		}
+		if password == "" {
+			errors = append(errors, "Password is required.")
+		}
+
+		if len(errors) > 0 {
+			return views.AffiliateLogin(errors, "").Render(c.Request().Context(), c.Response())
+		}
+
+		token, err := api.LoginAffiliate(username, password)
+		if err != nil {
+			errors = append(errors, "Invalid credentials.")
+			return views.AffiliateLogin(errors, "").Render(c.Request().Context(), c.Response())
+		}
+
+		cookie := new(http.Cookie)
+		cookie.Name = "affiliate_token"
+		cookie.Value = token
+		cookie.Path = "/"
+		cookie.HttpOnly = true
+		cookie.Secure = true
+		cookie.MaxAge = 24 * 60 * 60 * 7 // 7 days
+		c.SetCookie(cookie)
+
+		return c.Redirect(http.StatusSeeOther, "/affiliate/dashboard")
+	}
+	return views.AffiliateLogin(nil, "").Render(c.Request().Context(), c.Response())
+}
+
+func AffiliateRegisterHandler(c echo.Context) error {
+	if c.Request().Method == "POST" {
+		username := c.FormValue("username")
+		email := c.FormValue("email")
+		password := c.FormValue("password")
+		confirmPassword := c.FormValue("confirm_password")
+
+		var errors []string
+		if username == "" {
+			errors = append(errors, "Username is required.")
+		}
+		if email == "" {
+			errors = append(errors, "Email is required.")
+		}
+		if password == "" {
+			errors = append(errors, "Password is required.")
+		}
+		if confirmPassword != password {
+			errors = append(errors, "Passwords do not match.")
+		}
+		if len(password) < 8 {
+			errors = append(errors, "Password must be at least 8 characters long.")
+		}
+
+		if len(errors) > 0 {
+			return views.AffiliateRegister(errors, "", "").Render(c.Request().Context(), c.Response())
+		}
+
+		err := api.RegisterAffiliate(username, email, password, "")
+		if err != nil {
+			if strings.Contains(err.Error(), "404") {
+				errors = append(errors, "Registration endpoint not available. Please contact support.")
+			} else {
+				errors = append(errors, "Registration failed: "+err.Error())
+			}
+			return views.AffiliateRegister(errors, "", "").Render(c.Request().Context(), c.Response())
+		}
+
+		return views.AffiliateRegister(nil, "Registration successful! You can now log in.", "").Render(c.Request().Context(), c.Response())
+	}
+
+	return views.AffiliateRegister(nil, "", "").Render(c.Request().Context(), c.Response())
+}
+
+func AffiliateDashboardHandler(c echo.Context) error {
+	cookie, err := c.Cookie("affiliate_token")
+	if err != nil {
+		return c.Redirect(http.StatusSeeOther, "/affiliate/login")
+	}
+
+	stats, err := api.GetAffiliateStats(cookie.Value)
+	if err != nil {
+		return c.Redirect(http.StatusSeeOther, "/affiliate/login")
+	}
+
+	return views.AffiliateDashboard(stats).Render(c.Request().Context(), c.Response())
+}
+
+func AffiliateLogoutHandler(c echo.Context) error {
+	cookie := new(http.Cookie)
+	cookie.Name = "affiliate_token"
+	cookie.Value = ""
+	cookie.Path = "/"
+	cookie.MaxAge = -1
+	c.SetCookie(cookie)
+
+	return c.Redirect(http.StatusSeeOther, "/affiliate/login")
+}
+
+func AffiliatePayoutHandler(c echo.Context) error {
+	cookie, err := c.Cookie("affiliate_token")
+	if err != nil {
+		return c.Redirect(http.StatusSeeOther, "/affiliate/login")
+	}
+
+	if c.Request().Method == "POST" {
+		amountStr := c.FormValue("amount")
+
+		var errors []string
+
+		amount, err := strconv.ParseFloat(amountStr, 64)
+		if err != nil || amount < 200.00 {
+			errors = append(errors, "Minimum payout amount is $200.00")
+		}
+
+		payoutCurrency := c.FormValue("payout_currency")
+		walletAddress := c.FormValue("wallet_address")
+
+		if payoutCurrency != "USDC_SOL" && payoutCurrency != "XMR" {
+			errors = append(errors, "Please select a valid payout currency")
+		}
+
+		if payoutCurrency == "USDC_SOL" {
+			if len(walletAddress) < 32 || len(walletAddress) > 44 {
+				errors = append(errors, "Invalid Solana address format (32-44 characters)")
+			}
+		} else if payoutCurrency == "XMR" {
+			if len(walletAddress) < 95 || len(walletAddress) > 106 {
+				errors = append(errors, "Invalid Monero address format (95-106 characters)")
+			}
+		}
+
+		if len(errors) > 0 {
+			stats, _ := api.GetAffiliateStats(cookie.Value)
+			return views.AffiliatePayout(errors, "", stats).Render(c.Request().Context(), c.Response())
+		}
+
+		request := api.PayoutRequest{
+			Amount:         amount,
+			PayoutCurrency: payoutCurrency,
+			WalletAddress:  walletAddress,
+		}
+
+		_, err = api.RequestPayout(cookie.Value, request)
+		if err != nil {
+			errors = append(errors, "Payout request failed: "+err.Error())
+			stats, _ := api.GetAffiliateStats(cookie.Value)
+			return views.AffiliatePayout(errors, "", stats).Render(c.Request().Context(), c.Response())
+		}
+
+		stats, _ := api.GetAffiliateStats(cookie.Value)
+		return views.AffiliatePayout(nil, "Payout request submitted successfully!", stats).Render(c.Request().Context(), c.Response())
+	}
+
+	stats, err := api.GetAffiliateStats(cookie.Value)
+	if err != nil {
+		return c.Redirect(http.StatusSeeOther, "/affiliate/login")
+	}
+
+	return views.AffiliatePayout(nil, "", stats).Render(c.Request().Context(), c.Response())
+}
+
+func AffiliatePayoutHistoryHandler(c echo.Context) error {
+	cookie, err := c.Cookie("affiliate_token")
+	if err != nil {
+		return c.Redirect(http.StatusSeeOther, "/affiliate/login")
+	}
+
+	history, err := api.GetPayoutHistory(cookie.Value)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to load payout history")
+	}
+
+	return views.AffiliatePayoutHistory(history).Render(c.Request().Context(), c.Response())
 }
