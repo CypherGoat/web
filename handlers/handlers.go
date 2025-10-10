@@ -22,6 +22,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -569,6 +570,16 @@ func loadAllBlogPosts() ([]*views.BlogPostData, error) {
 }
 
 func loadBlogPost(slug string) (*views.BlogPostData, error) {
+	// Validate slug to ensure it's a simple filename without path traversal
+	if strings.Contains(slug, "/") || strings.Contains(slug, "\\") || strings.Contains(slug, "..") {
+		return nil, fmt.Errorf("invalid blog post slug")
+	}
+
+	validSlug := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).MatchString(slug)
+	if !validSlug {
+		return nil, fmt.Errorf("invalid blog post slug")
+	}
+
 	filename := filepath.Join("content/blog", slug+".md")
 	post, err := loadBlogPostFromFile(filename)
 	if err != nil {
