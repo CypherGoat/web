@@ -305,7 +305,7 @@ type AffiliateRegisterRequest struct {
 
 type AffiliateStats struct {
 	TotalClicks     int              `json:"total_referrals"`
-	TotalSwaps      int              `json:"total_swaps"`
+	TotalSwaps      int              `json:"total_completed"`
 	TotalCommission float64          `json:"total_earnings"`
 	PendingPayout   float64          `json:"balance"`
 	AffiliateID     string           `json:"affiliate_id"`
