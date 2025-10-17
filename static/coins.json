@@ -640,6 +640,15 @@
         "min": 4.8,
         "coingecko_id": "pirate-chain"
     },
+        {
+        "ticker": "arrrbsc",
+        "name": "Pirate Chain (BSC)",
+        "network": "arrrbsc",
+        "isStable": false,
+        "icon": "icons/arrr.webp",
+        "min": 4.8,
+        "coingecko_id": "pirate-chain"
+    },
     {
         "ticker": "dcr",
         "name": "Decred",
