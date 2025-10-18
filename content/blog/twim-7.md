@@ -54,10 +54,9 @@ author: "recanman"
 #### Technical Analysis
 | Indicator | Value | Signal |
 |---|---:|---|
-| Volume Trend | ↓ compared to 30-day average  | Bearish |
-| RSI (14) | 24.5 | Oversold |
+| RSI (14) | 41.3 | Neutral |
 | MACD | Bearish | Caution |
-| 20-EMA vs 50-EMA | 306.58 vs 311.61 | Downtrend |
+| 20-EMA vs 50-EMA | 302.26 vs 301.47 | Uptrend |
 | Bollinger Bands | Price Near lower band | Caution |
 
 ![](./xmr_comprehensive.png)
@@ -65,6 +64,9 @@ author: "recanman"
 **Chart Pattern**  
 No clear pattern detected.  
 Support around **284.36**; next resistance near **330.16**.
+
+**Outlook**  
+Momentum: bearish. Short-term trend: uptrend. As long as XMR stays above **284.36**, setup favors bulls. A close below **278.67** would weaken the setup.
 
 #### Hashrate Distribution
 
