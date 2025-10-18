@@ -59,7 +59,7 @@ author: "recanman"
 | 20-EMA vs 50-EMA | 302.26 vs 301.47 | Uptrend |
 | Bollinger Bands | Price Near lower band | Caution |
 
-![](./xmr_comprehensive.png)
+![](/blog/images/ms-7/xmr_comprehensive.png)
 
 **Chart Pattern**  
 No clear pattern detected.  
