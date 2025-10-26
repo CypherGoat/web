@@ -106,7 +106,10 @@ func main() {
 	e.POST("/challenge", handlers.ChallengeHandler)
 
 	e.GET("/blog", handlers.BlogHandler, CacheMiddleware(1*time.Hour))
-	e.GET("/blog/:slug", handlers.BlogPostHandler, CacheMiddleware(1*time.Hour))
+	e.GET("/blog/:slug", handlers.TWIMRedirectHandler, CacheMiddleware(1*time.Hour))
+
+	e.GET("/this-week-in-monero", handlers.TWIMHandler, CacheMiddleware(1*time.Hour))
+	e.GET("/this-week-in-monero/:slug", handlers.TWIMPostHandler, CacheMiddleware(1*time.Hour))
 
 	e.Static("/blog/images", "static/blog")
 

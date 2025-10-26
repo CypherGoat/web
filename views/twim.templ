@@ -1,76 +1,24 @@
 package views
 
-import (
-    "time"
-)
-
-type BlogPostData struct {
-    Title       string
-    Slug        string
-    IssueSlug   string
-    Date        string
-    Description string
-    Author      string
-    Tags        []string
-    Draft       bool
-    Content     string
-    HTMLContent string
-    Image       string  
-
-}
-
-func formatDate(dateStr string) string {
-    if t, err := time.Parse(time.RFC3339, dateStr); err == nil {
-        return t.Format("January 2 2006")
-    }
-    if t, err := time.Parse("2006-01-02", dateStr); err == nil {
-        return t.Format("January 2 2006")
-    }
-    return dateStr
-}
-
-templ Blog(posts []*BlogPostData) {
-    @HeaderCustomTitle("Blog") {
+templ TWIMIndex(posts []*BlogPostData) {
+    @HeaderCustomTitle("This Week In Monero - CypherGoat") {
         <main class="min-h-screen bg-[#121520] text-white pb-16">
             <div class="container max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 <div class="text-center mb-12 sm:mb-16">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent leading-tight">
-                        CypherGoat Blog
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent leading-tight">
+                        This Week In Monero
                     </h1>
                     <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-2 leading-relaxed">
-                        Explore insights on privacy, security, open source and the evolving landscape of cryptocurrency exchanges.
+                        Weekly insights and updates from the Monero ecosystem. Stay informed on the latest developments, news, and analysis in the world of private digital currency.
                     </p>
 
-                    <div class="mt-6 sm:mt-8 w-16 sm:w-20 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
+                    <div class="mt-6 sm:mt-8 w-16 sm:w-20 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
                 </div>
-
-                <!-- TWIM Notice -->
-                <div class="mb-6 sm:mb-8">
-                    <div class="bg-gradient-to-r from-orange-500/10 to-orange-600/10 border border-orange-500/20 rounded-lg p-3 sm:p-4">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                            <div class="flex-1">
-                                <h3 class="text-sm sm:text-base font-semibold text-orange-400 mb-1">
-                                    Looking for This Week in Monero?
-                                </h3>
-                                <p class="text-xs sm:text-sm text-gray-300">
-                                    TWIM content has moved to its own dedicated section.
-                                </p>
-                            </div>
-                            <a href="/this-week-in-monero" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors touch-manipulation whitespace-nowrap">
-                                <span>Visit TWIM</span>
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="grid gap-6 sm:gap-8">
                     for _, post := range posts {
                         if !post.Draft {
-                            <a href={ templ.URL("/blog/" + post.Slug) } class="block group rounded-xl transition-all duration-300 touch-manipulation">
-                                <article class="flex flex-col p-4 sm:p-6 md:p-8 rounded-xl bg-gradient-to-br from-[#1a1f2e] to-[#222633] group-hover:shadow-lg border border-gray-800/60 group-hover:border-blue-500/40 transition-all duration-300 shadow-md hover:shadow-blue-500/10 group-active:scale-[0.98]">
+                            <a href={ templ.URL("/this-week-in-monero/" + post.IssueSlug) } class="block group rounded-xl transition-all duration-300 touch-manipulation">
+                                <article class="flex flex-col p-4 sm:p-6 md:p-8 rounded-xl bg-gradient-to-br from-[#1a1f2e] to-[#222633] group-hover:shadow-lg border border-gray-800/60 group-hover:border-orange-500/40 transition-all duration-300 shadow-md hover:shadow-orange-500/10 group-active:scale-[0.98]">
                                     if post.Image != "" {
                                         <div class="mb-4 overflow-hidden rounded-lg">
                                             <img src={ post.Image } alt={ post.Title } class="w-full h-48 sm:h-40 md:h-32 object-cover object-[center_30%] transition-transform duration-300 group-hover:scale-105" />
@@ -83,23 +31,23 @@ templ Blog(posts []*BlogPostData) {
                                         <span>{ post.Author }</span>
                                     </div>
                                     
-                                    <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold mb-3 sm:mb-4 bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent tracking-tight leading-tight">
+                                    <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold mb-3 sm:mb-4 text-white tracking-tight leading-tight">
                                         { post.Title }
                                     </h2>
                                     
                                     <p class="text-gray-300 mb-4 leading-relaxed flex-grow text-sm sm:text-base">
                                         { post.Description }
                                     </p>
-                                    
+                                        
                                     if len(post.Tags) > 0 {
                                         <div class="flex flex-wrap gap-2 mb-4">
                                             for _, tag := range post.Tags {
-                                                <span class="bg-blue-500/10 text-blue-300 px-3 py-1 rounded-full text-xs border border-blue-500/20">{ tag }</span>
+                                                <span class="bg-orange-500/10 text-orange-300 px-3 py-1 rounded-full text-xs border border-orange-500/20">{ tag }</span>
                                             }
                                         </div>
                                     }
                                     
-                                    <div class="inline-flex items-center gap-2 text-blue-400 font-semibold group-hover:text-blue-300 transition-colors mt-auto">
+                                    <div class="inline-flex items-center gap-2 text-orange-400 font-semibold group-hover:text-orange-300 transition-colors mt-auto">
                                         <span>Read More</span>
                                         <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -112,14 +60,11 @@ templ Blog(posts []*BlogPostData) {
                 </div>
             </div>
         </main>
-            @Footer(){}
-
     }
 }
 
-
-templ BlogPost(post *BlogPostData) {
-    @BlogHeader(post) {
+templ TWIMPost(post *BlogPostData) {
+    @HeaderCustomTitle("This Week In Monero - " + post.Title + " - CypherGoat") {
         <div class="progress-container">
             <div id="progressBar" class="progress-bar"></div>
         </div>
@@ -127,11 +72,11 @@ templ BlogPost(post *BlogPostData) {
         <main class="min-h-screen bg-[#121520] text-white pb-16">
             <div class="container max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 <nav class="mb-6 sm:mb-8">
-                    <a href="/blog" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-medium py-2 px-2 -mx-2 rounded-md touch-manipulation">
+                    <a href="/this-week-in-monero" class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-medium py-2 px-2 -mx-2 rounded-md touch-manipulation">
                         <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
-                        <span>All Articles</span>
+                        <span>All TWIM Articles</span>
                     </a>
                 </nav>
 
@@ -148,9 +93,9 @@ templ BlogPost(post *BlogPostData) {
 
       <div class="flex flex-col sm:flex-row gap-2">
         <input type="email" name="email" required placeholder="your@email.com"
-               class="flex-1 px-3 py-3 sm:py-2 text-sm bg-[#121520] border border-gray-700 rounded text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none" />
+               class="flex-1 px-3 py-3 sm:py-2 text-sm bg-[#121520] border border-gray-700 rounded text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none" />
         <button type="submit"
-                class="px-4 py-3 sm:py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors font-medium touch-manipulation">
+                class="px-4 py-3 sm:py-2 text-sm bg-orange-600 hover:bg-orange-700 text-white rounded transition-colors font-medium touch-manipulation">
           Subscribe
         </button>
       </div>
@@ -167,7 +112,7 @@ templ BlogPost(post *BlogPostData) {
                             <span>By { post.Author }</span>
                         </div>
                         
-                        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent leading-tight">
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent leading-tight">
                             { post.Title }
                         </h1>
                         
@@ -180,7 +125,7 @@ templ BlogPost(post *BlogPostData) {
                         if len(post.Tags) > 0 {
                             <div class="flex flex-wrap gap-2 mt-6">
                                 for _, tag := range post.Tags {
-                                    <span class="bg-blue-500/10 text-blue-300 px-3 py-1 rounded-full text-xs border border-blue-500/20">{ tag }</span>
+                                    <span class="bg-orange-500/10 text-orange-300 px-3 py-1 rounded-full text-xs border border-orange-500/20">{ tag }</span>
                                 }
                             </div>
                         }
@@ -192,14 +137,14 @@ templ BlogPost(post *BlogPostData) {
                 </article>
                 
                 <div class="mt-12 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <a href="/blog" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-blue-500/20 hover:border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 touch-manipulation w-full sm:w-auto justify-center">
+                    <a href="/this-week-in-monero" class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-orange-500/20 hover:border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 touch-manipulation w-full sm:w-auto justify-center">
                         <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
-                        <span>Back to blog</span>
+                        <span>Back to TWIM</span>
                     </a>
                     
-                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-blue-500/20 hover:border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 touch-manipulation w-full sm:w-auto justify-center">
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-orange-500/20 hover:border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 touch-manipulation w-full sm:w-auto justify-center">
                         <span>Back to top</span>
                         <svg class="w-4 h-4 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
@@ -227,7 +172,7 @@ templ BlogPost(post *BlogPostData) {
                 margin-top: 2.5rem;
                 margin-bottom: 1.25rem;
                 color: #ffffff;
-                background: linear-gradient(to right, #60a5fa, #3b82f6);
+                background: linear-gradient(to right, #fb923c, #f97316);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
@@ -267,7 +212,7 @@ templ BlogPost(post *BlogPostData) {
                 font-weight: 700;
                 margin-top: 2rem;
                 margin-bottom: 0.75rem;
-                color: #60a5fa;
+                color: #fb923c;
             }
             
             @media (min-width: 640px) {
@@ -309,7 +254,7 @@ templ BlogPost(post *BlogPostData) {
             }
             
             #blog-content a {
-                color: #60a5fa;
+                color: #fb923c;
                 text-decoration: underline;
                 text-decoration-thickness: 2px;
                 text-underline-offset: 3px;
@@ -318,7 +263,7 @@ templ BlogPost(post *BlogPostData) {
             }
             
             #blog-content a:hover {
-                color: #3b82f6;
+                color: #f97316;
                 text-decoration-thickness: 3px;
             }
             
@@ -357,12 +302,12 @@ templ BlogPost(post *BlogPostData) {
             }
             
             #blog-content blockquote {
-                border-left: 4px solid #0066cc;
+                border-left: 4px solid #f97316;
                 padding: 1rem 1.5rem;
                 margin: 1.5rem 0;
-                background: rgba(0, 102, 204, 0.1);
+                background: rgba(249, 115, 22, 0.1);
                 border-radius: 8px;
-                border: 1px solid rgba(0, 102, 204, 0.2);
+                border: 1px solid rgba(249, 115, 22, 0.2);
                 font-style: italic;
             }
             
@@ -405,7 +350,7 @@ templ BlogPost(post *BlogPostData) {
                 font-weight: 600;
                 padding: 0.5rem 0.75rem;
                 text-align: left;
-                border-bottom: 2px solid rgba(96, 165, 250, 0.5);
+                border-bottom: 2px solid rgba(251, 146, 60, 0.5);
                 font-size: 0.875rem;
             }
             
@@ -462,7 +407,7 @@ templ BlogPost(post *BlogPostData) {
                 border-radius: 6px;
                 padding: 0.125rem 0.375rem;
                 font-size: 0.8rem;
-                color: #60a5fa;
+                color: #fb923c;
                 font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
                 border: 1px solid rgba(255, 255, 255, 0.12);
             }
@@ -481,7 +426,7 @@ templ BlogPost(post *BlogPostData) {
                 border-radius: 8px;
                 margin: 1.5rem auto;
                 display: block;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 102, 204, 0.07);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(249, 115, 22, 0.07);
                 border: 1px solid rgba(255, 255, 255, 0.05);
             }
             
@@ -489,7 +434,7 @@ templ BlogPost(post *BlogPostData) {
                 #blog-content img {
                     border-radius: 12px;
                     margin: 2rem auto;
-                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(249, 115, 22, 0.07);
                 }
             }
                 
@@ -515,7 +460,7 @@ templ BlogPost(post *BlogPostData) {
                 padding: 1rem;
                 margin: 1.5rem 0;
                 border: 1px solid rgba(255, 255, 255, 0.05);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 102, 204, 0.07);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(249, 115, 22, 0.07);
             }
             
             @media (min-width: 640px) {
@@ -523,7 +468,7 @@ templ BlogPost(post *BlogPostData) {
                     border-radius: 12px;
                     padding: 1.5rem;
                     margin: 2rem 0;
-                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(249, 115, 22, 0.07);
                 }
             }
             
@@ -553,7 +498,7 @@ templ BlogPost(post *BlogPostData) {
             
             .progress-bar {
                 height: 3px;
-                background: linear-gradient(to right, #0066cc, #60a5fa);
+                background: linear-gradient(to right, #f97316, #fb923c);
                 width: 0%;
             }
 
@@ -710,5 +655,4 @@ templ BlogPost(post *BlogPostData) {
             }
         </style>
     }
-    @Footer(){}
 }

@@ -422,6 +422,8 @@ func SitemapHandler(c echo.Context) error {
 		{"/contact", "monthly", "0.8"},
 		{"/affiliate", "weekly", "0.9"},
 		{"/affiliate/terms", "monthly", "0.7"},
+		{"/blog", "daily", "0.9"},
+		{"/this-week-in-monero", "weekly", "0.9"},
 	}
 
 	baseURL := "https://cyphergoat.com"
@@ -459,6 +461,28 @@ func SitemapHandler(c echo.Context) error {
     <priority>0.8</priority>
   </url>`, baseURL, ticker)
 				}
+			}
+		}
+	}
+
+	posts, err := loadAllBlogPosts()
+	if err == nil {
+		for _, post := range posts {
+			if strings.HasPrefix(post.Slug, "twim-") {
+				issueSlug := strings.Replace(post.Slug, "twim-", "issue-", 1)
+				sitemap += fmt.Sprintf(`
+  <url>
+    <loc>%s/this-week-in-monero/%s</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`, baseURL, issueSlug)
+			} else {
+				sitemap += fmt.Sprintf(`
+  <url>
+    <loc>%s/blog/%s</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`, baseURL, post.Slug)
 			}
 		}
 	}
@@ -515,11 +539,82 @@ func BlogHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(500, "Failed to load blog posts")
 	}
-	return render(c, views.Blog(posts))
+
+	// Filter out TWIM posts from regular blog
+	regularPosts := []*views.BlogPostData{}
+	for _, post := range posts {
+		if !strings.HasPrefix(post.Slug, "twim-") {
+			regularPosts = append(regularPosts, post)
+		}
+	}
+
+	return render(c, views.Blog(regularPosts))
+}
+
+func TWIMHandler(c echo.Context) error {
+	posts, err := loadAllBlogPosts()
+	if err != nil {
+		return echo.NewHTTPError(500, "Failed to load blog posts")
+	}
+
+	// Filter blog posts to only show TWIM articles
+	twimPosts := []*views.BlogPostData{}
+	for _, post := range posts {
+		if strings.HasPrefix(post.Slug, "twim-") {
+			post.IssueSlug = strings.Replace(post.Slug, "twim-", "issue-", 1)
+			twimPosts = append(twimPosts, post)
+		}
+	}
+
+	return render(c, views.TWIMIndex(twimPosts))
+}
+
+func TWIMPostHandler(c echo.Context) error {
+	slug := c.Param("slug")
+
+	var fileSlug string
+	if strings.HasPrefix(slug, "issue-") {
+		fileSlug = strings.Replace(slug, "issue-", "twim-", 1)
+	} else {
+		// Redirect old twim-N URLs to issue-N
+		if strings.HasPrefix(slug, "twim-") {
+			issueSlug := strings.Replace(slug, "twim-", "issue-", 1)
+			return c.Redirect(http.StatusMovedPermanently, "/this-week-in-monero/"+issueSlug)
+		}
+		return c.Redirect(http.StatusMovedPermanently, "/this-week-in-monero")
+	}
+
+	post, err := loadBlogPost(fileSlug)
+	if err != nil || post == nil {
+		return c.Redirect(http.StatusMovedPermanently, "/this-week-in-monero")
+	}
+
+	return render(c, views.TWIMPost(post))
 }
 
 func BlogPostHandler(c echo.Context) error {
 	slug := c.Param("slug")
+
+	// Redirect TWIM posts to new location
+	if strings.HasPrefix(slug, "twim-") {
+		return c.Redirect(http.StatusMovedPermanently, "/this-week-in-monero/"+slug)
+	}
+
+	post, err := loadBlogPost(slug)
+	if err != nil || post == nil {
+		return echo.NewHTTPError(404, "Blog post not found")
+	}
+	return render(c, views.BlogPost(post))
+}
+
+func TWIMRedirectHandler(c echo.Context) error {
+	slug := c.Param("slug")
+
+	if strings.HasPrefix(slug, "twim-") {
+		issueSlug := strings.Replace(slug, "twim-", "issue-", 1)
+		return c.Redirect(http.StatusMovedPermanently, "/this-week-in-monero/"+issueSlug)
+	}
+
 	post, err := loadBlogPost(slug)
 	if err != nil || post == nil {
 		return echo.NewHTTPError(404, "Blog post not found")
