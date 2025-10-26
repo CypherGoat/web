@@ -1,7 +1,7 @@
 package views
 
 templ TWIMIndex(posts []*BlogPostData) {
-    @HeaderCustomTitle("This Week In Monero - CypherGoat") {
+    @HeaderCustomTitle("This Week In Monero") {
         <main class="min-h-screen bg-[#121520] text-white pb-16">
             <div class="container max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 <div class="text-center mb-12 sm:mb-16">
@@ -64,7 +64,7 @@ templ TWIMIndex(posts []*BlogPostData) {
 }
 
 templ TWIMPost(post *BlogPostData) {
-    @HeaderCustomTitle("This Week In Monero - " + post.Title + " - CypherGoat") {
+    @HeaderCustomTitle("This Week In Monero - " + post.Title) {
         <div class="progress-container">
             <div id="progressBar" class="progress-bar"></div>
         </div>
