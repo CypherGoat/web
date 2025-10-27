@@ -537,7 +537,13 @@ templ EstimateCard(offers api.Estimates, mode string) {
         <p>{offers.TradeValue_fiat}</p>
             for i, offer := range offers.Results {
                 if !(offer.SendAmount == 0) {
-                    <form method="GET" action="/step2" class="estimate-form-estimates" data-kyc={ fmt.Sprintf("%d", offer.KYCScore) } data-rate={ fmt.Sprintf("%f", offer.ReceiveAmount) } data-is-top={ fmt.Sprintf("%t", i == 0) }>
+                    <form method="GET" action="/step2" class="estimate-form-estimates" data-kyc={ fmt.Sprintf("%d", offer.KYCScore) } 
+                    if mode == "pay" {
+                        data-rate={ fmt.Sprintf("%f",  offer.SendAmount) } 
+                    } else {
+                        data-rate={ fmt.Sprintf("%f", offer.ReceiveAmount) } 
+                    }
+                     data-is-top={ fmt.Sprintf("%t", i == 0) }>
                         <input type="hidden" name="coin1" value={ offer.Coin1 }>
                         <input type="hidden" name="coin2" value={ offer.Coin2 }>
                         <input type="hidden" name="network1" value={ offer.Network1 }>
@@ -669,7 +675,7 @@ templ EstimateCard(offers api.Estimates, mode string) {
             });
         });
         
-        function sortEstimates(sortBy, updateStorage) {
+               function sortEstimates(sortBy, updateStorage) {
             if (updateStorage) {
                 setSortPreference(sortBy);
             }
@@ -687,12 +693,17 @@ templ EstimateCard(offers api.Estimates, mode string) {
             }
             
             forms.sort((a, b) => {
-                if (sortBy === 'kyc') {
-                    return parseInt(a.dataset.kyc) - parseInt(b.dataset.kyc);
-                } else {
-                    return parseFloat(b.dataset.rate) - parseFloat(a.dataset.rate);
-                }
-            });
+    if (sortBy === 'kyc') {
+        return parseInt(a.dataset.kyc) - parseInt(b.dataset.kyc);
+    } else {
+        // sort descending in payment mode, ascending in swap mode
+        if (mode === "pay") {
+            return parseFloat(b.dataset.rate) - parseFloat(a.dataset.rate); 
+        } else {
+            return parseFloat(a.dataset.rate) - parseFloat(b.dataset.rate);
+        }
+    }
+});
             
             forms.forEach((form, index) => {
                 const button = form.querySelector('button');
