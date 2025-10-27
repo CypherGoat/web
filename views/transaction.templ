@@ -463,7 +463,11 @@ templ TransactionPage(transaction api.Transaction){
             <div class="transaction-section">
                 <div class="section-label">You Receive</div>
                 <div class="section-value">
-                    { FormatFloat(transaction.EstimateAmount) } { strings.ToUpper(transaction.Coin2) }
+                    if transaction.ReceiveAmount > 0 {
+                        { FormatFloat(transaction.ReceiveAmount) } { strings.ToUpper(transaction.Coin2) }
+                    } else {
+                        { FormatFloat(transaction.EstimateAmount) } { strings.ToUpper(transaction.Coin2) }
+                    }
                 </div>
             </div>
             

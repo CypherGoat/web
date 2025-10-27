@@ -21,7 +21,7 @@ import (
     "strings"
 )
 
-templ AddressForm(estimate api.Estimate, err bool){
+templ AddressForm(estimate api.Estimate, err bool,mode string){
 <style>
     body {
         background-color: #121520;
@@ -279,11 +279,19 @@ templ AddressForm(estimate api.Estimate, err bool){
             <div class="trade-summary mb-6">
                 <div class="trade-row">
                     <span class="trade-label">You Send</span>
-                    <span class="trade-value">{ FormatFloat(estimate.SendAmount) } { strings.ToUpper(estimate.Coin1) }</span>
+                    if mode == "pay" {
+                        <span class="trade-value">{ FormatFloat(estimate.ReceiveAmount) } { strings.ToUpper(estimate.Coin1) }</span>
+                    } else {
+                        <span class="trade-value">{ FormatFloat(estimate.SendAmount) } { strings.ToUpper(estimate.Coin1) }</span>
+                    }
                 </div>
                 <div class="trade-row">
                     <span class="trade-label">You Receive</span>
-                    <span class="trade-value">{ FormatFloat(estimate.ReceiveAmount) } { strings.ToUpper(estimate.Coin2) }</span>
+                    if mode == "pay" {
+                        <span class="trade-value">{ FormatFloat(estimate.SendAmount) } { strings.ToUpper(estimate.Coin2) }</span>
+                    } else {
+                        <span class="trade-value">{ FormatFloat(estimate.ReceiveAmount) } { strings.ToUpper(estimate.Coin2) }</span>
+                    }
                 </div>
                 <div class="trade-row">
                     <span class="trade-label">Exchange</span>
@@ -304,6 +312,8 @@ templ AddressForm(estimate api.Estimate, err bool){
                 <input type="hidden" name="partner" value={ estimate.ExchangeName }>
                 <input type="hidden" name="network1" value={ estimate.Network1 }>
                 <input type="hidden" name="network2" value={ estimate.Network2 }>
+                <input type="hidden" name="mode" value={ mode }>
+
 
                 <div>
                     <label for="address" class="block text-gray-300 font-semibold mb-2">Your { strings.ToUpper(estimate.Coin2) } Address</label>

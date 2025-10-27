@@ -18,6 +18,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"html"
 	"math"
 	"net/http"
 	"os"
@@ -34,7 +35,7 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
-	"github.com/yuin/goldmark/renderer/html"
+	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 	"gopkg.in/yaml.v3"
 
 	"github.com/CypherGoat/web/cmd/api"
@@ -150,15 +151,25 @@ func EstimateHandler(c echo.Context) error {
 	amountStr := c.QueryParam("amount")
 	network1 := c.QueryParam("network1")
 	network2 := c.QueryParam("network2")
+	mode := c.QueryParam("mode")
 
 	amount, err := strconv.ParseFloat(amountStr, 64)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, "Error parsing amount")
 	}
 
-	estimates, err := api.FetchEstimateFromAPI(coin1, coin2, amount, false, network1, network2)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, fmt.Sprintf("%s", err.Error()))
+	var estimates api.Estimates
+
+	if mode == "pay" {
+		estimates, err = api.FetchPaymentEstimateFromAPI(coin1, coin2, amount, network1, network2)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, fmt.Sprintf("%s", err.Error()))
+		}
+	} else {
+		estimates, err = api.FetchEstimateFromAPI(coin1, coin2, amount, false, network1, network2)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, fmt.Sprintf("%s", err.Error()))
+		}
 	}
 
 	value_btc := estimates.TradeValue_btc
@@ -191,7 +202,7 @@ func EstimateHandler(c echo.Context) error {
 
 	}
 
-	return views.EstimateCard(estimates).Render(c.Request().Context(), c.Response())
+	return views.EstimateCard(estimates, mode).Render(c.Request().Context(), c.Response())
 }
 
 func Step2Handler(c echo.Context) error {
@@ -200,6 +211,8 @@ func Step2Handler(c echo.Context) error {
 	network1 := c.QueryParam("network1")
 	network2 := c.QueryParam("network2")
 	amountStr := c.QueryParam("amount")
+	mode := c.QueryParam("mode")
+
 	amount, err := strconv.ParseFloat(amountStr, 64)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, "Error parsing amount")
@@ -214,11 +227,18 @@ func Step2Handler(c echo.Context) error {
 	var estimate api.Estimate
 	estimate.Coin1 = coin1
 	estimate.Coin2 = coin2
-	estimate.SendAmount = amount
 	estimate.ExchangeName = partner
-	estimate.ReceiveAmount = receiveamount
 	estimate.Network1 = network1
 	estimate.Network2 = network2
+
+	// In payment mode, amount is what user wants to receive, receiveamount is what they need to send
+	if mode == "pay" {
+		estimate.SendAmount = receiveamount // What user needs to send
+		estimate.ReceiveAmount = amount     // What user wants to receive
+	} else {
+		estimate.SendAmount = amount           // What user wants to send
+		estimate.ReceiveAmount = receiveamount // What user will receive
+	}
 
 	for _, ex := range views.ExchangesList {
 		if strings.EqualFold(ex.ShortCode, partner) {
@@ -231,7 +251,7 @@ func Step2Handler(c echo.Context) error {
 		estimate.ImageURL = info.ImageURL
 	}
 
-	return views.AddressForm(estimate, false).Render(c.Request().Context(), c.Response())
+	return views.AddressForm(estimate, false, mode).Render(c.Request().Context(), c.Response())
 }
 
 func Step3Handler(c echo.Context) error {
@@ -246,6 +266,7 @@ func Step3Handler(c echo.Context) error {
 	}
 	partner := c.QueryParam("partner")
 	address := c.QueryParam("address")
+	mode := c.QueryParam("mode")
 
 	info := api.Info{
 		IP:        "",
@@ -272,7 +293,17 @@ func Step3Handler(c echo.Context) error {
 		affiliate = affiliateCookie.Value
 	}
 
-	err, transaction := api.CreateTradeFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info)
+	var transaction api.Transaction
+
+	// Check if it's payment mode and call the appropriate API
+	if mode == "pay" {
+		// In payment mode, 'amount' is what the user wants to receive
+		err, transaction = api.CreatePaymentFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info)
+	} else {
+		// In swap mode, 'amount' is what the user wants to send
+		err, transaction = api.CreateTradeFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info)
+	}
+
 	if err != nil || transaction.Id == "" {
 		var estimate api.Estimate
 		estimate.Coin1 = coin1
@@ -283,7 +314,7 @@ func Step3Handler(c echo.Context) error {
 		estimate.Network1 = network1
 		estimate.Network2 = network2
 
-		return views.AddressForm(estimate, true).Render(c.Request().Context(), c.Response())
+		return views.AddressForm(estimate, true, mode).Render(c.Request().Context(), c.Response())
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/transaction/"+transaction.CGID)
@@ -664,6 +695,91 @@ func loadAllBlogPosts() ([]*views.BlogPostData, error) {
 	return posts, nil
 }
 
+func TWIMRSSHandler(c echo.Context) error {
+	c.Response().Header().Set(echo.HeaderContentType, "application/rss+xml")
+
+	posts, err := loadAllBlogPosts()
+	if err != nil {
+		return err
+	}
+
+	var twimPosts []*views.BlogPostData
+	for _, post := range posts {
+		if strings.HasPrefix(post.Slug, "twim-") && !post.Draft {
+			twimPosts = append(twimPosts, post)
+		}
+	}
+
+	sort.Slice(twimPosts, func(i, j int) bool {
+		dateI, errI := time.Parse("2006-01-02", twimPosts[i].Date)
+		dateJ, errJ := time.Parse("2006-01-02", twimPosts[j].Date)
+
+		if errI != nil || errJ != nil {
+			return twimPosts[i].Date > twimPosts[j].Date
+		}
+
+		return dateI.After(dateJ)
+	})
+
+	if len(twimPosts) > 10 {
+		twimPosts = twimPosts[:10]
+	}
+
+	rss := `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>This Week In Monero - CypherGoat</title>
+    <link>https://cyphergoat.com/this-week-in-monero</link>
+    <description>Weekly insights and updates from the Monero ecosystem. Stay informed on the latest developments, news and analysis in the world of private digital currency.</description>
+    <language>en-us</language>
+    <managingEditor>recanman@cyphergoat.com (recanman)</managingEditor>
+    <webMaster>support@cyphergoat.com (CypherGoat)</webMaster>
+    <lastBuildDate>` + time.Now().Format(time.RFC1123Z) + `</lastBuildDate>
+    <atom:link href="https://cyphergoat.com/this-week-in-monero/rss.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://cyphergoat.com/static/icons/cg-notext-light.png</url>
+      <title>This Week In Monero - CypherGoat</title>
+      <link>https://cyphergoat.com/this-week-in-monero</link>
+    </image>`
+
+	for _, post := range twimPosts {
+		issueSlug := strings.Replace(post.Slug, "twim-", "issue-", 1)
+		itemURL := fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", issueSlug)
+
+		description := post.Description
+		if description == "" && len(post.HTMLContent) > 200 {
+			description = post.HTMLContent[:200] + "..."
+		}
+
+		pubDate := post.Date
+		if parsedDate, err := time.Parse("2006-01-02", post.Date); err == nil {
+			pubDate = parsedDate.Format(time.RFC1123Z)
+		}
+
+		rss += fmt.Sprintf(`
+    <item>
+      <title>%s</title>
+      <link>%s</link>
+      <guid>%s</guid>
+      <pubDate>%s</pubDate>
+      <author>%s</author>
+      <description><![CDATA[%s]]></description>
+    </item>`,
+			html.EscapeString(post.Title),
+			itemURL,
+			itemURL,
+			pubDate,
+			html.EscapeString(post.Author),
+			description)
+	}
+
+	rss += `
+  </channel>
+</rss>`
+
+	return c.String(http.StatusOK, rss)
+}
+
 func loadBlogPost(slug string) (*views.BlogPostData, error) {
 	// Validate slug to ensure it's a simple filename without path traversal
 	if strings.Contains(slug, "/") || strings.Contains(slug, "\\") || strings.Contains(slug, "..") {
@@ -718,8 +834,8 @@ func loadBlogPostFromFile(filename string) (*views.BlogPostData, error) {
 			parser.WithAutoHeadingID(),
 		),
 		goldmark.WithRendererOptions(
-			html.WithUnsafe(), // Allow raw HTML in markdown
-			html.WithXHTML(),
+			goldmarkhtml.WithUnsafe(), // Allow raw HTML in markdown
+			goldmarkhtml.WithXHTML(),
 		),
 	)
 

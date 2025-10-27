@@ -82,6 +82,7 @@ type Transaction struct {
 	Network2       string    `json:"Network2,omitempty"`
 	Address        string    `json:"Address,omitempty"`
 	EstimateAmount float64   `json:"EstimateAmount,omitempty"`
+	ReceiveAmount  float64   `json:"ReceiveAmount,omitempty"`
 	Provider       string    `json:"Provider,omitempty"`
 	Id             string    `json:"Id,omitempty"`
 	SendAmount     float64   `json:"SendAmount,omitempty"`
@@ -94,6 +95,7 @@ type Transaction struct {
 	CreatedAt      time.Time `json:"CreatedAt,omitempty"`
 	Affiliate      string    `json:"Affiliate,omitempty"`
 	Memo           string    `json:"Memo,omitempty"`
+	IsPayment      bool      `json:"IsPayment,omitempty"`
 }
 
 func SendRequest(url string) ([]byte, error) {
@@ -177,6 +179,55 @@ func FetchEstimateFromAPI(coin1, coin2 string, amount float64, best bool, networ
 	return result.Rates, nil
 }
 
+func FetchPaymentEstimateFromAPI(coin1, coin2 string, amount float64, network1, network2 string) (Estimates, error) {
+	url := fmt.Sprintf("%s/payments/estimate?coin1=%s&coin2=%s&amount=%f&network1=%s&network2=%s&best=false", URL, coin1, coin2, amount, network1, network2)
+
+	data, err := SendRequest(url)
+	if err != nil {
+		return Estimates{}, err
+	}
+
+	var responseMap map[string]interface{}
+	err = json.Unmarshal(data, &responseMap)
+	if err != nil {
+		return Estimates{}, err
+	}
+
+	if errStr, ok := responseMap["error"].(string); ok {
+		return Estimates{}, fmt.Errorf("%s", errStr)
+	}
+
+	type ApiResponse struct {
+		Rates Estimates `json:"rates"`
+	}
+
+	var result ApiResponse
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		return Estimates{}, err
+	}
+
+	// Sort by lowest send amount (best deal for user in payment mode)
+	sort.Slice(result.Rates.Results, func(i, j int) bool {
+		return result.Rates.Results[i].ReceiveAmount < result.Rates.Results[j].ReceiveAmount
+	})
+
+	for i := range result.Rates.Results {
+		// In payment mode, the API returns how much to send in ReceiveAmount field
+		// and we want to receive the 'amount' parameter
+		sendAmountFromAPI := result.Rates.Results[i].ReceiveAmount
+
+		result.Rates.Results[i].Coin1 = coin1
+		result.Rates.Results[i].Coin2 = coin2
+		result.Rates.Results[i].SendAmount = sendAmountFromAPI // How much user needs to send
+		result.Rates.Results[i].ReceiveAmount = amount         // How much user wants to receive
+		result.Rates.Results[i].Network1 = network1
+		result.Rates.Results[i].Network2 = network2
+	}
+
+	return result.Rates, nil
+}
+
 func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info) (error, Transaction) {
 	params := url.Values{}
 	params.Add("coin1", coin1)
@@ -208,7 +259,69 @@ func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner st
 	}
 
 	transaction := result.Transaction
-	// fmt.Printf("Transaction: %+v\n", transaction)
+
+	transaction.Coin1 = coin1
+	transaction.Coin2 = coin2
+	transaction.Network1 = network1
+	transaction.Network2 = network2
+	transaction.IsPayment = false
+
+	// In swap mode, 'amount' is what user wants to send
+	if transaction.SendAmount == 0 || transaction.SendAmount == 1.0 {
+		transaction.SendAmount = amount
+	}
+
+	if transaction.ReceiveAmount == 0 && transaction.EstimateAmount > 0 {
+		transaction.ReceiveAmount = transaction.EstimateAmount
+	}
+
+	return nil, transaction
+}
+
+func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info) (error, Transaction) {
+	params := url.Values{}
+	params.Add("coin1", coin1)
+	params.Add("coin2", coin2)
+	params.Add("amount", fmt.Sprintf("%f", amount))
+	params.Add("partner", partner)
+	params.Add("address", address)
+	params.Add("network1", network1)
+	params.Add("network2", network2)
+	params.Add("affiliate", affiliate)
+	params.Add("ip", info.IP)
+	params.Add("useragent", info.UserAgent)
+	params.Add("lang", info.LangList)
+
+	params.Add("source", "clearnet-main")
+
+	requestURL := fmt.Sprintf("%s/payments/create?%s", URL, params.Encode())
+
+	data, err := SendRequest(requestURL)
+	if err != nil {
+		return err, Transaction{}
+	}
+
+	var result TransactionResponse
+	err = json.Unmarshal([]byte(data), &result)
+	if err != nil {
+		fmt.Println("Error unmarshalling JSON:", err)
+		return err, Transaction{}
+	}
+
+	transaction := result.Transaction
+
+	// Ensure the transaction has the correct coin and network information
+	transaction.Coin1 = coin1
+	transaction.Coin2 = coin2
+	transaction.Network1 = network1
+	transaction.Network2 = network2
+	transaction.IsPayment = true
+
+	// In payment mode, 'amount' is what user wants to receive
+	if transaction.ReceiveAmount == 0 {
+		transaction.ReceiveAmount = amount
+	}
+
 	return nil, transaction
 }
 
@@ -250,6 +363,25 @@ func GetTransactionFromAPI(id string) (error, Transaction) {
 	}
 
 	transaction := result["transaction"]
+
+	// Debug: print the raw transaction data
+	fmt.Printf("Raw transaction from API: %+v\n", transaction)
+
+	// If ReceiveAmount is 0 but EstimateAmount is set, use EstimateAmount as ReceiveAmount
+	// This handles cases where the API doesn't populate ReceiveAmount properly
+	if transaction.ReceiveAmount == 0 && transaction.EstimateAmount > 0 {
+		transaction.ReceiveAmount = transaction.EstimateAmount
+	}
+
+	// Additional check: if SendAmount equals EstimateAmount (both 1.0), it means the API
+	// returned placeholder values. In this case, we should show the EstimateAmount as the receive amount
+	// and the SendAmount should be different (showing what user actually needs to send)
+	if transaction.SendAmount == transaction.EstimateAmount && transaction.SendAmount == 1.0 {
+		// This appears to be placeholder data - the real amounts should come from the exchange
+		// For now, use EstimateAmount as ReceiveAmount and keep SendAmount as is
+		transaction.ReceiveAmount = transaction.EstimateAmount
+	}
+
 	return nil, transaction
 }
 

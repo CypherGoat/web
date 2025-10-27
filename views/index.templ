@@ -540,6 +540,116 @@ footer {
         border-right: 8px solid transparent;
         border-bottom: 8px solid rgba(26, 31, 46, 0.95);
     }
+        .faq-item:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Tab Navigation Styles */
+    .tab-navigation {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+        gap: 0.5rem;
+    }
+
+    .tab-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        padding: 0.4rem 0.8rem;
+        border: none;
+        background: rgba(255, 255, 255, 0.05);
+        color: #9ca3af;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 500;
+        font-size: 0.8rem;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tab-button.active {
+        background: rgba(0, 136, 255, 0.12);
+        color: #60a5fa;
+        border-color: rgba(0, 136, 255, 0.2);
+    }
+
+    .tab-button:hover:not(.active) {
+        background: rgba(255, 255, 255, 0.08);
+        color: #d1d5db;
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Tooltip styles */
+    .tab-button::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(31, 41, 55, 0.95);
+        color: #e5e7eb;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 400;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+        width: 400px;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.4;
+        backdrop-filter: blur(8px);
+    }
+
+    .tab-button:hover::after {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .tab-button::before {
+        content: '';
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid rgba(31, 41, 55, 0.95);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 10001;
+    }
+
+    .tab-button:hover::before {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .tab-icon {
+        width: 12px;
+        height: 12px;
+    }
+
+    .form-input.pay-mode {
+        background-color: #1a1f2e;
+        color: #e0e0e0;
+        cursor: text;
+    }
+
+    .form-input.swap-mode-disabled {
+        background-color: rgba(26, 31, 46, 0.5);
+        color: #b0b0b0;
+        cursor: not-allowed;
+    }
     </style>
      <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
     <p id="error-text"></p>
@@ -603,14 +713,15 @@ footer {
         <div class="container">
             <div class="card">
                 <h1 class="hidden">Swap</h1>
+
                <form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
     <div class="input-group">
         <div>
-            <label for="amount" class="form-label">Amount</label>
-            <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="0.00">
+            <label for="amount" class="form-label" id="amount-label">Amount</label>
+            <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="You send">
         </div>
         <div class="searchable-dropdown">
-            <label class="form-label">Send Coin</label>
+            <label class="form-label" id="send-coin-label">Send Coin</label>
             <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
             <div class="dropdown-options" id="dropdown-options-send"></div>
             <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
@@ -619,11 +730,11 @@ footer {
 
     <div class="input-group">
         <div>
-            <label for="estimated-amount" class="form-label">Estimated</label>
-            <input type="text" id="estimated-amount" class="form-input read-only" placeholder="0.00" readonly>
+            <label for="estimated-amount" class="form-label" id="estimated-label">Estimated</label>
+            <input type="text" id="estimated-amount" class="form-input read-only" placeholder="You receive" readonly>
         </div>
         <div class="searchable-dropdown">
-            <label class="form-label">Receive Coin</label>
+            <label class="form-label" id="receive-coin-label">Receive Coin</label>
             <input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off">
             <div class="dropdown-options" id="dropdown-options-receive"></div>
             <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
@@ -632,8 +743,24 @@ footer {
 
     <input type="hidden" id="network-send" name="network1">
     <input type="hidden" id="network-receive" name="network2">
-    <button type="submit" class="btn-primary">Swap</button>
+    <input type="hidden" id="mode" name="mode" value="swap">
+    <button type="submit" class="btn-primary" id="submit-button">Swap</button>
 </form>
+
+                <div class="tab-navigation">
+                    <button id="swap-tab" class="tab-button active" onclick="switchTab('swap')" data-tooltip="Standard mode: Enter the amount you want to send and see how much you'll receive. Great for converting specific amounts you already have.">
+                        <svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M7 16V4m0 0L3 8m4-4 4 4m6 0v12m0 0-4-4m4 4 4-4"/>
+                        </svg>
+                        Swap
+                    </button>
+                    <button id="pay-tab" class="tab-button" onclick="switchTab('pay')" data-tooltip="Payment mode: Enter exactly how much you want to receive and see how much you need to send. Perfect for paying specific amounts or hitting target values.">
+                        <svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 12h20m-10-8v16"/>
+                        </svg>
+                        Pay
+                    </button>
+                </div>
 
             </div>
         </div>
@@ -727,7 +854,7 @@ footer {
         <div class="partners-track">
             <!-- First set of logos -->
             <div class="partners-slide">
-                            <a href="https://www.alfacash.com" target="_blank" class="partner-item">
+                            <a href="https://www.alfa.cash" target="_blank" class="partner-item">
                     <img src="/exchanges/alfacash.svg" alt="Alfacash" class="partner-logo" loading="lazy">
                 </a>
                 <a href="https://changehero.io" target="_blank" class="partner-item">
@@ -781,7 +908,7 @@ footer {
             </div>
             
                         <div class="partners-slide">
-                            <a href="https://www.alfacash.com" target="_blank" class="partner-item">
+                            <a href="https://www.alfa.cash" target="_blank" class="partner-item">
                     <img src="/exchanges/alfacash.svg" alt="Alfacash" class="partner-logo" loading="lazy">
                 </a>
                 <a href="https://changehero.io" target="_blank" class="partner-item">
@@ -1095,19 +1222,27 @@ function updateEstimatedAmountFromFirstCard() {
         const amountElement = firstForm.querySelector('.amount-highlight-estimates');
         
         if (amountElement) {
-            const estimatedAmount = amountElement.textContent.trim();
-            const estimatedField = document.getElementById('estimated-amount');
+            let estimatedAmount = amountElement.textContent.trim();
             
-            if (estimatedField) {
-                estimatedField.value = estimatedAmount;
-                estimatedField.dispatchEvent(new Event('change', { bubbles: true }));
-                
-                const currentValue = estimatedAmount;
-                setTimeout(function() {
-                    if (estimatedField.value !== currentValue) {
-                        estimatedField.value = currentValue;
-                    }
-                }, 100);
+            // Extract just the number part, removing the currency
+            const parts = estimatedAmount.split(' ');
+            if (parts.length >= 2) {
+                estimatedAmount = parts[0];
+            }
+            
+            if (currentMode === 'swap') {
+                const estimatedField = document.getElementById('estimated-amount');
+                if (estimatedField) {
+                    estimatedField.value = estimatedAmount;
+                    estimatedField.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            } else if (currentMode === 'pay') {
+                // In pay mode, update the send amount field instead
+                const amountField = document.getElementById('amount');
+                if (amountField) {
+                    amountField.value = estimatedAmount;
+                    amountField.dispatchEvent(new Event('change', { bubbles: true }));
+                }
             }
         }
     }
@@ -1403,5 +1538,111 @@ function scrollToFAQ() {
         faqSection.scrollIntoView({ behavior: 'smooth' });
     }
 }
+
+let currentMode = 'swap'; // Track current mode
+
+function switchTab(mode) {
+    currentMode = mode;
+    
+    document.getElementById('swap-tab').classList.toggle('active', mode === 'swap');
+    document.getElementById('pay-tab').classList.toggle('active', mode === 'pay');
+    
+    const amountInput = document.getElementById('amount');
+    const estimatedInput = document.getElementById('estimated-amount');
+    const amountLabel = document.getElementById('amount-label');
+    const estimatedLabel = document.getElementById('estimated-label');
+    const submitButton = document.getElementById('submit-button');
+    const modeInput = document.getElementById('mode');
+    const sendCoinLabel = document.getElementById('send-coin-label');
+    const receiveCoinLabel = document.getElementById('receive-coin-label');
+    
+    if (mode === 'swap') {
+        amountInput.classList.remove('read-only', 'swap-mode-disabled');
+        amountInput.classList.add('pay-mode');
+        amountInput.readOnly = false;
+        amountInput.placeholder = 'You send';
+        amountInput.type = 'number';
+        amountInput.min = '0';
+        amountInput.step = 'any';
+        amountInput.required = true;
+        amountInput.name = 'amount';
+        
+        estimatedInput.classList.add('read-only');
+        estimatedInput.classList.remove('pay-mode');
+        estimatedInput.readOnly = true;
+        estimatedInput.placeholder = 'You receive';
+        estimatedInput.removeAttribute('type');
+        estimatedInput.removeAttribute('min');
+        estimatedInput.removeAttribute('step');
+        estimatedInput.removeAttribute('required');
+        estimatedInput.removeAttribute('name');
+        
+        amountLabel.textContent = 'Amount';
+        estimatedLabel.textContent = 'Estimated';
+        sendCoinLabel.textContent = 'Send Coin';
+        receiveCoinLabel.textContent = 'Receive Coin';
+        submitButton.textContent = 'Swap';
+        modeInput.value = 'swap';
+        
+    } else {
+        amountInput.classList.add('read-only', 'swap-mode-disabled');
+        amountInput.classList.remove('pay-mode');
+        amountInput.readOnly = true;
+        amountInput.placeholder = 'Send (calculated)';
+        amountInput.removeAttribute('type');
+        amountInput.removeAttribute('min');
+        amountInput.removeAttribute('step');
+        amountInput.removeAttribute('required');
+        amountInput.removeAttribute('name');
+        
+        estimatedInput.classList.remove('read-only');
+        estimatedInput.classList.add('pay-mode');
+        estimatedInput.readOnly = false;
+        estimatedInput.placeholder = 'Want to receive';
+        estimatedInput.type = 'number';
+        estimatedInput.min = '0';
+        estimatedInput.step = 'any';
+        estimatedInput.required = true;
+        estimatedInput.name = 'amount'; 
+        
+        amountLabel.textContent = 'Estimated';
+        estimatedLabel.textContent = 'Amount';
+        sendCoinLabel.textContent = 'Pay With';
+        receiveCoinLabel.textContent = 'Receive Coin';
+        submitButton.textContent = 'Pay';
+        modeInput.value = 'pay';
+    }
+    
+    amountInput.value = '';
+    estimatedInput.value = '';
+    
+    const estimateContainer = document.getElementById('estimate-container');
+    if (estimateContainer) {
+        estimateContainer.innerHTML = '';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('swap-form');
+    
+    form.addEventListener('submit', function(e) {
+        if (currentMode === 'pay') {
+            const estimatedInput = document.getElementById('estimated-amount');
+            const amountInput = document.getElementById('amount');
+            
+            estimatedInput.name = 'amount';
+            amountInput.removeAttribute('name');
+        } else {
+            const estimatedInput = document.getElementById('estimated-amount');
+            const amountInput = document.getElementById('amount');
+            
+            amountInput.name = 'amount';
+            estimatedInput.removeAttribute('name');
+        }
+    });
+    
+    switchTab('swap');
+});
+
 </script>
 }
