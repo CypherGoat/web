@@ -213,14 +213,13 @@ func FetchPaymentEstimateFromAPI(coin1, coin2 string, amount float64, network1, 
 	})
 
 	for i := range result.Rates.Results {
-		// In payment mode, the API returns how much to send in ReceiveAmount field
-		// and we want to receive the 'amount' parameter
+
 		sendAmountFromAPI := result.Rates.Results[i].ReceiveAmount
 
 		result.Rates.Results[i].Coin1 = coin1
 		result.Rates.Results[i].Coin2 = coin2
-		result.Rates.Results[i].SendAmount = sendAmountFromAPI // How much user needs to send
-		result.Rates.Results[i].ReceiveAmount = amount         // How much user wants to receive
+		result.Rates.Results[i].SendAmount = sendAmountFromAPI
+		result.Rates.Results[i].ReceiveAmount = amount
 		result.Rates.Results[i].Network1 = network1
 		result.Rates.Results[i].Network2 = network2
 	}
@@ -310,14 +309,12 @@ func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner 
 
 	transaction := result.Transaction
 
-	// Ensure the transaction has the correct coin and network information
 	transaction.Coin1 = coin1
 	transaction.Coin2 = coin2
 	transaction.Network1 = network1
 	transaction.Network2 = network2
 	transaction.IsPayment = true
 
-	// In payment mode, 'amount' is what user wants to receive
 	if transaction.ReceiveAmount == 0 {
 		transaction.ReceiveAmount = amount
 	}
@@ -364,21 +361,14 @@ func GetTransactionFromAPI(id string) (error, Transaction) {
 
 	transaction := result["transaction"]
 
-	// Debug: print the raw transaction data
 	fmt.Printf("Raw transaction from API: %+v\n", transaction)
 
-	// If ReceiveAmount is 0 but EstimateAmount is set, use EstimateAmount as ReceiveAmount
-	// This handles cases where the API doesn't populate ReceiveAmount properly
 	if transaction.ReceiveAmount == 0 && transaction.EstimateAmount > 0 {
 		transaction.ReceiveAmount = transaction.EstimateAmount
 	}
 
-	// Additional check: if SendAmount equals EstimateAmount (both 1.0), it means the API
-	// returned placeholder values. In this case, we should show the EstimateAmount as the receive amount
-	// and the SendAmount should be different (showing what user actually needs to send)
 	if transaction.SendAmount == transaction.EstimateAmount && transaction.SendAmount == 1.0 {
-		// This appears to be placeholder data - the real amounts should come from the exchange
-		// For now, use EstimateAmount as ReceiveAmount and keep SendAmount as is
+
 		transaction.ReceiveAmount = transaction.EstimateAmount
 	}
 
