@@ -110,6 +110,7 @@ func main() {
 
 	e.GET("/this-week-in-monero", handlers.TWIMHandler, CacheMiddleware(1*time.Hour))
 	e.GET("/this-week-in-monero/:slug", handlers.TWIMPostHandler, CacheMiddleware(1*time.Hour))
+	e.GET("/this-week-in-monero/rss.xml", handlers.TWIMRSSHandler, CacheMiddleware(1*time.Hour))
 
 	e.Static("/blog/images", "static/blog")
 
