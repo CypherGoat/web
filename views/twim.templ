@@ -9,10 +9,20 @@ templ TWIMIndex(posts []*BlogPostData) {
                         This Week In Monero
                     </h1>
                     <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-2 leading-relaxed">
-                        Weekly insights and updates from the Monero ecosystem. Stay informed on the latest developments, news, and analysis in the world of private digital currency.
+                        Weekly insights and updates from the Monero ecosystem. Stay informed on the latest developments, news and analysis in the world of private digital currency.
                     </p>
 
                     <div class="mt-6 sm:mt-8 w-16 sm:w-20 h-1 bg-gradient-to-r from-orange-400 to-orange-600 mx-auto rounded-full"></div>
+                    
+                    <!-- RSS Feed Link -->
+                    <div class="mt-4">
+                        <a href="/this-week-in-monero/rss.xml" class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors text-sm font-medium">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3.429 2.526c9.88 0 17.905 8.021 17.905 17.903 0 .552-.448 1-1 1s-1-.448-1-1c0-8.836-7.163-16-16.905-16-.552 0-1-.448-1-1s.448-1 1-1zM3.429 7.351c6.155 0 11.429 5.271 11.429 11.429 0 .552-.448 1-1 1s-1-.448-1-1c0-5.271-4.374-9.429-9.429-9.429-.552 0-1-.448-1-1s.448-1 1-1zM6.343 15.071c0 1.019-.829 1.929-1.714 1.929s-1.714-.91-1.714-1.929.829-1.929 1.714-1.929 1.714.91 1.714 1.929z"/>
+                            </svg>
+                            RSS Feed
+                        </a>
+                    </div>
                 </div>
                 <div class="grid gap-6 sm:gap-8">
                     for _, post := range posts {
