@@ -95,7 +95,7 @@ type Transaction struct {
 	CreatedAt      time.Time `json:"CreatedAt,omitempty"`
 	Affiliate      string    `json:"Affiliate,omitempty"`
 	Memo           string    `json:"Memo,omitempty"`
-	IsPayment      bool      `json:"IsPayment,omitempty"`
+	IsPayment      bool      `json:"payment,omitempty"`
 }
 
 func SendRequest(url string) ([]byte, error) {

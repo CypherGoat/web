@@ -454,22 +454,52 @@ templ TransactionPage(transaction api.Transaction){
             </div>
             
             <div class="transaction-section">
-                <div class="section-label">You Send</div>
-                <div class="section-value">
-                    { FormatFloat(transaction.SendAmount) } { strings.ToUpper(transaction.Coin1) }
-                </div>
-            </div>
-            
-            <div class="transaction-section">
-                <div class="section-label">You Receive</div>
-                <div class="section-value">
-                    if transaction.ReceiveAmount > 0 {
-                        { FormatFloat(transaction.ReceiveAmount) } { strings.ToUpper(transaction.Coin2) }
-                    } else {
-                        { FormatFloat(transaction.EstimateAmount) } { strings.ToUpper(transaction.Coin2) }
-                    }
-                </div>
-            </div>
+    <div class="section-label">You Send</div>
+    <div class="section-value">
+        <span style="display:inline-flex;align-items:center;">
+            { FormatFloat(transaction.SendAmount) } { strings.ToUpper(transaction.Coin1) }
+            if transaction.IsPayment {
+                <span class="send-lock-badge" style="position:relative;display:inline-flex;align-items:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="margin-left:6px;vertical-align:middle;" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5.25 7V4.5a2.75 2.75 0 0 1 5.5 0V7"/>
+                        <rect x="3.5" y="7" width="9" height="7" rx="2"/>
+                        <circle cx="8" cy="9.75" r="1.05" fill="currentColor" stroke="none"/>
+                        <path d="M8 10.8v1.7"/>
+                    </svg>
+                    <span class="tooltip-text" style="visibility:hidden;opacity:0;position:absolute;bottom:125%;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:6px 12px;border-radius:6px;font-size:0.95em;white-space:nowrap;transition:opacity 0.2s;z-index:10;">
+                        This is a fixed rate exchange, send <b>EXACTLY</b> the amount specified.
+                    </span>
+                </span>
+            }
+        </span>
+    </div>
+</div>
+
+<div class="transaction-section">
+    <div class="section-label">You Receive</div>
+    <div class="section-value">
+        <span style="display:inline-flex;align-items:center;">
+            if transaction.ReceiveAmount > 0 {
+                { FormatFloat(transaction.ReceiveAmount) } { strings.ToUpper(transaction.Coin2) }
+            } else {
+                { FormatFloat(transaction.EstimateAmount) } { strings.ToUpper(transaction.Coin2) }
+            }
+            if transaction.IsPayment {
+                <span class="receive-lock-badge" style="position:relative;display:inline-flex;align-items:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="margin-left:6px;vertical-align:middle;" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5.25 7V4.5a2.75 2.75 0 0 1 5.5 0V7"/>
+                        <rect x="3.5" y="7" width="9" height="7" rx="2"/>
+                        <circle cx="8" cy="9.75" r="1.05" fill="currentColor" stroke="none"/>
+                        <path d="M8 10.8v1.7"/>
+                    </svg>
+                    <span class="tooltip-text" style="visibility:hidden;opacity:0;position:absolute;bottom:125%;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:6px 12px;border-radius:6px;font-size:0.95em;white-space:nowrap;transition:opacity 0.2s;z-index:10;">
+                        You will receive <b>exactly</b> the amount shown.
+                    </span>
+                </span>
+            }
+        </span>
+    </div>
+</div>
             
             <div class="transaction-section">
                 <div class="section-label">Send Address</div>
@@ -653,6 +683,35 @@ templ TransactionPage(transaction api.Transaction){
             }
             contactExpanded = !contactExpanded;
         }
+            document.addEventListener('DOMContentLoaded', function() {
+        var sendLock = document.querySelector('.send-lock-badge');
+        if (sendLock) {
+            sendLock.onmouseenter = function() {
+                var tip = sendLock.querySelector('.tooltip-text');
+                tip.style.visibility = 'visible';
+                tip.style.opacity = '1';
+            };
+            sendLock.onmouseleave = function() {
+                var tip = sendLock.querySelector('.tooltip-text');
+                tip.style.visibility = 'hidden';
+                tip.style.opacity = '0';
+            };
+        }
+
+        var receiveLock = document.querySelector('.receive-lock-badge');
+        if (receiveLock) {
+            receiveLock.onmouseenter = function() {
+                var tip = receiveLock.querySelector('.tooltip-text');
+                tip.style.visibility = 'visible';
+                tip.style.opacity = '1';
+            };
+            receiveLock.onmouseleave = function() {
+                var tip = receiveLock.querySelector('.tooltip-text');
+                tip.style.visibility = 'hidden';
+                tip.style.opacity = '0';
+            };
+        }
+    });
     </script>
 }
 }
