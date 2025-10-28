@@ -533,7 +533,7 @@ templ EstimateCard(offers api.Estimates, mode string) {
         </div>
 
         
-        <div id="estimates-container-estimates">
+        <div id="estimates-container-estimates" data-mode={ mode }>
         <p>{offers.TradeValue_fiat}</p>
             for i, offer := range offers.Results {
                 if !(offer.SendAmount == 0) {
@@ -684,6 +684,8 @@ templ EstimateCard(offers api.Estimates, mode string) {
             
             const container = document.getElementById('estimates-container-estimates');
             if (!container) return;
+            const rawMode = (container.dataset.mode || '').trim().toLowerCase();
+            const mode = rawMode === '' ? 'pay' : rawMode;
             
             const children = Array.from(container.children);
             const forms = children.filter(el => el.classList.contains('estimate-form-estimates'));
@@ -693,17 +695,16 @@ templ EstimateCard(offers api.Estimates, mode string) {
             }
             
             forms.sort((a, b) => {
-    if (sortBy === 'kyc') {
-        return parseInt(a.dataset.kyc) - parseInt(b.dataset.kyc);
-    } else {
-        // sort descending in payment mode, ascending in swap mode
-        if (mode === "pay") {
-            return parseFloat(b.dataset.rate) - parseFloat(a.dataset.rate); 
-        } else {
-            return parseFloat(a.dataset.rate) - parseFloat(b.dataset.rate);
-        }
-    }
-});
+                if (sortBy === 'kyc') {
+                    return parseInt(a.dataset.kyc) - parseInt(b.dataset.kyc);
+                }
+                
+                if (mode === 'pay') {
+                    return parseFloat(a.dataset.rate) - parseFloat(b.dataset.rate);
+                }
+                
+                return parseFloat(b.dataset.rate) - parseFloat(a.dataset.rate);
+            });
             
             forms.forEach((form, index) => {
                 const button = form.querySelector('button');
