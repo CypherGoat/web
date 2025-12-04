@@ -74,7 +74,7 @@ templ TWIMIndex(posts []*BlogPostData) {
 }
 
 templ TWIMPost(post *BlogPostData) {
-    @HeaderCustomTitle("This Week In Monero - " + post.Title) {
+    @HeaderCustomTitle("" + post.Title) {
         <div class="progress-container">
             <div id="progressBar" class="progress-bar"></div>
         </div>
