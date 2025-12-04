@@ -6,7 +6,8 @@
         "isStable": false,
         "icon": "icons/btc.png",
         "min": 4.449e-05,
-        "coingecko_id": "bitcoin"
+        "coingecko_id": "bitcoin",
+        "cg-pay": true
     },
     {
         "ticker": "btc",
@@ -28,7 +29,10 @@
         "stealthex": "",
         "wizardswap": "",
         "bitcoinvn": "ln-btc",
-        "coingecko_id": "bitcoin"
+        "coingecko_id": "bitcoin",
+
+        "cg-pay": true
+
     },
     {
         "ticker": "eth",
@@ -37,7 +41,10 @@
         "isStable": false,
         "icon": "icons/eth.png",
         "min": 0.001114,
-        "coingecko_id": "ethereum"
+        "coingecko_id": "ethereum",
+
+        "cg-pay": true
+
     },
     {
         "ticker": "xmr",
@@ -46,7 +53,8 @@
         "isStable": false,
         "icon": "icons/xmr.png",
         "min": 0.01886,
-        "coingecko_id": "monero"
+        "coingecko_id": "monero",
+        "cg-pay": true
     },
     {
         "ticker": "ltc",
@@ -63,7 +71,8 @@
         "network": "bch",
         "isStable": false,
         "icon": "icons/bch.png",
-        "coingecko_id": "bitcoin-cash"
+        "coingecko_id": "bitcoin-cash",
+        "cg-pay": true
     },
     {
         "ticker": "doge",
@@ -72,15 +81,8 @@
         "isStable": false,
         "icon": "icons/doge.png",
         "min": 22.59,
-        "coingecko_id": "dogecoin"
-    },
-    {
-        "ticker": "pol",
-        "name": "Polygon",
-        "network": "pol",
-        "isStable": false,
-        "icon": "icons/matic.png",
-        "coingecko_id": "matic-network"
+        "coingecko_id": "dogecoin",
+        "cg-pay": true
     },
     {
         "ticker": "bnb",
@@ -89,7 +91,8 @@
         "isStable": false,
         "icon": "icons/bnb.png",
         "min": 0.005711,
-        "coingecko_id": "binancecoin"
+        "coingecko_id": "binancecoin",
+        "cg-pay": true
     },
     {
         "ticker": "sol",
@@ -98,7 +101,8 @@
         "isStable": false,
         "icon": "icons/sol.png",
         "min": 0.0238,
-        "coingecko_id": "solana"
+        "coingecko_id": "solana",
+        "cg-pay": true
     },
     {
         "ticker": "xtz",
@@ -107,7 +111,8 @@
         "isStable": false,
         "icon": "icons/xtz.png",
         "min": 6.336,
-        "coingecko_id": "tezos"
+        "coingecko_id": "tezos",
+        "cg-pay": true
     },
     {
         "ticker": "ada",
@@ -116,7 +121,8 @@
         "isStable": false,
         "icon": "icons/ada.png",
         "min": 5.868,
-        "coingecko_id": "cardano"
+        "coingecko_id": "cardano",
+        "cg-pay": true
     },
     {
         "ticker": "xrp",
@@ -125,7 +131,8 @@
         "isStable": false,
         "icon": "icons/xrp.png",
         "min": 1.678,
-        "coingecko_id": "binance-peg-xrp"
+        "coingecko_id": "binance-peg-xrp",
+        "cg-pay": true
     },
     {
         "ticker": "trx",
@@ -134,7 +141,8 @@
         "isStable": false,
         "icon": "icons/trx.png",
         "min": 14.58,
-        "coingecko_id": "tron"
+        "coingecko_id": "tron",
+        "cg-pay": true
     },
     {
         "ticker": "link",
@@ -143,14 +151,16 @@
         "isStable": false,
         "icon": "icons/link.png",
         "min": 0.2014,
-        "coingecko_id": "chainlink"
+        "coingecko_id": "chainlink",
+        "cg-pay": true
     },
     {
         "ticker": "usdc",
         "name": "USDC Coin",
         "network": "usdc",
         "isStable": true,
-        "icon": "icons/usdc.png"
+        "icon": "icons/usdc.png",
+        "cg-pay": true
     },
     {
         "ticker": "xno",
@@ -179,7 +189,8 @@
         "simpleswap": "usdcpoly",
         "stealthex": "usdcmatic",
         "wizardswap": "",
-        "bitcoinvn": "usdcpolygon2"
+        "bitcoinvn": "usdcpolygon2",
+        "cg-pay": true
     },
     {
         "ticker": "usdc",
@@ -199,7 +210,8 @@
         "simpleswap": "usdcspl",
         "stealthex": "usdcsol",
         "wizardswap": "",
-        "bitcoinvn": "usdcsol"
+        "bitcoinvn": "usdcsol",
+        "cg-pay": true
     },
     {
         "ticker": "usdc",
@@ -219,7 +231,8 @@
         "simpleswap": "usdcalgo",
         "stealthex": "usdcalgo",
         "wizardswap": "",
-        "bitcoinvn": "usdcalgo"
+        "bitcoinvn": "usdcalgo",
+        "cg-pay": true
     },
     {
         "ticker": "usdc",
@@ -239,7 +252,8 @@
         "simpleswap": "usdcbep20",
         "stealthex": "usdcbsc",
         "wizardswap": "",
-        "bitcoinvn": "usdcbep20"
+        "bitcoinvn": "usdcbep20",
+        "cg-pay": true
     },
     {
         "ticker": "usdc",
@@ -259,7 +273,8 @@
         "simpleswap": "usdcop",
         "stealthex": "usdcop",
         "wizardswap": "",
-        "bitcoinvn": "usdcoptimism2"
+        "bitcoinvn": "usdcoptimism2",
+        "cg-pay": true
     },
     {
         "ticker": "usdc",
@@ -279,7 +294,8 @@
         "simpleswap": "usdcbase",
         "stealthex": "usdcbase",
         "wizardswap": "",
-        "bitcoinvn": "usdcbase"
+        "bitcoinvn": "usdcbase",
+        "cg-pay": true
     },
     {
         "ticker": "usdc",
@@ -299,14 +315,16 @@
         "simpleswap": "usdctrc20",
         "stealthex": "usdctrc20",
         "wizardswap": "",
-        "bitcoinvn": "usdctrc20"
+        "bitcoinvn": "usdctrc20",
+        "cg-pay": true
     },
     {
         "ticker": "usdt",
         "name": "Tether USD",
         "network": "usdt",
         "isStable": true,
-        "icon": "icons/usdt.png"
+        "icon": "icons/usdt.png",
+        "cg-pay": true
     },
     {
         "ticker": "usdt",
@@ -326,7 +344,8 @@
         "simpleswap": "usdttrc20",
         "stealthex": "usdttrc20",
         "wizardswap": "",
-        "bitcoinvn": "usdttrc20"
+        "bitcoinvn": "usdttrc20",
+        "cg-pay": true
     },
     {
         "ticker": "usdt",
@@ -346,7 +365,8 @@
         "simpleswap": "usdtpoly",
         "stealthex": "usdtmatic",
         "wizardswap": "",
-        "bitcoinvn": "usdtpolygon"
+        "bitcoinvn": "usdtpolygon",
+        "cg-pay": true
     },
     {
         "ticker": "usdt",
@@ -365,7 +385,8 @@
         "simpleswap": "usdtbep20",
         "stealthex": "usdtbsc",
         "wizardswap": "",
-        "bitcoinvn": "usdtbep20"
+        "bitcoinvn": "usdtbep20",
+        "cg-pay": true
     },
     {
         "ticker": "usdt",
@@ -384,7 +405,8 @@
         "simpleswap": "usdtspl",
         "stealthex": "usdtsol",
         "wizardswap": "",
-        "bitcoinvn": "usdtsol"
+        "bitcoinvn": "usdtsol",
+        "cg-pay": true
     },
     {
         "ticker": "usdt",
@@ -403,7 +425,8 @@
         "simpleswap": "usdtalgo",
         "stealthex": "usdtalgo",
         "wizardswap": "",
-        "bitcoinvn": "usdtalgo"
+        "bitcoinvn": "usdtalgo",
+        "cg-pay": true
     },
     {
         "ticker": "busd",
@@ -422,7 +445,8 @@
         "simpleswap": "busd",
         "stealthex": "busd",
         "wizardswap": "",
-        "bitcoinvn": "busd"
+        "bitcoinvn": "busd",
+        "cg-pay": true
     },
     {
         "ticker": "busd",
@@ -441,7 +465,8 @@
         "simpleswap": "busderc20",
         "stealthex": "busderc20",
         "wizardswap": "",
-        "bitcoinvn": "busderc20"
+        "bitcoinvn": "busderc20",
+        "cg-pay": true
     },
     {
         "ticker": "dai",
@@ -460,7 +485,8 @@
         "simpleswap": "dai",
         "stealthex": "dai",
         "wizardswap": "",
-        "bitcoinvn": "dai"
+        "bitcoinvn": "dai",
+        "cg-pay": true
     },
     {
         "ticker": "dai",
@@ -479,7 +505,8 @@
         "simpleswap": "daibep20",
         "stealthex": "",
         "wizardswap": "",
-        "bitcoinvn": "daibep20"
+        "bitcoinvn": "daibep20",
+        "cg-pay": true
     },
     {
         "ticker": "dai",
@@ -498,7 +525,8 @@
         "simpleswap": "daimatic",
         "stealthex": "daimatic",
         "wizardswap": "",
-        "bitcoinvn": "daipolygon"
+        "bitcoinvn": "daipolygon",
+        "cg-pay": true
     },
     {
         "ticker": "dai",
@@ -517,7 +545,8 @@
         "simpleswap": "daiop",
         "stealthex": "daiop",
         "wizardswap": "",
-        "bitcoinvn": "daioptimism"
+        "bitcoinvn": "daioptimism",
+        "cg-pay": true
     },
     {
         "ticker": "tusd",
@@ -536,7 +565,8 @@
         "simpleswap": "tusd",
         "stealthex": "tusd",
         "wizardswap": "",
-        "bitcoinvn": "tusd"
+        "bitcoinvn": "tusd",
+        "cg-pay": true
     },
     {
         "ticker": "tusd",
@@ -555,7 +585,8 @@
         "simpleswap": "",
         "stealthex": "tusdtrc20",
         "wizardswap": "",
-        "bitcoinvn": "tusdtrc20"
+        "bitcoinvn": "tusdtrc20",
+        "cg-pay": true
     },
     {
         "ticker": "shib",
@@ -564,7 +595,10 @@
         "isStable": false,
         "icon": "icons/shib.png",
         "min": 10000,
-        "coingecko_id": "shiba-inu"
+        "fixedfloat": "shib",
+        "changenow":"shib",
+        "coingecko_id": "shiba-inu",
+        "cg-pay": true
     },
     {
         "ticker": "dot",
@@ -573,7 +607,9 @@
         "isStable": false,
         "icon": "icons/dot.png",
         "min": 1.272,
-        "coingecko_id": "polkadot"
+        "fixedfloat": "dot",
+        "coingecko_id": "polkadot",
+        "cg-pay": true
     },
     {
         "ticker": "etc",
@@ -582,16 +618,18 @@
         "isStable": false,
         "icon": "icons/etc.png",
         "min": 0.2318,
-        "coingecko_id": "ethereum-classic"
+        "coingecko_id": "ethereum-classic",
+        "cg-pay": true
     },
-            {
+    {
         "ticker": "zec",
         "name": "Zcash",
         "network": "zec",
         "isStable": false,
         "icon": "icons/zcash.webp",
         "min": 0.2,
-        "coingecko_id": "zec"
+        "coingecko_id": "zec",
+        "cg-pay": true
     },
     {
         "ticker": "hive",
@@ -600,7 +638,8 @@
         "isStable": false,
         "icon": "icons/hive.webp",
         "min": 24.06,
-        "coingecko_id": "hive"
+        "coingecko_id": "hive",
+        "cg-pay": true
     },
     {
         "ticker": "bdx",
@@ -656,7 +695,8 @@
         "isStable": false,
         "icon": "icons/dcr.webp",
         "min": 0.3045,
-        "coingecko_id": "decred"
+        "coingecko_id": "decred",
+        "cg-pay": true
     },
     {
         "ticker": "aave",
@@ -683,7 +723,8 @@
         "isStable": false,
         "icon": "icons/bat.webp",
         "min": 32.09,
-        "coingecko_id": "basic-attention-token"
+        "coingecko_id": "basic-attention-token",
+        "cg-pay": true
     },
     {
         "ticker": "link",
@@ -708,7 +749,8 @@
         "isStable": false,
         "icon": "icons/paxg.webp",
         "min": 0.002,
-        "coingecko_id": "pax-gold"
+        "coingecko_id": "pax-gold",
+        "cg-pay": true
     },
     {
         "ticker": "hbar",
@@ -717,7 +759,8 @@
         "isStable": false,
         "icon": "icons/hbar.webp",
         "min": 12,
-        "coingecko_id": "hedera-hashgraph"
+        "coingecko_id": "hedera-hashgraph",
+        "cg-pay": true
     },
     {
         "ticker": "ark",
@@ -735,7 +778,8 @@
         "isStable": false,
         "icon": "icons/firo.webp",
         "min": 14.24,
-        "coingecko_id": "zcoin"
+        "coingecko_id": "zcoin",
+        "cg-pay": true
     },
     {
         "ticker": "wbtc",
@@ -744,7 +788,8 @@
         "isStable": false,
         "icon": "icons/wbtc.webp",
         "min": 4.444e-05,
-        "coingecko_id": "wrapped-bitcoin"
+        "coingecko_id": "wrapped-bitcoin",
+        "cg-pay": true
     },
     {
         "ticker": "1inch",
@@ -762,7 +807,8 @@
         "isStable": false,
         "icon": "icons/dash.webp",
         "min": 0.2152,
-        "coingecko_id": "dash"
+        "coingecko_id": "dash",
+        "cg-pay": true
     },
     {
         "ticker": "zano",
@@ -771,7 +817,8 @@
         "isStable": false,
         "icon": "icons/zano.webp",
         "min": 0.3358,
-        "coingecko_id": "zano"
+        "coingecko_id": "zano",
+        "cg-pay": true
     },
     {
         "ticker": "tel",
