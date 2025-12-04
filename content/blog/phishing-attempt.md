@@ -38,7 +38,9 @@ We modified our backend to detect requests originating from that specific host. 
 
 
 Their entire operation collapsed on the spot.
-No functionality, no proxying, no future exploit.
+No functionality, no proxying, no future exploit. 
+
+**Within hours of the clone going live, we had already rendered it useless, all that remained was for the registrar to take the domain down.**
 
 ## **Resolution**
 Within a couple of hours of our initial report, Cloudflare and Nicenic confirmed that the domain was under review.
