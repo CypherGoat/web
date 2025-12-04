@@ -322,6 +322,50 @@ func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner 
 	return nil, transaction
 }
 
+func CreateQuickPaymentFromAPI(coin1, coin2 string, amount float64, address, network1, network2, affiliate string, info Info) (error, Transaction) {
+	params := url.Values{}
+	params.Add("coin1", coin1)
+	params.Add("coin2", coin2)
+	params.Add("amount", fmt.Sprintf("%f", amount))
+	params.Add("address", address)
+	params.Add("network1", network1)
+	params.Add("network2", network2)
+	params.Add("affiliate", affiliate)
+	params.Add("ip", info.IP)
+	params.Add("useragent", info.UserAgent)
+	params.Add("lang", info.LangList)
+
+	params.Add("source", "clearnet-main")
+
+	requestURL := fmt.Sprintf("%s/payments/quick?%s", URL, params.Encode())
+
+	data, err := SendRequest(requestURL)
+	if err != nil {
+		return err, Transaction{}
+	}
+
+	var result TransactionResponse
+	err = json.Unmarshal([]byte(data), &result)
+	if err != nil {
+		fmt.Println("Error unmarshalling JSON:", err)
+		return err, Transaction{}
+	}
+
+	transaction := result.Transaction
+
+	transaction.Coin1 = coin1
+	transaction.Coin2 = coin2
+	transaction.Network1 = network1
+	transaction.Network2 = network2
+	transaction.IsPayment = true
+
+	if transaction.ReceiveAmount == 0 {
+		transaction.ReceiveAmount = amount
+	}
+
+	return nil, transaction
+}
+
 func TrackTxFromAPI(t Transaction) (error, Transaction) {
 	url := fmt.Sprintf("%s/transaction?provider=%s&id=%s", URL, strings.ToLower(t.Provider), t.Id)
 	data, err := SendRequest(url)

@@ -23,7 +23,7 @@ script toggleQRCodeHandler(msg string) {
   toggleQRCode(msg);
 }
 
-templ TransactionPage(transaction api.Transaction){
+templ TransactionPage(transaction api.Transaction, cgPay bool){
     <!-- TrustBox script -->
 <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
 <!-- End TrustBox script -->
@@ -476,7 +476,12 @@ templ TransactionPage(transaction api.Transaction){
 </div>
 
 <div class="transaction-section">
+if cgPay {
+        <div class="section-label">They Receive</div>
+
+} else{
     <div class="section-label">You Receive</div>
+    }
     <div class="section-value">
         <span style="display:inline-flex;align-items:center;">
             if transaction.ReceiveAmount > 0 {

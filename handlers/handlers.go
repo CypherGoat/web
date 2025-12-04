@@ -143,6 +143,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"letsexchange": {"/exchanges/letsexchange.svg", "/exchanges/no-text/letsexchange.svg", true},
 	"quickex":      {"/exchanges/quickex.png", "", false},
 	"silkbyte":     {"/exchanges/silkbyte.png", "", false},
+	"etzswap":      {"/exchanges/etz.png", "", false},
 }
 
 func EstimateHandler(c echo.Context) error {
@@ -320,19 +321,102 @@ func Step3Handler(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/transaction/"+transaction.CGID)
 }
 
+func CGPayHandler(c echo.Context) error {
+	coin1 := c.QueryParam("coin1")
+	network1 := c.QueryParam("network1")
+	address := c.QueryParam("address")
+
+	amount_str := c.QueryParam("amount")
+	amount, err := strconv.ParseFloat(amount_str, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "error parsing amount")
+	}
+
+	return views.CGPayForm(coin1, network1, amount, address, "").Render(c.Request().Context(), c.Response())
+}
+
+func CGPayCreateHandler(c echo.Context) error {
+	coin1 := c.QueryParam("coin1")
+	coin2 := c.QueryParam("coin2")
+	network1 := c.QueryParam("network1")
+	network2 := c.QueryParam("network2")
+	amountStr := c.QueryParam("amount")
+	amount, err := strconv.ParseFloat(amountStr, 64)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "error parsing amount")
+	}
+	partner := c.QueryParam("partner")
+	address := c.QueryParam("address")
+
+	info := api.Info{
+		IP:        "",
+		UserAgent: "",
+		LangList:  "",
+	}
+	partnerLower := strings.ToLower(partner)
+
+	if exchangeData, ok := exchangeInfo[partnerLower]; ok && exchangeData.RequireIP {
+		ip := c.RealIP()
+		userAgent := c.Request().Header.Get("User-Agent")
+		langList := c.Request().Header.Get("Accept-Language")
+
+		info = api.Info{
+			IP:        ip,
+			UserAgent: userAgent,
+			LangList:  langList,
+		}
+	}
+
+	affiliate := ""
+	affiliateCookie, err := c.Cookie("affiliate")
+	if err == nil && affiliateCookie.Value != "" {
+		affiliate = affiliateCookie.Value
+	}
+
+	err, transaction := api.CreateQuickPaymentFromAPI(coin1, coin2, amount, address, network1, network2, affiliate, info)
+
+	if err != nil {
+		fmt.Printf("API Error: %v\n", err)
+		return views.CGPayForm(coin1, network1, amount, address, err.Error()).Render(c.Request().Context(), c.Response())
+	}
+
+	if transaction.Id == "" && transaction.CGID == "" {
+		fmt.Printf("Transaction missing both Id and CGID fields\n")
+		return views.CGPayForm(coin1, network1, amount, address, "Transaction creation failed - no transaction ID returned").Render(c.Request().Context(), c.Response())
+	}
+
+	transactionID := transaction.CGID
+	if transactionID == "" {
+		transactionID = transaction.Id
+	}
+
+	if transactionID == "" {
+		fmt.Printf("Both transaction.CGID and transaction.Id are empty\n")
+		return views.CGPayForm(coin1, network1, amount, address, "Transaction creation failed - invalid transaction ID").Render(c.Request().Context(), c.Response())
+	}
+
+	return c.Redirect(http.StatusSeeOther, "/transaction/"+transactionID+"?cg-pay=true")
+}
+
 func containsIgnoreCase(s, substr string) bool {
 	return strings.Contains(strings.ToLower(s), strings.ToLower(substr))
 }
 
 func GetTransactionHandler(c echo.Context) error {
 	id := c.Param("id")
+	cgPay := false
+	if v := c.QueryParam("cg-pay"); v != "" {
+		if b, err := strconv.ParseBool(v); err == nil {
+			cgPay = b
+		}
+	}
 
 	err, transaction := api.GetTransactionFromAPI(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, fmt.Sprintf("error getting transaction: %v", err))
 	}
 
-	return views.TransactionPage(transaction).Render(c.Request().Context(), c.Response())
+	return views.TransactionPage(transaction, cgPay).Render(c.Request().Context(), c.Response())
 
 }
 

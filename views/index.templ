@@ -1463,7 +1463,7 @@ function updateEstimatedAmountFromFirstCard() {
 
     async function loadCoins() {
         try {
-            const response = await fetch('/static/coins.json');
+            const response = await fetch('/static/coins.json?v=43');
             const jsonData = await response.json();
             createModalOptions(jsonData);
         } catch (error) {

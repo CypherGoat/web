@@ -1,0 +1,1088 @@
+package views
+
+import (
+    "fmt"
+    "strings"
+)
+
+templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress string, errStr string) {
+    // @IndexHeader(){}
+    
+    <style>
+        :root {
+            --bg-color: #111624;
+            --card-color: #191f2d;
+            --button-color: #0d74ff;
+            --text-color: #e0e0e0;
+            --accent-color: #66b0ff;
+            --button-hover: #0c66e5;
+            --card-border: rgba(255, 255, 255, 0.04);
+            --accent-bg: rgba(13, 116, 255, 0.15);
+        }
+
+        html, body {
+            background-color: transparent;
+            color: var(--text-color);
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .swap-form-section {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 0;
+            height: 100%;
+            align-items: center;
+        }
+
+        .iframe-shell {
+            width: 100%;
+            height: 100%;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 360px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            background-color: var(--card-color);
+            border-radius: 14px;
+            padding: 1rem 0.9rem;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+            border: 1px solid var(--card-border);
+            transition: box-shadow 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.32);
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 0.9rem;
+        }
+
+        .invoice-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            background-color: var(--accent-bg);
+            border: 1px solid rgba(13, 116, 255, 0.25);
+            color: var(--accent-color);
+        }
+
+        .invoice-title {
+            color: var(--text-color);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+            letter-spacing: -0.01em;
+        }
+
+        .invoice-subtitle {
+            color: rgba(224, 232, 255, 0.75);
+            font-size: 0.85rem;
+            margin: 0 auto;
+            max-width: 300px;
+        }
+
+        #swap-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        #swap-form .btn-primary {
+            margin-top: 0.25rem;
+        }
+
+        .send-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            background-color: #171c29;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 0.9rem 0.85rem;
+        }
+
+        @media (min-width: 640px) {
+            .send-card {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .send-field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            min-width: 0;
+        }
+
+        .amount-input-wrapper,
+        .coin-input-wrapper {
+            position: relative;
+        }
+
+        .send-input {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            background-color: rgba(20, 26, 40, 0.92);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .send-input::placeholder {
+            color: rgba(224, 224, 224, 0.45);
+        }
+
+        .send-input:focus {
+            border-color: var(--button-color);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--button-color);
+        }
+
+        .send-input.form-input {
+            width: 100%;
+        }
+
+        .send-input.has-icon {
+            padding-left: 2.5rem;
+        }
+
+        .coin-input-wrapper input {
+            cursor: pointer;
+            padding-right: 2.25rem;
+        }
+
+        .coin-input-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid rgba(224, 224, 224, 0.7);
+            pointer-events: none;
+        }
+
+        .coin-input-wrapper .dropdown-options {
+            top: calc(100% + 0.35rem);
+        }
+
+        .helper-text {
+            margin-top: 0.2rem;
+            font-size: 0.78rem;
+            color: rgba(224, 224, 224, 0.6);
+            text-align: center;
+        }
+
+        #error-message {
+            width: 100%;
+            max-width: 360px;
+            margin: 0.5rem auto 0;
+            box-sizing: border-box;
+        }
+
+        .receive-summary {
+            margin-top: 1.1rem;
+            text-align: center;
+            color: var(--text-color);
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 1rem 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .receive-summary .summary-label {
+            display: block;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            margin-bottom: 0.35rem;
+            color: rgba(224, 224, 224, 0.55);
+        }
+
+        .receive-summary .summary-value {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .receive-summary .summary-meta {
+            display: flex;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-top: 0.35rem;
+            font-size: 0.8rem;
+            color: rgba(224, 224, 224, 0.65);
+        }
+
+        .summary-address {
+            margin-top: 0.85rem;
+            padding: 0.65rem;
+            border-radius: 10px;
+            background-color: rgba(13, 116, 255, 0.08);
+            border: 1px solid rgba(13, 116, 255, 0.22);
+        }
+
+        .summary-address .summary-label {
+            margin-bottom: 0.4rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            color: rgba(224, 224, 224, 0.55);
+        }
+
+        .summary-address .address-value {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+            color: #d6e8ff;
+            background-color: rgba(10, 22, 38, 0.7);
+            padding: 0.5rem 0.65rem;
+            border-radius: 8px;
+            border: 1px solid rgba(13, 116, 255, 0.28);
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background-color: rgba(13, 116, 255, 0.2);
+            margin: 1rem 0 1rem;
+        }
+
+        #estimate-container {
+            margin-top: 1rem;
+        }
+
+        .hidden-input-group {
+            display: none;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .input-group .form-label {
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-input {
+            width: 150px;
+            padding: 0.65rem;
+            background-color: var(--card-color);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--button-color);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--button-color);
+        }
+
+        .searchable-dropdown {
+            position: relative;
+            flex: 1;
+        }
+
+        .searchable-dropdown input {
+            width: 100%;
+            padding: 0.65rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            background-color: #1a1f2e;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-size: 18px 18px;
+            background-position: left 10px center;
+            background-repeat: no-repeat;
+            padding-left: 34px;
+        }
+
+        .searchable-dropdown input:focus {
+            border-color: var(--button-color);
+            outline: none;
+            box-shadow: 0 0 0 3px var(--button-color);
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: calc(100% + 0.2rem);
+            left: 0;
+            width: 100%;
+            max-height: 220px;
+            overflow-y: auto;
+            background-color: #181e2c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+            display: none;
+            z-index: 10;
+        }
+
+        .dropdown-options div {
+            padding: 0.55rem 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-options div:hover,
+        .active-option {
+            background-color: rgba(13, 116, 255, 0.18);
+        }
+
+        .coin-icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-right: 0.45rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .coin-icon-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .modal-options .coin-icon-wrapper {
+            width: 24px;
+            height: 24px;
+            margin-right: 0;
+        }
+
+        .send-note {
+            text-align: center;
+            margin-top: -0.05rem;
+            margin-bottom: 0.9rem;
+            color: rgba(224, 224, 224, 0.55);
+        }
+
+
+
+        .btn-primary {
+            background-color: var(--button-color);
+            color: #ffffff;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            position: relative;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 18px rgba(13, 116, 255, 0.24);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(13, 116, 255, 0.32);
+            background-color: var(--button-hover);
+        }
+
+        .btn-primary:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(13, 116, 255, 0.18), 0 8px 18px rgba(13, 116, 255, 0.28);
+        }
+
+        .form-input.read-only {
+            background-color: rgba(26, 31, 46, 0.6);
+            color: #b0b0b0;
+            cursor: not-allowed;
+        }
+
+        .form-input.pay-mode {
+            background-color: #1a1f2e;
+            color: #e0e0e0;
+        }
+
+        .form-input.swap-mode-disabled {
+            background-color: rgba(26, 31, 46, 0.5);
+            color: #b0b0b0;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            border: 4px solid rgba(13, 116, 255, 0.12);
+            border-radius: 50%;
+            border-top: 4px solid #0d74ff;
+            width: 36px;
+            height: 36px;
+            animation: spin 0.8s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner-hidden {
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .coin-selection-modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.55);
+            padding: 1.25rem;
+            z-index: 1000;
+        }
+
+        .coin-selection-modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: #191f2d;
+            border-radius: 14px;
+            padding: 1.35rem;
+            width: min(400px, 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            background-color: rgba(20, 26, 40, 0.92);
+            color: #e0e0e0;
+            margin-bottom: 0.85rem;
+        }
+
+        .modal-options {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .modal-options div {
+            padding: 0.65rem 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            color: #e0e0e0;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .modal-options div:hover {
+            background-color: rgba(13, 116, 255, 0.18);
+        }
+
+        .modal-options img {
+            width: 24px;
+            height: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0;
+            }
+
+            .card {
+                padding: 1rem 0.85rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-input {
+                width: 100%;
+            }
+
+            .searchable-dropdown {
+                width: 100%;
+            }
+
+            #error-message {
+                max-width: 90%;
+            }
+        }
+
+        /* Powered by CypherGoat Pay footer styles */
+        .cg-powered-by {
+            margin-top: 0.75rem;
+            text-align: center;
+            font-size: 0.78rem;
+            color: rgba(224,224,224,0.68);
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0.6rem 0.6rem 0 0.6rem;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .cg-powered-by a {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+            transition: background-color 0.15s ease, color 0.15s ease, transform 0.12s ease;
+        }
+
+        .cg-powered-by a svg {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .cg-powered-by a:hover {
+            color: var(--button-color);
+            background-color: rgba(13, 116, 255, 0.06);
+            transform: translateY(-1px);
+            text-decoration: none;
+        }
+
+    </style>
+
+ if errStr != "" {
+        <div class="error-message text-center">
+            <p>There was an eror while creating your trade. { errStr }</p>
+        </div>
+    }
+
+    <div class="iframe-shell">
+        <div class="swap-form-section">
+            <div class="container">
+                <div class="card">
+                    <div class="invoice-header">
+                        <h1 class="invoice-title">Pay Invoice</h1>
+                        <p class="invoice-subtitle">Pick the coin you want to send - we will convert it behind the scenes.</p>
+                    </div>
+
+                    <form id="swap-form" method="GET" action="/pay/create" target="_blank" data-receive-ticker={ strings.ToLower(toCoin) } data-receive-network={ strings.ToLower(toNetwork) } data-receive-amount={ fmt.Sprintf("%.8f", toAmount) }>
+                        <div class="send-card">
+                            <div class="send-field">
+                                <label class="form-label" id="send-coin-label">Pay With</label>
+                                <div class="coin-input-wrapper">
+                                    <input type="text" placeholder="Choose a coin to send" id="dropdown-search-send" class="send-input form-input" autocomplete="off" readonly>
+                                    <div class="dropdown-options" id="dropdown-options-send"></div>
+                                </div>
+                                <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
+                            </div>
+                        </div>
+                        <p class="helper-text send-note">We will calculate the amount to send once you request an estimate.</p>
+
+                        <input type="hidden" min="0" id="amount" autocomplete="off">
+
+                        <div class="hidden-input-group">
+                            <label class="form-label" id="receive-coin-label">Recipient Coin</label>
+                            <div class="searchable-dropdown">
+                                <input type="text" placeholder="Recipient coin" id="dropdown-search-receive" autocomplete="off" readonly value={ strings.ToUpper(toCoin) }>
+                                <div class="dropdown-options" id="dropdown-options-receive"></div>
+                                <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off">
+                                    <option value={ strings.ToLower(toCoin) } selected>{ strings.ToUpper(toCoin) }</option>
+                                </select>
+                            </div>
+                            <label class="form-label hidden" id="estimated-label">Recipient Gets</label>
+                            <input type="number" id="estimated-amount" name="amount" class="form-input read-only" readonly value={ fmt.Sprintf("%.8f", toAmount) }>
+                        </div>
+
+                        <input type="hidden" id="network-send" name="network1">
+                        <input type="hidden" id="network-receive" name="network2" value={ toNetwork }>
+                        <input type="hidden" id="mode" name="mode" value="pay">
+                        <input type="hidden" name="address" value={ toAddress }>
+                        <button type="submit" class="btn-primary" id="submit-button">Pay Invoice</button>
+                    </form>
+
+                    <div class="receive-summary">
+                        <span class="summary-label">Business Receives</span>
+                        <span class="summary-value">{ FormatFloat(toAmount) } { strings.ToUpper(toCoin) }</span>
+                        
+                    </div>
+                     <div class="cg-powered-by" aria-hidden="false">
+            <a href="https://cyphergoat.com" target="_blank" rel="noopener noreferrer" title="CypherGoat Pay">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                    <path d="M13 2L3 14h7l-1 8L21 10h-7l-1-8z" fill="#66b0ff" />
+                </svg>
+                CypherGoat Pay
+            </a>
+        </div>
+
+                  
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-spinner" class="spinner spinner-hidden"></div>
+        <div id="estimate-container"></div>
+
+       
+    </div>
+
+    <div id="coin-selection-modal" class="coin-selection-modal hidden">
+        <div class="modal-content">
+            <input type="text" id="modal-search" placeholder="Search coin..." autocomplete="off">
+            <div id="modal-options" class="modal-options"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const form = document.getElementById('swap-form');
+            if (!form) {
+                return;
+            }
+
+            const dataset = form.dataset;
+            const presetReceiveTicker = (dataset.receiveTicker || '').toLowerCase();
+            const presetReceiveNetwork = (dataset.receiveNetwork || '').toLowerCase();
+            const presetReceiveAmount = dataset.receiveAmount || '';
+
+            const amountInput = document.getElementById('amount');
+            const estimatedInput = document.getElementById('estimated-amount');
+            const estimatedLabel = document.getElementById('estimated-label');
+            const sendCoinLabel = document.getElementById('send-coin-label');
+            const receiveCoinLabel = document.getElementById('receive-coin-label');
+            const submitButton = document.getElementById('submit-button');
+            const modeInput = document.getElementById('mode');
+            const receiveSearch = document.getElementById('dropdown-search-receive');
+            const receiveSelect = document.getElementById('crypto-receive');
+            const networkReceive = document.getElementById('network-receive');
+            const sendSearch = document.getElementById('dropdown-search-send');
+
+            if (amountInput) {
+                amountInput.value = '';
+            }
+
+            estimatedInput.classList.add('pay-mode');
+            estimatedInput.readOnly = true;
+            estimatedInput.placeholder = 'Invoice amount';
+            estimatedInput.type = 'number';
+            estimatedInput.min = '0';
+            estimatedInput.step = 'any';
+            estimatedInput.required = true;
+            estimatedInput.value = presetReceiveAmount;
+            estimatedInput.name = 'amount';
+            if (estimatedLabel) {
+                estimatedLabel.textContent = 'Recipient Gets';
+            }
+
+            sendCoinLabel.textContent = 'Pay With';
+            receiveCoinLabel.textContent = 'Recipient Coin';
+            submitButton.textContent = 'Pay Invoice';
+            modeInput.value = 'pay';
+            networkReceive.value = dataset.receiveNetwork || networkReceive.value;
+            receiveSearch.readOnly = true;
+            if (sendSearch) {
+                sendSearch.readOnly = true;
+            }
+
+            const modal = document.getElementById('coin-selection-modal');
+            const modalSearch = document.getElementById('modal-search');
+            const modalOptions = document.getElementById('modal-options');
+            let currentSelectElement = null;
+            let activeOptionIndex = 0;
+            let coinsData = [];
+
+            function applyInputIcon(field, iconUrl) {
+                if (!field) {
+                    return;
+                }
+                if (iconUrl) {
+                    field.style.backgroundImage = `url(${iconUrl})`;
+                    field.style.backgroundRepeat = 'no-repeat';
+                    field.style.backgroundPosition = 'left 10px center';
+                    field.style.backgroundSize = '20px 20px';
+                    field.style.paddingLeft = '40px';
+                    field.classList.add('has-icon');
+                } else {
+                    field.style.backgroundImage = '';
+                    field.style.paddingLeft = '';
+                    field.classList.remove('has-icon');
+                }
+            }
+
+            function updateNetworkFields(type, network) {
+                if (type === 'send') {
+                    document.getElementById('network-send').value = network || '';
+                }
+            }
+
+            function openModal(selectElement) {
+                currentSelectElement = selectElement;
+                modal.classList.remove('hidden');
+                modalSearch.value = '';
+                filterModalOptions();
+                setTimeout(() => modalSearch.focus(), 0);
+                activeOptionIndex = 0;
+            }
+
+            function closeModal() {
+                modal.classList.add('hidden');
+            }
+
+            function filterModalOptions() {
+                const filter = modalSearch.value.toLowerCase();
+                const options = modalOptions.querySelectorAll('div');
+                let firstVisible = null;
+
+                options.forEach((option, idx) => {
+                    const matches = option.dataset.text.includes(filter);
+                    option.style.display = matches ? 'flex' : 'none';
+                    option.classList.remove('active-option');
+                    if (matches && !firstVisible) {
+                        firstVisible = { element: option, index: idx };
+                    }
+                });
+
+                if (firstVisible) {
+                    firstVisible.element.classList.add('active-option');
+                    activeOptionIndex = firstVisible.index;
+                }
+            }
+
+            function selectOption(optionDiv) {
+                if (!optionDiv || optionDiv.style.display === 'none') {
+                    return;
+                }
+
+                const ticker = optionDiv.dataset.ticker;
+                const network = optionDiv.dataset.network;
+                const displayText = optionDiv.dataset.display;
+                const icon = optionDiv.dataset.icon;
+
+                currentSelectElement.value = ticker;
+
+                const suffixParts = currentSelectElement.id.split('-');
+                const suffix = suffixParts[suffixParts.length - 1];
+                const inputField = document.getElementById(`dropdown-search-${suffix}`);
+                const selectElement = document.getElementById(`crypto-${suffix}`);
+
+                if (inputField) {
+                    inputField.value = displayText;
+                    applyInputIcon(inputField, icon);
+                }
+
+                if (selectElement) {
+                    selectElement.innerHTML = `<option value="${ticker}" selected>${displayText}</option>`;
+                    selectElement.classList.add('hidden');
+                }
+
+                updateNetworkFields(suffix, network);
+                closeModal();
+            }
+
+            function createModalOptions(jsonData) {
+                // Only include coins that have cg-pay enabled. Support both `cg-pay` and `cgPay` keys.
+                const filteredData = Array.isArray(jsonData)
+                    ? jsonData.filter(item => item && (item['cg-pay'] === true || item.cgPay === true))
+                    : [];
+
+                coinsData = filteredData;
+                modalOptions.innerHTML = '';
+
+                filteredData.forEach((item, index) => {
+                    const displayText = item.network ? `${item.name} (${item.network.toUpperCase()})` : item.name;
+                    const displayTextWithTicker = `${displayText} (${item.ticker})`;
+
+                    const optionDiv = document.createElement('div');
+                    const iconMarkup = item.icon ? `<span class="coin-icon-wrapper"><img src="${item.icon}" alt="${item.name} icon"></span>` : '';
+                    optionDiv.innerHTML = `${iconMarkup}${displayText}`;
+                    optionDiv.dataset.ticker = item.ticker;
+                    optionDiv.dataset.network = item.network || '';
+                    optionDiv.dataset.display = displayText;
+                    optionDiv.dataset.text = displayTextWithTicker.toLowerCase();
+                    optionDiv.dataset.icon = item.icon || '';
+                    optionDiv.addEventListener('click', () => selectOption(optionDiv));
+
+                    if (index === 0) {
+                        optionDiv.classList.add('active-option');
+                        activeOptionIndex = 0;
+                    }
+
+                    modalOptions.appendChild(optionDiv);
+                });
+
+                setDefaultSendCoin(filteredData);
+                setPresetReceiveCoin(filteredData);
+                filterModalOptions();
+            }
+
+            function setDefaultSendCoin(jsonData) {
+                const defaultSendCoin = 'btc';
+                const match = jsonData.find(item => item.ticker.toLowerCase() === defaultSendCoin);
+                if (!match) {
+                    return;
+                }
+
+                const displayText = match.network ? `${match.name} (${match.network.toUpperCase()})` : match.name;
+                const selectSend = document.getElementById('crypto-send');
+                selectSend.value = match.ticker;
+
+                let option = selectSend.querySelector(`option[value="${match.ticker}"]`);
+                if (!option) {
+                    option = document.createElement('option');
+                    option.value = match.ticker;
+                    option.textContent = displayText;
+                    option.selected = true;
+                    selectSend.appendChild(option);
+                } else {
+                    option.selected = true;
+                }
+
+                if (sendSearch) {
+                    sendSearch.value = displayText;
+                    applyInputIcon(sendSearch, match.icon);
+                }
+
+                updateNetworkFields('send', match.network);
+            }
+
+            function setPresetReceiveCoin(jsonData) {
+                const receiveInput = document.getElementById('dropdown-search-receive');
+                const receiveSelect = document.getElementById('crypto-receive');
+                const fallbackTicker = (dataset.receiveTicker || '').toUpperCase();
+
+                const preset = jsonData.find(item => {
+                    const tickerMatches = item.ticker.toLowerCase() === presetReceiveTicker;
+                    const networkMatches = presetReceiveNetwork === '' || (item.network || '').toLowerCase() === presetReceiveNetwork;
+                    return tickerMatches && networkMatches;
+                }) || jsonData.find(item => item.ticker.toLowerCase() === presetReceiveTicker);
+
+                if (preset) {
+                    const displayText = preset.network ? `${preset.name} (${preset.network.toUpperCase()})` : preset.name;
+
+                    receiveInput.value = displayText;
+                    applyInputIcon(receiveInput, preset.icon);
+
+                    receiveSelect.innerHTML = `<option value="${preset.ticker}" selected>${displayText}</option>`;
+                    networkReceive.value = preset.network || dataset.receiveNetwork || '';
+                } else {
+                    receiveInput.value = fallbackTicker;
+                    applyInputIcon(receiveInput, null);
+                    receiveSelect.innerHTML = `<option value="${dataset.receiveTicker || ''}" selected>${fallbackTicker}</option>`;
+                    networkReceive.value = dataset.receiveNetwork || '';
+                }
+            }
+
+            async function loadCoins() {
+                try {
+                    const response = await fetch('/static/coins.json');
+                    const jsonData = await response.json();
+                    createModalOptions(jsonData);
+                } catch (error) {
+                    console.error('Error loading coins:', error);
+                }
+            }
+
+            function updateSendAmountFromEstimate() {
+                const amountField = document.getElementById('amount');
+                if (!amountField) {
+                    return;
+                }
+
+                const estimateForms = document.querySelectorAll('.estimate-form-estimates');
+                if (!estimateForms || estimateForms.length === 0) {
+                    return;
+                }
+
+                const firstForm = estimateForms[0];
+                const amountElement = firstForm.querySelector('.amount-highlight-estimates');
+                if (!amountElement) {
+                    return;
+                }
+
+                let estimatedAmount = amountElement.textContent.trim();
+                const parts = estimatedAmount.split(' ');
+                if (parts.length >= 2) {
+                    estimatedAmount = parts[0];
+                }
+
+                amountField.value = estimatedAmount;
+                amountField.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            loadCoins();
+
+            if (sendSearch) {
+                sendSearch.addEventListener('click', () => openModal(document.getElementById('crypto-send')));
+            }
+
+            modal.addEventListener('click', event => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            modalSearch.addEventListener('keydown', function(e) {
+                const visibleOptions = Array.from(modalOptions.querySelectorAll('div')).filter(opt => opt.style.display !== 'none');
+
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (visibleOptions.length > 0) {
+                        selectOption(visibleOptions[activeOptionIndex] || visibleOptions[0]);
+                    }
+                } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (visibleOptions.length === 0) {
+                        return;
+                    }
+                    visibleOptions.forEach(opt => opt.classList.remove('active-option'));
+                    const direction = e.key === 'ArrowDown' ? 1 : -1;
+                    activeOptionIndex = (activeOptionIndex + direction + visibleOptions.length) % visibleOptions.length;
+                    const target = visibleOptions[activeOptionIndex];
+                    target.classList.add('active-option');
+                    target.scrollIntoView({ block: 'nearest' });
+                } else if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            modalSearch.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter' || e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Escape') {
+                    return;
+                }
+                filterModalOptions();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+
+            form.addEventListener('submit', function() {
+                document.getElementById('crypto-send').classList.remove('hidden');
+                receiveSelect.classList.remove('hidden');
+            });
+
+            document.addEventListener('htmx:beforeRequest', function() {
+                const spinner = document.getElementById('loading-spinner');
+                if (spinner) {
+                    spinner.classList.remove('spinner-hidden');
+                }
+                const errorMessage = document.getElementById('error-message');
+                if (errorMessage) {
+                    errorMessage.classList.add('hidden');
+                }
+            });
+
+            document.addEventListener('htmx:afterSwap', function() {
+                const spinner = document.getElementById('loading-spinner');
+                if (spinner) {
+                    spinner.classList.add('spinner-hidden');
+                }
+                updateSendAmountFromEstimate();
+            });
+
+            document.addEventListener('estimatesSorted', updateSendAmountFromEstimate);
+
+            const estimateContainer = document.getElementById('estimate-container');
+            if (estimateContainer) {
+                const observer = new MutationObserver(() => {
+                    setTimeout(updateSendAmountFromEstimate, 50);
+                });
+                observer.observe(estimateContainer, { childList: true, subtree: true });
+            }
+
+            document.addEventListener('htmx:responseError', function(event) {
+                const spinner = document.getElementById('loading-spinner');
+                if (spinner) {
+                    spinner.classList.add('spinner-hidden');
+                }
+
+                const errorMessage = document.getElementById('error-message');
+                const errorText = document.getElementById('error-text');
+                if (errorMessage && errorText) {
+                    const responseText = event.detail && event.detail.xhr && event.detail.xhr.responseText
+                        ? event.detail.xhr.responseText
+                        : 'An error occurred while fetching the estimate.';
+                    errorText.textContent = responseText;
+                    errorMessage.classList.remove('hidden');
+                }
+            });
+        })();
+    </script>
+
+    // @Footer(){}
+}

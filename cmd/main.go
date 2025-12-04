@@ -57,14 +57,45 @@ func AffiliateMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+func AllowedHostsMiddleware(allowedHosts []string) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			host := c.Request().Host
+
+			if colonIndex := strings.LastIndex(host, ":"); colonIndex != -1 {
+				host = host[:colonIndex]
+			}
+
+			for _, allowedHost := range allowedHosts {
+				if host == allowedHost {
+					return next(c)
+				}
+			}
+
+			return c.String(http.StatusForbidden, "Access denied: Host not allowed")
+		}
+	}
+}
+
 func main() {
 	e := echo.New()
 
 	e.IPExtractor = echo.ExtractIPFromXFFHeader()
 
+	allowedHosts := []string{
+		"cyphergoat.com",
+		"www.cyphergoat.com",
+		"localhost",
+		"127.0.0.1",
+		"cyphergmw4huw7jzhat3misfm5jj2m4nvafockqbj7i5rrlec6mobdid.onion",
+		"cjorx2hmv3jxs5sshxhw73nmkiayupim6gfye3sfts2pzmjgk5rq.b32.i2p",
+	}
+
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.Secure())
+	e.Use(AllowedHostsMiddleware(allowedHosts))
+	e.Use(allowPayEmbedding)
 	e.Use(AffiliateMiddleware)
 
 	e.Use(removeTrailingSlash)
@@ -115,6 +146,9 @@ func main() {
 	e.Static("/blog/images", "static/blog")
 
 	e.GET("/affiliate", handlers.AffiliateHandler)
+
+	e.GET("/pay", handlers.CGPayHandler)
+	e.GET("/pay/create", handlers.CGPayCreateHandler)
 
 	e.GET("/affiliate/login", handlers.AffiliateLoginHandler)
 	e.POST("/affiliate/login", handlers.AffiliateLoginHandler)
@@ -168,6 +202,16 @@ func removeTrailingSlash(next echo.HandlerFunc) echo.HandlerFunc {
 			return c.Redirect(http.StatusMovedPermanently, targetPath)
 		}
 
+		return next(c)
+	}
+}
+
+func allowPayEmbedding(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		path := c.Request().URL.Path
+		if path == "/pay" || strings.HasPrefix(path, "/pay/") {
+			c.Response().Header().Set("X-Frame-Options", "ALLOWALL")
+		}
 		return next(c)
 	}
 }
