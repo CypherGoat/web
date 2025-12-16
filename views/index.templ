@@ -238,9 +238,26 @@ footer {
     }
 
     .form-input.read-only {
-        background-color: rgba(26, 31, 46, 0.5);
-        color: #b0b0b0;
+        background-color: rgba(40, 45, 60, 0.4);
+        background-image: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.02) 10px,
+            rgba(255, 255, 255, 0.02) 20px
+        );
+        color: #9ca3af;
         cursor: not-allowed;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        opacity: 0.85;
+        font-style: italic;
+        pointer-events: none;
+        user-select: none;
+    }
+    
+    .form-input.read-only::placeholder {
+        color: #6b7280;
+        opacity: 0.7;
     }
 
     .spinner {
@@ -684,7 +701,7 @@ footer {
         <br/>
         <br/>
         <p class="text-gray-300 mt-3 mb-4 text-3xl">
-            Trade crypto at the <span class="font-semibold text-blue-400">best</span> rate on the market
+           Private crypto swaps, without custody. 
         </p>
          <div class="flex flex-wrap justify-center gap-2 mb-6">
             <span class="trust-badge" 
@@ -732,8 +749,8 @@ footer {
 
     <div class="input-group">
         <div>
-            <label for="estimated-amount" class="form-label" id="estimated-label">Estimated</label>
-            <input type="text" id="estimated-amount" class="form-input read-only" placeholder="You receive" readonly>
+            <label for="estimated-amount" class="form-label" id="estimated-label">Estimated (auto-calculated)</label>
+            <input type="text" id="estimated-amount" class="form-input read-only" placeholder="You receive (calculated)" readonly>
         </div>
         <div class="searchable-dropdown">
             <label class="form-label" id="receive-coin-label">Receive Coin</label>
@@ -818,9 +835,17 @@ footer {
                 <p class="text-gray-300 mt-2">Yes. CypherGoat does not get access to your funds at any stage of the swap. We are simply an aggregator interface. We are also the only exchange aggregator that is fully open source, which means that anyone can audit our code at any time.</p>
             </div>
             <div class="faq-item mb-6">
-    <h3 class="text-xl font-semibold">What is the CypherGoat Shield program?</h3>
-    <p class="text-gray-300 mt-2">The CypherGoat Shield is our user protection program that guarantees you'll receive your funds or get reimbursed if an exchange fails to complete your transaction or holds your funds due to KYC issues. Look for the Shield icon next to exchange names to see the coverage amount. You can learn more about it in our <a href="/cyphergoat-shield" class="text-blue-400 hover:underline">Shield program terms</a>.</p>
-</div>
+                <h3 class="text-xl font-semibold">What is the CypherGoat Shield program?</h3>
+                <p class="text-gray-300 mt-2">The CypherGoat Shield is our user protection program that guarantees you'll receive your funds or get reimbursed if an exchange fails to complete your transaction or holds your funds due to KYC issues. Look for the Shield icon next to exchange names to see the coverage amount. You can learn more about it in our <a href="/cyphergoat-shield" class="text-blue-400 hover:underline">Shield program terms</a>.</p>
+            </div>
+            <div class="faq-item mb-6">
+            <h3 class="text-xl font-semibold">
+    Can I get help with larger swaps?
+            </h3>
+            <p class="text-gray-300 mt-2">
+                Yes. For larger swaps, CypherGoat can provide assistance with coordination and monitoring. CypherGoat remains fully non-custodial and funds always move directly between you and the exchange. Availability is limited and offered on a case-by-case basis.
+            </p>
+            </div>
         </div>
 
         <div class="w-full lg:w-2/4 px-8 mt-12 lg:mt-0">
