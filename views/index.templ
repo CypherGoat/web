@@ -669,6 +669,45 @@ footer {
         color: #b0b0b0;
         cursor: not-allowed;
     }
+
+    .swap-coins-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: -0.7rem;
+        margin-top: -0.7rem;
+    }
+
+    .swap-coins-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: rgba(0, 136, 255, 0.08);
+        border: 1px solid rgba(0, 136, 255, 0.2);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 1;
+    }
+
+    .swap-coins-btn:hover {
+        background: rgba(0, 136, 255, 0.15);
+        border-color: rgba(0, 136, 255, 0.4);
+    }
+
+    .swap-coins-btn svg {
+        width: 16px;
+        height: 16px;
+        color: #60a5fa;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+    }
+
+    .swap-coins-btn:hover svg {
+        color: #93c5fd;
+        transform: rotate(180deg);
+    }
     </style>
      <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
     <p id="error-text"></p>
@@ -744,6 +783,14 @@ footer {
             <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
             <div class="dropdown-options" id="dropdown-options-send"></div>
             <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
+        </div>
+    </div>
+
+    <div class="swap-coins-container">
+        <div class="swap-coins-btn" onclick="swapCoins()" title="Swap coins">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 16V4m0 0L3 8m4-4 4 4m6 0v12m0 0-4-4m4 4 4-4"/>
+            </svg>
         </div>
     </div>
 
@@ -1497,6 +1544,50 @@ function updateEstimatedAmountFromFirstCard() {
     }
 
     loadCoins();
+
+    // Function to swap the selected coins
+    window.swapCoins = function() {
+        // Get current values
+        const sendSelect = document.getElementById('crypto-send');
+        const receiveSelect = document.getElementById('crypto-receive');
+        const sendInput = document.getElementById('dropdown-search-send');
+        const receiveInput = document.getElementById('dropdown-search-receive');
+        const sendNetwork = document.getElementById('network-send');
+        const receiveNetwork = document.getElementById('network-receive');
+
+        // Swap the select values
+        const tempValue = sendSelect.value;
+        const tempText = sendSelect.options[sendSelect.selectedIndex]?.textContent || '';
+        
+        sendSelect.value = receiveSelect.value;
+        if (sendSelect.options[sendSelect.selectedIndex]) {
+            sendSelect.options[sendSelect.selectedIndex].selected = true;
+        }
+        
+        receiveSelect.value = tempValue;
+        if (receiveSelect.options[receiveSelect.selectedIndex]) {
+            receiveSelect.options[receiveSelect.selectedIndex].selected = true;
+        }
+
+        // Swap the input field values and icons
+        const tempInputValue = sendInput.value;
+        const tempBgImage = sendInput.style.backgroundImage;
+        
+        sendInput.value = receiveInput.value;
+        sendInput.style.backgroundImage = receiveInput.style.backgroundImage;
+        
+        receiveInput.value = tempInputValue;
+        receiveInput.style.backgroundImage = tempBgImage;
+
+        // Swap the network values
+        const tempNetwork = sendNetwork.value;
+        sendNetwork.value = receiveNetwork.value;
+        receiveNetwork.value = tempNetwork;
+
+        // Clear the amount and estimated amount fields
+        document.getElementById('amount').value = '';
+        document.getElementById('estimated-amount').value = '';
+    };
 
     document.getElementById('dropdown-search-send').addEventListener('click', () => openModal(document.getElementById('crypto-send')));
     document.getElementById('dropdown-search-receive').addEventListener('click', () => openModal(document.getElementById('crypto-receive')));
