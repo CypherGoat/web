@@ -1555,19 +1555,18 @@ function updateEstimatedAmountFromFirstCard() {
         const sendNetwork = document.getElementById('network-send');
         const receiveNetwork = document.getElementById('network-receive');
 
-        // Swap the select values
+        // Store current values
         const tempValue = sendSelect.value;
-        const tempText = sendSelect.options[sendSelect.selectedIndex]?.textContent || '';
+        const tempOption = sendSelect.innerHTML;
+        const receiveValue = receiveSelect.value;
+        const receiveOption = receiveSelect.innerHTML;
         
-        sendSelect.value = receiveSelect.value;
-        if (sendSelect.options[sendSelect.selectedIndex]) {
-            sendSelect.options[sendSelect.selectedIndex].selected = true;
-        }
+        // Swap the select elements' innerHTML and values
+        sendSelect.innerHTML = receiveOption;
+        sendSelect.value = receiveValue;
         
+        receiveSelect.innerHTML = tempOption;
         receiveSelect.value = tempValue;
-        if (receiveSelect.options[receiveSelect.selectedIndex]) {
-            receiveSelect.options[receiveSelect.selectedIndex].selected = true;
-        }
 
         // Swap the input field values and icons
         const tempInputValue = sendInput.value;
