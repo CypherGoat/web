@@ -112,4 +112,4 @@ Thank you!
 
 Found anything worth noting? Want to send something to be included in the next issue? Want to chat about something?
 
-You can contact me on [Matrix](https://mater rix.to/#/@recanman:kernal.eu). Be aware that Matrix is centralized due to the fact that most people make an account on [Matrix.org](https://matrix.org/) operated by the Matrix Foundation - That's [a lot of metadata](https://yewtu.be/watch?v=PxwEwwlDM8Q&t=28) controlled unjust by just one entity.
+You can contact me on [Matrix](https://matrix.to/#/@recanman:kernal.eu). Be aware that Matrix is centralized due to the fact that most people make an account on [Matrix.org](https://matrix.org/) operated by the Matrix Foundation - That's [a lot of metadata](https://yewtu.be/watch?v=PxwEwwlDM8Q&t=28) controlled unjust by just one entity.
