@@ -732,8 +732,8 @@ templ BlogHeader(post *BlogPostData) {
         <link href="/static/styles.css?v=202508134" rel="stylesheet">
         <script src="/static/htmx.min.js"></script>
 
-        <title>{ post.Title } | CypherGoat Blog</title>
-        <meta name="title" content={ post.Title + " | CypherGoat Blog" }>
+        <title>{ post.Title } | CypherGoat</title>
+        <meta name="title" content={ post.Title + " | CypherGoat" }>
         <meta name="description" content={ post.Description }>
         <meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto, exchange, cryptocurrency" }>
         <meta name="author" content={ post.Author }>
@@ -741,7 +741,7 @@ templ BlogHeader(post *BlogPostData) {
 
         <meta property="og:type" content="article">
         <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
-        <meta property="og:title" content={ post.Title + " | CypherGoat Blog" }>
+        <meta property="og:title" content={ post.Title + " | CypherGoat" }>
         <meta property="og:description" content={ post.Description }>
         if post.Image != "" {
             <meta property="og:image" content={ post.Image }>
