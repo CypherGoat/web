@@ -144,6 +144,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"quickex":      {"/exchanges/quickex.png", "", false},
 	"silkbyte":     {"/exchanges/silkbyte.png", "", false},
 	"etzswap":      {"/exchanges/etz.png", "", false},
+	"thorchain":    {"/exchanges/thorchain.png", "/exchanges/no-text/thorchain.png", false},
 }
 
 func EstimateHandler(c echo.Context) error {
