@@ -195,13 +195,23 @@ templ Header() {
                 outline: 2px solid rgba(255, 255, 255, 0.3);
                 outline-offset: 2px;
             }
+
+            /* Logo hover animation */
+            .logo-link:hover .logo-img {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+            }
+
+            .logo-img {
+                transition: transform 0.2s ease, filter 0.2s ease;
+            }
         </style>
     </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2"> 
+            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
+                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2 logo-img"> 
                 CypherGoat               
             </a>
             <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
@@ -399,13 +409,23 @@ templ HeaderCustomTitle(title string) {
                 outline: 2px solid rgba(255, 255, 255, 0.3);
                 outline-offset: 2px;
             }
+
+            /* Logo hover animation */
+            .logo-link:hover .logo-img {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+            }
+
+            .logo-img {
+                transition: transform 0.2s ease, filter 0.2s ease;
+            }
         </style>
     </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2"> 
+            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
+                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2 logo-img"> 
                 CypherGoat               
             </a>
             <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
@@ -604,13 +624,23 @@ templ IndexHeader() {
                 outline: 2px solid rgba(255, 255, 255, 0.3);
                 outline-offset: 2px;
             }
+
+            /* Logo hover animation */
+            .logo-link:hover .logo-img {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+            }
+
+            .logo-img {
+                transition: transform 0.2s ease, filter 0.2s ease;
+            }
         </style>
     </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2"> 
+            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
+                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2 logo-img"> 
                 CypherGoat               
             </a>
             <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
@@ -901,13 +931,23 @@ templ BlogHeader(post *BlogPostData) {
                 outline: 2px solid rgba(255, 255, 255, 0.3);
                 outline-offset: 2px;
             }
+
+            /* Logo hover animation */
+            .logo-link:hover .logo-img {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+            }
+
+            .logo-img {
+                transition: transform 0.2s ease, filter 0.2s ease;
+            }
         </style>
     </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2"> 
+            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
+                <img src="/static/icons/cg-notext.svg" alt="CypherGoat Logo" width="75" height="75" class="mr-1 -my-2 logo-img"> 
                 CypherGoat               
             </a>
             <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">

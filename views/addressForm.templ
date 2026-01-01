@@ -321,6 +321,18 @@ templ AddressForm(estimate api.Estimate, err bool,mode string){
                         class="w-full p-3 bg-[#1a1f2e] text-gray-300 border border-gray-700 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 transition-all">
                 </div>
 
+                if strings.ToLower(estimate.ExchangeName) == "thorchain" {
+                    <div style="background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(255, 140, 0, 0.15)); border: 1px solid rgba(255, 165, 0, 0.3); border-radius: 12px; padding: 1rem;">
+                        <label style="display: flex; align-items: flex-start; cursor: pointer; color: #e0e0e0;">
+                            <input type="checkbox" id="thorchain-memo-check" required
+                                style="width: 20px; height: 20px; margin-right: 0.75rem; margin-top: 0.125rem; cursor: pointer; flex-shrink: 0; accent-color: #FFA500;">
+                            <span style="line-height: 1.5;">
+                                <strong style="color: #FFA500;">I understand that ThorChain integration is in beta</strong> and a memo is required for this transaction, I must include it or <strong>my transaction will fail</strong>.
+                            </span>
+                        </label>
+                    </div>
+                }
+
                 <button class="action-button">
                     Create Trade
                 </button>

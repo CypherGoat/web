@@ -100,7 +100,7 @@ var ExchangesList = []Exchange{
 	{
 		Name:                  "QuickEx",
 		ShortCode:             "quickex",
-		KYCScore:              1,
+		KYCScore:              2,
 		URL:                   "https://quickex.io",
 		LogoURL:               "/exchanges/quickex.png",
 		NoTextURL:             "",
