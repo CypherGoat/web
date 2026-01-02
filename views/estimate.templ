@@ -76,6 +76,12 @@ templ EstimateCard(offers api.Estimates, mode string) {
             border-color: rgba(255, 255, 255, 0.1);
         }
 
+        .estimate-form-estimates.selected .card-estimates {
+            border-color: rgba(0, 136, 255, 0.4);
+            background: linear-gradient(145deg, #1e2538, #252b3f);
+            box-shadow: 0 0 0 2px rgba(0, 136, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
         .exchange-info-estimates {
             grid-column: 1 / -1;
             display: flex;
@@ -528,8 +534,8 @@ templ EstimateCard(offers api.Estimates, mode string) {
     </style>
     <div class="container-estimates">
         <div class="sort-options-estimates">
-            <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Sort by Rate</button>
-            <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Sort by KYC</button>
+            <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Best Rate</button>
+            <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Lowest KYC</button>
         </div>
 
         
@@ -710,8 +716,10 @@ templ EstimateCard(offers api.Estimates, mode string) {
                 const button = form.querySelector('button');
                 if (index === 0) {
                     button.className = 'btn-select2-estimates btn-primary-estimates';
+                    form.classList.add('selected');
                 } else {
                     button.className = 'btn-select2-estimates';
+                    form.classList.remove('selected');
                 }
                 
                 container.appendChild(form);
@@ -722,6 +730,7 @@ templ EstimateCard(offers api.Estimates, mode string) {
                 }
             });
             document.dispatchEvent(new CustomEvent('estimatesSorted'));
+            document.dispatchEvent(new CustomEvent('firstEstimateUpdated'));
 
         }
         
@@ -738,9 +747,7 @@ templ EstimateCard(offers api.Estimates, mode string) {
 
 
 
-    (function() {
-        // Initialize existing sorting code...
-        
+    (function() {        
         // Add tooltip behavior for guarantee badges
         function setupTooltips() {
             const badges = document.querySelectorAll('.guarantee-badge-estimates');
