@@ -23,7 +23,7 @@ author: "recanman"
 
 - Version v0.1.3 of monero-multisig-gui has been released by freigeist-m. It includes bug fixes. [Release](https://github.com/freigeist-m/monero-multisig-gui/releases/tag/v0.1.3)
 - A new Monero mining pool, xmr.pw, has been released in beta. [View](https://xmr.pw/)
-- A Monero meetup will be occuring on January 16, 2026, from 6-9PM EST, in Charlotte, North Carolina. [Event](https://luma.com/imb0pdkf)
+- A Monero meetup will be occurring on January 16, 2026, from 6-9PM EST, in Charlotte, North Carolina. [Event](https://luma.com/imb0pdkf)
 - Version v0.11.8 of monero-ts has been released by woodser. It includes an internal improvement. [Release](https://github.com/woodser/monero-ts/releases/tag/v0.11.8)
 - Version v1.0.1.1 of the Haveno Android app has been released by atsamd21. It includes bug fixes and new features. [Release](https://github.com/atsamd21/Haveno-app/releases/tag/v1.0.1.1)
 - The next Cuprate meeting has been scheduled for January 13, 2026 at 1800 UTC. It will take place in the [Matrix](https://matrix.to/#/#cuprate:monero.social)/[IRC-Libera](irc://irc.libera.chat/#cuprate) chats, in the #cuprate channel.
@@ -49,19 +49,19 @@ author: "recanman"
 #### Technical Analysis
 | Indicator | Value | Signal |
 |---|---:|---|
-| RSI (14) | 62.6 | Neutral |
+| RSI (14) | 66.3 | Neutral |
 | MACD | Bullish | Strong |
-| 20-EMA vs 50-EMA | 390.06 vs 351.96 | Uptrend |
+| 20-EMA vs 50-EMA | 404.91 vs 362.75 | Uptrend |
 | Bollinger Bands | Price Near upper band | Caution |
 
 ![](/blog/images/ms-18/xmr_comprehensive.png)
 
 **Chart Pattern**  
 No clear pattern detected.  
-Support around **284.36**; next resistance near **494.81**.
+Support around **311.33**; next resistance near **494.81**.
 
 **Outlook**  
-Momentum: bullish. Short-term trend: uptrend. As long as XMR stays above **284.36**, setup favors bulls. A close below **278.67** would weaken the setup.
+Momentum: bullish. Short-term trend: uptrend. As long as XMR stays above **311.33**, setup favors bulls. A close below **305.10** would weaken the setup.
 
 #### Hashrate Distribution
 
