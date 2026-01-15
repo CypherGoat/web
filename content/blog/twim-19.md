@@ -24,6 +24,7 @@ author: "recanman"
 - Version v0.18.4.5 'Fluorine Fermi' of Monero has been released. It includes various internal improvements and bug fixes. [Release](https://www.getmonero.org/2026/01/11/monero-GUI-0.18.4.5-released.html)
 - The Monero price broke its all-time high, peaking at almost $800 on January 14, 2026.
 - MoneroKon 2026 will take place from June 5-7 in Warsaw, Poland, after a failed attempt to organize it in Serbia. [Event](https://monerokon.org/)
+- A fork of the CypherGoat CLI with various improvements has been released by moralpriest. [Release](https://github.com/moralpriest/cyphergoat-cli)
 - Version v0.8.41 of monero-java has been released by woodser. It includes an improvement. [Release](https://github.com/woodser/monero-java/releases/tag/v0.8.41)
 - Version v0.9.4 of Monfluo has been released by acx. It includes an update to Monero v0.18.4.5. [Release](https://codeberg.org/acx/monfluo/releases/tag/0.9.4)
 - Version v5.7.0 of Cake Wallet has been released by Cake Wallet. It includes various bug fixes, and Zcash support. [Release](https://github.com/cake-tech/cake_wallet/releases/tag/v5.7.0)
