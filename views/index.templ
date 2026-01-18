@@ -1244,16 +1244,6 @@ document.addEventListener('htmx:afterSwap', function() {
         faqSection.style.display = 'none';
     }
     
-    // Change button text to 'Continue >' after estimates are loaded
-    const submitButton = document.getElementById('submit-button');
-    if (submitButton && currentMode === 'swap') {
-        submitButton.textContent = 'Continue >';
-        setupContinueButton();
-    } else if (submitButton && currentMode === 'pay') {
-        submitButton.textContent = 'Continue >';
-        setupContinueButton();
-    }
-    
     updateEstimatedAmountFromFirstCard();
     
     setTimeout(function() {
@@ -1539,7 +1529,7 @@ function updateEstimatedAmountFromFirstCard() {
 
     async function loadCoins() {
         try {
-            const response = await fetch('/static/coins.json?v=43');
+            const response = await fetch('/static/coins.json?v=44');
             const jsonData = await response.json();
             createModalOptions(jsonData);
         } catch (error) {
@@ -1660,44 +1650,6 @@ function scrollToFAQ() {
     }
 }
 
-// Setup Continue button to submit the first estimate form
-function setupContinueButton() {
-    const submitButton = document.getElementById('submit-button');
-    const swapForm = document.getElementById('swap-form');
-    
-    if (!submitButton || !swapForm) return;
-    
-    // Mark that continue mode is active
-    submitButton.dataset.continueMode = 'true';
-}
-
-// Handle form submission for both Swap/Pay and Continue modes
-document.addEventListener('DOMContentLoaded', function() {
-    const swapForm = document.getElementById('swap-form');
-    if (swapForm) {
-        swapForm.addEventListener('submit', function(e) {
-            const submitButton = document.getElementById('submit-button');
-            
-            // If in continue mode, prevent default and submit the first estimate form instead
-            if (submitButton && submitButton.dataset.continueMode === 'true') {
-                e.preventDefault();
-                const firstEstimateForm = document.querySelector('.estimate-form-estimates.selected');
-                if (firstEstimateForm) {
-                    firstEstimateForm.submit();
-                }
-            }
-            // Otherwise, let the normal form submission happen
-        });
-    }
-})
-
-document.addEventListener('firstEstimateUpdated', function() {
-    const submitButton = document.getElementById('submit-button');
-    if (submitButton && (submitButton.textContent === 'Continue >')) {
-        setupContinueButton();
-    }
-});
-
 let currentMode = 'swap'; // Track current mode
 
 function switchTab(mode) {
@@ -1771,9 +1723,6 @@ function switchTab(mode) {
         submitButton.textContent = 'Pay';
         modeInput.value = 'pay';
     }
-    
-    // Reset continue mode when switching tabs
-    submitButton.dataset.continueMode = 'false';
     
     amountInput.value = '';
     estimatedInput.value = '';

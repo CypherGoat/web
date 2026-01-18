@@ -321,9 +321,18 @@
     {
         "ticker": "usdt",
         "name": "Tether USD",
-        "network": "usdt",
+        "network": "eth",
         "isStable": true,
         "icon": "icons/usdt.png",
+        "alfacash": "tethererc20",
+        "changehero": "usdt20",
+        "changenow": "usdterc20",
+        "fixedfloat": "usdt",
+        "majesticbank": "",
+        "nanswap": "usdt",
+        "stealthex": "usdterc20",
+        "wizardswap": "",
+        "bitcoinvn": "usdterc20",
         "cg-pay": true
     },
     {
