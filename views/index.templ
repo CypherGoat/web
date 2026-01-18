@@ -719,6 +719,15 @@ footer {
     body.js-enabled .dropdown-input {
         cursor: pointer;
     }
+
+    /* Hide swap coins button when JavaScript is disabled */
+    .swap-coins-container {
+        display: none;
+    }
+
+    body.js-enabled .swap-coins-container {
+        display: flex;
+    }
     </style>
      <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
     <p id="error-text"></p>

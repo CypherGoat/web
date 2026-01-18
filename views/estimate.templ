@@ -283,7 +283,36 @@ templ EstimateCard(offers api.Estimates, mode string) {
             align-items: center;
             gap: 0.5rem;
         }
+        .card-estimates.blocked {
+            opacity: 0.6;
+            background: linear-gradient(145deg, #2a2a2a, #333333);
+            border: 1px solid #555;
+        }
 
+        .card-estimates.blocked .btn-select-estimates,
+        .card-estimates.blocked .btn-select2-estimates {
+            background: #666;
+            color: #999;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .card-estimates.blocked .btn-select-estimates:hover,
+        .card-estimates.blocked .btn-select2-estimates:hover {
+            background: #666;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .blocked-notice-estimates {
+            background: linear-gradient(135deg, #656565, #3b3b3b);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
         .arrow-icon-estimates {
             color: #9fa3b8;
             font-size: 1rem;
@@ -560,7 +589,7 @@ templ EstimateCard(offers api.Estimates, mode string) {
                         <input type="hidden" name="mode" value={ mode }>
 
 
-                        <div class="card-estimates">
+                        <div class={ "card-estimates", templ.KV("blocked", offer.Blocked) }>
                             <div class="exchange-info-estimates">
                                 <div class="exchange-name-estimates">
                                     if offer.NoTextURL != "" {
@@ -607,12 +636,20 @@ templ EstimateCard(offers api.Estimates, mode string) {
                                         { FormatFloat(offer.ReceiveAmount) } { strings.ToUpper(offer.Coin2) }
                                     }
                                 </div>
-                                if i == 0 {
+                                if offer.Blocked {
+                                    <button class="btn-select2-estimates" type="button" disabled>Not Available</button>
+                                } else if i == 0 {
                                     <button class="btn-select2-estimates btn-primary-estimates" type="submit">Select</button>
                                 } else {
                                     <button class="btn-select2-estimates" type="submit">Select</button>
                                 }
                             </div>
+                            
+                            if offer.Blocked {
+                                <div class="blocked-notice-estimates">
+                                    This exchange is not available via our hidden services.
+                                </div>
+                            }
                             
                             <div class="exchange-features-estimates">
                                 if offer.KYCScore == 0 {

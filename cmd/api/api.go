@@ -228,7 +228,7 @@ func FetchPaymentEstimateFromAPI(coin1, coin2 string, amount float64, network1, 
 	return result.Rates, nil
 }
 
-func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info) (error, Transaction) {
+func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info, source string) (error, Transaction) {
 	params := url.Values{}
 	params.Add("coin1", coin1)
 	params.Add("coin2", coin2)
@@ -242,7 +242,7 @@ func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner st
 	params.Add("useragent", info.UserAgent)
 	params.Add("lang", info.LangList)
 
-	params.Add("source", "clearnet-main")
+	params.Add("source", source)
 
 	requestURL := fmt.Sprintf("%s/swap?%s", URL, params.Encode())
 
@@ -278,7 +278,7 @@ func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner st
 	return nil, transaction
 }
 
-func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info) (error, Transaction) {
+func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info, source string) (error, Transaction) {
 	params := url.Values{}
 	params.Add("coin1", coin1)
 	params.Add("coin2", coin2)
@@ -292,7 +292,7 @@ func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner 
 	params.Add("useragent", info.UserAgent)
 	params.Add("lang", info.LangList)
 
-	params.Add("source", "clearnet-main")
+	params.Add("source", source)
 
 	requestURL := fmt.Sprintf("%s/payments/create?%s", URL, params.Encode())
 
@@ -323,7 +323,7 @@ func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner 
 	return nil, transaction
 }
 
-func CreateQuickPaymentFromAPI(coin1, coin2 string, amount float64, address, network1, network2, affiliate string, info Info) (error, Transaction) {
+func CreateQuickPaymentFromAPI(coin1, coin2 string, amount float64, address, network1, network2, affiliate string, info Info, source string) (error, Transaction) {
 	params := url.Values{}
 	params.Add("coin1", coin1)
 	params.Add("coin2", coin2)
@@ -336,7 +336,7 @@ func CreateQuickPaymentFromAPI(coin1, coin2 string, amount float64, address, net
 	params.Add("useragent", info.UserAgent)
 	params.Add("lang", info.LangList)
 
-	params.Add("source", "clearnet-main")
+	params.Add("source", source)
 
 	requestURL := fmt.Sprintf("%s/payments/quick?%s", URL, params.Encode())
 

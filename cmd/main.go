@@ -57,6 +57,23 @@ func AffiliateMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+func AnonymousNetworkDetectionMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		host := c.Request().Host
+
+		if colonIndex := strings.LastIndex(host, ":"); colonIndex != -1 {
+			host = host[:colonIndex]
+		}
+
+		// Check if the host is a Tor or I2P address
+		isAnonymousNetwork := strings.HasSuffix(host, ".onion") || strings.HasSuffix(host, ".i2p") || strings.HasSuffix(host, ".b32.i2p")
+
+		c.Set("isAnonymousNetwork", isAnonymousNetwork)
+
+		return next(c)
+	}
+}
+
 func AllowedHostsMiddleware(allowedHosts []string) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
@@ -96,6 +113,7 @@ func main() {
 	e.Use(middleware.Secure())
 	e.Use(AllowedHostsMiddleware(allowedHosts))
 	e.Use(allowPayEmbedding)
+	e.Use(AnonymousNetworkDetectionMiddleware)
 	e.Use(AffiliateMiddleware)
 
 	e.Use(removeTrailingSlash)

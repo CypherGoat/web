@@ -296,6 +296,8 @@ func EstimateHandler(c echo.Context) error {
 		}
 	}
 
+	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
+
 	value_btc := estimates.TradeValue_btc
 	value_usd := estimates.TradeValue_fiat
 	for i := range estimates.Results {
@@ -323,6 +325,7 @@ func EstimateHandler(c echo.Context) error {
 		}
 
 		estimates.Results[i].Log = exchangeInfo[name].RequireIP
+		estimates.Results[i].Blocked = isExchangeBlocked(estimates.Results[i].ExchangeName, isAnonymousNetwork)
 
 	}
 
@@ -417,15 +420,22 @@ func Step3Handler(c echo.Context) error {
 		affiliate = affiliateCookie.Value
 	}
 
+	// Get anonymous network status from middleware
+	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
+	source := "clearnet-main"
+	if isAnonymousNetwork {
+		source = "anonet"
+	}
+
 	var transaction api.Transaction
 
 	// Check if it's payment mode and call the appropriate API
 	if mode == "pay" {
 		// In payment mode, 'amount' is what the user wants to receive
-		err, transaction = api.CreatePaymentFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info)
+		err, transaction = api.CreatePaymentFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info, source)
 	} else {
 		// In swap mode, 'amount' is what the user wants to send
-		err, transaction = api.CreateTradeFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info)
+		err, transaction = api.CreateTradeFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info, source)
 	}
 
 	if err != nil || transaction.Id == "" {
@@ -496,7 +506,14 @@ func CGPayCreateHandler(c echo.Context) error {
 		affiliate = affiliateCookie.Value
 	}
 
-	err, transaction := api.CreateQuickPaymentFromAPI(coin1, coin2, amount, address, network1, network2, affiliate, info)
+	// Get anonymous network status from middleware
+	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
+	source := "clearnet-main"
+	if isAnonymousNetwork {
+		source = "anonet"
+	}
+
+	err, transaction := api.CreateQuickPaymentFromAPI(coin1, coin2, amount, address, network1, network2, affiliate, info, source)
 
 	if err != nil {
 		fmt.Printf("API Error: %v\n", err)
