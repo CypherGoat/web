@@ -14,3 +14,40 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package views
+
+import (
+	"encoding/json"
+	"io/ioutil"
+	"strings"
+)
+
+type Coin struct {
+	Ticker  string `json:"ticker"`
+	Name    string `json:"name"`
+	Network string `json:"network"`
+	Icon    string `json:"icon"`
+}
+
+func getCoins() []Coin {
+	data, err := ioutil.ReadFile("static/coins.json")
+	if err != nil {
+		return nil
+	}
+	var coins []Coin
+	json.Unmarshal(data, &coins)
+	return coins
+}
+
+func formatCoinValue(coin Coin) string {
+	if coin.Ticker == coin.Network {
+		return coin.Ticker
+	}
+	return coin.Ticker + "(" + coin.Network + ")"
+}
+
+func formatCoinDisplay(coin Coin) string {
+	if coin.Network == coin.Ticker {
+		return coin.Name + " - " + strings.ToUpper(coin.Ticker)
+	}
+	return coin.Name + " - " + strings.ToUpper(coin.Ticker) + " (" + strings.ToUpper(coin.Network) + ")"
+}

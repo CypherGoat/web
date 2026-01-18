@@ -64,6 +64,7 @@ type Estimate struct {
 	CGShield        bool `json:"CGShield,omitempty"`
 	CoveragePercent float64
 	CGSAmount       string
+	Blocked         bool `json:"blocked"`
 }
 
 type Info struct {

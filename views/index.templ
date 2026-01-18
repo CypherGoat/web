@@ -15,6 +15,8 @@
 
 package views
 
+import "strings"
+
 templ IndexTempl() {
     
 		@IndexHeader(){
@@ -708,32 +710,41 @@ footer {
         color: #93c5fd;
         transform: rotate(180deg);
     }
+
+    /* Hide datalist when JavaScript is enabled */
+    body.js-enabled datalist {
+        display: none;
+    }
+
+    body.js-enabled .dropdown-input {
+        cursor: pointer;
+    }
     </style>
      <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
     <p id="error-text"></p>
 </div>
-<noscript>
-  <div class="no-js-popup">
-    <h1>Hey there! JavaScript seems to be off</h1>
-    <p>
-      <span class="emphasis">No worries at all!</span>  
-      We’ve got you covered. For the fastest, most private and completely JavaScript free experience, head over to:<br>
-      <a href="https://nojs.cyphergoat.com" target="_blank" rel="noopener noreferrer" class="emphasis">nojs.cyphergoat.com</a>
-    </p>
-    <p>
-        Or connect securely via our
-      <a href="http://cyphergmw4huw7jzhat3misfm5jj2m4nvafockqbj7i5rrlec6mobdid.onion/" target="_blank" rel="noopener noreferrer">Tor</a>  
-      or  
-      <a href="http://cjorx2hmv3jxs5sshxhw73nmkiayupim6gfye3sfts2pzmjgk5rq.b32.i2p/" target="_blank" rel="noopener noreferrer">I2P</a>  
-      versions.
-    </p>
-    <p class="note">
-      Your privacy matters to us.  
-      Enjoy the full experience with or without JavaScript, your choice!
-    </p>
-    <p class="note">P.S our webui is completely open source! Check it out on <a href="https://github.com/CypherGoat/web" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
-  </div>
-</noscript>
+// <noscript>
+//   <div class="no-js-popup">
+//     <h1>Hey there! JavaScript seems to be off</h1>
+//     <p>
+//       <span class="emphasis">No worries at all!</span>  
+//       We’ve got you covered. For the fastest, most private and completely JavaScript free experience, head over to:<br>
+//       <a href="https://nojs.cyphergoat.com" target="_blank" rel="noopener noreferrer" class="emphasis">nojs.cyphergoat.com</a>
+//     </p>
+//     <p>
+//         Or connect securely via our
+//       <a href="http://cyphergmw4huw7jzhat3misfm5jj2m4nvafockqbj7i5rrlec6mobdid.onion/" target="_blank" rel="noopener noreferrer">Tor</a>  
+//       or  
+//       <a href="http://cjorx2hmv3jxs5sshxhw73nmkiayupim6gfye3sfts2pzmjgk5rq.b32.i2p/" target="_blank" rel="noopener noreferrer">I2P</a>  
+//       versions.
+//     </p>
+//     <p class="note">
+//       Your privacy matters to us.  
+//       Enjoy the full experience with or without JavaScript, your choice!
+//     </p>
+//     <p class="note">P.S our webui is completely open source! Check it out on <a href="https://github.com/CypherGoat/web" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+//   </div>
+// </noscript>
 
 <div class="pt-0 container mx-auto p-7 min-h-screen">
     <div class="text-center">
@@ -772,17 +783,22 @@ footer {
             <div class="card">
                 <h1 class="hidden">Swap</h1>
 
-               <form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
+               <form id="swap-form" method="GET" action="/estimate" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
     <div class="input-group">
         <div>
             <label for="amount" class="form-label" id="amount-label">Amount</label>
-            <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="You send">
+            <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="You send" value="0.1">
         </div>
         <div class="searchable-dropdown">
             <label class="form-label" id="send-coin-label">Send Coin</label>
-            <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
+            <input type="text" list="coins1" placeholder="Search coin to send..." id="dropdown-search-send" name="coin1" autocomplete="off" class="dropdown-input" value="BTC">
+            <datalist id="coins1">
+                for _, coin := range getCoins() {
+                    <option value={formatCoinValue(coin)}>{coin.Name} - {strings.ToUpper(coin.Ticker)} ({strings.ToUpper(coin.Network)})</option>
+                }
+            </datalist>
             <div class="dropdown-options" id="dropdown-options-send"></div>
-            <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
+            <select id="crypto-send" style="display: none;" autocomplete="off"></select>
         </div>
     </div>
 
@@ -796,20 +812,26 @@ footer {
 
     <div class="input-group">
         <div>
-            <label for="estimated-amount" class="form-label" id="estimated-label">Estimated (auto-calculated)</label>
+            <label for="estimated-amount" class="form-label" id="estimated-label">Estimated</label>
             <input type="text" id="estimated-amount" class="form-input read-only" placeholder="You receive (calculated)" readonly>
         </div>
         <div class="searchable-dropdown">
             <label class="form-label" id="receive-coin-label">Receive Coin</label>
-            <input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off">
+            <input type="text" list="coins2" placeholder="Search coin to receive..." id="dropdown-search-receive" name="coin2" autocomplete="off" class="dropdown-input" value="XMR">
+            <datalist id="coins2">
+                for _, coin := range getCoins() {
+                    <option value={formatCoinValue(coin)}>{coin.Name} - {strings.ToUpper(coin.Ticker)} ({strings.ToUpper(coin.Network)})</option>
+                }
+            </datalist>
             <div class="dropdown-options" id="dropdown-options-receive"></div>
-            <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
+            <select id="crypto-receive" style="display: none;" autocomplete="off"></select>
         </div>
     </div>
 
     <input type="hidden" id="network-send" name="network1">
     <input type="hidden" id="network-receive" name="network2">
     <input type="hidden" id="mode" name="mode" value="swap">
+    <input type="hidden" id="nojs" name="nojs" value="true">
     <button type="submit" class="btn-primary" id="submit-button">Swap</button>
 </form>
 
@@ -1190,8 +1212,31 @@ function closePopupOnClickOutside(event) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Add class to body to indicate JS is enabled
+    document.body.classList.add('js-enabled');
+    
+    // Remove nojs parameter since JavaScript is enabled
+    const nojsInput = document.getElementById('nojs');
+    if (nojsInput) {
+        nojsInput.remove();
+    }
+    
+    // Make datalist inputs readonly to prevent native dropdown
+    const sendInput = document.getElementById('dropdown-search-send');
+    const receiveInput = document.getElementById('dropdown-search-receive');
+    sendInput.setAttribute('readonly', true);
+    receiveInput.setAttribute('readonly', true);
+    
+    // Remove name attributes from datalist inputs when JS is enabled
+    // so they don't interfere with the hidden selects
+    sendInput.removeAttribute('name');
+    receiveInput.removeAttribute('name');
+    
+    // Add name attributes to hidden selects for form submission
     const selectElementSend = document.getElementById('crypto-send');
     const selectElementReceive = document.getElementById('crypto-receive');
+    selectElementSend.setAttribute('name', 'coin1');
+    selectElementReceive.setAttribute('name', 'coin2');
     const scrollButton = document.getElementById("hide-on-swap");
     const faqSection = document.getElementById("faq-section");
     
@@ -1391,6 +1436,7 @@ function updateEstimatedAmountFromFirstCard() {
             optionDiv.innerHTML = `<img src="${item.icon}" alt="${item.name} icon"> ${displayText}`;
             optionDiv.dataset.ticker = item.ticker;
             optionDiv.dataset.network = item.network;
+            optionDiv.dataset.name = item.name;
             optionDiv.dataset.text = displayTextWithTicker;
 
             optionDiv.onclick = () => {
@@ -1408,19 +1454,28 @@ function updateEstimatedAmountFromFirstCard() {
         
         const ticker = optionDiv.dataset.ticker;
         const network = optionDiv.dataset.network;
-        const displayText = optionDiv.textContent.trim();
+        const name = optionDiv.dataset.name;
         const icon = optionDiv.querySelector('img').src;
+        
+        // Format display: "Name (TICKER)" or "Name (NETWORK)" if different from ticker
+        let displayValue;
+        if (ticker === network) {
+            displayValue = `${name} (${ticker.toUpperCase()})`;
+        } else {
+            displayValue = `${name} (${network.toUpperCase()})`;
+        }
         
         currentSelectElement.value = ticker;
         const inputField = document.querySelector(`#dropdown-search-${currentSelectElement.id.split('-')[1]}`);
-        inputField.value = displayText;
+        
+        inputField.value = displayValue;
         inputField.style.backgroundImage = `url(${icon})`;
         inputField.style.backgroundRepeat = 'no-repeat';
         inputField.style.backgroundPosition = 'left 10px center';
         inputField.style.paddingLeft = '40px';
 
         const selectElement = document.getElementById(`crypto-${currentSelectElement.id.split('-')[1]}`);
-        selectElement.innerHTML = `<option value="${ticker}" selected>${displayText}</option>`;
+        selectElement.innerHTML = `<option value="${ticker}" selected>${displayValue}</option>`;
         selectElement.classList.add('hidden');
 
         closeModal();
@@ -1471,9 +1526,13 @@ function updateEstimatedAmountFromFirstCard() {
         const receiveCoin = jsonData.find(item => item.ticker.toLowerCase() === defaultReceiveCoin);
         
         if (sendCoin) {
-            const sendDisplayText = sendCoin.network ? 
-                `${sendCoin.name} (${sendCoin.network.toUpperCase()})` : 
-                `${sendCoin.name}`;
+            // Format display: "Name (TICKER)" or "Name (NETWORK)" if different
+            let sendDisplayValue;
+            if (sendCoin.ticker === sendCoin.network) {
+                sendDisplayValue = `${sendCoin.name} (${sendCoin.ticker.toUpperCase()})`;
+            } else {
+                sendDisplayValue = `${sendCoin.name} (${sendCoin.network.toUpperCase()})`;
+            }
                 
             const selectSend = document.getElementById('crypto-send');
             selectSend.value = sendCoin.ticker;
@@ -1482,7 +1541,7 @@ function updateEstimatedAmountFromFirstCard() {
             if (!option) {
                 option = document.createElement('option');
                 option.value = sendCoin.ticker;
-                option.textContent = sendDisplayText;
+                option.textContent = sendDisplayValue;
                 option.selected = true;
                 selectSend.appendChild(option);
             } else {
@@ -1490,7 +1549,7 @@ function updateEstimatedAmountFromFirstCard() {
             }
                 
             const sendInputField = document.getElementById('dropdown-search-send');
-            sendInputField.value = sendDisplayText;
+            sendInputField.value = sendDisplayValue;
             sendInputField.style.backgroundImage = `url(${sendCoin.icon})`;
             sendInputField.style.backgroundRepeat = 'no-repeat';
             sendInputField.style.backgroundPosition = 'left 10px center';
@@ -1499,9 +1558,13 @@ function updateEstimatedAmountFromFirstCard() {
         }
         
         if (receiveCoin) {
-            const receiveDisplayText = receiveCoin.network ? 
-                `${receiveCoin.name} (${receiveCoin.network.toUpperCase()})` : 
-                `${receiveCoin.name}`;
+            // Format display: "Name (TICKER)" or "Name (NETWORK)" if different
+            let receiveDisplayValue;
+            if (receiveCoin.ticker === receiveCoin.network) {
+                receiveDisplayValue = `${receiveCoin.name} (${receiveCoin.ticker.toUpperCase()})`;
+            } else {
+                receiveDisplayValue = `${receiveCoin.name} (${receiveCoin.network.toUpperCase()})`;
+            }
             
             const selectReceive = document.getElementById('crypto-receive');
             selectReceive.value = receiveCoin.ticker;
@@ -1510,7 +1573,7 @@ function updateEstimatedAmountFromFirstCard() {
             if (!option) {
                 option = document.createElement('option');
                 option.value = receiveCoin.ticker;
-                option.textContent = receiveDisplayText;
+                option.textContent = receiveDisplayValue;
                 option.selected = true;
                 selectReceive.appendChild(option);
             } else {
@@ -1518,7 +1581,7 @@ function updateEstimatedAmountFromFirstCard() {
             }
                 
             const receiveInputField = document.getElementById('dropdown-search-receive');
-            receiveInputField.value = receiveDisplayText;
+            receiveInputField.value = receiveDisplayValue;
             receiveInputField.style.backgroundRepeat = 'no-repeat';
             receiveInputField.style.backgroundImage = `url(${receiveCoin.icon})`;
             receiveInputField.style.backgroundPosition = 'left 10px center';
@@ -1562,7 +1625,7 @@ function updateEstimatedAmountFromFirstCard() {
         receiveSelect.innerHTML = tempOption;
         receiveSelect.value = tempValue;
 
-        // Swap the input field values and icons
+        // Swap the datalist input field values and icons
         const tempInputValue = sendInput.value;
         const tempBgImage = sendInput.style.backgroundImage;
         
@@ -1598,7 +1661,16 @@ function updateEstimatedAmountFromFirstCard() {
         }
     });
 
-    document.getElementById('swap-form').addEventListener('submit', function() {
+    document.getElementById('swap-form').addEventListener('submit', function(e) {
+    // When JS is enabled and using HTMX, use the modal-selected values
+    const sendInput = document.getElementById('dropdown-search-send');
+    const receiveInput = document.getElementById('dropdown-search-receive');
+    
+    // If using the modal (JS enabled), update the datalist inputs with the selected values
+    if (document.getElementById('crypto-send').value) {
+        // JS mode - values are already set correctly
+    }
+    
     document.getElementById('crypto-send').classList.remove('hidden');
     document.getElementById('crypto-receive').classList.remove('hidden');
     const scrollBtn = document.getElementById('scroll-to-faq-container');
@@ -1608,8 +1680,8 @@ function updateEstimatedAmountFromFirstCard() {
     scrollButtonHiddenForever = true;
 });
 
-    document.getElementById('dropdown-search-send').setAttribute('readonly', true);
-    document.getElementById('dropdown-search-receive').setAttribute('readonly', true);
+    // Allow users to type in the datalist inputs for better accessibility
+    // The modal will still work when they click on it
 });
 
 document.addEventListener('DOMContentLoaded', function() {

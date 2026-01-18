@@ -312,9 +312,16 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
         margin-top: 1.5rem;
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 12px;
-        overflow: hidden;
         background: rgba(255, 255, 255, 0.02);
         transition: all 0.3s ease;
+    }
+    
+    .contact-section summary {
+        list-style: none;
+    }
+    
+    .contact-section summary::-webkit-details-marker {
+        display: none;
     }
     
     .contact-header {
@@ -326,6 +333,12 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
         background: rgba(255, 255, 255, 0.05);
         transition: all 0.3s ease;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+    }
+    
+    .contact-section[open] .contact-header {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
     
     .contact-header:hover {
@@ -349,18 +362,23 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
         color: #a0a0a0;
     }
     
-    .contact-chevron.expanded {
+    .contact-section[open] .contact-chevron {
         transform: rotate(180deg);
     }
     
     .contact-content {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
+        animation: slideDown 0.3s ease;
     }
     
-    .contact-content.expanded {
-        max-height: 300px;
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     
     .contact-inner {
@@ -547,10 +565,10 @@ if cgPay {
                         <path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"/>
                         <path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"/>
                     </svg>
-                    Show QR Code
+                    Hide QR Code
                 </button>
                 <div class="mt-4">
-                    <img id="qrcode" src="" alt="QR Code" class="hidden mx-auto border-4 border-white rounded-lg">
+                    <img id="qrcode" src={ "/generate?text=" + transaction.Address } alt="QR Code" class="mx-auto border-4 border-white rounded-lg">
                 </div>
             </div>
             if strings.ToLower(transaction.Provider) != "thorchain" {
@@ -629,8 +647,8 @@ if cgPay {
             } 
             if transaction.Done == false{
             <!-- Contact Support Section -->
-            <div class="contact-section">
-                <div class="contact-header" onclick="toggleContactSection()">
+            <details class="contact-section">
+                <summary class="contact-header">
                     <div class="contact-header-left">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="text-yellow-500">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -638,11 +656,11 @@ if cgPay {
                         </svg>
                         <span class="contact-title">Problem with your transaction?</span>
                     </div>
-                    <svg id="contactChevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="contact-chevron">
+                    <svg class="contact-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                     </svg>
-                </div>
-                <div id="contactContent" class="contact-content">
+                </summary>
+                <div class="contact-content">
                     <div class="contact-inner">
                         <p class="contact-description">
                             Need help with your transaction? Our support team is available to assist you through secure messaging platforms.
@@ -669,15 +687,14 @@ if cgPay {
                         </div>
                     </div>
                 </div>
-            </div>
+            </details>
             }
         </div>
     </div>
 </form>
 
     <script>
-        let qrCodeVisible = false;
-        let contactExpanded = false;
+        let qrCodeVisible = true; // Start as true since QR is visible by default
         
         function toggleQRCode(text) {
             const img = document.getElementById('qrcode');
@@ -686,31 +703,11 @@ if cgPay {
                 img.classList.add('hidden');
                 button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"/><path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"/></svg> Show QR Code';
             } else {
-                fetch('/generate?text=' + encodeURIComponent(text))
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = URL.createObjectURL(blob);
-                        img.src = url;
-                        img.classList.remove('hidden');
-                        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg> Hide QR Code';
-                    })
-                    .catch(error => console.error('Error:', error));
+                // QR code is already loaded in the src, just show it
+                img.classList.remove('hidden');
+                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg> Hide QR Code';
             }
             qrCodeVisible = !qrCodeVisible;
-        }
-        
-        function toggleContactSection() {
-            const content = document.getElementById('contactContent');
-            const chevron = document.getElementById('contactChevron');
-            
-            if (contactExpanded) {
-                content.classList.remove('expanded');
-                chevron.classList.remove('expanded');
-            } else {
-                content.classList.add('expanded');
-                chevron.classList.add('expanded');
-            }
-            contactExpanded = !contactExpanded;
         }
             document.addEventListener('DOMContentLoaded', function() {
         var sendLock = document.querySelector('.send-lock-badge');

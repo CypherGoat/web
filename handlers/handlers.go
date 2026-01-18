@@ -21,6 +21,7 @@ import (
 	"html"
 	"math"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -95,6 +96,22 @@ func ExchangesHandler(c echo.Context) error {
 	return views.Exchanges().Render(c.Request().Context(), c.Response())
 }
 
+var blockedExchangesForAnonymousNetworks = map[string]bool{
+	"stealthex":  true,
+	"changenow":  true,
+	"fixedfloat": true,
+	"simpleswap": true,
+	"exolix":     true,
+	"nanswap":    true,
+}
+
+func isExchangeBlocked(exchangeName string, isAnonymousNetwork bool) bool {
+	if !isAnonymousNetwork {
+		return false
+	}
+	return blockedExchangesForAnonymousNetworks[strings.ToLower(exchangeName)]
+}
+
 func ExchangeDetailHandler(c echo.Context) error {
 	shortCode := c.Param("shortcode")
 
@@ -147,17 +164,122 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"thorchain":    {"/exchanges/thorchain.png", "/exchanges/no-text/thorchain.png", false},
 }
 
+func parseCoinValue(value string) (string, string) {
+	re := regexp.MustCompile(`^([^\(]+)(?:\(([^)]+)\))?$`)
+	matches := re.FindStringSubmatch(value)
+	if len(matches) == 3 {
+		ticker := matches[1]
+		network := matches[2]
+		if network == "" {
+			network = ticker
+		}
+		return ticker, network
+	}
+	return value, value
+}
+
 func EstimateHandler(c echo.Context) error {
 	coin1 := c.QueryParam("coin1")
 	coin2 := c.QueryParam("coin2")
+
+	coin1 = strings.ToLower(coin1)
+	coin2 = strings.ToLower(coin2)
+
 	amountStr := c.QueryParam("amount")
 	network1 := c.QueryParam("network1")
 	network2 := c.QueryParam("network2")
 	mode := c.QueryParam("mode")
 
+	nojs := c.QueryParam("nojs")
+
 	amount, err := strconv.ParseFloat(amountStr, 64)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, "Error parsing amount")
+	}
+
+	if nojs == "true" {
+
+		sorting := c.QueryParam("sort")
+
+		query := url.Values{}
+		for key, values := range c.QueryParams() {
+			if key == "sort" {
+				continue
+			}
+			for _, v := range values {
+				query.Add(key, v)
+			}
+		}
+		baseQuery := query.Encode()
+
+		if sorting != "kyc" {
+			sorting = "rate"
+		}
+
+		amountFloat := amount
+		if err != nil {
+			return views.EstimateTempl(err.Error(), []api.Estimate{}, "", baseQuery).Render(c.Request().Context(), c.Response())
+		}
+		if amountFloat == 0 {
+			return views.EstimateTempl("amount can't be zero", []api.Estimate{}, "", baseQuery).Render(c.Request().Context(), c.Response())
+		}
+
+		coin1Ticker, network1 := parseCoinValue(coin1)
+		coin2Ticker, network2 := parseCoinValue(coin2)
+
+		estimates, err := api.FetchEstimateFromAPI(coin1Ticker, coin2Ticker, amountFloat, false, network1, network2)
+		if err != nil {
+			return views.EstimateTempl(err.Error(), []api.Estimate{}, "", baseQuery).Render(c.Request().Context(), c.Response())
+		}
+
+		isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
+
+		value_btc := estimates.TradeValue_btc
+		value_usd := estimates.TradeValue_fiat
+
+		for i := range estimates.Results {
+			// fmt.Println(apiEstimates[i].ExchangeName)
+
+			name := strings.ToLower(estimates.Results[i].ExchangeName)
+
+			if info, ok := exchangeInfo[name]; ok {
+				estimates.Results[i].ImageURL = info.ImageURL
+				estimates.Results[i].NoTextURL = info.NoTextURL
+				for _, ex := range views.ExchangesList {
+					if strings.ToLower(ex.ShortCode) == name {
+						estimates.Results[i].CGShield = ex.CGShield
+						if ex.CGShield {
+							amount := ex.CGSAmountFloat
+							fiat := ex.CGSinStable
+							if fiat {
+								estimates.Results[i].CoveragePercent = math.Min(math.Max(amount/value_usd*100, 0), 100)
+							} else {
+								estimates.Results[i].CoveragePercent = math.Min(math.Max(amount/value_btc*100, 0), 100)
+							}
+						}
+						break
+					}
+				}
+
+			} else {
+				estimates.Results[i].ImageURL = ""
+			}
+
+			estimates.Results[i].Log = exchangeInfo[name].RequireIP
+			estimates.Results[i].Blocked = isExchangeBlocked(estimates.Results[i].ExchangeName, isAnonymousNetwork)
+
+		}
+
+		if sorting == "kyc" {
+			sort.SliceStable(estimates.Results, func(i, j int) bool {
+				if estimates.Results[i].KYCScore == estimates.Results[j].KYCScore {
+					return estimates.Results[i].ReceiveAmount > estimates.Results[j].ReceiveAmount
+				}
+				return estimates.Results[i].KYCScore < estimates.Results[j].KYCScore
+			})
+		}
+
+		return views.EstimateTempl("", estimates.Results, sorting, baseQuery).Render(c.Request().Context(), c.Response())
 	}
 
 	var estimates api.Estimates

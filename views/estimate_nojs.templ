@@ -1,0 +1,625 @@
+package views
+
+import(
+    "github.com/CypherGoat/web/cmd/api"
+    "fmt"
+    "strings"
+)
+
+templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQuery string){        
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex-grow: 1;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
+        .container {
+            max-width: 700px;
+            height: auto;
+            margin: 0 auto;
+            padding: 1rem;
+            color: #f5f5f5;
+            align-items: center;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: #cccccc;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        #estimates-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .estimate-form {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Estimates styles */
+        body-estimates {
+            background-color: #121520;
+            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        }
+
+        .container-estimates {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 1rem;
+            color: #f5f5f5;
+        }
+
+        .card-estimates {
+            background-color: #1a1f2e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-gap: 1rem;
+        }
+
+        .card-estimates:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .exchange-info-estimates {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .exchange-name-estimates {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .estimate-image-estimates {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .amount-highlight-estimates {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.01em;
+        }
+
+        .btn-select-estimates, .btn-select2-estimates {
+            background-color: #2a3042;
+            color: #fff;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            grid-column: 1 / -1;
+            justify-self: end;
+            min-width: 140px;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-select-estimates:hover, .btn-select2-estimates:hover {
+            background-color: #353d52;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary-estimates {
+            background-color: #0066cc;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
+        }
+
+        .btn-primary-estimates:hover {
+            background-color: #0077e6;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.35);
+        }
+        
+        .btn-select2-estimates:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .kyc-badge-estimates {
+            min-width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: help;
+            margin-left: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .kyc-badge-estimates::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1a1f2e;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            width: max-content;
+            max-width: 200px;
+            font-size: 0.75rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .kyc-badge-estimates:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .kyc-0-estimates {
+            background-color: #1a9c51; 
+            color: white;
+        }
+
+        .kyc-1-estimates {
+            background-color: #4ca550; 
+            color: white;
+        }
+
+        .kyc-2-estimates {
+            background-color: #ffc107; 
+            color: #333;
+        }
+        
+        .sort-options-estimates {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
+            gap: 0.75rem;
+        }
+        
+        .sort-btn-estimates {
+            background-color: #1a1f2e;
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .sort-btn-estimates.active {
+            background-color: rgba(0, 102, 204, 0.2);
+            border-color: rgba(0, 102, 204, 0.4);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
+        }
+        
+        .sort-btn-estimates:hover {
+            background-color: #232838;
+        }
+
+        .estimate-details-estimates {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            grid-column: 1 / -1;
+        }
+
+        .exchange-meta-estimates {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-estimates.blocked {
+            opacity: 0.6;
+            background: linear-gradient(145deg, #2a2a2a, #333333);
+            border: 1px solid #555;
+        }
+
+        .card-estimates.blocked .btn-select-estimates,
+        .card-estimates.blocked .btn-select2-estimates {
+            background: #666;
+            color: #999;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .card-estimates.blocked .btn-select-estimates:hover,
+        .card-estimates.blocked .btn-select2-estimates:hover {
+            background: #666;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .blocked-notice-estimates {
+            background: linear-gradient(135deg, #656565, #3b3b3b);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .ip-badge-estimates {
+            min-width: 20px;
+            height: 26px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: help;
+            vertical-align: middle;
+            background: linear-gradient(145deg, #626262, #4a4545);
+            color: white;
+            clip-path: polygon(50% 0%, 100% 30%, 80% 100%, 20% 100%, 0% 30%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 0;
+            line-height: normal;
+        }
+
+        .ip-badge-estimates::before {
+            content: attr(title);
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 6px;
+            width: max-content;
+            max-width: 300px;
+            font-size: 0.75rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+            white-space: normal;
+            text-align: center;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+        }
+
+        .ip-badge-estimates:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+          .guarantee-icon-estimates {
+            font-size: 0.9rem;
+            margin-right: 0.1rem;
+            vertical-align: middle;
+        }
+        
+        svg.guarantee-icon-estimates {
+            width: 14px;
+            height: 14px;
+            stroke: #00cc88;
+            margin-bottom: -2px;
+        }
+
+                    .guarantee-badge-estimates {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0, 153, 102, 0.15);
+            border: 1px solid rgba(0, 153, 102, 0.3);
+            color: #00cc88;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: auto;
+            position: relative; /* For tooltip positioning */
+            cursor: help;
+        }
+        
+               .tooltip-content-estimates {
+            position: absolute;
+            bottom: 130%;
+            right: 0;
+            background-color: #1a1f2e;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            width: max-content;
+            max-width: 250px;
+            font-size: 0.75rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            pointer-events: none;
+        }
+        
+        /* Add invisible connector between badge and tooltip */
+        .guarantee-badge-estimates::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            height: 15px; /* Create an invisible bridge to the tooltip */
+            background: transparent;
+        }
+        
+        .guarantee-badge-estimates:hover .tooltip-content-estimates {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transition-delay: 0s;
+        }
+        
+        /* Keep tooltip visible while hovering over it */
+        .tooltip-content-estimates:hover {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        
+        /* Add significant delay before hiding */
+        .guarantee-badge-estimates.tooltip-active .tooltip-content-estimates {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+                .tooltip-content-estimates a {
+            color: #00cc88;
+            font-weight: 600;
+            text-decoration: underline;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .tooltip-content-estimates a:hover {
+            color: #00e699;
+            box-shadow: 0 0 0 2px rgba(0, 204, 136, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .card-estimates {
+                padding: 1.2rem;
+                grid-gap: 0.8rem;
+            }
+
+            .amount-highlight-estimates {
+                font-size: 1.25rem;
+            }
+
+            .exchange-name-estimates {
+                font-size: 1.1rem;
+            }
+            
+            .estimate-details-estimates {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .btn-select-estimates, .btn-select2-estimates {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+                min-width: 120px;
+                align-self: stretch;
+                width: 100%;
+            }
+            
+            .sort-options-estimates {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .sort-btn-estimates {
+                flex-grow: 1;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .card-estimates {
+                padding: 1rem;
+                grid-gap: 0.6rem;
+                margin-bottom: 0.8rem;
+            }
+            
+            .exchange-info-estimates {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .exchange-name-estimates {
+                font-size: 1rem;
+            }
+            
+            .amount-highlight-estimates {
+                font-size: 1.2rem;
+            }
+            
+            .btn-select-estimates, .btn-select2-estimates {
+                padding: 0.7rem 0.8rem;
+                font-size: 0.9rem;
+                min-height: 44px;
+            }
+        }
+    </style>
+    
+    @Header(){}    
+    <br/>
+    
+    if errors != ""{
+        <div class="error-message" role="alert">
+            <span class="block sm:inline">{errors}</span>
+        </div>
+    }
+
+    <h1>Estimates</h1>
+    <h2>Estimates found from our partnered exchanges:</h2>
+
+    <div id="estimates-container">
+        <div class="sort-options-estimates">
+            <a href={ fmt.Sprintf("?%s&sort=rate", baseQuery) } class={ "sort-btn-estimates", templ.KV("active", sort == "rate") }>Sort by Rate</a>
+            <a href={ fmt.Sprintf("?%s&sort=kyc", baseQuery) } class={ "sort-btn-estimates", templ.KV("active", sort == "kyc") }>Sort by KYC</a>
+        </div>
+        
+        for i, est := range estimate {
+            if !(est.SendAmount == 0) {
+                <form method="GET" action="/step2" class="estimate-form" data-kyc={ fmt.Sprintf("%d", est.KYCScore) } data-rate={ fmt.Sprintf("%f", est.ReceiveAmount) } data-is-top={ fmt.Sprintf("%t", i == 0) }>
+                    <input type="hidden" name="coin1" value={ est.Coin1 }>
+                    <input type="hidden" name="coin2" value={ est.Coin2 }>
+                    <input type="hidden" name="network1" value={ est.Network1 }>
+                    <input type="hidden" name="network2" value={ est.Network2 }>
+                    <input type="hidden" name="amount" value={ fmt.Sprintf("%f", est.SendAmount) }>
+                    <input type="hidden" name="receiveamount" value={ fmt.Sprintf("%v", est.ReceiveAmount) }>
+                    <input type="hidden" name="partner" value={ est.ExchangeName }>
+                    
+                    <div class={ "card-estimates", templ.KV("blocked", est.Blocked) }>
+                        <div class="exchange-info-estimates">
+                            <div class="exchange-name-estimates">
+if est.NoTextURL != "" {
+                                        <img src={ est.NoTextURL } alt={ est.ExchangeName } class="estimate-image-estimates" loading="lazy" width="32" height="32">
+                                    } else {
+                                        <img src={ est.ImageURL } alt={ est.ExchangeName } class="estimate-image-estimates" loading="lazy" width="32" height="32">
+                                    }                                <span>{ est.ExchangeName }</span>
+                                if est.KYCScore == 0 {
+                                    <span class="kyc-badge-estimates kyc-0-estimates" data-tooltip="Exchange never asks for KYC.">0</span>
+                                } else if est.KYCScore == 1 {
+                                    <span class="kyc-badge-estimates kyc-1-estimates" data-tooltip="Exchange may ask for KYC very rarely or never.">1</span>
+                                } else {
+                                    <span class="kyc-badge-estimates kyc-2-estimates" data-tooltip="Exchange may rarely ask for KYC.">2</span>
+                                }
+                                if est.Log {
+                                    <span class="ip-badge-estimates" title="Exchange requires IP logging."></span>
+                                }
+                            </div>
+                        </div>
+
+                         if est.CGShield{
+                                     <div class="guarantee-badge-estimates">
+                                        <svg class="guarantee-icon-estimates" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        </svg>
+                                        Insured ({FormatCoveragePercent(est.CoveragePercent)}%)
+                                        <div class="tooltip-content-estimates">
+                                            Insured under the CypherGoat Shield Program. Read more <a href="https://cyphergoat.com/cyphergoat-shield" target="_blank">here</a>.
+                                        </div>
+                                    </div>
+                                } else {
+                                    //  <div class="guarantee-badge-estimates no-guarantee-estimates">
+                                    //     No Guarantee
+                                    // </div>
+                                }
+                        
+                        
+                        <div class="estimate-details-estimates">
+                            <div class="amount-highlight-estimates">
+                                { fmt.Sprintf("%f", est.ReceiveAmount) } { strings.ToUpper(est.Coin2) }
+                            </div>
+                        </div>
+                        
+                        if est.Blocked {
+                            <button class="btn-select2-estimates" type="button" disabled>Not Available</button>
+                            <div class="blocked-notice-estimates">
+                                This exchange is not available via our hidden services.
+                            </div>
+                        } else {
+                            if i == 0 {
+                                <button class="btn-select2-estimates btn-primary-estimates" type="submit">Select</button>
+                            } else {
+                                <button class="btn-select2-estimates" type="submit">Select</button>
+                            }
+                        }
+                    </div>
+                </form>
+                <div class="estimate-spacer" style="height: 2rem;"></div>
+            }
+        }
+    </div>
+}
