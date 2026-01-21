@@ -162,6 +162,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"silkbyte":     {"/exchanges/silkbyte.png", "", false},
 	"etzswap":      {"/exchanges/etz.png", "", false},
 	"thorchain":    {"/exchanges/thorchain.png", "/exchanges/no-text/thorchain.png", false},
+	"bitxchange":   {"/exchanges/no-text/bitxchange.png", "", false},
 }
 
 func parseCoinValue(value string) (string, string) {
@@ -424,7 +425,7 @@ func Step3Handler(c echo.Context) error {
 	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
 	source := "clearnet-main"
 	if isAnonymousNetwork {
-		source = "anonet"
+		source = "anonnet"
 	}
 
 	var transaction api.Transaction
@@ -510,7 +511,7 @@ func CGPayCreateHandler(c echo.Context) error {
 	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
 	source := "clearnet-main"
 	if isAnonymousNetwork {
-		source = "anonet"
+		source = "anonnet"
 	}
 
 	err, transaction := api.CreateQuickPaymentFromAPI(coin1, coin2, amount, address, network1, network2, affiliate, info, source)
