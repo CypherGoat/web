@@ -21,7 +21,7 @@ author: "recanman"
 
 ### Recent News
 
-- CypherGoat is giving away two tickets to MoneroTopia! [Info](https://x.com/cyphergoatcom/status/2018344979039502491?s=46)
+- CypherGoat is giving away 4 tickets to MoneroTopia! [Info](https://x.com/cyphergoatcom/status/2018344979039502491?s=46)
 - Version v1.0.7 of the Skylight Wallet has been released by MAGIC Grants. It includes various bug fixes and improvements. [Release](https://github.com/MAGICGrants/skylight-wallet/releases/tag/v1.0.7)
 - Version v1.0.2 of the Haveno Android app has been released by atsamd21. It includes support for Haveno v1.2.2, various bug fixes, and improvements. [Release](https://github.com/atsamd21/Haveno-app/releases/tag/v1.0.2)
 - Version v2.4.3 of Stack Wallet has been released by CypherStack. It includes new features, bug fixes, and improvements. [Release](https://github.com/cypherstack/stack_wallet/releases/tag/build_299)
