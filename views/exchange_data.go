@@ -274,4 +274,17 @@ var ExchangesList = []Exchange{
 		TrustpilotRating:      4.0,
 		TrustpilotReviewCount: 3,
 	},
+	{
+		Name:                  "n.exchange",
+		ShortCode:             "nexchange",
+		KYCScore:              2,
+		URL:                   "https://n.exchange/",
+		LogoURL:               "/exchanges/nexchange.PNG",
+		NoTextURL:             "/exchanges/no-text/nexchange.png",
+		Description:           "n.exchange is a fast, reliable and fully transparent cryptocurrency exchange built by crypto enthusiasts, for crypto enthusiasts.",
+		CGShield:              false,
+		TrustpilotURL:         "https://www.trustpilot.com/review/n.exchange",
+		TrustpilotRating:      4.0,
+		TrustpilotReviewCount: 365,
+	},
 }

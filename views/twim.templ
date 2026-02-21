@@ -75,6 +75,7 @@ templ TWIMIndex(posts []*BlogPostData) {
 
 templ TWIMPost(post *BlogPostData) {
     @BlogHeader(post) {
+        <div id="top"></div>
         <div class="progress-container">
             <div id="progressBar" class="progress-bar"></div>
         </div>
@@ -154,12 +155,12 @@ templ TWIMPost(post *BlogPostData) {
                         <span>Back to TWIM</span>
                     </a>
                     
-                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-orange-500/20 hover:border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 touch-manipulation w-full sm:w-auto justify-center">
+                    <a href="#top" class="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-orange-500/20 hover:border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 touch-manipulation w-full sm:w-auto justify-center">
                         <span>Back to top</span>
                         <svg class="w-4 h-4 transition-transform group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
                         </svg>
-                    </button>
+                    </a>
                 </div>
                 </div>
             
@@ -504,6 +505,12 @@ templ TWIMPost(post *BlogPostData) {
                 height: 3px;
                 z-index: 100;
                 background: rgba(26, 31, 46, 0.7);
+                display: none;
+            }
+            
+            /* Show progress bar only when JavaScript is enabled */
+            body.js-enabled .progress-container {
+                display: block;
             }
             
             .progress-bar {
