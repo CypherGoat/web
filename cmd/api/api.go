@@ -65,6 +65,7 @@ type Estimate struct {
 	CoveragePercent float64
 	CGSAmount       string
 	Blocked         bool `json:"blocked"`
+	SafeRouteOK     bool `json:"safeRouteOK"`
 }
 
 type Info struct {
@@ -93,7 +94,7 @@ type Transaction struct {
 	Token          string    `json:"Token,omitempty"`
 	Done           bool      `json:"Done,omitempty"`
 	CGID           string    `json:"CGID,omitempty"`
-	CreatedAt      time.Time `json:"CreatedAt,omitempty"`
+	CreatedAt      time.Time `json:"createdAt"`
 	Affiliate      string    `json:"Affiliate,omitempty"`
 	Memo           string    `json:"Memo,omitempty"`
 	IsPayment      bool      `json:"payment,omitempty"`

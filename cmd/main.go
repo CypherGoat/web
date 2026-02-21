@@ -121,6 +121,7 @@ func main() {
 	e.Static("/static", "static")
 	e.Static("/icons", "static/icons")
 	e.Static("/exchanges", "static/exchanges")
+	e.File("/favicon.ico", "static/icons/favicon/dark/favicon.ico")
 
 	e.GET("/", handlers.IndexHandler)
 	e.GET("/estimate", handlers.EstimateHandler)
@@ -128,6 +129,7 @@ func main() {
 	e.GET("/step3", handlers.Step3Handler)
 	e.GET("/generate", generateQRCodeHandler)
 	e.GET("/transaction/:id", handlers.GetTransactionHandler)
+	e.GET("/download/:id", handlers.DownloadReceiptHandler)
 	e.GET("/about", handlers.AboutHandler)
 	e.GET("/terms", handlers.TermsHandler)
 	e.GET("/contact", handlers.ContactHandler)
@@ -176,6 +178,8 @@ func main() {
 	e.GET("/affiliate/logout", handlers.AffiliateLogoutHandler)
 
 	e.GET("/affiliate/terms", handlers.AffiliateTerms)
+
+	// e.GET("/saferoute", handlers.SafeRouteHandler)
 
 	e.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError

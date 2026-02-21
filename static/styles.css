@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+/* Prevent FontAwesome from interfering with non-FA SVGs */
+svg:not([class*="fa-"]) {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* Ensure SVG icons in flex containers maintain their size */
+.inline-flex svg {
+    flex-shrink: 0;
+}
+
+/* Ensure Tailwind sizing classes work properly on SVGs */
+.w-4 svg, svg.w-4 {
+    width: 1rem !important;
+    height: 1rem !important;
+}
+
+.h-4 svg, svg.h-4 {
+    width: 1rem !important;
+    height: 1rem !important;
+}

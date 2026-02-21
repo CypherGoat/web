@@ -16,6 +16,7 @@
 package handlers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"html"
@@ -33,6 +34,7 @@ import (
 
 	"github.com/CypherGoat/web/views"
 	"github.com/a-h/templ"
+	"github.com/jung-kurt/gofpdf"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
@@ -163,6 +165,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"etzswap":      {"/exchanges/etz.png", "", false},
 	"thorchain":    {"/exchanges/thorchain.png", "/exchanges/no-text/thorchain.png", false},
 	"bitxchange":   {"/exchanges/no-text/bitxchange.png", "", false},
+	"nexchange":    {"/exchanges/nexchange.PNG", "/exchanges/no-text/nexchange.png", false},
 }
 
 func parseCoinValue(value string) (string, string) {
@@ -1272,4 +1275,184 @@ func AffiliatePayoutHistoryHandler(c echo.Context) error {
 	}
 
 	return views.AffiliatePayoutHistory(history).Render(c.Request().Context(), c.Response())
+}
+
+func TransactionReceiptGenerator(tx api.Transaction) ([]byte, error) {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+
+	// Header
+	pdf.SetFont("Arial", "B", 24)
+	pdf.SetTextColor(30, 30, 30)
+	pdf.Cell(0, 12, "TRANSACTION RECEIPT")
+	pdf.Ln(12)
+
+	pdf.SetFont("Arial", "", 12)
+	pdf.SetTextColor(100, 100, 100)
+	pdf.Cell(0, 6, "CypherGoat - Non-Custodial Exchange Aggregator")
+	pdf.Ln(4)
+
+	pdf.SetFont("Arial", "", 10)
+	pdf.SetTextColor(120, 120, 120)
+	pdf.Cell(0, 5, "cyphergoat.com")
+	pdf.Ln(10)
+
+	// Horizontal line
+	pdf.SetDrawColor(180, 180, 180)
+	pdf.SetLineWidth(0.5)
+	pdf.Line(10, pdf.GetY(), 200, pdf.GetY())
+	pdf.Ln(8)
+
+	// Transaction details
+	pdf.SetFont("Arial", "B", 11)
+	pdf.SetTextColor(60, 60, 60)
+	pdf.Cell(55, 7, "Transaction ID:")
+	pdf.SetFont("Arial", "", 11)
+	pdf.SetTextColor(80, 80, 80)
+	pdf.Cell(0, 7, tx.CGID)
+	pdf.Ln(7)
+
+	pdf.SetFont("Arial", "B", 11)
+	pdf.SetTextColor(60, 60, 60)
+	pdf.Cell(55, 7, "Exchange Used:")
+	pdf.SetFont("Arial", "", 11)
+	pdf.SetTextColor(80, 80, 80)
+	pdf.Cell(0, 7, tx.Provider)
+	pdf.Ln(7)
+
+	pdf.SetFont("Arial", "B", 11)
+	pdf.SetTextColor(60, 60, 60)
+	pdf.Cell(55, 7, "Date:")
+	pdf.SetFont("Arial", "", 11)
+	pdf.SetTextColor(80, 80, 80)
+	pdf.Cell(0, 7, tx.CreatedAt.Format("January 2, 2006 15:04 MST"))
+	pdf.Ln(7)
+
+	pdf.SetFont("Arial", "B", 11)
+	pdf.SetTextColor(60, 60, 60)
+	pdf.Cell(55, 7, "Status:")
+	pdf.SetFont("Arial", "B", 11)
+	pdf.SetTextColor(34, 139, 34)
+	pdf.Cell(0, 7, "COMPLETED")
+	pdf.Ln(12)
+
+	// Transaction summary
+	pdf.SetFont("Arial", "B", 14)
+	pdf.SetTextColor(30, 30, 30)
+	pdf.Cell(0, 8, "Transaction Summary")
+	pdf.Ln(10)
+
+	// Amounts sent/received
+	pdf.SetFont("Arial", "B", 11)
+	pdf.SetTextColor(60, 60, 60)
+	pdf.Cell(55, 7, "Amount Sent:")
+	pdf.SetFont("Arial", "", 11)
+	pdf.SetTextColor(80, 80, 80)
+	sendAmount := fmt.Sprintf("%.8f %s", tx.SendAmount, strings.ToUpper(tx.Coin1))
+	pdf.Cell(0, 7, sendAmount)
+	pdf.Ln(6)
+
+	if tx.Network1 != "" {
+		pdf.SetFont("Arial", "I", 10)
+		pdf.SetTextColor(120, 120, 120)
+		pdf.Cell(55, 5, "")
+		pdf.Cell(0, 5, "via "+strings.ToUpper(tx.Network1)+" network")
+		pdf.Ln(6)
+	}
+
+	pdf.SetFont("Arial", "B", 11)
+	pdf.SetTextColor(60, 60, 60)
+	pdf.Cell(55, 7, "Amount Received:")
+	pdf.SetFont("Arial", "", 11)
+	pdf.SetTextColor(80, 80, 80)
+	receiveText := fmt.Sprintf("%.8f %s", tx.ReceiveAmount, strings.ToUpper(tx.Coin2))
+	pdf.Cell(0, 7, receiveText)
+	pdf.Ln(6)
+
+	if tx.Network2 != "" {
+		pdf.SetFont("Arial", "I", 10)
+		pdf.SetTextColor(120, 120, 120)
+		pdf.Cell(55, 5, "")
+		pdf.Cell(0, 5, "via "+strings.ToUpper(tx.Network2)+" network")
+		pdf.Ln(6)
+	}
+
+	if tx.IsPayment {
+		pdf.SetFont("Arial", "I", 10)
+		pdf.SetTextColor(100, 100, 100)
+		pdf.Cell(55, 5, "")
+		pdf.Cell(0, 5, "Fixed rate transaction")
+		pdf.Ln(5)
+	}
+
+	pdf.Ln(10)
+
+	// Deposit address if exists
+	if tx.Address != "" {
+		pdf.SetFont("Arial", "B", 11)
+		pdf.SetTextColor(60, 60, 60)
+		pdf.Cell(0, 7, "Deposit Address Used:")
+		pdf.Ln(6)
+
+		pdf.SetFont("Courier", "", 9)
+		pdf.SetTextColor(80, 80, 80)
+		pdf.MultiCell(0, 5, tx.Address, "", "L", false)
+		pdf.Ln(5)
+	}
+
+	// Memo if exists
+	if tx.Memo != "" {
+		pdf.SetFont("Arial", "B", 11)
+		pdf.SetTextColor(60, 60, 60)
+		pdf.Cell(0, 7, "Memo/Tag:")
+		pdf.Ln(6)
+
+		pdf.SetFont("Courier", "", 10)
+		pdf.SetTextColor(80, 80, 80)
+		pdf.MultiCell(0, 5, tx.Memo, "", "L", false)
+		pdf.Ln(5)
+	}
+
+	// Exchange link if exists
+	if tx.Track != "" && strings.ToLower(tx.Provider) != "thorchain" {
+		pdf.SetFont("Arial", "B", 11)
+		pdf.SetTextColor(60, 60, 60)
+		pdf.Cell(0, 7, "Exchange Reference:")
+		pdf.Ln(6)
+
+		pdf.SetFont("Arial", "", 9)
+		pdf.SetTextColor(0, 102, 204)
+		pdf.CellFormat(0, 5, tx.Track, "", 0, "", false, 0, tx.Track)
+	}
+
+	// Generate PDF bytes
+	var buf bytes.Buffer
+	err := pdf.Output(&buf)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
+func DownloadReceiptHandler(c echo.Context) error {
+	txID := c.Param("id")
+
+	err, transaction := api.GetTransactionFromAPI(txID)
+	if err != nil {
+		return c.String(http.StatusNotFound, "Transaction not found")
+	}
+
+	pdfBytes, err := TransactionReceiptGenerator(transaction)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Failed to generate receipt")
+	}
+
+	filename := fmt.Sprintf("cyphergoat-receipt-%s.pdf", txID)
+
+	c.Response().Header().Set("Content-Type", "application/pdf")
+	c.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+	c.Response().Header().Set("Content-Length", fmt.Sprintf("%d", len(pdfBytes)))
+
+	return c.Blob(http.StatusOK, "application/pdf", pdfBytes)
 }

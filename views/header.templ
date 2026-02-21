@@ -26,7 +26,14 @@ templ Header() {
     <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" href="/favicon.ico" sizes="any">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="/static/tailwind.css?v=202508134" rel="stylesheet">
         <link href="/static/styles.css?v=202508134" rel="stylesheet">
@@ -205,8 +212,12 @@ templ Header() {
             .logo-img {
                 transition: transform 0.2s ease, filter 0.2s ease;
             }
-        </style>
-    </head>
+        </style>        
+        <script>
+            // Add js-enabled class immediately when JavaScript is available
+            document.documentElement.classList.add('js-enabled');
+            document.body.classList.add('js-enabled');
+        </script>    </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
         <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
@@ -240,7 +251,14 @@ templ HeaderCustomTitle(title string) {
     <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" href="/favicon.ico" sizes="any">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="/static/tailwind.css?v=20250814" rel="stylesheet">
         <link href="/static/styles.css?v=20250814" rel="stylesheet">
@@ -420,6 +438,12 @@ templ HeaderCustomTitle(title string) {
                 transition: transform 0.2s ease, filter 0.2s ease;
             }
         </style>
+        
+        <script>
+            // Add js-enabled class immediately when JavaScript is available
+            document.documentElement.classList.add('js-enabled');
+            document.body.classList.add('js-enabled');
+        </script>
     </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
@@ -454,7 +478,14 @@ templ IndexHeader() {
     <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" href="/favicon.ico" sizes="any">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="/static/tailwind.css?v=202508134" rel="stylesheet">
         <link href="/static/styles.css?v=202508134" rel="stylesheet">
@@ -635,6 +666,12 @@ templ IndexHeader() {
                 transition: transform 0.2s ease, filter 0.2s ease;
             }
         </style>
+        
+        <script>
+            // Add js-enabled class immediately when JavaScript is available
+            document.documentElement.classList.add('js-enabled');
+            document.body.classList.add('js-enabled');
+        </script>
     </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
@@ -759,11 +796,20 @@ templ BlogHeader(post *BlogPostData) {
     <html lang="en">
        <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/static/icons/cg-notext.svg">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
+        <link rel="icon" href="/favicon.ico" sizes="any">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="/static/tailwind.css?v=202508134" rel="stylesheet">
         <link href="/static/styles.css?v=202508134" rel="stylesheet">
         <script src="/static/htmx.min.js"></script>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <title>{ post.Title } | CypherGoat</title>
         <meta name="title" content={ post.Title + " | CypherGoat" }>
@@ -942,6 +988,12 @@ templ BlogHeader(post *BlogPostData) {
                 transition: transform 0.2s ease, filter 0.2s ease;
             }
         </style>
+        
+        <script>
+            // Add js-enabled class immediately when JavaScript is available
+            document.documentElement.classList.add('js-enabled');
+            document.body.classList.add('js-enabled');
+        </script>
     </head>
     <body class="bg-[#121520]">
     <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">

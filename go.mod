@@ -3,7 +3,8 @@ module github.com/CypherGoat/web
 go 1.24.0
 
 require (
-	github.com/a-h/templ v0.3.898
+	github.com/a-h/templ v0.3.977
+	github.com/jung-kurt/gofpdf v1.16.2
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/yuin/goldmark v1.7.13
