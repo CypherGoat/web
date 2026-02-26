@@ -222,10 +222,10 @@ func EstimateHandler(c echo.Context) error {
 
 		amountFloat := amount
 		if err != nil {
-			return views.EstimateTempl(err.Error(), []api.Estimate{}, "", baseQuery).Render(c.Request().Context(), c.Response())
+			return views.EstimateTempl(err.Error(), []api.Estimate{}, "", baseQuery, 0).Render(c.Request().Context(), c.Response())
 		}
 		if amountFloat == 0 {
-			return views.EstimateTempl("amount can't be zero", []api.Estimate{}, "", baseQuery).Render(c.Request().Context(), c.Response())
+			return views.EstimateTempl("amount can't be zero", []api.Estimate{}, "", baseQuery, 0).Render(c.Request().Context(), c.Response())
 		}
 
 		coin1Ticker, network1 := parseCoinValue(coin1)
@@ -233,7 +233,7 @@ func EstimateHandler(c echo.Context) error {
 
 		estimates, err := api.FetchEstimateFromAPI(coin1Ticker, coin2Ticker, amountFloat, false, network1, network2)
 		if err != nil {
-			return views.EstimateTempl(err.Error(), []api.Estimate{}, "", baseQuery).Render(c.Request().Context(), c.Response())
+			return views.EstimateTempl(err.Error(), []api.Estimate{}, "", baseQuery, 0).Render(c.Request().Context(), c.Response())
 		}
 
 		isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
@@ -250,7 +250,7 @@ func EstimateHandler(c echo.Context) error {
 				estimates.Results[i].ImageURL = info.ImageURL
 				estimates.Results[i].NoTextURL = info.NoTextURL
 				for _, ex := range views.ExchangesList {
-					if strings.ToLower(ex.ShortCode) == name {
+					if strings.EqualFold(ex.ShortCode, name) {
 						estimates.Results[i].CGShield = ex.CGShield
 						if ex.CGShield {
 							amount := ex.CGSAmountFloat
@@ -283,7 +283,7 @@ func EstimateHandler(c echo.Context) error {
 			})
 		}
 
-		return views.EstimateTempl("", estimates.Results, sorting, baseQuery).Render(c.Request().Context(), c.Response())
+		return views.EstimateTempl("", estimates.Results, sorting, baseQuery, estimates.EstimateId).Render(c.Request().Context(), c.Response())
 	}
 
 	var estimates api.Estimates
@@ -312,7 +312,7 @@ func EstimateHandler(c echo.Context) error {
 			estimates.Results[i].ImageURL = info.ImageURL
 			estimates.Results[i].NoTextURL = info.NoTextURL
 			for _, ex := range views.ExchangesList {
-				if strings.ToLower(ex.ShortCode) == name {
+				if strings.EqualFold(ex.ShortCode, name) {
 					estimates.Results[i].CGShield = ex.CGShield
 					if ex.CGShield {
 						amount := ex.CGSAmountFloat
@@ -355,6 +355,12 @@ func Step2Handler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, "Error parsing receive amount")
 	}
 
+	estimateIdStr := c.QueryParam("estimateid")
+	estimateId := 0
+	if estimateIdStr != "" {
+		estimateId, _ = strconv.Atoi(estimateIdStr)
+	}
+
 	var estimate api.Estimate
 	estimate.Coin1 = coin1
 	estimate.Coin2 = coin2
@@ -382,7 +388,7 @@ func Step2Handler(c echo.Context) error {
 		estimate.ImageURL = info.ImageURL
 	}
 
-	return views.AddressForm(estimate, false, mode).Render(c.Request().Context(), c.Response())
+	return views.AddressForm(estimate, false, mode, estimateId).Render(c.Request().Context(), c.Response())
 }
 
 func Step3Handler(c echo.Context) error {
@@ -398,6 +404,12 @@ func Step3Handler(c echo.Context) error {
 	partner := c.QueryParam("partner")
 	address := c.QueryParam("address")
 	mode := c.QueryParam("mode")
+
+	estimateIdStr := c.QueryParam("estimateid")
+	estimateId := 0
+	if estimateIdStr != "" {
+		estimateId, _ = strconv.Atoi(estimateIdStr)
+	}
 
 	info := api.Info{
 		IP:        "",
@@ -436,10 +448,10 @@ func Step3Handler(c echo.Context) error {
 	// Check if it's payment mode and call the appropriate API
 	if mode == "pay" {
 		// In payment mode, 'amount' is what the user wants to receive
-		err, transaction = api.CreatePaymentFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info, source)
+		err, transaction = api.CreatePaymentFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info, source, estimateId)
 	} else {
 		// In swap mode, 'amount' is what the user wants to send
-		err, transaction = api.CreateTradeFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info, source)
+		err, transaction = api.CreateTradeFromAPI(coin1, coin2, amount, address, partner, network1, network2, affiliate, info, source, estimateId)
 	}
 
 	if err != nil || transaction.Id == "" {
@@ -452,7 +464,7 @@ func Step3Handler(c echo.Context) error {
 		estimate.Network1 = network1
 		estimate.Network2 = network2
 
-		return views.AddressForm(estimate, true, mode).Render(c.Request().Context(), c.Response())
+		return views.AddressForm(estimate, true, mode, estimateId).Render(c.Request().Context(), c.Response())
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/transaction/"+transaction.CGID)

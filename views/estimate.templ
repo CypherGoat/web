@@ -587,6 +587,8 @@ templ EstimateCard(offers api.Estimates, mode string) {
                         <input type="hidden" name="receiveamount" value={ fmt.Sprintf("%v", offer.ReceiveAmount) }>
                         <input type="hidden" name="partner" value={ offer.ExchangeName }>
                         <input type="hidden" name="mode" value={ mode }>
+                        <input type="hidden" name="estimateid" value={ fmt.Sprintf("%d", offers.EstimateId) }>
+
 
 
                         <div class={ "card-estimates", templ.KV("blocked", offer.Blocked) }>

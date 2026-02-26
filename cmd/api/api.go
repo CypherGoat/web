@@ -45,6 +45,7 @@ type Estimates struct {
 	TradeValue_fiat float64
 	TradeValue_btc  float64
 	CGSinStable     bool `json:"CGSinStable"`
+	EstimateId      int  `json:"estimateId,omitempty"`
 }
 
 type Estimate struct {
@@ -98,6 +99,7 @@ type Transaction struct {
 	Affiliate      string    `json:"Affiliate,omitempty"`
 	Memo           string    `json:"Memo,omitempty"`
 	IsPayment      bool      `json:"payment,omitempty"`
+	EstimateId     int       `json:"estimateId,omitempty"`
 }
 
 func SendRequest(url string) ([]byte, error) {
@@ -215,7 +217,6 @@ func FetchPaymentEstimateFromAPI(coin1, coin2 string, amount float64, network1, 
 	})
 
 	for i := range result.Rates.Results {
-
 		sendAmountFromAPI := result.Rates.Results[i].ReceiveAmount
 
 		result.Rates.Results[i].Coin1 = coin1
@@ -229,7 +230,7 @@ func FetchPaymentEstimateFromAPI(coin1, coin2 string, amount float64, network1, 
 	return result.Rates, nil
 }
 
-func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info, source string) (error, Transaction) {
+func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info, source string, estimateId int) (error, Transaction) {
 	params := url.Values{}
 	params.Add("coin1", coin1)
 	params.Add("coin2", coin2)
@@ -244,6 +245,10 @@ func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner st
 	params.Add("lang", info.LangList)
 
 	params.Add("source", source)
+
+	if estimateId > 0 {
+		params.Add("estimateid", fmt.Sprintf("%d", estimateId))
+	}
 
 	requestURL := fmt.Sprintf("%s/swap?%s", URL, params.Encode())
 
@@ -279,7 +284,7 @@ func CreateTradeFromAPI(coin1, coin2 string, amount float64, address, partner st
 	return nil, transaction
 }
 
-func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info, source string) (error, Transaction) {
+func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner string, network1, network2, affiliate string, info Info, source string, estimateId int) (error, Transaction) {
 	params := url.Values{}
 	params.Add("coin1", coin1)
 	params.Add("coin2", coin2)
@@ -292,6 +297,9 @@ func CreatePaymentFromAPI(coin1, coin2 string, amount float64, address, partner 
 	params.Add("ip", info.IP)
 	params.Add("useragent", info.UserAgent)
 	params.Add("lang", info.LangList)
+	if estimateId > 0 {
+		params.Add("estimateid", fmt.Sprintf("%d", estimateId))
+	}
 
 	params.Add("source", source)
 

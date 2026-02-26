@@ -21,7 +21,7 @@ import (
     "strings"
 )
 
-templ AddressForm(estimate api.Estimate, err bool,mode string){
+templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
 <style>
     body {
         background-color: #121520;
@@ -313,6 +313,8 @@ templ AddressForm(estimate api.Estimate, err bool,mode string){
                 <input type="hidden" name="network1" value={ estimate.Network1 }>
                 <input type="hidden" name="network2" value={ estimate.Network2 }>
                 <input type="hidden" name="mode" value={ mode }>
+                <input type="hidden" name="estimateid" value={ fmt.Sprintf("%d", estimateId) }>
+
 
 
                 <div>

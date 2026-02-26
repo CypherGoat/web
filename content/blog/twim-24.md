@@ -46,6 +46,7 @@ author: "recanman"
 
 #### Technical Analysis
 | Indicator | Value | Signal |
+|-----------|-------|--------|
 | RSI (14) | 42.9 | Neutral |
 | MACD | Bearish | Caution |
 | 20-EMA vs 50-EMA | 418.28 vs 380.12 | Uptrend |
