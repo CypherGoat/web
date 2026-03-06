@@ -1,7 +1,7 @@
 ---
 title: "This Week In Monero #26: 26 Feb 2026 - 5 Mar 2026"
 description: "monero.win v2 released, P2Pool v4.14 released, and more..."
-date: 2026-02-26T12:00:00+00:00
+date: 2026-03-05T12:00:00+00:00
 image: "/blog/images/ms-26/cover.png"
 draft: false
 author: "recanman"
