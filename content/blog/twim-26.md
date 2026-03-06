@@ -23,7 +23,6 @@ author: "recanman"
 
 - A v2 of the [monero.win](https://monero.win/) XMR casino has been released. It includes improvements and new games.
 - Version v4.14 of P2Pool has been released by SChernykh. It includes bug fixes, new features, and improvements. [Release](https://github.com/SChernykh/p2pool/releases/tag/v4.14)
-- Version v1.2.3 of Haveno has been released by woodser. It includes various bug fixes, new features, and improvements. [Release](https://github.com/haveno-dex/haveno/releases/tag/v1.2.3)
 - Version v0.10.3.0 of Bitcart has been released by MrNaif2018. It includes various bug fixes and improvements. [Release](https://github.com/bitcart/bitcart/releases/tag/0.10.3.0)
 - The next Cuprate meeting has been scheduled for March 10, 2026 at 1800 UTC. It will take place in the [Matrix](https://matrix.to/#/#cuprate:monero.social)/[IRC-Libera](irc://irc.libera.chat/#cuprate) chats, in the #cuprate channel.
 
