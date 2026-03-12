@@ -29,7 +29,7 @@
         "simpleswap": "btc-lightning",
         "stealthex": "",
         "wizardswap": "",
-        "bitcoinvn": "ln-btc",
+        "bitcoinvn": "btcln",
         "quickex": "btc_lightning",
         "coingecko_id": "bitcoin",
         "cg-pay": true
