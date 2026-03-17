@@ -166,6 +166,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"thorchain":    {"/exchanges/thorchain.png", "/exchanges/no-text/thorchain.png", false},
 	"bitxchange":   {"/exchanges/no-text/bitxchange.png", "", false},
 	"nexchange":    {"/exchanges/nexchange.PNG", "/exchanges/no-text/nexchange.png", false},
+	"stereoswap":   {"/exchanges/stereoswap.png", "/exchanges/no-text/stereoswap.png", false},
 }
 
 func parseCoinValue(value string) (string, string) {
@@ -1467,4 +1468,139 @@ func DownloadReceiptHandler(c echo.Context) error {
 	c.Response().Header().Set("Content-Length", fmt.Sprintf("%d", len(pdfBytes)))
 
 	return c.Blob(http.StatusOK, "application/pdf", pdfBytes)
+}
+
+func loadAllGuidePosts() ([]*views.BlogPostData, error) {
+	var posts []*views.BlogPostData
+
+	guidesDir := "content/blog/guides"
+	entries, err := os.ReadDir(guidesDir)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".md") {
+			continue
+		}
+
+		slug := strings.TrimSuffix(entry.Name(), ".md")
+		post, err := loadBlogPostFromFile(filepath.Join(guidesDir, entry.Name()))
+		if err != nil {
+			continue
+		}
+
+		if post.Draft {
+			continue
+		}
+
+		post.Slug = slug
+		post.IssueSlug = slug
+		posts = append(posts, post)
+	}
+
+	sort.Slice(posts, func(i, j int) bool {
+		dateI, errI := time.Parse("2006-01-02", posts[i].Date)
+		dateJ, errJ := time.Parse("2006-01-02", posts[j].Date)
+		if errI != nil || errJ != nil {
+			return posts[i].Date > posts[j].Date
+		}
+		return dateI.After(dateJ)
+	})
+
+	return posts, nil
+}
+
+func loadGuidePost(slug string) (*views.BlogPostData, error) {
+	if strings.Contains(slug, "/") || strings.Contains(slug, "\\") || strings.Contains(slug, "..") {
+		return nil, fmt.Errorf("invalid guide slug")
+	}
+
+	validSlug := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`).MatchString(slug)
+	if !validSlug {
+		return nil, fmt.Errorf("invalid guide slug")
+	}
+
+	filename := filepath.Join("content/blog/guides", slug+".md")
+	post, err := loadBlogPostFromFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	if post.Draft {
+		return nil, fmt.Errorf("post is draft")
+	}
+
+	post.Slug = slug
+	post.IssueSlug = slug
+	return post, nil
+}
+
+func GuidesIndexHandler(c echo.Context) error {
+	posts, err := loadAllGuidePosts()
+	if err != nil {
+		posts = []*views.BlogPostData{}
+	}
+	return render(c, views.GuidesIndex(posts))
+}
+
+func GuidesPostHandler(c echo.Context) error {
+	slug := c.Param("slug")
+
+	post, err := loadGuidePost(slug)
+	if err != nil || post == nil {
+		return c.Redirect(http.StatusMovedPermanently, "/guides")
+	}
+
+	return render(c, views.GuidesPost(post))
+}
+
+func GuidesRSSHandler(c echo.Context) error {
+	guidesPosts, err := loadAllGuidePosts()
+	if err != nil {
+		guidesPosts = []*views.BlogPostData{}
+	}
+
+	rss := `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Guides - CypherGoat</title>
+    <link>https://cyphergoat.com/guides</link>
+    <description>In-depth guides on privacy, security, and using Monero and related tools effectively.</description>
+    <language>en-us</language>
+    <managingEditor>support@cyphergoat.com (CypherGoat)</managingEditor>
+    <webMaster>support@cyphergoat.com (CypherGoat)</webMaster>
+    <lastBuildDate>` + time.Now().Format(time.RFC1123Z) + `</lastBuildDate>
+    <atom:link href="https://cyphergoat.com/guides/rss.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://cyphergoat.com/static/icons/cg-notext-light.png</url>
+      <title>Guides - CypherGoat</title>
+      <link>https://cyphergoat.com/guides</link>
+    </image>`
+
+	for _, post := range guidesPosts {
+		itemURL := fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug)
+
+		description := post.Description
+		if description == "" && len(post.HTMLContent) > 200 {
+			description = post.HTMLContent[:200] + "..."
+		}
+
+		pubDate := post.Date
+
+		rss += `
+    <item>
+      <title>` + post.Title + `</title>
+      <link>` + itemURL + `</link>
+      <description><![CDATA[` + description + `]]></description>
+      <pubDate>` + pubDate + `</pubDate>
+      <guid>` + itemURL + `</guid>
+    </item>`
+	}
+
+	rss += `
+  </channel>
+</rss>`
+
+	return c.Blob(http.StatusOK, "application/rss+xml; charset=utf-8", []byte(rss))
 }
