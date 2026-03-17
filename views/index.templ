@@ -711,6 +711,17 @@ footer {
         transform: rotate(180deg);
     }
 
+    .shield-footer-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        margin-top: 0.75rem;
+        font-size: 0.78rem;
+        color: #6b7280;
+        line-height: 1.4;
+        padding: 0 0.25rem;
+    }
+
     /* Hide datalist when JavaScript is enabled */
     body.js-enabled datalist {
         display: none;
@@ -781,6 +792,12 @@ footer {
                onclick="">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M16 2v4h4v12H4V6h4V2h8zm-3 10h-2v6h2v-6zm0-4h-2v2h2V8z"/></svg>
                 20+ Exchanges
+            </a>
+            <a class="trust-badge"
+               href="/cyphergoat-shield"
+               data-info="If a covered exchange fails to deliver your funds or freezes them over KYC, CypherGoat reimburses you. Look for the Shield icon when selecting an exchange.">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Shield Protected
             </a>
         </div>
     </div>
