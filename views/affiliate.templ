@@ -21,1100 +21,1749 @@ import (
 )
 
 templ Affiliate() {
-    @Header(){
-    }
+    @Header(){}
     <style>
     html, body {
-        height: 100%;
         margin: 0;
         scroll-behavior: smooth;
     }
 
     body {
-        background-color: #121520;
-    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
+        background:
+            radial-gradient(circle at top, rgba(0, 136, 255, 0.14), transparent 32%),
+            linear-gradient(180deg, #121520 0%, #0f131d 100%);
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        color: #e5edf7;
     }
 
     .main-content {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
+        width: min(1180px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 1.5rem 0 5rem;
     }
 
-    footer {
-        margin-top: auto;
-        width: 100%;
+    .affiliate-shell {
+        position: relative;
+        overflow-x: hidden;
     }
 
-.container {
-    max-width: 700px;
-    height: auto;
-    margin: 0 auto;
-    padding: 1rem;
-    color: #f5f5f5;
-    align-items: center;
-}
-
-.container2 {
-    max-width:90%;
-    height: auto;
-    margin: 2rem auto;
-    padding: 1rem;
-    color: #f5f5f5;
-    align-items: center;
-}
-
-.container3 {
-    max-width:70%;
-    height: auto;
-    margin: 2rem auto;
-    padding: 1rem;
-    color: #f5f5f5;
-    align-items: center;
-}
-
-    .card {
-        background: linear-gradient(145deg, #1a1f2e, #222633);
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
-        transition: box-shadow 0.3s ease, transform 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+    .affiliate-shell::before,
+    .affiliate-shell::after {
+        content: "";
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+        filter: blur(12px);
+        opacity: 0.7;
     }
 
-    .card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
-        transform: translateY(-2px);
+    .affiliate-shell::before {
+        width: 18rem;
+        height: 18rem;
+        top: 2rem;
+        right: -5rem;
+        background: radial-gradient(circle, rgba(0, 136, 255, 0.18), transparent 68%);
     }
 
-    .card h2 {
-        color: #ffffff;
-        font-size: 1.75rem;
-        margin-bottom: 1.5rem;
+    .affiliate-shell::after {
+        width: 14rem;
+        height: 14rem;
+        top: 30rem;
+        left: -4rem;
+        background: radial-gradient(circle, rgba(77, 172, 255, 0.12), transparent 70%);
+    }
+
+    .section {
+        margin-top: 1.75rem;
+    }
+
+    .panel {
+        position: relative;
+        background: linear-gradient(145deg, rgba(26, 31, 46, 0.96), rgba(34, 38, 51, 0.96));
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 22px;
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(10px);
+    }
+
+    .hero-panel {
+        padding: 3rem;
+        overflow: hidden;
+    }
+
+    .hero-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr);
+        gap: 2rem;
+        align-items: stretch;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 136, 255, 0.22);
+        background: rgba(0, 136, 255, 0.08);
+        color: #8fc8ff;
+        font-size: 0.8rem;
         font-weight: 700;
-        text-align: center;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
     }
 
-    .rgb-effect {
-        background: linear-gradient(90deg, #00bfff, #1e90ff, #4a54f1);
+    .hero-title {
+        margin: 1.1rem 0 1rem;
+        font-size: clamp(2.7rem, 5vw, 4.6rem);
+        line-height: 0.97;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -0.04em;
+    }
+
+    .hero-title .accent {
+        display: block;
+        background: linear-gradient(135deg, #8ed0ff, #0088ff 45%, #4dacff 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        animation: gradientFlow 6s ease infinite;
-        background-size: 200% auto;
+        text-shadow: 0 0 24px rgba(0, 136, 255, 0.12);
     }
 
-    @keyframes gradientFlow {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    .hero-copy {
+        max-width: 42rem;
+        margin: 0;
+        color: #a8b4c8;
+        font-size: 1.08rem;
+        line-height: 1.75;
     }
 
-    @keyframes rgbAnimation {
-        0% { background-position: 0% 0%; }
-        50% { background-position: 100% 100%; }
-        100% { background-position: 0% 0%; }
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-top: 1.75rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        min-height: 3.35rem;
+        padding: 0.95rem 1.45rem;
+        border-radius: 14px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
     }
 
     .btn-primary {
-        background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
-        background-size: 400% 400%;
+        background: linear-gradient(135deg, #0088ff, #0055cc);
         color: #ffffff;
-        padding: 0.85rem 1.5rem;
-        border: none;
-        border-radius: 12px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        cursor: pointer;
-        width: auto;
-        transition: transform 0.2s ease, box-shadow 0.3s ease;
-        background-clip: padding-box;
-        position: relative;
-        animation: rgbAnimation 6s ease infinite;
-        text-shadow: 1px 1px 4px rgba(30, 144, 255, 0.7);
-        text-decoration: none;
-        display: inline-block;
-        letter-spacing: 0.5px;
+        border: 1px solid rgba(125, 190, 255, 0.25);
+        box-shadow: 0 12px 30px rgba(0, 102, 204, 0.3);
     }
 
     .btn-primary:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 18px 36px rgba(0, 102, 204, 0.38);
+        background: linear-gradient(135deg, #1393ff, #0062dd);
     }
 
-    .btn-primary:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.3);
+    .btn-secondary {
+        color: #dbe9f8;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.03);
     }
 
-    .feature-card {
-        background: linear-gradient(145deg, #2c2c2c, #252525);
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        height: 100%;
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        border-color: rgba(0, 136, 255, 0.28);
+        background: rgba(0, 136, 255, 0.06);
+    }
+
+    .hero-notes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.65rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: #c3cfdf;
+        font-size: 0.92rem;
+    }
+
+    .pill i {
+        color: #4dacff;
+    }
+
+    .hero-aside {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .spotlight-card,
+    .mini-card,
+    .card,
+    .stat-card,
+    .audience-card,
+    .faq-item {
+        background: linear-gradient(145deg, rgba(24, 29, 42, 0.96), rgba(20, 24, 35, 0.96));
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 18px;
+    }
+
+    .spotlight-card {
+        padding: 1.6rem;
+        min-height: 100%;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
     }
 
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+    .spotlight-kicker {
+        color: #8fc8ff;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
     }
 
-    .feature-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        background: linear-gradient(45deg, #00bfff, #4a54f1);
+    .spotlight-value {
+        margin: 0.45rem 0 0;
+        font-size: clamp(3.2rem, 6vw, 4.5rem);
+        line-height: 0.95;
+        font-weight: 900;
+        color: #ffffff;
+    }
+
+    .spotlight-value span {
+        background: linear-gradient(135deg, #8ed0ff, #0088ff 45%, #4dacff 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
     }
 
-    .form-input {
-        width: 100%;
-        padding: 0.85rem;
-        background-color: #2e2e2e;
-        color: #e0e0e0;
-        border: 1px solid #555;
-        border-radius: 12px;
-        font-size: 1rem;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    .spotlight-copy {
+        margin: 0.9rem 0 1.2rem;
+        color: #a8b4c8;
+        line-height: 1.65;
     }
 
-    .form-input:focus {
-        border-color: #4a54f1;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(74, 84, 241, 0.2);
+    .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
     }
 
-    .form-label {
-        color: #e0e0e0;
-        font-weight: 600;
-        font-size: 1rem;
+    .mini-card {
+        padding: 1.1rem;
+    }
+
+    .mini-label {
         display: block;
-        margin-bottom: 0.5rem;
+        color: #7f8ba2;
+        font-size: 0.84rem;
+        margin-bottom: 0.4rem;
     }
 
-    .step-card {
-        position: relative;
-        padding-left: 4rem;
-        margin-bottom: 2.5rem;
+    .mini-value {
+        display: block;
+        color: #ffffff;
+        font-size: 1.15rem;
+        font-weight: 700;
+    }
+
+    .section-head {
+        text-align: center;
+        margin-bottom: 1.3rem;
+    }
+
+    .section-title {
+        margin: 0;
+        color: #ffffff;
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+    }
+
+    .section-subtitle {
+        margin: 0.55rem auto 0;
+        max-width: 44rem;
+        color: #9ca9bd;
+        line-height: 1.7;
+    }
+
+    .stats-grid,
+    .steps-grid,
+    .detail-grid,
+    .audience-grid,
+    .faq-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .stat-card {
+        padding: 1.35rem 1.4rem;
+        text-align: left;
+        transition: transform 0.2s ease, border-color 0.25s ease;
+    }
+
+    .stat-card:hover,
+    .card:hover,
+    .audience-card:hover,
+    .faq-item:hover {
+        transform: translateY(-3px);
+        border-color: rgba(0, 136, 255, 0.2);
+    }
+
+    .stat-value {
+        display: block;
+        color: #ffffff;
+        font-size: 1.85rem;
+        font-weight: 800;
+        line-height: 1.1;
+    }
+
+    .stat-caption {
+        display: block;
+        color: #8d99ae;
+        font-size: 0.92rem;
+        margin-top: 0.45rem;
+        line-height: 1.55;
+    }
+
+    .steps-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card {
+        padding: 1.5rem;
+        transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    .step-head {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 1rem;
     }
 
     .step-number {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 3rem;
-        height: 3rem;
-        background: linear-gradient(45deg, #00bfff, #4a54f1);
-        border-radius: 50%;
-        display: flex;
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 12px;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 1.2rem;
-        box-shadow: 0 4px 12px rgba(0, 191, 255, 0.3);
+        background: linear-gradient(135deg, #0088ff, #0055cc);
+        color: #ffffff;
+        font-weight: 800;
+        box-shadow: 0 10px 22px rgba(0, 102, 204, 0.28);
+        flex-shrink: 0;
     }
 
-    .testimonial-card {
-        background: rgba(44, 44, 44, 0.6);
-        border-radius: 16px;
-        padding: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+    .step-title,
+    .card h3,
+    .audience-card h3,
+    .faq-q {
+        margin: 0;
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    .step-copy,
+    .card p,
+    .audience-card p,
+    .faq-a {
+        margin: 0;
+        color: #9ca9bd;
+        line-height: 1.7;
+    }
+
+    .detail-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        align-items: start;
+    }
+
+    .commission-panel {
+        padding: 2rem;
+    }
+
+    .commission-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(0, 136, 255, 0.08);
+        border: 1px solid rgba(0, 136, 255, 0.18);
+        color: #8fc8ff;
+        font-size: 0.84rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .commission-value {
+        margin: 1rem 0 0.4rem;
+        color: #ffffff;
+        font-size: clamp(3rem, 5vw, 4.2rem);
+        font-weight: 900;
+        line-height: 0.95;
+    }
+
+    .commission-value span {
+        background: linear-gradient(135deg, #8ed0ff, #0088ff 45%, #4dacff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .commission-copy {
+        margin: 0;
+        color: #a8b4c8;
+        line-height: 1.75;
+    }
+
+    .detail-list {
+        margin: 1.5rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .detail-list li {
+        display: flex;
+        gap: 0.8rem;
+        align-items: flex-start;
+        color: #c8d4e3;
+        line-height: 1.65;
+    }
+
+    .detail-list i {
+        margin-top: 0.25rem;
+        color: #4dacff;
+    }
+
+    .breakdown-stack {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .breakdown-card {
+        padding: 1.35rem;
+    }
+
+    .breakdown-label {
+        display: block;
+        color: #7f8ba2;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.5rem;
+    }
+
+    .breakdown-value {
+        display: block;
+        color: #ffffff;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.55rem;
+    }
+
+    .audience-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .audience-card {
+        padding: 1.4rem;
+        transition: transform 0.2s ease, border-color 0.25s ease;
+    }
+
+    .audience-icon {
+        width: 2.85rem;
+        height: 2.85rem;
         margin-bottom: 1rem;
-        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        background: rgba(0, 136, 255, 0.12);
+        border: 1px solid rgba(0, 136, 255, 0.18);
+        color: #8fc8ff;
+        font-size: 1.15rem;
     }
 
-    .testimonial-card:before {
-        content: '"';
-        position: absolute;
-        top: 10px;
-        left: 15px;
-        font-size: 3rem;
-        color: rgba(74, 84, 241, 0.2);
-        font-family: Georgia, serif;
-    }
-
-    .highlight {
-        color: #00bfff;
-        font-weight: bold;
+    .faq-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .faq-item {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding-bottom: 1.5rem;
+        padding: 1.35rem;
+        transition: transform 0.2s ease, border-color 0.25s ease;
     }
 
-    @media (max-width: 768px) {
-        .container2 {
-            max-width: 100%;
-            padding: 0.5rem;
-            margin: 1rem auto;
-        }
-        
-        .container3 {
-            max-width: 100%;
-            padding: 0.5rem;
-            margin: 1rem auto;
-        }
-        
-        .card {
-            padding: 1.5rem;
-            border-radius: 12px;
-        }
-        
-        .step-card {
-            padding-left: 3.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .step-number {
-            width: 2.5rem;
-            height: 2.5rem;
-            font-size: 1rem;
+    .faq-q {
+        margin-bottom: 0.7rem;
+    }
+
+    .faq-a a,
+    .login-link,
+    .terms-link {
+        color: #76bcff;
+        text-decoration: none;
+    }
+
+    .faq-a a:hover,
+    .login-link:hover,
+    .terms-link:hover {
+        color: #9fd2ff;
+        text-decoration: underline;
+    }
+
+    .final-cta {
+        padding: 2rem;
+        text-align: center;
+        background:
+            radial-gradient(circle at top, rgba(0, 136, 255, 0.14), transparent 42%),
+            linear-gradient(145deg, rgba(26, 31, 46, 0.96), rgba(34, 38, 51, 0.96));
+    }
+
+    .final-cta .section-subtitle {
+        max-width: 38rem;
+    }
+
+    .final-links {
+        margin-top: 1.15rem;
+        color: #7f8ba2;
+        font-size: 0.94rem;
+    }
+
+    @media (max-width: 1080px) {
+        .hero-grid,
+        .detail-grid,
+        .stats-grid,
+        .audience-grid,
+        .faq-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        h1 {
-            font-size: 2.5rem !important;
-            line-height: 1.2 !important;
-        }
-
-        h2 {
-            font-size: 1.75rem !important;
-        }
-
-        h3 {
-            font-size: 1.25rem !important;
-        }
-
-        p {
-            font-size: 1rem !important;
-        }
-
-        .btn-primary {
-            padding: 0.75rem 1.25rem;
-            font-size: 1rem;
-            width: 100%;
-            text-align: center;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .text-6xl {
-            font-size: 2.5rem !important;
-        }
-
-        .text-xl {
-            font-size: 1rem !important;
-        }
-
-        .mb-16 {
-            margin-bottom: 2rem !important;
-        }
-        
-        .mb-8 {
-            margin-bottom: 1rem !important;
+        .steps-grid {
+            grid-template-columns: 1fr;
         }
     }
 
-    @media (max-width: 480px) {
-        .card {
+    @media (max-width: 820px) {
+        .main-content {
+            width: min(100% - 1rem, 100%);
+            padding-top: 1rem;
+        }
+
+        .hero-panel,
+        .commission-panel,
+        .final-cta,
+        .card,
+        .spotlight-card,
+        .faq-item,
+        .stat-card,
+        .audience-card {
             padding: 1.25rem;
         }
-        
-        .step-card {
-            padding-left: 3rem;
+
+        .hero-grid,
+        .detail-grid,
+        .stats-grid,
+        .audience-grid,
+        .faq-grid,
+        .mini-grid {
+            grid-template-columns: 1fr;
         }
-        
-        .step-number {
-            width: 2.25rem;
-            height: 2.25rem;
+
+        .hero-title {
+            font-size: 2.55rem;
         }
-        
-        h1 {
-            font-size: 2rem !important;
+
+        .hero-actions {
+            flex-direction: column;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .section {
+            margin-top: 1rem;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+        }
+
+        .hero-copy,
+        .section-subtitle,
+        .step-copy,
+        .card p,
+        .audience-card p,
+        .faq-a {
+            font-size: 0.96rem;
+        }
+
+        .eyebrow,
+        .pill,
+        .commission-badge {
+            font-size: 0.76rem;
         }
     }
     </style>
 
-    <div class="pt-0 container2 mx-auto p-7 min-h-screen main-content">
-        <div class="text-center mb-16">
-            <h1 class="text-6xl font-extrabold text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500 inline-block rgb-effect leading-tight">
-                Affiliate Program
-            </h1>
-            <p class="text-gray-300 mt-6 text-xl max-w-3xl mx-auto">
-                Partner with CypherGoat and <span class="rgb-effect">earn up to 50% commission</span> while helping others find the best rates for their crypto swaps.
-            </p>
-        </div>
+    <main class="main-content affiliate-shell">
+        <section class="panel hero-panel section">
+            <div class="hero-grid">
+                <div>
+                    <span class="eyebrow"><i class="fas fa-handshake"></i> Affiliate Program</span>
+                    <h1 class="hero-title">
+                        Turn crypto traffic into
+                        <span class="accent">repeat revenue.</span>
+                    </h1>
+                    <p class="hero-copy">
+                        Share CypherGoat with your audience and earn up to 50% of our fees on every qualifying swap. Fast signup, direct crypto payouts, and a straightforward value proposition built for crypto-native audiences.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="/affiliate/register" class="btn-primary">Start earning for free <i class="fas fa-arrow-right"></i></a>
+                        <a href="/affiliate/login" class="btn-secondary">Existing affiliate login</a>
+                    </div>
+                    <div class="hero-notes">
+                        <span class="pill"><i class="fas fa-bolt"></i> Instant signup</span>
+                        <span class="pill"><i class="fas fa-link"></i> Permanent attribution</span>
+                        <span class="pill"><i class="fas fa-wallet"></i> Crypto payouts</span>
+                        <span class="pill"><i class="fas fa-chart-line"></i> Real-time dashboard</span>
+                    </div>
+                </div>
 
-        <div class="container3 mx-auto mb-20">
-            <div class="card">
-                <h2 class="text-3xl font-bold text-center text-white mb-8">How Our Affiliate Program Works</h2>
-                <br/>
-                <div class="step-card"> 
-                    <div class="step-number">1</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Register</h3>
-                    <p class="text-gray-300">Register with your email address and create a password.</p>
-                </div>
-                
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Get Your Unique Links</h3>
-                    <p class="text-gray-300">Once logged in, you will get your unique links and can start earning</p>
-                </div>
-                
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Promote CypherGoat</h3>
-                    <p class="text-gray-300">Share your links through your website, blog, social media, or other channels to your audience.</p>
-                </div>
-                
-                <div class="step-card">
-                    <div class="step-number">4</div>
-                    <h3 class="text-xl font-bold text-white mb-3">Track & Earn</h3>
-                    <p class="text-gray-300">Monitor performance in real-time and receive up to 50% of our fees for every successful transaction.</p>
-                </div>
-                
-                <div class="text-center mt-8">
-                    <a href="/affiliate/register" class="btn-primary">Become an Affiliate</a>
-                </div>
-                <br/>
-                <div class="text-center mt-4">
-                    <p class="text-gray-300">Have questions? <a href="/contact/" class="text-blue-400">Contact us</a></p>
+                <div class="hero-aside">
+                    <div class="spotlight-card">
+                        <div>
+                            <span class="spotlight-kicker">Topline Offer</span>
+                            <p class="spotlight-value"><span>50%</span></p>
+                            <p class="spotlight-copy">
+                                Earn a share of CypherGoat fees whenever your audience swaps through your link. No application review. No manual approval queue.
+                            </p>
+                        </div>
+                        <div class="mini-grid">
+                            <div class="mini-card">
+                                <span class="mini-label">Minimum payout</span>
+                                <span class="mini-value">$200 equivalent</span>
+                            </div>
+                            <div class="mini-card">
+                                <span class="mini-label">Payout speed</span>
+                                <span class="mini-value">24-48 hours</span>
+                            </div>
+                            <div class="mini-card">
+                                <span class="mini-label">Payment method</span>
+                                <span class="mini-value">Any supported coin</span>
+                            </div>
+                            <div class="mini-card">
+                                <span class="mini-label">Best for</span>
+                                <span class="mini-value">Crypto-native audiences</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-}
+        </section>
 
-templ AffiliateTerms(){
-    @Header(){}
+        <section class="section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value">50%</span>
+                    <span class="stat-caption">Commission on qualifying swaps referred through your tracking link.</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">$200</span>
+                    <span class="stat-caption">Minimum payout threshold in BTC or another supported asset.</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">Real-time</span>
+                    <span class="stat-caption">Dashboard reporting for clicks, conversions, and earned balance.</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">Global</span>
+                    <span class="stat-caption">No country-based join restrictions, subject to local compliance.</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2 class="section-title">How it works</h2>
+                <p class="section-subtitle">Fast onboarding, clear attribution, and the same no-nonsense positioning the core product already uses.</p>
+            </div>
+            <div class="steps-grid">
+                <article class="card">
+                    <div class="step-head">
+                        <span class="step-number">1</span>
+                        <h3 class="step-title">Create your account</h3>
+                    </div>
+                    <p class="step-copy">Register with your email and password. There is no application form and no approval wait.</p>
+                </article>
+                <article class="card">
+                    <div class="step-head">
+                        <span class="step-number">2</span>
+                        <h3 class="step-title">Grab your referral link</h3>
+                    </div>
+                    <p class="step-copy">Your dashboard gives you a unique tracking link you can drop into videos, guides, bios, newsletters, and community posts.</p>
+                </article>
+                <article class="card">
+                    <div class="step-head">
+                        <span class="step-number">3</span>
+                        <h3 class="step-title">Send qualified traffic</h3>
+                    </div>
+                    <p class="step-copy">When users click through and complete swaps on CypherGoat, those qualifying transactions are attributed back to you.</p>
+                </article>
+                <article class="card">
+                    <div class="step-head">
+                        <span class="step-number">4</span>
+                        <h3 class="step-title">Withdraw in crypto</h3>
+                    </div>
+                    <p class="step-copy">Track performance in real time and request payout once you cross the minimum threshold.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="detail-grid">
+                <div class="panel commission-panel">
+                    <span class="commission-badge"><i class="fas fa-percent"></i> Commission structure</span>
+                    <p class="commission-value"><span>Up to 50%</span></p>
+                    <p class="commission-copy">
+                        The pitch is simple: send users who already need a privacy-conscious swap aggregator, and earn a revenue share when they transact. No hidden tiers and no cluttered explanation block.
+                    </p>
+                    <ul class="detail-list">
+                        <li><i class="fas fa-check-circle"></i><span>Commissions are credited after a referred swap confirms.</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>Payouts are requested from your dashboard and sent directly to your wallet.</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>Referrals remain tied to your tracking link for future qualifying swaps.</span></li>
+                    </ul>
+                </div>
+                <div class="breakdown-stack">
+                    <div class="card breakdown-card">
+                        <span class="breakdown-label">When do I get paid?</span>
+                        <span class="breakdown-value">After swaps confirm</span>
+                        <p>Balances update after confirmation, and payout requests are typically handled within 24-48 hours.</p>
+                    </div>
+                    <div class="card breakdown-card">
+                        <span class="breakdown-label">What is the threshold?</span>
+                        <span class="breakdown-value">$200 minimum</span>
+                        <p>Withdraw in BTC or another supported coin once your balance reaches the equivalent of 200 USD.</p>
+                    </div>
+                    <div class="card breakdown-card">
+                        <span class="breakdown-label">How is attribution handled?</span>
+                        <span class="breakdown-value">Unique referral link</span>
+                        <p>Use your personal affiliate URL across your content and traffic sources. Self-referrals do not qualify.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2 class="section-title">Who this fits</h2>
+                <p class="section-subtitle">The page should speak to the same people already using CypherGoat: privacy-minded users, educators, builders, and communities around crypto execution.</p>
+            </div>
+            <div class="audience-grid">
+                <article class="audience-card">
+                    <span class="audience-icon"><i class="fas fa-video"></i></span>
+                    <h3>Creators and streamers</h3>
+                    <p>Add your link to descriptions, pinned comments, and callouts wherever you already discuss swaps and privacy tools.</p>
+                </article>
+                <article class="audience-card">
+                    <span class="audience-icon"><i class="fas fa-pen-nib"></i></span>
+                    <h3>Writers and newsletter operators</h3>
+                    <p>Monetize comparison posts, tutorials, and market explainers without forcing readers through a sales-heavy funnel.</p>
+                </article>
+                <article class="audience-card">
+                    <span class="audience-icon"><i class="fas fa-user-shield"></i></span>
+                    <h3>Privacy-first communities</h3>
+                    <p>CypherGoat already resonates with users looking for open, privacy-conscious swap flows, especially around XMR-adjacent audiences.</p>
+                </article>
+                <article class="audience-card">
+                    <span class="audience-icon"><i class="fas fa-share-nodes"></i></span>
+                    <h3>Social channels and communities</h3>
+                    <p>Telegram groups, X accounts, Discord servers, and niche forums can all drive recurring qualified traffic.</p>
+                </article>
+                <article class="audience-card">
+                    <span class="audience-icon"><i class="fas fa-code"></i></span>
+                    <h3>Wallets and app builders</h3>
+                    <p>Integrate or surface your link inside products where users already need a swap option and a clear destination.</p>
+                </article>
+                <article class="audience-card">
+                    <span class="audience-icon"><i class="fas fa-users"></i></span>
+                    <h3>Community operators</h3>
+                    <p>If people ask you where to swap, you can turn that recommendation into a measurable revenue stream.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2 class="section-title">Frequently asked questions</h2>
+                <p class="section-subtitle">Short answers, consistent styling, and less visual noise.</p>
+            </div>
+            <div class="faq-grid">
+                <article class="faq-item">
+                    <p class="faq-q">How and when are commissions paid?</p>
+                    <p class="faq-a">Commissions are credited once a referred swap confirms on-chain. Payout requests are sent from your dashboard and are typically processed within 24-48 hours.</p>
+                </article>
+                <article class="faq-item">
+                    <p class="faq-q">What is the minimum payout threshold?</p>
+                    <p class="faq-a">The minimum payout is 200 USD equivalent in your chosen supported coin. Balances roll over until you decide to withdraw.</p>
+                </article>
+                <article class="faq-item">
+                    <p class="faq-q">Which cryptocurrencies can I be paid in?</p>
+                    <p class="faq-a">Payouts are available in Bitcoin and other supported cryptocurrencies. Set your preferred payout asset from the affiliate dashboard.</p>
+                </article>
+                <article class="faq-item">
+                    <p class="faq-q">Is there an approval process to join?</p>
+                    <p class="faq-a">No. Registration is immediate and free, and your links are available as soon as the account is created.</p>
+                </article>
+                <article class="faq-item">
+                    <p class="faq-q">Can I promote on social media, YouTube, or paid ads?</p>
+                    <p class="faq-a">Social media, YouTube, blogs, newsletters, forums, and other organic channels are allowed. Paid search bidding on the CypherGoat brand name is not. See the <a href="/affiliate/terms">full terms</a> { "for" } details.</p>
+                </article>
+                <article class="faq-item">
+                    <p class="faq-q">Are there geographic restrictions?</p>
+                    <p class="faq-a">There are no country-based restrictions on joining the program. You remain responsible for complying with the laws in your jurisdiction.</p>
+                </article>
+                <article class="faq-item">
+                    <p class="faq-q">What counts as a qualifying swap?</p>
+                    <p class="faq-a">A qualifying swap is a completed transaction made by a user who arrived through your referral link. Self-referrals do not qualify. See the <a href="/affiliate/terms">terms and conditions</a> { "for" } the full definition.</p>
+                </article>
+                <article class="faq-item">
+                    <p class="faq-q">What traffic sources work best?</p>
+                    <p class="faq-a">Guides, comparisons, tutorials, wallet recommendations, and community referrals tend to convert best because they reach users who already intend to swap.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="panel final-cta">
+                <div class="section-head">
+                    <h2 class="section-title">Start with the link, not the paperwork</h2>
+                    <p class="section-subtitle">Join in under two minutes and start earning whenever your audience uses CypherGoat to swap.</p>
+                </div>
+                <div class="hero-actions" style="justify-content:center; margin-top:0;">
+                    <a href="/affiliate/register" class="btn-primary">Get my affiliate link <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <p class="final-links">
+                    Already registered? <a href="/affiliate/login" class="login-link">Log in here</a>
+                    &nbsp;|&nbsp;
+                    <a href="/affiliate/terms" class="terms-link">View program terms</a>
+                </p>
+            </div>
+        </section>
+    </main>
+}
+templ AffiliatePortalStyles() {
     <style>
+    html, body {
+        margin: 0;
+        scroll-behavior: smooth;
+    }
+
     body {
-        background-color: #1c1c1c;
-        font-family: 'Arial', sans-serif;
+        background:
+            radial-gradient(circle at top, rgba(0, 136, 255, 0.14), transparent 28%),
+            linear-gradient(180deg, #121520 0%, #0f131d 100%);
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        color: #e5edf7;
+    }
+
+    .aff-page {
+        width: min(1180px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 1.5rem 0 5rem;
+    }
+
+    .aff-page--narrow {
+        width: min(840px, calc(100% - 2rem));
+    }
+
+    .aff-page--auth {
+        width: min(1020px, calc(100% - 2rem));
+    }
+
+    .aff-hero,
+    .aff-panel,
+    .aff-stat-card,
+    .aff-card,
+    .aff-side-card,
+    .aff-table-section,
+    .aff-summary-card,
+    .aff-alert,
+    .aff-info,
+    .aff-balance-card {
+        background: linear-gradient(145deg, rgba(26, 31, 46, 0.96), rgba(34, 38, 51, 0.96));
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 22px;
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+    }
+
+    .aff-hero,
+    .aff-panel,
+    .aff-table-section,
+    .aff-balance-card {
+        padding: 2rem;
+    }
+
+    .aff-page-section {
+        margin-top: 1.25rem;
+    }
+
+    .aff-hero {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .aff-hero::before {
+        content: "";
+        position: absolute;
+        inset: auto -5rem -6rem auto;
+        width: 18rem;
+        height: 18rem;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(0, 136, 255, 0.16), transparent 70%);
+        pointer-events: none;
+    }
+
+    .aff-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.45rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(0, 136, 255, 0.08);
+        border: 1px solid rgba(0, 136, 255, 0.18);
+        color: #8fc8ff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .aff-title {
+        margin: 1rem 0 0.6rem;
+        color: #ffffff;
+        font-size: clamp(2.2rem, 4vw, 3.4rem);
+        line-height: 1;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+    }
+
+    .aff-title .accent {
+        background: linear-gradient(135deg, #8ed0ff, #0088ff 48%, #4dacff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .aff-subtitle,
+    .aff-copy,
+    .aff-muted,
+    .aff-table td,
+    .aff-table th,
+    .aff-list,
+    .aff-list li {
+        color: #9ca9bd;
+        line-height: 1.7;
+    }
+
+    .aff-subtitle {
+        max-width: 48rem;
+        margin: 0;
+    }
+
+    .aff-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-top: 1.4rem;
+    }
+
+    .aff-btn,
+    .aff-btn-secondary,
+    .aff-btn-success,
+    .aff-btn-danger,
+    .aff-btn-muted {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        min-height: 3rem;
+        padding: 0.85rem 1.25rem;
+        border-radius: 14px;
+        font-size: 0.98rem;
+        font-weight: 700;
+        text-decoration: none;
+        border: 1px solid transparent;
+        transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+        cursor: pointer;
+    }
+
+    .aff-btn {
+        background: linear-gradient(135deg, #0088ff, #0055cc);
+        color: #ffffff;
+        border-color: rgba(125, 190, 255, 0.22);
+        box-shadow: 0 12px 28px rgba(0, 102, 204, 0.28);
+    }
+
+    .aff-btn:hover,
+    .aff-btn-secondary:hover,
+    .aff-btn-success:hover,
+    .aff-btn-danger:hover,
+    .aff-btn-muted:hover {
+        transform: translateY(-2px);
+    }
+
+    .aff-btn-secondary {
+        background: rgba(255, 255, 255, 0.03);
+        color: #dce8f6;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .aff-btn-success {
+        background: linear-gradient(135deg, #22c55e, #15803d);
+        color: #ffffff;
+        box-shadow: 0 12px 28px rgba(34, 197, 94, 0.2);
+    }
+
+    .aff-btn-danger {
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
+        color: #ffffff;
+        box-shadow: 0 12px 28px rgba(239, 68, 68, 0.2);
+    }
+
+    .aff-btn-muted {
+        background: linear-gradient(135deg, #475569, #334155);
+        color: #ffffff;
+        box-shadow: 0 12px 28px rgba(71, 85, 105, 0.18);
+    }
+
+    .aff-btn:disabled,
+    .aff-btn-success:disabled {
+        background: #4b5563;
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .aff-auth-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .aff-side-card,
+    .aff-card,
+    .aff-summary-card,
+    .aff-stat-card {
+        padding: 1.5rem;
+    }
+
+    .aff-side-title,
+    .aff-card-title,
+    .aff-section-title {
+        margin: 0 0 0.65rem;
+        color: #ffffff;
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+
+    .aff-side-card ul,
+    .aff-check-list,
+    .aff-terms-list {
+        margin: 1rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .aff-check-list li,
+    .aff-terms-list li {
+        display: flex;
+        gap: 0.7rem;
+        align-items: flex-start;
+    }
+
+    .aff-check-list i,
+    .aff-terms-list i,
+    .aff-eyebrow i {
+        color: #4dacff;
+        margin-top: 0.2rem;
+    }
+
+    .aff-form-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .aff-form-group {
+        display: grid;
+        gap: 0.5rem;
+    }
+
+    .aff-label {
+        color: #d8e2ee;
+        font-size: 0.96rem;
+        font-weight: 600;
+    }
+
+    .aff-input,
+    .aff-select,
+    .aff-code {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.95rem 1rem;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(13, 18, 28, 0.52);
+        color: #eff5fb;
+        font-size: 1rem;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .aff-input:focus,
+    .aff-select:focus {
+        outline: none;
+        border-color: rgba(0, 136, 255, 0.55);
+        box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.15);
+        background: rgba(15, 22, 34, 0.78);
+    }
+
+    .aff-code {
+        font-family: 'Courier New', monospace;
+        font-size: 0.92rem;
+    }
+
+    .aff-alert,
+    .aff-info {
+        padding: 1rem 1.1rem;
+    }
+
+    .aff-alert ul {
+        margin: 0;
+        padding-left: 1rem;
+    }
+
+    .aff-alert--error {
+        border-color: rgba(239, 68, 68, 0.3);
+        background: linear-gradient(145deg, rgba(68, 18, 18, 0.9), rgba(46, 18, 22, 0.92));
+        color: #fca5a5;
+    }
+
+    .aff-alert--success {
+        border-color: rgba(34, 197, 94, 0.26);
+        background: linear-gradient(145deg, rgba(11, 44, 27, 0.92), rgba(16, 52, 35, 0.92));
+        color: #86efac;
+    }
+
+    .aff-info {
+        border-color: rgba(59, 130, 246, 0.24);
+        background: linear-gradient(145deg, rgba(18, 34, 58, 0.92), rgba(20, 39, 68, 0.92));
+        color: #93c5fd;
+    }
+
+    .aff-stats-grid,
+    .aff-summary-grid,
+    .aff-terms-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .aff-stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .aff-summary-grid,
+    .aff-terms-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .aff-stat-kicker,
+    .aff-summary-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #7f8ba2;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .aff-stat-value,
+    .aff-summary-value,
+    .aff-balance-value {
+        color: #ffffff;
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        font-weight: 900;
+        line-height: 1.05;
+        margin: 0;
+    }
+
+    .aff-balance-card {
+        text-align: center;
+    }
+
+    .aff-balance-value {
+        color: #86efac;
+        margin-bottom: 0.35rem;
+    }
+
+    .aff-balance-label {
+        color: #95a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .aff-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+    }
+
+    .aff-toolbar-actions,
+    .aff-inline-actions,
+    .aff-referral-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .aff-referral-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .aff-table-wrap {
+        overflow-x: auto;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(7, 11, 18, 0.28);
+    }
+
+    .aff-table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: collapse;
+    }
+
+    .aff-table th,
+    .aff-table td {
+        padding: 0.9rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        vertical-align: top;
+    }
+
+    .aff-table th {
+        color: #d8e2ee;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .aff-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .aff-status,
+    .aff-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .aff-status--complete,
+    .aff-chip--green {
+        background: rgba(34, 197, 94, 0.12);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.18);
+    }
+
+    .aff-status--pending,
+    .aff-chip--amber {
+        background: rgba(245, 158, 11, 0.12);
+        color: #fcd34d;
+        border: 1px solid rgba(245, 158, 11, 0.18);
+    }
+
+    .aff-status--approved,
+    .aff-chip--blue {
+        background: rgba(59, 130, 246, 0.12);
+        color: #93c5fd;
+        border: 1px solid rgba(59, 130, 246, 0.18);
+    }
+
+    .aff-status--rejected,
+    .aff-chip--red {
+        background: rgba(239, 68, 68, 0.12);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.18);
+    }
+
+    .aff-number-positive {
+        color: #86efac;
+        font-weight: 700;
+    }
+
+    .aff-empty {
+        padding: 2rem;
+        text-align: center;
+        color: #7f8ba2;
+    }
+
+    .aff-link {
+        color: #76bcff;
+        text-decoration: none;
+    }
+
+    .aff-link:hover {
+        color: #9fd2ff;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 980px) {
+        .aff-auth-grid,
+        .aff-stats-grid,
+        .aff-summary-grid,
+        .aff-terms-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 720px) {
+        .aff-page,
+        .aff-page--narrow,
+        .aff-page--auth {
+            width: min(100% - 1rem, 100%);
+            padding-top: 1rem;
+        }
+
+        .aff-hero,
+        .aff-panel,
+        .aff-stat-card,
+        .aff-card,
+        .aff-side-card,
+        .aff-table-section,
+        .aff-summary-card,
+        .aff-alert,
+        .aff-info,
+        .aff-balance-card {
+            padding: 1.25rem;
+        }
+
+        .aff-title {
+            font-size: 2rem;
+        }
+
+        .aff-actions,
+        .aff-toolbar-actions,
+        .aff-referral-actions,
+        .aff-referral-row {
+            grid-template-columns: 1fr;
+            flex-direction: column;
+        }
+
+        .aff-actions .aff-btn,
+        .aff-actions .aff-btn-secondary,
+        .aff-actions .aff-btn-success,
+        .aff-actions .aff-btn-danger,
+        .aff-actions .aff-btn-muted,
+        .aff-referral-row .aff-btn,
+        .aff-toolbar-actions a {
+            width: 100%;
+        }
+
+        .aff-referral-row {
+            display: grid;
+        }
     }
     </style>
-    <div class="text-gray-100 font-sans py-8 px-4">
-        <header class="mb-12 text-center">
-            <h1 class="text-4xl font-bold text-white mb-4">CypherGoat Affiliate Program Terms & Conditions</h1>
-            <p class="text-lg text-gray-400">By signing up for the CypherGoat Affiliate Program, you agree to comply with the following terms and conditions.</p>
-        </header>
+}
 
-        <ul class="space-y-8 max-w-4xl mx-auto">
-            <li>
-                <strong class="text-white text-xl">1. Eligibility</strong>
-                <ul class="list-disc list-inside text-base text-gray-300">
-                    <li>CypherGoat reserves the right to reject any application at its sole discretion.</li>
-                </ul>
-            </li>
-            <li>
-                <strong class="text-white text-xl">2. Affiliate Responsibilities</strong>
-                <ul class="list-disc list-inside text-base text-gray-300">
-                    <li>You agree to promote CypherGoat in a lawful and ethical manner.</li>
-                    <li>You may not engage in spam, misleading advertising, or fraudulent activities.</li>
-                    <li>You are responsible for ensuring compliance with all applicable laws and regulations.</li>
-                </ul>
-            </li>
-            <li>
-                <strong class="text-white text-xl">3. Commission Structure & Payouts</strong>
-                <ul class="list-disc list-inside text-base text-gray-300">
-                    <li>Affiliates earn a commission for each qualifying transaction made through their referral link.</li>
-                    <li>Payments are made in cryptocurrency, with a minimum payout threshold of 0.002 Bitcoin.</li>
-                    <li>CypherGoat reserves the right to adjust commission rates at any time.</li>
-                </ul>
-            </li>
-            <li>
-                <strong class="text-white text-xl">4. Restrictions</strong>
-                <ul class="list-disc list-inside text-base text-gray-300">
-                    <li>Affiliates may not bid on CypherGoat’s brand name or variations in paid advertising campaigns.</li>
-                    <li>Any attempt to impersonate CypherGoat or mislead users is strictly prohibited.</li>
-                    <li>Self-referrals or fraudulent transactions will result in immediate disqualification.</li>
-                </ul>
-            </li>
-            <li>
-                <strong class="text-white text-xl">5. Termination & Modifications</strong>
-                <ul class="list-disc list-inside text-base text-gray-300">
-                    <li>CypherGoat reserves the right to terminate or modify this affiliate program at any time.</li>
-                    <li>Affiliates who violate these terms may have their accounts suspended without prior notice.</li>
-                    <li>Unclaimed commissions may be forfeited in cases of rule violations.</li>
-                </ul>
-            </li>
-            <li>
-                <strong class="text-white text-xl">6. Liability & Disclaimer</strong>
-                <ul class="list-disc list-inside text-base text-gray-300">
-                    <li>CypherGoat is not liable for any indirect damages resulting from participation in the program.</li>
-                    <li>Affiliates are independent contractors and not employees or partners of CypherGoat.</li>
-                </ul>
-            </li>
-        </ul>
+templ AffiliateTerms() {
+    @Header(){}
+    @AffiliatePortalStyles()
+    <div class="aff-page aff-page--narrow">
+        <section class="aff-hero">
+            <span class="aff-eyebrow"><i class="fas fa-scale-balanced"></i> Affiliate Terms</span>
+            <h1 class="aff-title">Program <span class="accent">terms and conditions</span></h1>
+            <p class="aff-subtitle">The affiliate portal should carry the same visual language as the landing page while keeping the legal content straightforward and readable.</p>
+        </section>
 
-        <p class="text-base text-center text-gray-400 mt-8">By utilizing CypherGoat, you acknowledge and agree to these terms. Should you have any questions or concerns, feel free to contact us.</p>
+        <section class="aff-page-section aff-terms-grid">
+            <article class="aff-card">
+                <h2 class="aff-card-title">1. Eligibility</h2>
+                <ul class="aff-terms-list aff-muted">
+                    <li><i class="fas fa-check-circle"></i><span>CypherGoat reserves the right to reject any application at its sole discretion.</span></li>
+                </ul>
+            </article>
+            <article class="aff-card">
+                <h2 class="aff-card-title">2. Affiliate responsibilities</h2>
+                <ul class="aff-terms-list aff-muted">
+                    <li><i class="fas fa-check-circle"></i><span>You agree to promote CypherGoat in a lawful and ethical manner.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>You may not engage in spam, misleading advertising, or fraudulent activities.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>You are responsible for ensuring compliance with applicable laws and regulations.</span></li>
+                </ul>
+            </article>
+            <article class="aff-card">
+                <h2 class="aff-card-title">3. Commissions and payouts</h2>
+                <ul class="aff-terms-list aff-muted">
+                    <li><i class="fas fa-check-circle"></i><span>Affiliates earn commission for qualifying transactions made through their referral link.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Payments are made in cryptocurrency, with a minimum payout threshold of 0.002 Bitcoin.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>CypherGoat may adjust commission rates at any time.</span></li>
+                </ul>
+            </article>
+            <article class="aff-card">
+                <h2 class="aff-card-title">4. Restrictions</h2>
+                <ul class="aff-terms-list aff-muted">
+                    <li><i class="fas fa-check-circle"></i><span>Paid advertising may not bid on the CypherGoat brand name or close variations.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Impersonation, misleading claims, or deceptive promotion are prohibited.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Self-referrals or fraudulent transactions result in disqualification.</span></li>
+                </ul>
+            </article>
+            <article class="aff-card">
+                <h2 class="aff-card-title">5. Termination and changes</h2>
+                <ul class="aff-terms-list aff-muted">
+                    <li><i class="fas fa-check-circle"></i><span>CypherGoat may terminate or modify the program at any time.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Violations may result in suspension without prior notice.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Unclaimed commissions may be forfeited in cases of rule violations.</span></li>
+                </ul>
+            </article>
+            <article class="aff-card">
+                <h2 class="aff-card-title">6. Liability and disclaimer</h2>
+                <ul class="aff-terms-list aff-muted">
+                    <li><i class="fas fa-check-circle"></i><span>CypherGoat is not liable for indirect damages resulting from program participation.</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Affiliates are independent contractors, not employees or partners.</span></li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="aff-page-section aff-panel">
+            <p class="aff-copy">By using the affiliate program, you acknowledge and agree to these terms. For questions, contact support through the main CypherGoat channels.</p>
+            <div class="aff-actions">
+                <a href="/affiliate" class="aff-btn-secondary">Back to affiliate page</a>
+                <a href="/affiliate/login" class="aff-btn">Affiliate login</a>
+            </div>
+        </section>
     </div>
+    @Footer(){}
 }
 
 templ AffiliateLogin(errors []string, success string) {
     @Header(){}
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            scroll-behavior: smooth;
-        }
-        body {
-            background-color: #121520;
-            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .login-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 200px);
-            padding: 2rem;
-        }
-        .login-panel {
-            background: linear-gradient(145deg, #181b28, #1e2235);
-            border-radius: 18px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.08);
-            max-width: 420px;
-            width: 100%;
-        }
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .login-title {
-            color: #fff;
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #00bfff, #4a54f1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .login-subtitle {
-            color: #b0b8d1;
-            font-size: 1.1rem;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-label {
-            color: #e0e0e0;
-            font-weight: 600;
-            font-size: 1rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .form-input {
-            width: 100%;
-            padding: 0.9rem;
-            background-color: #23263a;
-            color: #e0e0e0;
-            border: 1px solid #3a3f54;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            box-sizing: border-box;
-        }
-        .form-input:focus {
-            border-color: #4a54f1;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74,84,241,0.15);
-            background-color: #2a2e42;
-        }
-        .btn-login {
-            width: 100%;
-            background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
-            background-size: 400% 400%;
-            color: #ffffff;
-            padding: 0.95rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            animation: rgbAnimation 6s ease infinite;
-        }
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-        .login-links {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #2e3448;
-        }
-        .login-links a {
-            color: #4a94ff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .login-links a:hover {
-            text-decoration: underline;
-        }
-        .alert-error {
-            background: rgba(255,107,107,0.1);
-            border: 1px solid rgba(255,107,107,0.3);
-            color: #ff6b6b;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        .alert-success {
-            background: rgba(75,227,140,0.1);
-            border: 1px solid rgba(75,227,140,0.3);
-            color: #4be38c;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        @keyframes rgbAnimation {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-    </style>
+    @AffiliatePortalStyles()
+    <div class="aff-page aff-page--auth">
+        <section class="aff-auth-grid">
+            <aside class="aff-side-card">
+                <span class="aff-eyebrow"><i class="fas fa-lock"></i> Affiliate Access</span>
+                <h1 class="aff-title">Log in to the <span class="accent">affiliate portal</span></h1>
+                <p class="aff-subtitle">View referral activity, copy your link, check commission totals, and request payouts from the same portal style used across the rest of the affiliate area.</p>
+                <ul class="aff-check-list aff-muted">
+                    <li><i class="fas fa-chart-line"></i><span>Track clicks, completed swaps, and earned commission.</span></li>
+                    <li><i class="fas fa-link"></i><span>Access your referral URL and share it anywhere your audience already discovers swap tools.</span></li>
+                    <li><i class="fas fa-wallet"></i><span>Request payouts directly in supported cryptocurrencies.</span></li>
+                </ul>
+            </aside>
 
-    <div class="login-container">
-        <div class="login-panel">
-            <div class="login-header">
-                <h1 class="login-title">Affiliate Login</h1>
-                <p class="login-subtitle">Access your affiliate dashboard</p>
-            </div>
+            <section class="aff-panel">
+                <h2 class="aff-section-title">Affiliate login</h2>
+                <p class="aff-muted">Use the username and password created for your affiliate account.</p>
 
-            if len(errors) > 0 {
-                <div class="alert-error">
-                    <ul style="margin:0;padding-left:1rem;">
-                        for _, err := range errors {
-                            <li>{err}</li>
-                        }
-                    </ul>
+                if len(errors) > 0 {
+                    <div class="aff-page-section aff-alert aff-alert--error">
+                        <ul>
+                            for _, err := range errors {
+                                <li>{ err }</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                if success != "" {
+                    <div class="aff-page-section aff-alert aff-alert--success">{ success }</div>
+                }
+
+                <form method="POST" action="/affiliate/login" class="aff-form-grid aff-page-section">
+                    <div class="aff-form-group">
+                        <label class="aff-label" for="username">Username</label>
+                        <input class="aff-input" type="text" id="username" name="username" required placeholder="Enter your username" autocomplete="username"/>
+                    </div>
+                    <div class="aff-form-group">
+                        <label class="aff-label" for="password">Password</label>
+                        <input class="aff-input" type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password"/>
+                    </div>
+                    <button type="submit" class="aff-btn">Log in</button>
+                </form>
+
+                <div class="aff-page-section aff-muted">
+                    Need an account? <a href="/affiliate/register" class="aff-link">Create an affiliate account</a>
                 </div>
-            }
-
-            if success != "" {
-                <div class="alert-success">
-                    {success}
-                </div>
-            }
-
-            <form method="POST" action="/affiliate/login">
-                <div class="form-group">
-                    <label class="form-label" for="username">Username</label>
-                    <input class="form-input" type="text" id="username" name="username" required placeholder="Enter your username" autocomplete="username"/>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <input class="form-input" type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password"/>
-                </div>
-
-                <button type="submit" class="btn-login">Login</button>
-            </form>
-
-            <div class="login-links">
-                <p style="color: #b0b8d1; margin-bottom: 0.5rem;">Don't have an account?</p>
-                <a href="/affiliate/register">Create an affiliate account</a>
-            </div>
-        </div>
+            </section>
+        </section>
     </div>
     @Footer(){}
 }
 
 templ AffiliateRegister(errors []string, success string, token string) {
     @Header(){}
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            scroll-behavior: smooth;
-        }
-        body {
-            background-color: #121520;
-            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .register-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 200px);
-            padding: 2rem;
-        }
-        .register-panel {
-            background: linear-gradient(145deg, #181b28, #1e2235);
-            border-radius: 18px;
-            padding: 3rem 2.5rem;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.08);
-            max-width: 450px;
-            width: 100%;
-        }
-        .register-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .register-title {
-            color: #fff;
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #00bfff, #4a54f1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .register-subtitle {
-            color: #b0b8d1;
-            font-size: 1.1rem;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-label {
-            color: #e0e0e0;
-            font-weight: 600;
-            font-size: 1rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .form-input {
-            width: 100%;
-            padding: 0.9rem;
-            background-color: #23263a;
-            color: #e0e0e0;
-            border: 1px solid #3a3f54;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            box-sizing: border-box;
-        }
-        .form-input:focus {
-            border-color: #4a54f1;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74,84,241,0.15);
-            background-color: #2a2e42;
-        }
-        .btn-register {
-            width: 100%;
-            background: linear-gradient(45deg, #00bfff, #1e90ff, #007bff, #0056b3);
-            background-size: 400% 400%;
-            color: #ffffff;
-            padding: 0.95rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            animation: rgbAnimation 6s ease infinite;
-        }
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-        .register-links {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #2e3448;
-        }
-        .register-links a {
-            color: #4a94ff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .register-links a:hover {
-            text-decoration: underline;
-        }
-        .alert-error {
-            background: rgba(255,107,107,0.1);
-            border: 1px solid rgba(255,107,107,0.3);
-            color: #ff6b6b;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        .alert-success {
-            background: rgba(75,227,140,0.1);
-            border: 1px solid rgba(75,227,140,0.3);
-            color: #4be38c;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        @keyframes rgbAnimation {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
-        }
-    </style>
+    @AffiliatePortalStyles()
+    <div class="aff-page aff-page--auth">
+        <section class="aff-auth-grid">
+            <aside class="aff-side-card">
+                <span class="aff-eyebrow"><i class="fas fa-user-plus"></i> Affiliate Signup</span>
+                <h1 class="aff-title">Complete your <span class="accent">registration</span></h1>
+                <p class="aff-subtitle">Finish setting up your affiliate account and get immediate access to your referral link and dashboard.</p>
+                <ul class="aff-check-list aff-muted">
+                    <li><i class="fas fa-bolt"></i><span>No manual approval queue once registration is complete.</span></li>
+                    <li><i class="fas fa-shield"></i><span>Use a strong password. This account controls your payout requests and referral reporting.</span></li>
+                    <li><i class="fas fa-right-to-bracket"></i><span>After registration, log in to manage links, balances, and payout details.</span></li>
+                </ul>
+            </aside>
 
-    <div class="register-container">
-        <div class="register-panel">
-            <div class="register-header">
-                <h1 class="register-title">Complete Registration</h1>
-                <p class="register-subtitle">Set up your affiliate account</p>
-            </div>
+            <section class="aff-panel">
+                <h2 class="aff-section-title">Create affiliate account</h2>
+                <p class="aff-muted">Choose a username, attach your email, and finish setup.</p>
 
-            if len(errors) > 0 {
-                <div class="alert-error">
-                    <ul style="margin:0;padding-left:1rem;">
-                        for _, err := range errors {
-                            <li>{err}</li>
-                        }
-                    </ul>
+                if len(errors) > 0 {
+                    <div class="aff-page-section aff-alert aff-alert--error">
+                        <ul>
+                            for _, err := range errors {
+                                <li>{ err }</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                if success != "" {
+                    <div class="aff-page-section aff-alert aff-alert--success">
+                        { success }
+                        <div style="margin-top: 0.8rem;">
+                            <a href="/affiliate/login" class="aff-link">Log in now</a>
+                        </div>
+                    </div>
+                } else {
+                    <form method="POST" action="/affiliate/register" class="aff-form-grid aff-page-section">
+                        <input type="hidden" name="token" value={ token } />
+                        <div class="aff-form-group">
+                            <label class="aff-label" for="username">Username</label>
+                            <input class="aff-input" type="text" id="username" name="username" required placeholder="Choose a username" autocomplete="username"/>
+                        </div>
+                        <div class="aff-form-group">
+                            <label class="aff-label" for="email">Email</label>
+                            <input class="aff-input" type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email"/>
+                        </div>
+                        <div class="aff-form-group">
+                            <label class="aff-label" for="password">Password</label>
+                            <input class="aff-input" type="password" id="password" name="password" required placeholder="Create a strong password" autocomplete="new-password"/>
+                        </div>
+                        <div class="aff-form-group">
+                            <label class="aff-label" for="confirm_password">Confirm password</label>
+                            <input class="aff-input" type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password" autocomplete="new-password"/>
+                        </div>
+                        <button type="submit" class="aff-btn">Complete registration</button>
+                    </form>
+                }
+
+                <div class="aff-page-section aff-muted">
+                    Already registered? <a href="/affiliate/login" class="aff-link">Log in here</a>
                 </div>
-            }
-
-            if success != "" {
-                <div class="alert-success">
-                    {success}
-                    <div style="margin-top: 1rem;">
-                        <a href="/affiliate/login" style="color: #4a94ff; text-decoration: underline;">Login now</a>
-                    </div>
-                </div>
-            } else {
-                <form method="POST" action="/affiliate/register">
-                    <input type="hidden" name="token" value={token} />
-
-                    <div class="form-group">
-                        <label class="form-label" for="username">Username</label>
-                        <input class="form-input" type="text" id="username" name="username" required placeholder="Choose a username" autocomplete="username"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="email">Email</label>
-                        <input class="form-input" type="email" id="email" name="email" required placeholder="your@email.com" autocomplete="email"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="password">Password</label>
-                        <input class="form-input" type="password" id="password" name="password" required placeholder="Create a strong password" autocomplete="new-password"/>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="confirm_password">Confirm Password</label>
-                        <input class="form-input" type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password" autocomplete="new-password"/>
-                    </div>
-
-                    <button type="submit" class="btn-register">Complete Registration</button>
-                </form>
-            }
-
-            <div class="register-links">
-                <p style="color: #b0b8d1; margin-bottom: 0.5rem;">Already have an account?</p>
-                <a href="/affiliate/login">Login here</a>
-            </div>
-        </div>
+            </section>
+        </section>
     </div>
     @Footer(){}
 }
 
-
 templ AffiliateDashboard(stats *api.AffiliateStats) {
     @Header(){}
-    <style>
-        body {
-            background-color: #121520;
-            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-        }
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .dashboard-title {
-            color: #ffffff;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0;
-        }
-        .logout-btn {
-            background: linear-gradient(45deg, #dc3545, #c82333);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220,53,69,0.3);
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .stat-title {
-            color: #b0b8d1;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-        }
-        .stat-value {
-            color: #ffffff;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.25rem;
-        }
-        .stat-subtitle {
-            color: #6b7280;
-            font-size: 0.85rem;
-        }
-        .referral-section {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .section-title {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        .referral-link-container {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        .referral-link {
-            flex: 1;
-            padding: 0.8rem;
-            background: #23263a;
-            border: 1px solid #3a3f54;
-            border-radius: 8px;
-            color: #e0e0e0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            min-width: 300px;
-        }
-        .copy-btn {
-            background: linear-gradient(45deg, #00bfff, #4a54f1);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .copy-btn:hover {
-            transform: translateY(-2px);
-        }
-        .recent-swaps {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .swaps-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        .swaps-table th {
-            color: #b0b8d1;
-            font-weight: 600;
-            text-align: left;
-            padding: 0.75rem;
-            border-bottom: 1px solid #2e3448;
-        }
-        .swaps-table td {
-            color: #e0e0e0;
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .commission-positive {
-            color: #22c55e;
-            font-weight: 600;
-        }
-        @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 1rem;
-            }
-            .dashboard-title {
-                font-size: 2rem;
-            }
-            .referral-link-container {
-                flex-direction: column;
-            }
-            .referral-link {
-                min-width: unset;
-            }
-        }
-    </style>
-
-    <div class="dashboard-container">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Affiliate Dashboard</h1>
-            <a href="/affiliate/logout" class="logout-btn">Logout</a>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-title">Total Swaps</div>
-                <div class="stat-value">{fmt.Sprintf("%d", stats.TotalClicks)}</div>
-                <div class="stat-subtitle">All referral swaps (including incomplete)</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-title">Completed Swaps</div>
-                <div class="stat-value">{fmt.Sprintf("%d", stats.TotalSwaps)}</div>
-                <div class="stat-subtitle">Successfully completed swaps</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-title">Total Commission</div>
-                <div class="stat-value">{fmt.Sprintf("$%.2f", stats.TotalCommission)}</div>
-                <div class="stat-subtitle">Total earnings to date</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-title">Pending Payout</div>
-                <div class="stat-value">{fmt.Sprintf("$%.2f", stats.PendingPayout)}</div>
-                <div class="stat-subtitle">Available for withdrawal</div>
-            </div>
-        </div>
-
-        <div class="referral-section">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h2 class="section-title" style="margin-bottom: 0;">Your Referral Link</h2>
-                <div style="display: flex; gap: 0.5rem;">
-                    <a href="/affiliate/payout" style="background: linear-gradient(45deg, #22c55e, #16a34a); color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Request Payout</a>
-                    <a href="/affiliate/payout/history" style="background: linear-gradient(45deg, #6b7280, #4b5563); color: white; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Payout History</a>
+    @AffiliatePortalStyles()
+    <div class="aff-page">
+        <section class="aff-hero">
+            <div class="aff-toolbar">
+                <div>
+                    <span class="aff-eyebrow"><i class="fas fa-chart-column"></i> Affiliate Dashboard</span>
+                    <h1 class="aff-title">Referral performance <span class="accent">at a glance</span></h1>
+                    <p class="aff-subtitle">Monitor traffic, qualified swaps, total commission, and payout availability from a dashboard that now matches the landing and auth pages.</p>
+                </div>
+                <div class="aff-toolbar-actions">
+                    <a href="/affiliate/payout" class="aff-btn-success">Request payout</a>
+                    <a href="/affiliate/payout/history" class="aff-btn-secondary">Payout history</a>
+                    <a href="/affiliate/logout" class="aff-btn-danger">Logout</a>
                 </div>
             </div>
-            <p style="color: #b0b8d1; margin-bottom: 1rem;">
-                Share this link to earn commission on every successful swap:
-            </p>
+        </section>
+
+        <section class="aff-page-section aff-stats-grid">
+            <article class="aff-stat-card">
+                <span class="aff-stat-kicker">Total clicks</span>
+                <p class="aff-stat-value">{ fmt.Sprintf("%d", stats.TotalClicks) }</p>
+                <p class="aff-muted">All tracked referral visits and swap starts.</p>
+            </article>
+            <article class="aff-stat-card">
+                <span class="aff-stat-kicker">Completed swaps</span>
+                <p class="aff-stat-value">{ fmt.Sprintf("%d", stats.TotalSwaps) }</p>
+                <p class="aff-muted">Successfully completed swaps attributed to your link.</p>
+            </article>
+            <article class="aff-stat-card">
+                <span class="aff-stat-kicker">Total commission</span>
+                <p class="aff-stat-value">{ fmt.Sprintf("$%.2f", stats.TotalCommission) }</p>
+                <p class="aff-muted">All-time affiliate earnings.</p>
+            </article>
+            <article class="aff-stat-card">
+                <span class="aff-stat-kicker">Pending payout</span>
+                <p class="aff-stat-value">{ fmt.Sprintf("$%.2f", stats.PendingPayout) }</p>
+                <p class="aff-muted">Available balance before payout request.</p>
+            </article>
+        </section>
+
+        <section class="aff-page-section aff-panel">
+            <div class="aff-toolbar">
+                <div>
+                    <h2 class="aff-section-title">Your referral link</h2>
+                    <p class="aff-muted">Share this URL in videos, guides, comparison pages, newsletters, and crypto communities.</p>
+                </div>
+                <div class="aff-referral-actions">
+                    <a href="/affiliate/payout" class="aff-btn-success">Request payout</a>
+                    <a href="/affiliate/payout/history" class="aff-btn-muted">Payout history</a>
+                </div>
+            </div>
+
             if stats.ReferralLink != "" {
-                <div class="referral-link-container">
-                    <input type="text" class="referral-link" value={fmt.Sprintf("https://cyphergoat.com/?ref=%s", stats.ReferralLink)} readonly id="referral-link"/>
-                    <button class="copy-btn" onclick="copyReferralLink()">Copy Link</button>
+                <div class="aff-referral-row">
+                    <input type="text" class="aff-code" value={ fmt.Sprintf("https://cyphergoat.com/?ref=%s", stats.ReferralLink) } readonly id="referral-link"/>
+                    <button class="aff-btn" onclick="copyReferralLink()" type="button">Copy link</button>
                 </div>
             } else {
-                <div style="color: #ff6b6b; padding: 1rem; background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); border-radius: 10px;">
-                    <p>Your referral link is being generated. Please contact support if this persists.</p>
-                    <p><strong>Debug Info:</strong></p>
-                    <p>Affiliate ID: {stats.AffiliateID}</p>
-                    <p>Referral Code: "{stats.ReferralLink}"</p>
+                <div class="aff-alert aff-alert--error">
+                    <p>Your referral link is being generated. Contact support if this persists.</p>
+                    <p><strong>Affiliate ID:</strong> { stats.AffiliateID }</p>
+                    <p><strong>Referral Code:</strong> "{ stats.ReferralLink }"</p>
                 </div>
             }
-        </div>
+        </section>
 
         if len(stats.AllTrades) > 0 {
-            <div class="recent-swaps">
-                <h2 class="section-title">All Referral Trades</h2>
-                <table class="swaps-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>ID</th>
-                            <th>Swap</th>
-                            <th>Amount</th>
-                            <th>Exchange</th>
-                            <th>Status</th>
-                            <th>Commission</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        for _, trade := range stats.AllTrades {
+            <section class="aff-page-section aff-table-section">
+                <h2 class="aff-section-title">All referral trades</h2>
+                <div class="aff-table-wrap">
+                    <table class="aff-table">
+                        <thead>
                             <tr>
-                                <td>{trade.Date}</td>
-                                <td style="font-family: 'Courier New', monospace; font-size: 0.8rem;">{trade.ID}</td>
-                                <td>{trade.Coin1} → {trade.Coin2}</td>
-                                <td>{fmt.Sprintf("%.4f", trade.Amount)}</td>
-                                <td>{trade.Exchange}</td>
-                                <td>
-                                    if trade.Complete {
-                                        <span style="color: #22c55e; font-weight: 600;">✓ Complete</span>
-                                    } else {
-                                        <span style="color: #f59e0b; font-weight: 600;">⏳ {trade.Status}</span>
-                                    }
-                                </td>
-                                <td>
-                                    if trade.Complete && trade.Commission > 0 {
-                                        <span class="commission-positive">{fmt.Sprintf("$%.2f", trade.Commission)}</span>
-                                    } else {
-                                        <span style="color: #6b7280;">-</span>
-                                    }
-                                </td>
+                                <th>Date</th>
+                                <th>ID</th>
+                                <th>Swap</th>
+                                <th>Amount</th>
+                                <th>Exchange</th>
+                                <th>Status</th>
+                                <th>Commission</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            for _, trade := range stats.AllTrades {
+                                <tr>
+                                    <td>{ trade.Date }</td>
+                                    <td><span class="aff-code">{ trade.ID }</span></td>
+                                    <td>{ trade.Coin1 } -> { trade.Coin2 }</td>
+                                    <td>{ fmt.Sprintf("%.4f", trade.Amount) }</td>
+                                    <td>{ trade.Exchange }</td>
+                                    <td>
+                                        if trade.Complete {
+                                            <span class="aff-status aff-status--complete">Complete</span>
+                                        } else {
+                                            <span class="aff-status aff-status--pending">{ trade.Status }</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        if trade.Complete && trade.Commission > 0 {
+                                            <span class="aff-number-positive">{ fmt.Sprintf("$%.2f", trade.Commission) }</span>
+                                        } else {
+                                            <span class="aff-muted">-</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         } else if len(stats.RecentSwaps) > 0 {
-            <div class="recent-swaps">
-                <h2 class="section-title">Recent Swaps</h2>
-                <table class="swaps-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Swap</th>
-                            <th>Amount</th>
-                            <th>Exchange</th>
-                            <th>Commission</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        for _, swap := range stats.RecentSwaps {
+            <section class="aff-page-section aff-table-section">
+                <h2 class="aff-section-title">Recent swaps</h2>
+                <div class="aff-table-wrap">
+                    <table class="aff-table">
+                        <thead>
                             <tr>
-                                <td>{swap.Date}</td>
-                                <td>{swap.Coin1} → {swap.Coin2}</td>
-                                <td>{fmt.Sprintf("%.4f", swap.Amount)}</td>
-                                <td>{swap.Exchange}</td>
-                                <td class="commission-positive">{fmt.Sprintf("$%.2f", swap.Commission)}</td>
+                                <th>Date</th>
+                                <th>Swap</th>
+                                <th>Amount</th>
+                                <th>Exchange</th>
+                                <th>Commission</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            for _, swap := range stats.RecentSwaps {
+                                <tr>
+                                    <td>{ swap.Date }</td>
+                                    <td>{ swap.Coin1 } -> { swap.Coin2 }</td>
+                                    <td>{ fmt.Sprintf("%.4f", swap.Amount) }</td>
+                                    <td>{ swap.Exchange }</td>
+                                    <td><span class="aff-number-positive">{ fmt.Sprintf("$%.2f", swap.Commission) }</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         }
     </div>
 
@@ -1124,251 +1773,111 @@ templ AffiliateDashboard(stats *api.AffiliateStats) {
             linkInput.select();
             linkInput.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(linkInput.value).then(() => {
-                const btn = document.querySelector('.copy-btn');
+                const btn = document.querySelector('.aff-referral-row .aff-btn');
                 const originalText = btn.textContent;
-                btn.textContent = 'Copied!';
+                btn.textContent = 'Copied';
                 setTimeout(() => {
                     btn.textContent = originalText;
                 }, 2000);
             });
         }
     </script>
-
     @Footer(){}
 }
 
 templ AffiliatePayout(errors []string, success string, stats *api.AffiliateStats) {
     @Header(){}
-    <style>
-        body {
-            background-color: #121520;
-            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-        }
-        .payout-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .payout-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .payout-title {
-            color: #ffffff;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0;
-        }
-        .back-btn {
-            background: linear-gradient(45deg, #6b7280, #4b5563);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(107,114,128,0.3);
-        }
-        .balance-card {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-        }
-        .balance-amount {
-            color: #22c55e;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-        .balance-label {
-            color: #b0b8d1;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .payout-form {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-label {
-            color: #e0e0e0;
-            font-weight: 600;
-            font-size: 1rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .form-input {
-            width: 100%;
-            padding: 0.9rem;
-            background-color: #23263a;
-            color: #e0e0e0;
-            border: 1px solid #3a3f54;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            box-sizing: border-box;
-        }
-        .form-input:focus {
-            border-color: #4a54f1;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74,84,241,0.15);
-            background-color: #2a2e42;
-        }
-        .btn-payout {
-            width: 100%;
-            background: linear-gradient(45deg, #22c55e, #16a34a);
-            color: white;
-            padding: 0.95rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-payout:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(34,197,94,0.3);
-        }
-        .btn-payout:disabled {
-            background: #6b7280;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        .alert-error {
-            background: rgba(255,107,107,0.1);
-            border: 1px solid rgba(255,107,107,0.3);
-            color: #ff6b6b;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        .alert-success {
-            background: rgba(75,227,140,0.1);
-            border: 1px solid rgba(75,227,140,0.3);
-            color: #4be38c;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        .info-box {
-            background: rgba(59,130,246,0.1);
-            border: 1px solid rgba(59,130,246,0.3);
-            color: #60a5fa;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        .info-box ul {
-            margin: 0.5rem 0 0 1rem;
-        }
-        @media (max-width: 768px) {
-            .payout-container {
-                padding: 1rem;
-            }
-            .payout-title {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    @AffiliatePortalStyles()
+    <div class="aff-page aff-page--narrow">
+        <section class="aff-hero">
+            <div class="aff-toolbar">
+                <div>
+                    <span class="aff-eyebrow"><i class="fas fa-wallet"></i> Payout Request</span>
+                    <h1 class="aff-title">Withdraw your <span class="accent">affiliate balance</span></h1>
+                    <p class="aff-subtitle">Request crypto payouts once your available balance reaches the minimum threshold.</p>
+                </div>
+                <div class="aff-toolbar-actions">
+                    <a href="/affiliate/dashboard" class="aff-btn-secondary">Back to dashboard</a>
+                </div>
+            </div>
+        </section>
 
-    <div class="payout-container">
-        <div class="payout-header">
-            <h1 class="payout-title">Request Payout</h1>
-            <a href="/affiliate/dashboard" class="back-btn">← Back to Dashboard</a>
-        </div>
-
-        <div class="balance-card">
-            <div class="balance-amount">{fmt.Sprintf("$%.2f", stats.PendingPayout)}</div>
-            <div class="balance-label">Available Balance</div>
-        </div>
+        <section class="aff-page-section aff-balance-card">
+            <p class="aff-balance-value">{ fmt.Sprintf("$%.2f", stats.PendingPayout) }</p>
+            <p class="aff-balance-label">Available balance</p>
+        </section>
 
         if len(errors) > 0 {
-            <div class="alert-error">
-                <ul style="margin:0;padding-left:1rem;">
+            <div class="aff-page-section aff-alert aff-alert--error">
+                <ul>
                     for _, err := range errors {
-                        <li>{err}</li>
+                        <li>{ err }</li>
                     }
                 </ul>
             </div>
         }
 
         if success != "" {
-            <div class="alert-success">
-                {success}
-                <div style="margin-top: 1rem;">
-                    <a href="/affiliate/payout/history" style="color: #4a94ff; text-decoration: underline;">View payout history</a>
+            <div class="aff-page-section aff-alert aff-alert--success">
+                { success }
+                <div style="margin-top: 0.8rem;">
+                    <a href="/affiliate/payout/history" class="aff-link">View payout history</a>
                 </div>
             </div>
         }
 
-        <div class="info-box">
-            <strong>Payout Information:</strong>
-            <ul>
-                <li>Minimum payout: $200.00</li>
-                <li>Payments available in USDC (Solana) or Monero (XMR)</li>
-                <li>Processing time: 1-3 business days</li>
-                <li>All payouts are processed manually</li>
+        <section class="aff-page-section aff-info">
+            <strong>Payout information</strong>
+            <ul class="aff-check-list" style="margin-top: 0.8rem;">
+                <li><i class="fas fa-check-circle"></i><span>Minimum payout: $200.00</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Payments available in USDC on Solana or Monero (XMR).</span></li>
+                <li><i class="fas fa-check-circle"></i><span>Processing time is typically 1-3 business days.</span></li>
+                <li><i class="fas fa-check-circle"></i><span>All payouts are processed manually.</span></li>
             </ul>
-        </div>
+        </section>
 
-        <form method="POST" action="/affiliate/payout" class="payout-form">
-            <div class="form-group">
-                <label class="form-label" for="amount">Payout Amount (USD)</label>
-                <input class="form-input" type="number" id="amount" name="amount" step="0.01" min="200" 
-                       max={fmt.Sprintf("%.2f", stats.PendingPayout)} required 
-                       placeholder="Enter amount (minimum $200.00)"/>
-            </div>
+        <section class="aff-page-section aff-panel">
+            <h2 class="aff-section-title">Payout details</h2>
+            <form method="POST" action="/affiliate/payout" class="aff-form-grid">
+                <div class="aff-form-group">
+                    <label class="aff-label" for="amount">Payout amount (USD)</label>
+                    <input class="aff-input" type="number" id="amount" name="amount" step="0.01" min="200"
+                        max={ fmt.Sprintf("%.2f", stats.PendingPayout) } required
+                        placeholder="Enter amount (minimum $200.00)"/>
+                </div>
 
-            <div class="form-group">
-                <label class="form-label" for="payout_currency">Payout Currency</label>
-                <select class="form-input" id="payout_currency" name="payout_currency" required onchange="updateAddressPlaceholder()">
-                    <option value="">Select payout currency</option>
-                    <option value="USDC_SOL">USDC (Solana)</option>
-                    <option value="XMR">Monero (XMR)</option>
-                </select>
-            </div>
+                <div class="aff-form-group">
+                    <label class="aff-label" for="payout_currency">Payout currency</label>
+                    <select class="aff-select" id="payout_currency" name="payout_currency" required onchange="updateAddressPlaceholder()">
+                        <option value="">Select payout currency</option>
+                        <option value="USDC_SOL">USDC (Solana)</option>
+                        <option value="XMR">Monero (XMR)</option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label class="form-label" for="wallet_address">Wallet Address</label>
-                <input class="form-input" type="text" id="wallet_address" name="wallet_address" required 
-                       placeholder="Select currency first"/>
-            </div>
+                <div class="aff-form-group">
+                    <label class="aff-label" for="wallet_address">Wallet address</label>
+                    <input class="aff-input" type="text" id="wallet_address" name="wallet_address" required placeholder="Select currency first"/>
+                </div>
 
-            <button type="submit" class="btn-payout" 
+                <button type="submit" class="aff-btn-success"
                     if stats.PendingPayout < 200.00 {
                         disabled
                     }>
-                if stats.PendingPayout < 200.00 {
-                    Insufficient Balance (Minimum $200.00)
-                } else {
-                    Request Payout
-                }
-            </button>
-        </form>
+                    if stats.PendingPayout < 200.00 {
+                        Insufficient Balance (Minimum $200.00)
+                    } else {
+                        Request payout
+                    }
+                </button>
+            </form>
+        </section>
 
         <script>
             function updateAddressPlaceholder() {
                 const currencySelect = document.getElementById('payout_currency');
                 const addressInput = document.getElementById('wallet_address');
-                
+
                 if (currencySelect.value === 'USDC_SOL') {
                     addressInput.placeholder = 'Enter your Solana wallet address (32-44 characters)';
                     addressInput.pattern = '[1-9A-HJ-NP-Za-km-z]{32,44}';
@@ -1382,273 +1891,147 @@ templ AffiliatePayout(errors []string, success string, stats *api.AffiliateStats
             }
         </script>
     </div>
-
     @Footer(){}
 }
 
 templ AffiliatePayoutHistory(history *api.PayoutHistory) {
     @Header(){}
-    <style>
-        body {
-            background-color: #121520;
-            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-        }
-        .history-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .history-title {
-            color: #ffffff;
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin: 0;
-        }
-        .back-btn {
-            background: linear-gradient(45deg, #6b7280, #4b5563);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(107,114,128,0.3);
-        }
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .summary-card {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-        }
-        .summary-amount {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-        }
-        .summary-label {
-            color: #b0b8d1;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .payouts-section {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .section-title {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        .payouts-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        .payouts-table th {
-            color: #b0b8d1;
-            font-weight: 600;
-            text-align: left;
-            padding: 0.75rem;
-            border-bottom: 1px solid #2e3448;
-        }
-        .payouts-table td {
-            color: #e0e0e0;
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .status-pending {
-            color: #f59e0b;
-            font-weight: 600;
-        }
-        .status-completed {
-            color: #22c55e;
-            font-weight: 600;
-        }
-        .status-approved {
-            color: #3b82f6;
-            font-weight: 600;
-        }
-        .status-rejected {
-            color: #ef4444;
-            font-weight: 600;
-        }
-        .tx-hash {
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            color: #60a5fa;
-        }
-        .no-payouts {
-            text-align: center;
-            color: #6b7280;
-            padding: 2rem;
-            font-style: italic;
-        }
-        @media (max-width: 768px) {
-            .history-container {
-                padding: 1rem;
-            }
-            .history-title {
-                font-size: 2rem;
-            }
-            .payouts-table {
-                font-size: 0.9rem;
-            }
-        }
-    </style>
-
-    <div class="history-container">
-        <div class="history-header">
-            <h1 class="history-title">Payout History</h1>
-            <a href="/affiliate/dashboard" class="back-btn">← Back to Dashboard</a>
-        </div>
-
-        <div class="summary-grid">
-            <div class="summary-card">
-                <div class="summary-amount" style="color: #22c55e;">{fmt.Sprintf("$%.2f", history.TotalPaidOut)}</div>
-                <div class="summary-label">Total Paid Out</div>
+    @AffiliatePortalStyles()
+    <div class="aff-page">
+        <section class="aff-hero">
+            <div class="aff-toolbar">
+                <div>
+                    <span class="aff-eyebrow"><i class="fas fa-clock-rotate-left"></i> Payout History</span>
+                    <h1 class="aff-title">Track requested and <span class="accent">completed payouts</span></h1>
+                    <p class="aff-subtitle">See what has been paid, what is still pending, and any transaction details attached to processed requests.</p>
+                </div>
+                <div class="aff-toolbar-actions">
+                    <a href="/affiliate/dashboard" class="aff-btn-secondary">Back to dashboard</a>
+                </div>
             </div>
+        </section>
 
-            <div class="summary-card">
-                <div class="summary-amount" style="color: #f59e0b;">{fmt.Sprintf("$%.2f", history.PendingAmount)}</div>
-                <div class="summary-label">Pending Payouts</div>
-            </div>
-        </div>
+        <section class="aff-page-section aff-summary-grid">
+            <article class="aff-summary-card">
+                <span class="aff-summary-label">Total paid out</span>
+                <p class="aff-summary-value" style="color: #86efac;">{ fmt.Sprintf("$%.2f", history.TotalPaidOut) }</p>
+            </article>
+            <article class="aff-summary-card">
+                <span class="aff-summary-label">Pending payouts</span>
+                <p class="aff-summary-value" style="color: #fcd34d;">{ fmt.Sprintf("$%.2f", history.PendingAmount) }</p>
+            </article>
+        </section>
 
         if len(history.PendingPayouts) > 0 {
-            <div class="payouts-section">
-                <h2 class="section-title">Pending Payouts</h2>
-                <table class="payouts-table">
-                    <thead>
-                        <tr>
-                            <th>Date Requested</th>
-                            <th>Amount</th>
-                            <th>Currency</th>
-                            <th>Wallet Address</th>
-                            <th>Status</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        for _, payout := range history.PendingPayouts {
+            <section class="aff-page-section aff-table-section">
+                <h2 class="aff-section-title">Pending payouts</h2>
+                <div class="aff-table-wrap">
+                    <table class="aff-table">
+                        <thead>
                             <tr>
-                                <td>{payout.RequestedAt.Format("Jan 2, 2006")}</td>
-                                <td>{fmt.Sprintf("$%.2f", payout.Amount)}</td>
-                                <td>
-                                    if payout.PayoutCurrency == "USDC_SOL" {
-                                        <span style="color: #3b82f6;">USDC</span>
-                                    } else if payout.PayoutCurrency == "XMR" {
-                                        <span style="color: #ff6600;">XMR</span>
-                                    } else {
-                                        {payout.PayoutCurrency}
-                                    }
-                                </td>
-                                <td class="tx-hash">{payout.WalletAddress}</td>
-                                <td>
-                                    <span class="status-pending">⏳ {payout.Status}</span>
-                                </td>
-                                <td>{payout.AdminNotes}</td>
+                                <th>Date requested</th>
+                                <th>Amount</th>
+                                <th>Currency</th>
+                                <th>Wallet address</th>
+                                <th>Status</th>
+                                <th>Notes</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            for _, payout := range history.PendingPayouts {
+                                <tr>
+                                    <td>{ payout.RequestedAt.Format("Jan 2, 2006") }</td>
+                                    <td>{ fmt.Sprintf("$%.2f", payout.Amount) }</td>
+                                    <td>
+                                        if payout.PayoutCurrency == "USDC_SOL" {
+                                            <span class="aff-chip aff-chip--blue">USDC</span>
+                                        } else if payout.PayoutCurrency == "XMR" {
+                                            <span class="aff-chip aff-chip--amber">XMR</span>
+                                        } else {
+                                            { payout.PayoutCurrency }
+                                        }
+                                    </td>
+                                    <td><span class="aff-code">{ payout.WalletAddress }</span></td>
+                                    <td><span class="aff-status aff-status--pending">{ payout.Status }</span></td>
+                                    <td>{ payout.AdminNotes }</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         }
 
         if len(history.CompletedPayouts) > 0 {
-            <div class="payouts-section">
-                <h2 class="section-title">Completed Payouts</h2>
-                <table class="payouts-table">
-                    <thead>
-                        <tr>
-                            <th>Date Requested</th>
-                            <th>Date Completed</th>
-                            <th>Amount</th>
-                            <th>Currency</th>
-                            <th>Status</th>
-                            <th>Transaction Hash</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        for _, payout := range history.CompletedPayouts {
+            <section class="aff-page-section aff-table-section">
+                <h2 class="aff-section-title">Completed payouts</h2>
+                <div class="aff-table-wrap">
+                    <table class="aff-table">
+                        <thead>
                             <tr>
-                                <td>{payout.RequestedAt.Format("Jan 2, 2006")}</td>
-                                <td>
-                                    if payout.ProcessedAt != nil {
-                                        {payout.ProcessedAt.Format("Jan 2, 2006")}
-                                    } else {
-                                        -
-                                    }
-                                </td>
-                                <td>{fmt.Sprintf("$%.2f", payout.Amount)}</td>
-                                <td>
-                                    if payout.PayoutCurrency == "USDC_SOL" {
-                                        <span style="color: #3b82f6;">USDC</span>
-                                    } else if payout.PayoutCurrency == "XMR" {
-                                        <span style="color: #ff6600;">XMR</span>
-                                    } else {
-                                        {payout.PayoutCurrency}
-                                    }
-                                </td>
-                                <td>
-                                    if payout.Status == "completed" {
-                                        <span class="status-completed">✓ Completed</span>
-                                    } else if payout.Status == "rejected" {
-                                        <span class="status-rejected">✗ Rejected</span>
-                                    } else {
-                                        <span class="status-approved">📋 {payout.Status}</span>
-                                    }
-                                </td>
-                                <td>
-                                    if payout.TxHash != "" {
-                                        <span class="tx-hash">{payout.TxHash}</span>
-                                    } else {
-                                        -
-                                    }
-                                </td>
+                                <th>Date requested</th>
+                                <th>Date completed</th>
+                                <th>Amount</th>
+                                <th>Currency</th>
+                                <th>Status</th>
+                                <th>Transaction hash</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            for _, payout := range history.CompletedPayouts {
+                                <tr>
+                                    <td>{ payout.RequestedAt.Format("Jan 2, 2006") }</td>
+                                    <td>
+                                        if payout.ProcessedAt != nil {
+                                            { payout.ProcessedAt.Format("Jan 2, 2006") }
+                                        } else {
+                                            -
+                                        }
+                                    </td>
+                                    <td>{ fmt.Sprintf("$%.2f", payout.Amount) }</td>
+                                    <td>
+                                        if payout.PayoutCurrency == "USDC_SOL" {
+                                            <span class="aff-chip aff-chip--blue">USDC</span>
+                                        } else if payout.PayoutCurrency == "XMR" {
+                                            <span class="aff-chip aff-chip--amber">XMR</span>
+                                        } else {
+                                            { payout.PayoutCurrency }
+                                        }
+                                    </td>
+                                    <td>
+                                        if payout.Status == "completed" {
+                                            <span class="aff-status aff-status--complete">Completed</span>
+                                        } else if payout.Status == "rejected" {
+                                            <span class="aff-status aff-status--rejected">Rejected</span>
+                                        } else {
+                                            <span class="aff-status aff-status--approved">{ payout.Status }</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        if payout.TxHash != "" {
+                                            <span class="aff-code">{ payout.TxHash }</span>
+                                        } else {
+                                            -
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         } else {
-            <div class="payouts-section">
-                <div class="no-payouts">
+            <section class="aff-page-section aff-table-section">
+                <div class="aff-empty">
                     if len(history.PendingPayouts) == 0 && history.TotalPaidOut == 0 && history.PendingAmount == 0 {
                         <p>No payout history available yet.</p>
-                        <p style="font-size: 0.9rem; color: #6b7280; margin-top: 0.5rem;">
-                            The payout system is ready - once you request a payout, it will appear here.
-                        </p>
+                        <p>The payout system is ready. Once you request a payout, it will appear here.</p>
                     } else {
                         No completed payouts yet.
                     }
                 </div>
-            </div>
+            </section>
         }
     </div>
-
     @Footer(){}
 }
