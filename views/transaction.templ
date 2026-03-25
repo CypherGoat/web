@@ -579,7 +579,7 @@ if cgPay {
                     }
                 </div>
             </div>
-            if strings.ToLower(transaction.Provider) != "thorchain" {
+            if strings.ToLower(transaction.Provider) != "thorchain" && strings.ToLower(transaction.Provider) != "bitania" {
 
             <div class="transaction-section">
                 <div class="section-label">Exchange Link</div>
@@ -628,11 +628,8 @@ if cgPay {
                     </div>
                     <p class="text-xl font-bold text-green-400 mb-2">Transaction Complete</p>
                     <p class="text-gray-300">Thank you for using CypherGoat</p>
-                </div>
 
-                <div class="divider"></div>
-                
-                <!-- Unified Review Section -->
+                      <!-- Unified Review Section -->
                 <div class="review-section">
                     <h3 class="review-section-title">Share your experience</h3>
                     
@@ -662,6 +659,11 @@ if cgPay {
                         </div>
                     </div>
                 </div>
+                </div>
+
+                <div class="divider"></div>
+                
+              
             } 
             if transaction.Done == false{
             <!-- Contact Support Section -->

@@ -167,6 +167,8 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"bitxchange":   {"/exchanges/no-text/bitxchange.png", "", false},
 	"nexchange":    {"/exchanges/nexchange.PNG", "/exchanges/no-text/nexchange.png", false},
 	"stereoswap":   {"/exchanges/stereoswap.png", "/exchanges/no-text/stereoswap.png", false},
+	"bitania":      {"/exchanges/bitania.png", "/exchanges/no-text/bitania.jpg", false},
+	"ccecash":      {"/exchanges/ccecash.svg", "/exchanges/no-text/ccecash.png", false},
 }
 
 func parseCoinValue(value string) (string, string) {
