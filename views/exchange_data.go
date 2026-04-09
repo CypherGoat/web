@@ -203,7 +203,7 @@ var ExchangesList = []Exchange{
 	{
 		Name:                  "LetsExchange",
 		ShortCode:             "letsexchange",
-		KYCScore:              2,
+		KYCScore:              1,
 		URL:                   "https://letsexchange.io/",
 		LogoURL:               "/exchanges/letsexchange.svg",
 		NoTextURL:             "/exchanges/no-text/letsexchange.svg",
@@ -305,7 +305,7 @@ var ExchangesList = []Exchange{
 	{
 		Name:                  "Bitania",
 		ShortCode:             "bitania",
-		KYCScore:              1,
+		KYCScore:              0,
 		URL:                   "https://bitania.com/",
 		LogoURL:               "/exchanges/bitania.png",
 		NoTextURL:             "/exchanges/no-text/bitania.jpg",
@@ -327,5 +327,18 @@ var ExchangesList = []Exchange{
 		TrustpilotURL:         "https://www.trustpilot.com/review/cce.cash",
 		TrustpilotRating:      4.6,
 		TrustpilotReviewCount: 29,
+	},
+	{
+		Name:                  "Baltex",
+		ShortCode:             "baltex",
+		KYCScore:              1,
+		URL:                   "https://baltex.io/",
+		LogoURL:               "/exchanges/baltex.svg",
+		NoTextURL:             "/exchanges/no-text/baltex.svg",
+		Description:           "Buy and exchange Bitcoin on Baltex — fast, secure, no limits or KYC. Low fees, instant swaps, and free AML verification.",
+		CGShield:              false,
+		TrustpilotURL:         "https://www.trustpilot.com/review/baltex.io",
+		TrustpilotRating:      4.2,
+		TrustpilotReviewCount: 15,
 	},
 }

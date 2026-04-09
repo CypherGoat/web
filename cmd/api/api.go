@@ -66,7 +66,8 @@ type Estimate struct {
 	CoveragePercent float64
 	CGSAmount       string
 	Blocked         bool `json:"blocked"`
-	SafeRouteOK     bool `json:"safeRouteOK"`
+	SafeRouteOK     bool `json:"SafeRouteOK"`
+	SafeRouteScore  int  `json:"SafeRouteScore"`
 }
 
 type Info struct {
