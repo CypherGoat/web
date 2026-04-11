@@ -774,6 +774,18 @@ func SitemapHandler(c echo.Context) error {
 		}
 	}
 
+	guidePosts, err := loadAllGuidePosts()
+	if err == nil {
+		for _, post := range guidePosts {
+			sitemap += fmt.Sprintf(`
+  <url>
+    <loc>%s/guides/%s</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`, baseURL, post.IssueSlug)
+		}
+	}
+
 	sitemap += `
 </urlset>`
 
