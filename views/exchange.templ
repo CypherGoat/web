@@ -21,7 +21,7 @@ import (
 )
 
 templ CoinExchangeScreen(coin string, coinName string) {
-    @HeaderCustomTitle(fmt.Sprintf("Exchange %v (%v) at the best rate on the market", coinName, strings.ToUpper(coin))){}
+    @HeaderCustomTitle(fmt.Sprintf("Exchange %v (%v) at the best rate on the market", coinName, strings.ToUpper(coin)), fmt.Sprintf("https://cyphergoat.com/swap/%v", strings.ToLower(coin)), fmt.Sprintf("Swap %v (%v) at the best rate. No account or KYC required. Compare rates across 20+ exchanges instantly on CypherGoat.", coinName, strings.ToUpper(coin))){}
 
                 <style>
 .rgb-effect {

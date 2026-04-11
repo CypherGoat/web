@@ -692,11 +692,14 @@ func SitemapHandler(c echo.Context) error {
 	}{
 		{"/", "daily", "1.0"},
 		{"/about", "monthly", "0.8"},
+		{"/exchanges", "weekly", "0.9"},
+		{"/guides", "weekly", "0.8"},
 		{"/terms", "monthly", "0.7"},
 		{"/privacy", "monthly", "0.7"},
 		{"/contact", "monthly", "0.8"},
 		{"/affiliate", "weekly", "0.9"},
 		{"/affiliate/terms", "monthly", "0.7"},
+		{"/cyphergoat-shield", "monthly", "0.6"},
 		{"/blog", "daily", "0.9"},
 		{"/this-week-in-monero", "weekly", "0.9"},
 	}
@@ -738,6 +741,15 @@ func SitemapHandler(c echo.Context) error {
 				}
 			}
 		}
+	}
+
+	for _, ex := range views.ExchangesList {
+		sitemap += fmt.Sprintf(`
+  <url>
+    <loc>%s/exchange/%s</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`, baseURL, ex.ShortCode)
 	}
 
 	posts, err := loadAllBlogPosts()

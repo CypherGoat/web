@@ -16,7 +16,7 @@
 package views
 
 templ About(){
-    @Header(){
+    @HeaderCustomTitle("About CypherGoat", "https://cyphergoat.com/about", "CypherGoat is a privacy-first, non-custodial crypto exchange aggregator. Compare rates from 20+ exchanges with no account, no KYC, and no custody of your funds."){
     }
     <style>
 html, body {
@@ -130,7 +130,7 @@ body {
 }
 
 templ Contact() {
-    @Header(){}
+    @HeaderCustomTitle("Contact", "https://cyphergoat.com/contact", "Get in touch with the CypherGoat team. We're here to help with questions about crypto swaps, exchange partners, or our affiliate program."){}
     <style>
         body {
             background-color: #1a1d26;

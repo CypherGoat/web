@@ -21,7 +21,7 @@ import (
 )
 
 templ Affiliate() {
-    @Header(){}
+    @HeaderCustomTitle("Affiliate Program", "https://cyphergoat.com/affiliate", "Earn crypto by referring users to CypherGoat. Join our affiliate program and receive competitive commissions on every swap — no KYC, transparent on-chain payouts."){}
     <style>
     html, body {
         margin: 0;
@@ -1432,7 +1432,7 @@ templ AffiliatePortalStyles() {
 }
 
 templ AffiliateTerms() {
-    @Header(){}
+    @HeaderCustomTitle("Affiliate Terms", "https://cyphergoat.com/affiliate/terms", "Read the CypherGoat Affiliate Program terms and conditions. Transparent rules, fair commissions, and on-chain crypto payouts."){}
     @AffiliatePortalStyles()
     <div class="aff-page aff-page--narrow">
         <section class="aff-hero">

@@ -30,7 +30,7 @@ func formatDate(dateStr string) string {
 }
 
 templ Blog(posts []*BlogPostData) {
-    @HeaderCustomTitle("Blog") {
+    @HeaderCustomTitle("Blog", "https://cyphergoat.com/blog", "Stay updated with the CypherGoat blog. News, analysis, and guides on crypto privacy, Monero, and non-KYC cryptocurrency exchanges.") {
         <main class="min-h-screen bg-[#121520] text-white pb-16">
             <div class="container max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 <div class="text-center mb-12 sm:mb-16">

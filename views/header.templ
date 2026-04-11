@@ -40,7 +40,7 @@ templ Header() {
         <script src="/static/htmx.min.js"></script>
 
         <meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta property="og:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
         <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
         <meta property="og:image:type" content="image/png">
         <meta property="og:image:width" content="1200">
@@ -50,14 +50,14 @@ templ Header() {
         <meta property="og:type" content="website">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta name="twitter:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
         <meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
         <meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <meta name="keywords" content="swap crypto, crypto exchange, best crypto rates, cryptocurrency swap, crypto trading, crypto aggregator">
+        <meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap">
         <meta name="author" content="CypherGoat">
-        <meta name="description" content="Swap your crypto at the best rate on the market. No account, no KYC, free and open source crypto exchange aggregator. 100+ coins supported.">
+        <meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported.">
 
         <title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
 
@@ -67,7 +67,7 @@ templ Header() {
             "@type": "FinancialService",
             "name": "CypherGoat",
             "url": "https://cyphergoat.com",
-            "description": "Swap your crypto at the best rate on the market. No account, no KYC, free and open source. 100+ coins supported.",
+            "description": "Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source.",
             "sameAs": [
                 "https://x.com/cyphergoatcom",
                 "https://github.com/cyphergoat",
@@ -247,7 +247,7 @@ templ Header() {
     </html>
 }
 
-templ HeaderCustomTitle(title string) {
+templ HeaderCustomTitle(title, canonical, description string) {
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -264,26 +264,33 @@ templ HeaderCustomTitle(title string) {
         <link href="/static/tailwind.css?v=20250814" rel="stylesheet">
         <link href="/static/styles.css?v=20250814" rel="stylesheet">
         <script src="/static/htmx.min.js"></script>
+        if canonical != "" {
+            <link rel="canonical" href={ canonical }>
+        }
 
         <meta property="og:title" content={fmt.Sprintf("CypherGoat - %s", title)}>
-        <meta property="og:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta property="og:description" content={ description }>
         <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
         <meta property="og:image:type" content="image/png">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-        <meta property="og:url" content="https://cyphergoat.com">
+        if canonical != "" {
+            <meta property="og:url" content={ canonical }>
+        } else {
+            <meta property="og:url" content="https://cyphergoat.com">
+        }
         <meta property="og:type" content="website">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content={fmt.Sprintf("CypherGoat - %s", title)}>
-        <meta name="twitter:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta name="twitter:description" content={ description }>
         <meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
         <meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <meta name="keywords" content="swap crypto, crypto exchange, best crypto rates, cryptocurrency swap, crypto trading, crypto aggregator">
+        <meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap">
         <meta name="author" content="CypherGoat">
-        <meta name="description" content="Swap your crypto at the best rate on the market. No account, no KYC, free and open source crypto exchange aggregator. 100+ coins supported.">
+        <meta name="description" content={ description }>
 
         <title>CypherGoat - { title }</title>
 
@@ -495,7 +502,7 @@ templ IndexHeader() {
         <link rel="canonical" href="https://cyphergoat.com">
 
         <meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta property="og:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
         <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
         <meta property="og:image:type" content="image/png">
         <meta property="og:image:width" content="1200">
@@ -505,14 +512,14 @@ templ IndexHeader() {
         <meta property="og:type" content="website">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta name="twitter:description" content="Find the best rates for your crypto swaps with CypherGoat. No account required, no KYC, and open source.">
+        <meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
         <meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
         <meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <meta name="keywords" content="swap crypto, crypto exchange, best crypto rates, cryptocurrency swap, crypto trading, crypto aggregator">
+        <meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap">
         <meta name="author" content="CypherGoat">
-        <meta name="description" content="Swap your crypto at the best rate on the market. No account, no KYC, free and open source crypto exchange aggregator. 100+ coins supported.">
+        <meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported.">
 
         <title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
 
@@ -522,7 +529,7 @@ templ IndexHeader() {
             "@type": "FinancialService",
             "name": "CypherGoat",
             "url": "https://cyphergoat.com",
-            "description": "Swap your crypto at the best rate on the market. No account, no KYC, free and open source. 100+ coins supported.",
+            "description": "Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source.",
             "sameAs": [
                 "https://x.com/cyphergoatcom",
                 "https://github.com/cyphergoat",
@@ -819,10 +826,18 @@ templ BlogHeader(post *BlogPostData) {
         <meta name="description" content={ post.Description }>
         <meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto, exchange, cryptocurrency" }>
         <meta name="author" content={ post.Author }>
-        <link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        if post.IssueSlug != "" {
+            <link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }>
+        } else {
+            <link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        }
 
         <meta property="og:type" content="article">
-        <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        if post.IssueSlug != "" {
+            <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }>
+        } else {
+            <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        }
         <meta property="og:title" content={ post.Title + " | CypherGoat" }>
         <meta property="og:description" content={ post.Description }>
         if post.Image != "" {
@@ -836,7 +851,11 @@ templ BlogHeader(post *BlogPostData) {
         }
 
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        if post.IssueSlug != "" {
+            <meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }>
+        } else {
+            <meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
+        }
         <meta property="twitter:title" content={ post.Title + " | CypherGoat Blog" }>
         <meta property="twitter:description" content={ post.Description }>
         if post.Image != "" {
@@ -1038,16 +1057,16 @@ templ GuidesIndexHeader() {
         <link href="/static/styles.css?v=20250814" rel="stylesheet">
         <script src="/static/htmx.min.js"></script>
 
-        <title>CypherGoat Guides</title>
-        <meta name="title" content="CypherGoat Guides">
-        <meta name="description" content="In-depth guides on privacy, security, and using Monero and related tools effectively.">
-        <meta name="keywords" content="monero guides, crypto privacy guides, cryptocurrency security, Monero tutorials">
+        <title>CypherGoat Guides - Privacy, Monero &amp; Crypto Security</title>
+        <meta name="title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security">
+        <meta name="description" content="In-depth guides on crypto privacy, Monero, and security. Learn how to swap privately, use Monero effectively, and protect your financial sovereignty.">
+        <meta name="keywords" content="monero guides, crypto privacy guides, cryptocurrency security, monero tutorials, xmr swap guide, no kyc crypto, privacy coins">
         <meta name="author" content="CypherGoat">
 
         <link rel="canonical" href="https://cyphergoat.com/guides">
 
-        <meta property="og:title" content="CypherGoat Guides">
-        <meta property="og:description" content="In-depth guides on privacy, security, and using Monero and related tools effectively.">
+        <meta property="og:title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security">
+        <meta property="og:description" content="In-depth guides on crypto privacy, Monero, and security. Learn how to swap privately, use Monero effectively, and protect your financial sovereignty.">
         <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
         <meta property="og:image:type" content="image/png">
         <meta property="og:image:width" content="1200">
