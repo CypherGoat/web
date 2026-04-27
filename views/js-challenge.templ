@@ -11,39 +11,108 @@ type FormData struct {
 
 templ JSChallenge(data FormData) {
 @Header(){
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Verifying your browser...</title>
-</head>
-<body>
-<p class="text-gray-300 text-center text-sm sm:text-base font-medium bg-gray-900 p-4 rounded-lg shadow-md">
-  Verifying your browser... <span class="text-blue-400">JavaScript is required</span>
-</p>
+<style>
+  .challenge-shell {
+    min-height: calc(100vh - 76px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
 
-<form id="challenge-form" method="POST" action="https://newsletter.cyphergoat.com/subscription/form">
-    <input type="hidden" name="nonce" value={ data.Nonce }>
-    <input type="hidden" name="email" value={ data.Email }>
-    <input type="hidden" name="name" value={ data.Name }>
-    <input type="hidden" name="l" value="306a7b72-6c08-4498-9128-fe4346712d56">
-    <input type="hidden" name="l" value="09048302-9f16-4cea-aa48-5a0f93012fd1">
+  .challenge-card {
+    width: 100%;
+    max-width: 34rem;
+    padding: 2rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+      #11151c;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+  }
 
-    <input type="hidden" name="js_passed" id="js_passed" value="0">
+  .challenge-kicker {
+    display: inline-block;
+    margin-bottom: 0.9rem;
+    color: #8d95a5;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
 
-   
-</form>
+  .challenge-title {
+    color: #ffffff;
+    font-size: 1.9rem;
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.75rem;
+  }
+
+  .challenge-copy {
+    color: #8b93a7;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .challenge-progress {
+    margin-top: 1.5rem;
+    height: 7px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .challenge-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #d8ccb2, #faf7ef);
+    transform-origin: left;
+    animation: challengeProgress 0.55s ease-out forwards;
+  }
+
+  .challenge-note {
+    margin-top: 0.9rem;
+    color: #6b7280;
+    font-size: 0.8rem;
+  }
+
+  @keyframes challengeProgress {
+    from { transform: scaleX(0.18); opacity: 0.7; }
+    to { transform: scaleX(1); opacity: 1; }
+  }
+</style>
+
+<div class="challenge-shell">
+  <div class="challenge-card">
+    <div class="challenge-kicker">Browser verification</div>
+    <h1 class="challenge-title">Verifying your browser.</h1>
+    <p class="challenge-copy">JavaScript is required. Continuing automatically.</p>
+    <div class="challenge-progress" aria-hidden="true">
+      <div class="challenge-progress-bar"></div>
+    </div>
+    <p class="challenge-note">Please wait.</p>
+
+    <form id="challenge-form" method="POST" action="https://newsletter.cyphergoat.com/subscription/form">
+        <input type="hidden" name="nonce" value={ data.Nonce }>
+        <input type="hidden" name="email" value={ data.Email }>
+        <input type="hidden" name="name" value={ data.Name }>
+        <input type="hidden" name="l" value="306a7b72-6c08-4498-9128-fe4346712d56">
+        <input type="hidden" name="l" value="09048302-9f16-4cea-aa48-5a0f93012fd1">
+        <input type="hidden" name="js_passed" id="js_passed" value="0">
+    </form>
+  </div>
+</div>
 
 <script>
   document.getElementById('js_passed').value = "1";
-
   document.cookie = "js_validated=1; max-age=300; path=/";
-
   setTimeout(() => {
       document.getElementById('challenge-form').submit();
   }, 500);
 </script>
-</body>
-</html>
 }
 }

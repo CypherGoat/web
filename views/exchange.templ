@@ -16,16 +16,15 @@
 package views 
 
 import (
-    "strings"
-    "fmt"
+	"fmt"
+	"strings"
 )
 
 templ CoinExchangeScreen(coin string, coinName string) {
-    @HeaderCustomTitle(fmt.Sprintf("Exchange %v (%v) at the best rate on the market", coinName, strings.ToUpper(coin)), fmt.Sprintf("https://cyphergoat.com/swap/%v", strings.ToLower(coin)), fmt.Sprintf("Swap %v (%v) at the best rate. No account or KYC required. Compare rates across 20+ exchanges instantly on CypherGoat.", coinName, strings.ToUpper(coin))){}
-
-                <style>
+	@HeaderCustomTitle(fmt.Sprintf("Exchange %v (%v) at the best rate on the market", coinName, strings.ToUpper(coin)), fmt.Sprintf("https://cyphergoat.com/swap/%v", strings.ToLower(coin)), fmt.Sprintf("Swap %v (%v) at the best rate. No account or KYC required. Compare rates across 20+ exchanges instantly on CypherGoat.", coinName, strings.ToUpper(coin)))
+	<style>
 .rgb-effect {
-    color: #0066cc;
+    color: #e7eaef;
     font-weight: 800;
 }
 
@@ -42,7 +41,7 @@ html, body {
 }
 
 body {
-    background-color: #121520;
+    background-color: #0b0d14;
     font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
     min-height: 100vh;
     display: flex;
@@ -90,17 +89,19 @@ footer {
 }
 
     .card {
-        background: linear-gradient(145deg, #1a1f2e, #222633);
-        border-radius: 16px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        border-radius: 22px;
         padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
-        transition: box-shadow 0.3s ease, transform 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+        transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
-        transform: translateY(-2px);
+        box-shadow: 0 34px 86px rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.1);
     }
 
     .card h2 {
@@ -120,33 +121,36 @@ footer {
     }
 
     .input-group .form-label {
-        color: #e0e0e0;
+        color: #8a92a3;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 0.72rem;
         display: block;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.55rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
     }
 
     .form-input {
         width: 150px;
-        padding: 0.75rem;
-        background-color: #1a1f2e;
-        color: #e0e0e0;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.95rem 1rem;
+        background-color: #0b0e13;
+        color: #f3f4f6;
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
         font-size: 1rem;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        font-weight: 500;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .form-input:focus {
-        border-color: #0066cc;
+        border-color: rgba(231, 234, 239, 0.24);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
     }
 
     .form-input:focus-visible {
-        border-color: #0066cc;
-        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+        border-color: rgba(231, 234, 239, 0.24);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
     }
 
     .searchable-dropdown {
@@ -156,13 +160,14 @@ footer {
     
     .searchable-dropdown input {
         width: 100%;
-        padding: 0.75rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.95rem 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
-        background-color: #1a1f2e;
-        color: #e0e0e0;
+        background-color: #0b0e13;
+        color: #f3f4f6;
         font-size: 1rem;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        font-weight: 500;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
         background-size: 20px 20px;
         background-position: left 10px center;
         background-repeat: no-repeat;
@@ -170,9 +175,9 @@ footer {
     }
 
     .searchable-dropdown input:focus {
-        border-color: #0066cc;
+        border-color: rgba(231, 234, 239, 0.24);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
     }
 
     .dropdown-options {
@@ -182,8 +187,8 @@ footer {
         width: 100%;
         max-height: 300px;
         overflow-y: auto;
-        background: #222633;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: #12161d;
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         display: none;
@@ -201,7 +206,7 @@ footer {
     }
 
     .dropdown-options div:hover {
-        background: #2a3042;
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .dropdown-options img {
@@ -211,31 +216,29 @@ footer {
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
-        padding: 0.75rem;
+        background: #e7eaef;
+        color: #11151c;
+        padding: 0.95rem 1rem;
         border: none;
         border-radius: 12px;
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
         width: 100%;
-        transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
-        background-clip: padding-box;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         position: relative;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
 
     .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
-        background: linear-gradient(135deg, #0099ff, #0066dd);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+        background: #f3f5f7;
+        transform: translateY(-1px);
     }
 
     .btn-primary:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3), 0 4px 12px rgba(0, 102, 204, 0.25);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
     }
 
     .form-input.read-only {
@@ -245,9 +248,9 @@ footer {
     }
 
     .spinner {
-        border: 4px solid rgba(0, 102, 204, 0.1);
+        border: 4px solid rgba(255, 255, 255, 0.08);
         border-radius: 50%;
-        border-top: 4px solid #0066cc;
+        border-top: 4px solid #e7eaef;
         width: 40px;
         height: 40px;
         animation: spin 0.8s linear infinite;
@@ -356,45 +359,45 @@ footer {
 }
 
 .modal-content {
-    background: linear-gradient(145deg, #1a1f2e, #222633);
+    background: #11151c;
     padding: 2rem;
-    border-radius: 16px;
+    border-radius: 12px;
     width: 90%;
     max-width: 600px;
     text-align: center;
     max-height: 80vh;
     overflow-y: auto;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .modal-content input {
     width: 100%;
     padding: 0.75rem 1rem 0.75rem 2.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    background-color: #1a1f2e;
+    background-color: #0b0e13;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
     background-repeat: no-repeat;
     background-position: 12px center;
-    color: #e0e0e0;
+    color: #f3f4f6;
     font-size: 1rem;
     max-height: 90vh;
     margin-bottom: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .modal-content input:focus {
-    border-color: #0066cc;
+    border-color: rgba(231, 234, 239, 0.24);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
 }
 
 .modal-options {
     max-height: 400px;
     overflow-y: auto;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .modal-options div {
@@ -408,7 +411,7 @@ footer {
 }
 
 .modal-options div:hover {
-    background: #2a3042;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .modal-options img {
@@ -425,22 +428,23 @@ footer {
 
 .coin-header h1 {
     font-size: clamp(1.75rem, 5vw, 2.5rem);
-    font-weight: 800;
-    background: linear-gradient(45deg, #0088ff, #0066cc, #0055cc);
+    font-weight: 500;
+    background: linear-gradient(135deg, #ffffff, #ddd4bf 58%, #9098a8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 1rem;
     line-height: 1.2;
+    letter-spacing: -0.05em;
 }
 
 .coin-description {
     max-width: 800px;
     margin: 0 auto 2.5rem;
     padding: 1.75rem;
-    background: rgba(26, 31, 46, 0.5);
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 18px;
     text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .advantages {
@@ -451,13 +455,15 @@ footer {
 }
 
 .advantage-card {
-    background: linear-gradient(145deg, #1e2438, #252c42);
-    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+        #11151c;
+    border-radius: 20px;
     padding: 2rem;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 1px 8px rgba(0, 85, 204, 0.08);
+    box-shadow: 0 22px 52px rgba(0, 0, 0, 0.26);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     position: relative;
     overflow: hidden;
 }
@@ -469,7 +475,7 @@ footer {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #0088ff, #0055cc);
+    background: linear-gradient(90deg, #ddd4bf, #8f97a7);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s ease;
@@ -477,7 +483,7 @@ footer {
 
 .advantage-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(0, 85, 204, 0.1);
+    box-shadow: 0 30px 64px rgba(0, 0, 0, 0.32);
 }
 
 .advantage-card:hover::before {
@@ -504,7 +510,7 @@ footer {
 .advantage-card p {
     font-size: 1.05rem;
     line-height: 1.6;
-    color: #b0b8cd;
+    color: #98a1b1;
 }
 
 @media (max-width: 768px) {
@@ -524,11 +530,11 @@ footer {
 }
 
 .faq-card {
-    background: rgba(26, 31, 46, 0.5);
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 18px;
     padding: 1.5rem;
     transition: transform 0.2s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .faq-card:hover {
@@ -566,152 +572,142 @@ footer {
     }
 }
     </style>
-
-    <div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
-    <p id="error-text"></p>
-</div>
-
-    <div class="container2 mx-auto px-4 py-8">
-        <div class="coin-header">
-            <h1>Exchange {strings.ToUpper(coin)} at the Best Rate on the Market</h1>
-            <p class="text-xl text-gray-300">Get the best {coinName} exchange rates with no KYC and lowest fees</p>
-        </div>
-
- <div class="swap-form-section mt-4">
-        <div class="container">
-            <div class="card">
-                <h1 class="hidden">Swap {coinName}</h1>
-               <form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
-    <div class="input-group">
-        <div>
-            <label for="amount" class="form-label">Amount</label>
-            <input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="0.00">
-        </div>
-        <div class="searchable-dropdown">
-            <label class="form-label">Send Coin</label>
-            <input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off">
-            <div class="dropdown-options" id="dropdown-options-send"></div>
-            <select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
-        </div>
-    </div>
-
-    <div class="input-group">
-        <div>
-            <label for="estimated-amount" class="form-label">Estimated</label>
-            <input type="text" id="estimated-amount" class="form-input read-only" placeholder="0.00" readonly>
-        </div>
-        <div class="searchable-dropdown">
-            <label class="form-label">Receive Coin</label>
-            <input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off">
-            <div class="dropdown-options" id="dropdown-options-receive"></div>
-            <select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
-        </div>
-    </div>
-
-    <input type="hidden" id="network-send" name="network1">
-    <input type="hidden" id="network-receive" name="network2">
-    <button type="submit" class="btn-primary">Swap</button>
-</form>
-
-            </div>
-        </div>
-
-            <div id="loading-spinner" class="spinner spinner-hidden"></div>
-            <div id="error-message" class="hidden">
-                <p id="error-text"></p>
-            </div>
-            <div id="estimate-container"></div>
-        </div>
-
-        <div class="container3 mx-auto my-12">
-            <h2 class="text-2xl font-bold mb-8 text-center">Why Choose Our {strings.ToUpper(coin)} Exchange</h2>
-            <div class="advantages">
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#bolt-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <defs>
-                                <linearGradient id="bolt-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#0088ff" />
-                                    <stop offset="100%" stop-color="#0055cc" />
-                                </linearGradient>
-                            </defs>
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Instant {strings.ToUpper(coin)} Swap</h3>
-                    <p class="text-gray-300">Exchange {strings.ToUpper(coin)} quickly with no waiting periods or complex verification processes. Get your assets in minutes.</p>
-                </div>
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#rate-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <defs>
-                                <linearGradient id="rate-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#0088ff" />
-                                    <stop offset="100%" stop-color="#0055cc" />
-                                </linearGradient>
-                            </defs>
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M16 8h-6.5a2.5 2.5 0 0 0 0 5h3a2.5 2.5 0 0 1 0 5H6"></path>
-                            <line x1="12" y1="6" x2="12" y2="8"></line>
-                            <line x1="12" y1="16" x2="12" y2="18"></line>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Best {strings.ToUpper(coin)} Rates</h3>
-                    <p class="text-gray-300">Our algorithm compares rates across major exchanges in real-time to ensure you always get the most competitive {strings.ToUpper(coin)} exchange rate.</p>
-                </div>
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#shield-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <defs>
-                                <linearGradient id="shield-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#0088ff" />
-                                    <stop offset="100%" stop-color="#0055cc" />
-                                </linearGradient>
-                            </defs>
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            <path d="M9 12l2 2 4-4"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">No KYC Required</h3>
-                    <p class="text-gray-300">Exchange {coinName} ({strings.ToUpper(coin)}) privately without identity verification. Your financial privacy matters to us.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="faq-section mt-12 mb-16">
-            <h2 class="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="faq-card">
-                    <h3 class="text-lg font-semibold mb-2">How long does a {strings.ToUpper(coin)} swap take?</h3>
-                    <p class="text-gray-300">Most {strings.ToUpper(coin)} swaps are completed within 10-30 minutes, depending on network confirmation times and exchange processing.</p>
-                </div>
-                <div class="faq-card">
-                    <h3 class="text-lg font-semibold mb-2">Is there a minimum amount to exchange?</h3>
-<p class="text-gray-300">Yes, the minimum amount to exchange is approximately $5 worth of any cryptocurrency.</p>                </div>
-                <div class="faq-card">
-                    <h3 class="text-lg font-semibold mb-2">Are there any hidden fees?</h3>
-                    <p class="text-gray-300">No hidden fees. The rate you see includes all exchange fees. You'll only pay network transaction fees which vary by blockchain.</p>
-                </div>
-                <div class="faq-card">
-                    <h3 class="text-lg font-semibold mb-2">Is KYC required for {strings.ToUpper(coin)} swaps?</h3>
-                    <p class="text-gray-300">CypherGoat prioritizes no-KYC exchanges, displaying KYC score for each option so you can choose exchanges that respect your privacy.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="coin-selection-modal" class="coin-selection-modal hidden">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Select Coin</h3>
-                <button id="close-modal" class="text-gray-400 hover:text-white">&times;</button>
-            </div>
-            <input type="text" id="modal-search" placeholder="Search coin..." onkeyup="filterModalOptions()" autocomplete="off">
-            <div id="modal-options" class="modal-options"></div>
-        </div>
-    </div>
-
-    <script>
+	<div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
+		<p id="error-text"></p>
+	</div>
+	<div class="container2 mx-auto px-4 py-8">
+		<div class="coin-header">
+			<h1>Exchange { strings.ToUpper(coin) } at the Best Rate on the Market</h1>
+			<p class="text-xl text-gray-300">Get the best { coinName } exchange rates with no KYC and lowest fees</p>
+		</div>
+		<div class="swap-form-section mt-4">
+			<div class="container">
+				<div class="card">
+					<h1 class="hidden">Swap { coinName }</h1>
+					<form id="swap-form" hx-get="/estimate" hx-target="#estimate-container" hx-swap="innerHTML">
+						<div class="input-group">
+							<div>
+								<label for="amount" class="form-label">Amount</label>
+								<input type="number" min="0" id="amount" name="amount" required step="any" class="form-input" autocomplete="off" placeholder="0.00"/>
+							</div>
+							<div class="searchable-dropdown">
+								<label class="form-label">Send Coin</label>
+								<input type="text" placeholder="Search coin to send..." id="dropdown-search-send" autocomplete="off"/>
+								<div class="dropdown-options" id="dropdown-options-send"></div>
+								<select id="crypto-send" name="coin1" required style="display: none;" autocomplete="off"></select>
+							</div>
+						</div>
+						<div class="input-group">
+							<div>
+								<label for="estimated-amount" class="form-label">Estimated</label>
+								<input type="text" id="estimated-amount" class="form-input read-only" placeholder="0.00" readonly/>
+							</div>
+							<div class="searchable-dropdown">
+								<label class="form-label">Receive Coin</label>
+								<input type="text" placeholder="Search coin to receive..." id="dropdown-search-receive" autocomplete="off"/>
+								<div class="dropdown-options" id="dropdown-options-receive"></div>
+								<select id="crypto-receive" name="coin2" required style="display: none;" autocomplete="off"></select>
+							</div>
+						</div>
+						<input type="hidden" id="network-send" name="network1"/>
+						<input type="hidden" id="network-receive" name="network2"/>
+						<button type="submit" class="btn-primary">Swap</button>
+					</form>
+				</div>
+			</div>
+			<div id="loading-spinner" class="spinner spinner-hidden"></div>
+			<div id="error-message" class="hidden">
+				<p id="error-text"></p>
+			</div>
+			<div id="estimate-container"></div>
+		</div>
+		<div class="container3 mx-auto my-12">
+			<h2 class="text-2xl font-bold mb-8 text-center">Why Choose Our { strings.ToUpper(coin) } Exchange</h2>
+			<div class="advantages">
+				<div class="advantage-card">
+					<div class="advantage-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#bolt-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<defs>
+								<linearGradient id="bolt-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+									<stop offset="0%" stop-color="#f4efe2"></stop>
+									<stop offset="100%" stop-color="#9098a8"></stop>
+								</linearGradient>
+							</defs>
+							<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-3">Instant { strings.ToUpper(coin) } Swap</h3>
+					<p class="text-gray-300">Exchange { strings.ToUpper(coin) } quickly with no waiting periods or complex verification processes. Get your assets in minutes.</p>
+				</div>
+				<div class="advantage-card">
+					<div class="advantage-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#rate-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<defs>
+								<linearGradient id="rate-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+									<stop offset="0%" stop-color="#f4efe2"></stop>
+									<stop offset="100%" stop-color="#9098a8"></stop>
+								</linearGradient>
+							</defs>
+							<circle cx="12" cy="12" r="10"></circle>
+							<path d="M16 8h-6.5a2.5 2.5 0 0 0 0 5h3a2.5 2.5 0 0 1 0 5H6"></path>
+							<line x1="12" y1="6" x2="12" y2="8"></line>
+							<line x1="12" y1="16" x2="12" y2="18"></line>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-3">Best { strings.ToUpper(coin) } Rates</h3>
+					<p class="text-gray-300">Our algorithm compares rates across major exchanges in real-time to ensure you always get the most competitive { strings.ToUpper(coin) } exchange rate.</p>
+				</div>
+				<div class="advantage-card">
+					<div class="advantage-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="url(#shield-gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<defs>
+								<linearGradient id="shield-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+									<stop offset="0%" stop-color="#f4efe2"></stop>
+									<stop offset="100%" stop-color="#9098a8"></stop>
+								</linearGradient>
+							</defs>
+							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+							<path d="M9 12l2 2 4-4"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-3">No KYC Required</h3>
+					<p class="text-gray-300">Exchange { coinName } ({ strings.ToUpper(coin) }) privately without identity verification. Your financial privacy matters to us.</p>
+				</div>
+			</div>
+		</div>
+		<div class="faq-section mt-12 mb-16">
+			<h2 class="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div class="faq-card">
+					<h3 class="text-lg font-semibold mb-2">How long does a { strings.ToUpper(coin) } swap take?</h3>
+					<p class="text-gray-300">Most { strings.ToUpper(coin) } swaps are completed within 10-30 minutes, depending on network confirmation times and exchange processing.</p>
+				</div>
+				<div class="faq-card">
+					<h3 class="text-lg font-semibold mb-2">Is there a minimum amount to exchange?</h3>
+					<p class="text-gray-300">Yes, the minimum amount to exchange is approximately $5 worth of any cryptocurrency.</p>
+				</div>
+				<div class="faq-card">
+					<h3 class="text-lg font-semibold mb-2">Are there any hidden fees?</h3>
+					<p class="text-gray-300">No hidden fees. The rate you see includes all exchange fees. You'll only pay network transaction fees which vary by blockchain.</p>
+				</div>
+				<div class="faq-card">
+					<h3 class="text-lg font-semibold mb-2">Is KYC required for { strings.ToUpper(coin) } swaps?</h3>
+					<p class="text-gray-300">CypherGoat prioritizes no-KYC exchanges, displaying KYC score for each option so you can choose exchanges that respect your privacy.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="coin-selection-modal" class="coin-selection-modal hidden">
+		<div class="modal-content">
+			<div class="flex justify-between items-center mb-4">
+				<h3 class="text-xl font-bold">Select Coin</h3>
+				<button id="close-modal" class="text-gray-400 hover:text-white">&times;</button>
+			</div>
+			<input type="text" id="modal-search" placeholder="Search coin..." onkeyup="filterModalOptions()" autocomplete="off"/>
+			<div id="modal-options" class="modal-options"></div>
+		</div>
+	</div>
+	<script>
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1004,6 +1000,5 @@ async function loadCoins() {
     document.getElementById('dropdown-search-receive').setAttribute('readonly', true);
 });
 </script>
-    
-    @Footer(){}
+	@Footer()
 }

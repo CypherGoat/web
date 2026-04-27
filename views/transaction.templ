@@ -14,43 +14,44 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package views
+
 import (
-    "github.com/CypherGoat/web/cmd/api"
-    "strings"
+	"github.com/CypherGoat/web/cmd/api"
+	"strings"
 )
 
 script toggleQRCodeHandler(msg string) {
   toggleQRCode(msg);
 }
 
-templ TransactionPage(transaction api.Transaction, cgPay bool){
-    <!-- TrustBox script -->
-<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
-<!-- End TrustBox script -->
-
-    @Header(){
- <style>
+templ TransactionPage(transaction api.Transaction, cgPay bool) {
+	<!-- TrustBox script -->
+	<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+	<!-- End TrustBox script -->
+	@Header() {
+		<style>
     body {
-        background-color: #121520;
+        background-color: #0b0d14;
         color: #e0e0e0;
         font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
         min-height: 100vh;
     }
 
     .transaction-card {
-        background: linear-gradient(145deg, #1a1f2e, #222633);
-        border-radius: 16px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        border-radius: 22px;
         padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
         transition: box-shadow 0.3s ease, transform 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.06);
         max-width: 500px;
         width: 100%;
     }
 
     .transaction-card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
-        transform: translateY(-2px);
+        box-shadow: 0 34px 86px rgba(0, 0, 0, 0.38);
     }
 
     .transaction-header {
@@ -58,10 +59,7 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
         font-weight: 700;
         text-align: center;
         margin-bottom: 1.5rem;
-        background: linear-gradient(to right, #ffffff, #e0e0e0);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #ffffff;
     }
 
     .transaction-section {
@@ -88,19 +86,19 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
         padding: 0.8rem;
         font-family: 'Courier New', monospace;
         color: #e0e0e0;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid #1e2235;
         word-break: break-all;
         overflow-wrap: break-word;
     }
 
     .qr-toggle-btn {
-        color: #0088ff;
+        color: #ece6d8;
         font-weight: 600;
-        background: rgba(0, 136, 255, 0.1);
+        background: rgba(255, 255, 255, 0.04);
         border-radius: 8px;
         padding: 0.5rem 1rem;
         transition: all 0.3s ease;
-        border: 1px solid rgba(0, 136, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -112,7 +110,7 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
     }
 
     .qr-toggle-btn:hover {
-        background: rgba(0, 136, 255, 0.2);
+        background: rgba(255, 255, 255, 0.07);
     }
 
     .divider {
@@ -122,15 +120,15 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
     }
 
     .success-container {
-        background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+        background: rgba(255, 255, 255, 0.03);
         border-radius: 12px;
         padding: 1.5rem;
         text-align: center;
-        border: 1px solid rgba(16, 185, 129, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .success-icon {
-        background: rgba(16, 185, 129, 0.15);
+        background: rgba(255, 255, 255, 0.06);
         border-radius: 50%;
         width: 50px;
         height: 50px;
@@ -141,8 +139,8 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
     }
 
     .refresh-btn {
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
+        background: #f3eee2;
+        color: #0b0d14;
         padding: 0.85rem 1.5rem;
         border: none;
         border-radius: 12px;
@@ -152,7 +150,7 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
         cursor: pointer;
         width: 100%;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 102, 204, 0.2);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
         position: relative;
         overflow: hidden;
         display: flex;
@@ -173,9 +171,8 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
     }
     
     .refresh-btn:hover {
-        background: linear-gradient(135deg, #0099ff, #0066dd);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 102, 204, 0.3);
+        background: #faf7ef;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
     }
     
     .refresh-btn:hover::before {
@@ -197,14 +194,14 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
     }
 
     .external-link {
-        color: #0088ff;
+        color: #e9e2d1;
         text-decoration: none;
         font-weight: 600;
         transition: all 0.3s ease;
     }
 
     .external-link:hover {
-        color: #0099ff;
+        color: #faf7ef;
         text-decoration: underline;
     }
     
@@ -273,8 +270,8 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
     .review-widget-link {
         display: inline-flex;
         align-items: center;
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
+        background: #f3eee2;
+        color: #0b0d14;
         padding: 0.6rem 1rem;
         border-radius: 8px;
         text-decoration: none;
@@ -285,10 +282,10 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
     }
     
     .review-widget-link:hover {
-        background: linear-gradient(135deg, #0099ff, #0066dd);
+        background: #faf7ef;
         transform: translateY(-1px);
         box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-        color: #ffffff;
+        color: #0b0d14;
         text-decoration: none;
     }
     
@@ -454,266 +451,249 @@ templ TransactionPage(transaction api.Transaction, cgPay bool){
         border-color: rgba(76, 175, 80, 0.3);
     }
  </style>
-
- <form action="" method="get">
-    <div class="flex items-center justify-center min-h-screen bg-[#121520] pb-4 sm:pb-0">
-        <div class="transaction-card mx-4 my-6">
-            <h2 class="transaction-header">{ transaction.Provider }</h2>
-            
-            if strings.ToLower(transaction.Provider) == "thorchain" {
-                <div style="background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(255, 140, 0, 0.15)); border: 1px solid rgba(255, 165, 0, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
-                    <div style="display: flex; align-items: flex-start;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="color: #FFA500; flex-shrink: 0; margin-right: 0.75rem; margin-top: 0.125rem;">
-                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                        </svg>
-                        <div>
-                            <div style="color: #FFA500; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem;">
-  ⚠️ Memo / OP_RETURN required
-</div>
-<div style="color: #e0e0e0; font-size: 0.9rem; line-height: 1.5;">
-  THORChain swaps require a <strong>memo</strong> to be included <strong>inside the transaction</strong>.
-  Depending on the sending chain, this is added as a <strong>memo</strong>, <strong>OP_RETURN</strong>, or <strong>transaction data</strong> field.
-  <br><br>
-  If the memo is missing, modified, or your wallet does not support it, the swap will <strong>not execute</strong> and recovery may be slow or impossible.
-  Please copy the memo <strong>exactly as shown</strong> and double-check the <strong>address</strong>, <strong>amount</strong>, and <strong>memo</strong> before sending.
-</div>
-                        </div>
-                    </div>
-                </div>
-            }
-            
-            <div class="transaction-section">
-                <div class="section-label">Transaction Status</div>
-                <div class="section-value">
-                    if transaction.Status == "" {
-                        <span class="font-medium text-blue-400">Created</span>
-                    } else {
-                        <span class="font-medium text-blue-400">{ transaction.Status }</span>
-                    }
-                </div>
-            </div>
-            
-            <div class="transaction-section">
-    <div class="section-label">You Send</div>
-    <div class="section-value">
-        <span style="display:inline-flex;align-items:center;">
-            { FormatFloat(transaction.SendAmount) } { strings.ToUpper(transaction.Coin1) }
-            if transaction.IsPayment {
-                <span class="send-lock-badge" style="position:relative;display:inline-flex;align-items:center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="margin-left:6px;vertical-align:middle;" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5.25 7V4.5a2.75 2.75 0 0 1 5.5 0V7"/>
-                        <rect x="3.5" y="7" width="9" height="7" rx="2"/>
-                        <circle cx="8" cy="9.75" r="1.05" fill="currentColor" stroke="none"/>
-                        <path d="M8 10.8v1.7"/>
-                    </svg>
-                    <span class="tooltip-text" style="visibility:hidden;opacity:0;position:absolute;bottom:125%;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:6px 12px;border-radius:6px;font-size:0.95em;white-space:nowrap;transition:opacity 0.2s;z-index:10;">
-                        This is a fixed rate exchange, send <b>EXACTLY</b> the amount specified.
-                    </span>
-                </span>
-            }
-        </span>
-    </div>
-</div>
-
-<div class="transaction-section">
-if cgPay {
-        <div class="section-label">They Receive</div>
-
-} else{
-    <div class="section-label">You Receive</div>
-    }
-    <div class="section-value">
-        <span style="display:inline-flex;align-items:center;">
-            if transaction.ReceiveAmount > 0 {
-                { FormatFloat(transaction.ReceiveAmount) } { strings.ToUpper(transaction.Coin2) }
-            } else {
-                { FormatFloat(transaction.EstimateAmount) } { strings.ToUpper(transaction.Coin2) }
-            }
-            if transaction.IsPayment {
-                <span class="receive-lock-badge" style="position:relative;display:inline-flex;align-items:center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="margin-left:6px;vertical-align:middle;" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5.25 7V4.5a2.75 2.75 0 0 1 5.5 0V7"/>
-                        <rect x="3.5" y="7" width="9" height="7" rx="2"/>
-                        <circle cx="8" cy="9.75" r="1.05" fill="currentColor" stroke="none"/>
-                        <path d="M8 10.8v1.7"/>
-                    </svg>
-                    <span class="tooltip-text" style="visibility:hidden;opacity:0;position:absolute;bottom:125%;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:6px 12px;border-radius:6px;font-size:0.95em;white-space:nowrap;transition:opacity 0.2s;z-index:10;">
-                        You will receive <b>exactly</b> the amount shown.
-                    </span>
-                </span>
-            }
-        </span>
-    </div>
-</div>
-            
-            <div class="transaction-section">
-                <div class="section-label">Send Address</div>
-                <div class="code-block">{ transaction.Address }</div>
-            </div>
-            
-            if transaction.Memo != "" {
-                <div class="transaction-section">
-                    <div class="section-label">Memo <span class="required-tag">REQUIRED</span></div>
-                    <div class="code-block">{ transaction.Memo }</div>
-                </div>
-            }
-            
-            <div class="transaction-section text-center">
-                <button id="toggleButton" type="button" onclick={ toggleQRCodeHandler(transaction.Address) } 
-                        class="qr-toggle-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"/>
-                        <path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"/>
-                    </svg>
-                    if transaction.Done {
-                        Show QR Code
-                    } else {
-                        Hide QR Code
-                    }
-                </button>
-                <div class="mt-4" id="qrcode-container">
-                    if transaction.Done {
-                        <img id="qrcode" src={ "/generate?text=" + transaction.Address } alt="QR Code" class="mx-auto border-4 border-white rounded-lg hidden">
-                    } else {
-                        <img id="qrcode" src={ "/generate?text=" + transaction.Address } alt="QR Code" class="mx-auto border-4 border-white rounded-lg">
-                    }
-                </div>
-            </div>
-            if strings.ToLower(transaction.Provider) != "thorchain" && strings.ToLower(transaction.Provider) != "bitania" {
-
-            <div class="transaction-section">
-                <div class="section-label">Exchange Link</div>
-                <div class="section-value">
-                    <a href={ templ.URL(transaction.Track) } class="external-link" target="_blank">
-                        { strings.ToLower(transaction.Provider) }
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="inline-block ml-1">
-                          <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a.5.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-                          <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            }
-            
-            <div class="transaction-section">
-                <div class="section-label">CypherGoat ID</div>
-                <div class="section-value font-mono">{ transaction.CGID }</div>
-            </div>
-
-
-            if transaction.Done != true{
-            <button type="submit" class="refresh-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
-                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                </svg>
-                Refresh Status
-            </button>
-            }
-            
-            if transaction.Done == true {
-                <a href={ templ.URL("/download/" + transaction.CGID) } class="refresh-btn" style="text-decoration: none; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center;" download>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
-                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                    </svg>
-                    Download Receipt (PDF)
-                </a>
-                <div class="divider"></div>
-                <div class="success-container">
-                    <div class="success-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-green-500">
-                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                        </svg>
-                    </div>
-                    <p class="text-xl font-bold text-green-400 mb-2">Transaction Complete</p>
-                    <p class="text-gray-300">Thank you for using CypherGoat</p>
-
-                      <!-- Unified Review Section -->
-                <div class="review-section">
-                    <h3 class="review-section-title">Share your experience</h3>
-                    
-                    <div class="review-widgets">
-                        <div class="review-widget trustpilot-widget-container">
-                            <div class="review-widget-header">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="review-icon text-green-500">
-                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                                </svg>
-                                <span class="review-widget-title">Trustpilot</span>
-                            </div>
-                             <a href="https://www.trustpilot.com/evaluate/cyphergoat.com" target="_blank" rel="noopener" class="block">
-                                <img src="/static/tp.jpg" width="200" height="60" alt="Leave a review on Trustpilot" class="mx-auto mt-2">
-                            </a>
-                        </div>
-
-                        <!-- KYCnotme widget -->
-                        <div class="review-widget kycnotme-widget-container">
-                            <div class="review-widget-header">
-                                <img src="/static/kycnm_logo.svg" width="20" height="20" alt="KYCnot.me logo" class="review-icon">
-                                <span class="review-widget-title">KYCnot.me</span>
-                            </div>
-                
-                            <a href="https://kycnot.me/service/cyphergoat/review" target="_blank" rel="noopener" class="block">
-                                <img src="/static/kycnotme.svg" width="200" height="60" alt="Leave a review on KYCnot.me" class="mx-auto mt-2">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                </div>
-
-                <div class="divider"></div>
-                
-              
-            } 
-            if transaction.Done == false{
-            <!-- Contact Support Section -->
-            <details class="contact-section">
-                <summary class="contact-header">
-                    <div class="contact-header-left">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="text-yellow-500">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                        </svg>
-                        <span class="contact-title">Problem with your transaction?</span>
-                    </div>
-                    <svg class="contact-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                    </svg>
-                </summary>
-                <div class="contact-content">
-                    <div class="contact-inner">
-                        <p class="contact-description">
-                            Need help with your transaction? Our support team is available to assist you through secure messaging platforms.
-                        </p>
-                        <div class="contact-links">
-                            <a href="https://t.me/CypherGoatSupport" target="_blank" rel="noopener" class="contact-link telegram-link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="contact-link-icon text-blue-400">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"/>
-                                </svg>
-                                <div class="contact-link-content">
-                                    <div class="contact-link-title">Telegram</div>
-                                    <div class="contact-link-subtitle">CypherGoatSupport</div>
-                                </div>
-                            </a>
-                            <a href="https://smp15.simplex.im/a#x8Q20y3KcKabkLeCFyDMvUDgaf3EdQQh_0eE3xyxBYw" target="_blank" rel="noopener" class="contact-link simplex-link">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="contact-link-icon text-green-400">
-                                    <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
-                                </svg>
-                                <div class="contact-link-content">
-                                    <div class="contact-link-title">SimpleX Chat</div>
-                                    <div class="contact-link-subtitle">Private messaging</div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </details>
-            }
-        </div>
-    </div>
-</form>
-
-    <script>
+		<form action="" method="get">
+			<div class="flex items-center justify-center min-h-screen bg-[#121520] pb-4 sm:pb-0">
+				<div class="transaction-card mx-4 my-6">
+					<h2 class="transaction-header">{ transaction.Provider }</h2>
+					if strings.ToLower(transaction.Provider) == "thorchain" {
+						<div style="background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(255, 140, 0, 0.15)); border: 1px solid rgba(255, 165, 0, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">
+							<div style="display: flex; align-items: flex-start;">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="color: #FFA500; flex-shrink: 0; margin-right: 0.75rem; margin-top: 0.125rem;">
+									<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+								</svg>
+								<div>
+									<div style="color: #FFA500; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem;">
+										⚠️ Memo / OP_RETURN required
+									</div>
+									<div style="color: #e0e0e0; font-size: 0.9rem; line-height: 1.5;">
+										THORChain swaps require a <strong>memo</strong> to be included <strong>inside the transaction</strong>.
+										Depending on the sending chain, this is added as a <strong>memo</strong>, <strong>OP_RETURN</strong>, or <strong>transaction data</strong> field.
+										<br/>
+										<br/>
+										If the memo is missing, modified, or your wallet does not support it, the swap will <strong>not execute</strong> and recovery may be slow or impossible.
+										Please copy the memo <strong>exactly as shown</strong> and double-check the <strong>address</strong>, <strong>amount</strong>, and <strong>memo</strong> before sending.
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+					<div class="transaction-section">
+						<div class="section-label">Transaction Status</div>
+						<div class="section-value">
+							if transaction.Status == "" {
+								<span class="font-medium text-blue-400">Created</span>
+							} else {
+								<span class="font-medium text-blue-400">{ transaction.Status }</span>
+							}
+						</div>
+					</div>
+					<div class="transaction-section">
+						<div class="section-label">You Send</div>
+						<div class="section-value">
+							<span style="display:inline-flex;align-items:center;">
+								{ FormatFloat(transaction.SendAmount) } { strings.ToUpper(transaction.Coin1) }
+								if transaction.IsPayment {
+									<span class="send-lock-badge" style="position:relative;display:inline-flex;align-items:center;">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="margin-left:6px;vertical-align:middle;" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M5.25 7V4.5a2.75 2.75 0 0 1 5.5 0V7"></path>
+											<rect x="3.5" y="7" width="9" height="7" rx="2"></rect>
+											<circle cx="8" cy="9.75" r="1.05" fill="currentColor" stroke="none"></circle>
+											<path d="M8 10.8v1.7"></path>
+										</svg>
+										<span class="tooltip-text" style="visibility:hidden;opacity:0;position:absolute;bottom:125%;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:6px 12px;border-radius:6px;font-size:0.95em;white-space:nowrap;transition:opacity 0.2s;z-index:10;">
+											This is a fixed rate exchange, send <b>EXACTLY</b> the amount specified.
+										</span>
+									</span>
+								}
+							</span>
+						</div>
+					</div>
+					<div class="transaction-section">
+						if cgPay {
+							<div class="section-label">They Receive</div>
+						} else {
+							<div class="section-label">You Receive</div>
+						}
+						<div class="section-value">
+							<span style="display:inline-flex;align-items:center;">
+								if transaction.ReceiveAmount > 0 {
+									{ FormatFloat(transaction.ReceiveAmount) } { strings.ToUpper(transaction.Coin2) }
+								} else {
+									{ FormatFloat(transaction.EstimateAmount) } { strings.ToUpper(transaction.Coin2) }
+								}
+								if transaction.IsPayment {
+									<span class="receive-lock-badge" style="position:relative;display:inline-flex;align-items:center;">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" style="margin-left:6px;vertical-align:middle;" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M5.25 7V4.5a2.75 2.75 0 0 1 5.5 0V7"></path>
+											<rect x="3.5" y="7" width="9" height="7" rx="2"></rect>
+											<circle cx="8" cy="9.75" r="1.05" fill="currentColor" stroke="none"></circle>
+											<path d="M8 10.8v1.7"></path>
+										</svg>
+										<span class="tooltip-text" style="visibility:hidden;opacity:0;position:absolute;bottom:125%;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:6px 12px;border-radius:6px;font-size:0.95em;white-space:nowrap;transition:opacity 0.2s;z-index:10;">
+											You will receive <b>exactly</b> the amount shown.
+										</span>
+									</span>
+								}
+							</span>
+						</div>
+					</div>
+					<div class="transaction-section">
+						<div class="section-label">Send Address</div>
+						<div class="code-block">{ transaction.Address }</div>
+					</div>
+					if transaction.Memo != "" {
+						<div class="transaction-section">
+							<div class="section-label">Memo <span class="required-tag">REQUIRED</span></div>
+							<div class="code-block">{ transaction.Memo }</div>
+						</div>
+					}
+					<div class="transaction-section text-center">
+						<button
+							id="toggleButton"
+							type="button"
+							onclick={ toggleQRCodeHandler(transaction.Address) }
+							class="qr-toggle-btn"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+								<path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"></path>
+								<path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"></path>
+							</svg>
+							if transaction.Done {
+								Show QR Code
+							} else {
+								Hide QR Code
+							}
+						</button>
+						<div class="mt-4" id="qrcode-container">
+							if transaction.Done {
+								<img id="qrcode" src={ "/generate?text=" + transaction.Address } alt="QR Code" class="mx-auto border-4 border-white rounded-lg hidden"/>
+							} else {
+								<img id="qrcode" src={ "/generate?text=" + transaction.Address } alt="QR Code" class="mx-auto border-4 border-white rounded-lg"/>
+							}
+						</div>
+					</div>
+					if strings.ToLower(transaction.Provider) != "thorchain" && strings.ToLower(transaction.Provider) != "bitania" {
+						<div class="transaction-section">
+							<div class="section-label">Exchange Link</div>
+							<div class="section-value">
+								<a href={ templ.URL(transaction.Track) } class="external-link" target="_blank">
+									{ strings.ToLower(transaction.Provider) }
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="inline-block ml-1">
+										<path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a.5.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"></path>
+										<path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"></path>
+									</svg>
+								</a>
+							</div>
+						</div>
+					}
+					<div class="transaction-section">
+						<div class="section-label">CypherGoat ID</div>
+						<div class="section-value font-mono">{ transaction.CGID }</div>
+					</div>
+					if transaction.Done != true {
+						<button type="submit" class="refresh-btn">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
+								<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+								<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+							</svg>
+							Refresh Status
+						</button>
+					}
+					if transaction.Done == true {
+						<a href={ templ.URL("/download/" + transaction.CGID) } class="refresh-btn" style="text-decoration: none; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center;" download>
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
+								<path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+								<path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+							</svg>
+							Download Receipt (PDF)
+						</a>
+						<div class="divider"></div>
+						<div class="success-container">
+							<div class="success-icon">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-green-500">
+									<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
+								</svg>
+							</div>
+							<p class="text-xl font-bold text-green-400 mb-2">Transaction Complete</p>
+							<p class="text-gray-300">Thank you for using CypherGoat</p>
+							<!-- Unified Review Section -->
+							<div class="review-section">
+								<h3 class="review-section-title">Share your experience</h3>
+								<div class="review-widgets">
+									<div class="review-widget trustpilot-widget-container">
+										<div class="review-widget-header">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="review-icon text-green-500">
+												<path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+											</svg>
+											<span class="review-widget-title">Trustpilot</span>
+										</div>
+										<a href="https://www.trustpilot.com/evaluate/cyphergoat.com" target="_blank" rel="noopener" class="block">
+											<img src="/static/tp.jpg" width="200" height="60" alt="Leave a review on Trustpilot" class="mx-auto mt-2"/>
+										</a>
+									</div>
+									<!-- KYCnotme widget -->
+									<div class="review-widget kycnotme-widget-container">
+										<div class="review-widget-header">
+											<img src="/static/kycnm_logo.svg" width="20" height="20" alt="KYCnot.me logo" class="review-icon"/>
+											<span class="review-widget-title">KYCnot.me</span>
+										</div>
+										<a href="https://kycnot.me/service/cyphergoat/review" target="_blank" rel="noopener" class="block">
+											<img src="/static/kycnotme.svg" width="200" height="60" alt="Leave a review on KYCnot.me" class="mx-auto mt-2"/>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="divider"></div>
+					}
+					if transaction.Done == false {
+						<!-- Contact Support Section -->
+						<details class="contact-section">
+							<summary class="contact-header">
+								<div class="contact-header-left">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="text-yellow-500">
+										<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+										<path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"></path>
+									</svg>
+									<span class="contact-title">Problem with your transaction?</span>
+								</div>
+								<svg class="contact-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+									<path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+								</svg>
+							</summary>
+							<div class="contact-content">
+								<div class="contact-inner">
+									<p class="contact-description">
+										Need help with your transaction? Our support team is available to assist you through secure messaging platforms.
+									</p>
+									<div class="contact-links">
+										<a href="https://t.me/CypherGoatSupport" target="_blank" rel="noopener" class="contact-link telegram-link">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="contact-link-icon text-blue-400">
+												<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z"></path>
+											</svg>
+											<div class="contact-link-content">
+												<div class="contact-link-title">Telegram</div>
+												<div class="contact-link-subtitle">CypherGoatSupport</div>
+											</div>
+										</a>
+										<a href="https://smp15.simplex.im/a#x8Q20y3KcKabkLeCFyDMvUDgaf3EdQQh_0eE3xyxBYw" target="_blank" rel="noopener" class="contact-link simplex-link">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="contact-link-icon text-green-400">
+												<path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"></path>
+											</svg>
+											<div class="contact-link-content">
+												<div class="contact-link-title">SimpleX Chat</div>
+												<div class="contact-link-subtitle">Private messaging</div>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+						</details>
+					}
+				</div>
+			</div>
+		</form>
+		<script>
         // Check if QR is initially visible (hidden class not present)
         let qrCodeVisible = !document.getElementById('qrcode').classList.contains('hidden');
         
@@ -760,5 +740,5 @@ if cgPay {
         }
     });
     </script>
-}
+	}
 }

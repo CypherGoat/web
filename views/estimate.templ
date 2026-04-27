@@ -45,531 +45,435 @@ func FormatCoveragePercent(num float64) string {
 
 templ EstimateCard(offers api.Estimates, mode string) {
      <style>
-        body-estimates {
-            background-color: #121520;
-            font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-        }
-
         .container-estimates {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 1rem;
+            width: 100%;
+            margin: 0;
+            padding: 0;
             color: #f5f5f5;
         }
 
-        .card-estimates {
-            background-color: #1a1f2e;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        .estimate-toolbar-estimates {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1rem;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .trade-value-estimates {
+            margin: 0;
+            color: #798192;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .sort-options-estimates {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .sort-btn-estimates {
+            background: transparent;
+            color: #939cad;
+            border: 0;
+            border-radius: 999px;
+            padding: 0.55rem 0.9rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: background 0.18s ease, color 0.18s ease;
+            white-space: nowrap;
+        }
+
+        .sort-btn-estimates.active {
+            background: rgba(231, 234, 239, 0.08);
+            color: #e7eaef;
+        }
+
+        .sort-btn-estimates:hover {
+            color: #e5e7eb;
+        }
+
+        #estimates-container-estimates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .estimate-form-estimates {
+            display: block;
+        }
+
+        .card-estimates {
             display: grid;
-            grid-template-columns: 1fr auto;
-            grid-gap: 1rem;
+            gap: 0.95rem;
+            padding: 1.15rem 1.2rem;
+            background: #10141a;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 20px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+            transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
         }
 
         .card-estimates:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.12);
+            background: #11161d;
+            transform: translateY(-1px);
         }
 
         .estimate-form-estimates.selected .card-estimates {
-            border-color: rgba(0, 136, 255, 0.4);
-            background: linear-gradient(145deg, #1e2538, #252b3f);
-            box-shadow: 0 0 0 2px rgba(0, 136, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
+            border-color: rgba(153, 161, 175, 0.18);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.01)), #11161d;
+            box-shadow: 0 0 0 1px rgba(153, 161, 175, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.03);
         }
 
         .exchange-info-estimates {
-            grid-column: 1 / -1;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
+            align-items: flex-start;
+            gap: 1rem;
         }
 
         .exchange-name-estimates {
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: #ffffff;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.7rem;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.1;
             letter-spacing: 0.01em;
         }
 
         .estimate-image-estimates {
-            width: 28px;
-            height: 28px;
+            width: 30px;
+            height: 30px;
             object-fit: contain;
-            border-radius: 4px;
-        }
-
-        .coin-symbols-estimates {
-            color: #d0d0d0;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            grid-column: 1 / -1;
-            margin: 0.5rem 0;
-            padding: 0.4rem 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .coin-symbol-estimates {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.3rem 0.7rem;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s ease;
-            font-weight: 500;
-        }
-
-        .amount-highlight-estimates {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #ffffff;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            letter-spacing: 0.01em;
-        }
-
-        .btn-select-estimates, .btn-select2-estimates {
-            background-color: #2a3042;
-            color: #fff;
-            padding: 0.7rem 1.2rem;
-            border: none;
             border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s ease;
-            grid-column: 1 / -1;
-            justify-self: end;
-            min-width: 140px;
-            letter-spacing: 0.02em;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-select-estimates:hover, .btn-select2-estimates:hover {
-            background-color: #353d52;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-primary-estimates {
-            background-color: #0066cc;
-            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
-        }
-
-        .btn-primary-estimates:hover {
-            background-color: #0077e6;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.35);
-        }
-        
-        .btn-select2-estimates:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .kyc-badge-estimates {
-            min-width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: help;
-            margin-left: 0.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-        
-        .kyc-badge-estimates::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 130%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #1a1f2e;
-            color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-            width: max-content;
-            max-width: 200px;
-            font-size: 0.75rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-            pointer-events: none;
-            z-index: 100;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .kyc-badge-estimates:hover::after {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .kyc-0-estimates {
-            background-color: #1a9c51; 
-            color: white;
-        }
-
-        .kyc-1-estimates {
-            background-color: #4ca550; 
-            color: white;
-        }
-
-        .kyc-2-estimates {
-            background-color: #ffc107; 
-            color: #333;
-        }
-        
-        .sort-options-estimates {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 1.5rem;
-            gap: 0.75rem;
-        }
-        
-        .sort-btn-estimates {
-            background-color: #1a1f2e;
-            color: #e0e0e0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s ease;
-            font-weight: 500;
-        }
-        
-        .sort-btn-estimates.active {
-            background-color: rgba(0, 102, 204, 0.2);
-            border-color: rgba(0, 102, 204, 0.4);
-            color: #ffffff;
-            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
-        }
-        
-        .sort-btn-estimates:hover {
-            background-color: #232838;
-        }
-
-        .kyc-badge-estimates {
-            display: none;
-        }
-
-        .show-kyc-estimates .kyc-badge-estimates {
-            display: inline-flex;
-        }
-
-        .estimate-details-estimates {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            grid-column: 1 / -1;
+            flex-shrink: 0;
         }
 
         .exchange-meta-estimates {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
+
+        .coin-symbols-estimates {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            color: #8f97a7;
+            font-size: 0.74rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .coin-symbol-estimates {
+            display: inline-flex;
+            align-items: center;
+            min-height: 2rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: #d4dae4;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+        }
+
+        .arrow-icon-estimates {
+            color: #626b7b;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .estimate-details-estimates {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .amount-highlight-estimates {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+
+        .btn-select-estimates, .btn-select2-estimates {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 128px;
+            min-height: 2.8rem;
+            padding: 0.75rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 0.76rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+        }
+
+        .btn-select-estimates:hover, .btn-select2-estimates:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .btn-primary-estimates {
+            background: #e7eaef;
+            border-color: #e7eaef;
+            color: #11151c;
+        }
+
+        .btn-primary-estimates:hover {
+            background: #f3f5f7;
+            border-color: #f3f5f7;
+            color: #11151c;
+        }
+
+        .exchange-features-estimates {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            flex-wrap: wrap;
+            padding-top: 0.1rem;
+        }
+
+        .feature-tag-estimates,
+        .guarantee-badge-estimates {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            min-height: 1.95rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.025);
+            color: #aab2c0;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .feature-tag-estimates.kyc {
+            color: #c1c8d3;
+            border-color: rgba(153, 161, 175, 0.14);
+            background: rgba(153, 161, 175, 0.07);
+        }
+
+        .guarantee-badge-estimates {
+            position: relative;
+            cursor: help;
+            color: #9ce0c0;
+            border-color: rgba(97, 196, 146, 0.18);
+            background: rgba(97, 196, 146, 0.08);
+        }
+
+        .guarantee-icon-estimates {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .kyc-badge-estimates {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-width: 1.6rem;
+            height: 1.6rem;
+            padding: 0 0.35rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: help;
+            position: relative;
+        }
+
+        .show-kyc-estimates .kyc-badge-estimates {
+            display: inline-flex;
+        }
+
+        .kyc-0-estimates {
+            background: rgba(87, 191, 127, 0.18);
+            color: #a6ebbb;
+        }
+
+        .kyc-1-estimates {
+            background: rgba(150, 195, 96, 0.18);
+            color: #cfe7a5;
+        }
+
+        .kyc-2-estimates {
+            background: rgba(210, 171, 104, 0.2);
+            color: #e8d0a2;
+        }
+
+        .kyc-badge-estimates::after,
+        .tooltip-content-estimates {
+            position: absolute;
+            bottom: calc(100% + 0.7rem);
+            right: 0;
+            width: max-content;
+            max-width: 240px;
+            padding: 0.65rem 0.8rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #0f1319;
+            color: #f4f6f8;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.34);
+            font-size: 0.75rem;
+            line-height: 1.45;
+            letter-spacing: normal;
+            text-transform: none;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.18s ease, visibility 0.18s ease;
+            z-index: 30;
+            text-align: left;
+        }
+
+        .kyc-badge-estimates::after {
+            content: attr(data-tooltip);
+        }
+
+        .kyc-badge-estimates:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .guarantee-badge-estimates::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 100%;
+            height: 0.8rem;
+        }
+
+        .guarantee-badge-estimates:hover .tooltip-content-estimates,
+        .guarantee-badge-estimates.tooltip-active .tooltip-content-estimates,
+        .tooltip-content-estimates:hover {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .tooltip-content-estimates a {
+            color: #d5dae2;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .tooltip-content-estimates a:hover {
+            color: #f3f5f7;
+        }
+
         .card-estimates.blocked {
-            opacity: 0.6;
-            background: linear-gradient(145deg, #2a2a2a, #333333);
-            border: 1px solid #555;
+            opacity: 0.72;
+            background: #151922;
         }
 
         .card-estimates.blocked .btn-select-estimates,
         .card-estimates.blocked .btn-select2-estimates {
-            background: #666;
-            color: #999;
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.06);
+            color: #697181;
             cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .card-estimates.blocked .btn-select-estimates:hover,
-        .card-estimates.blocked .btn-select2-estimates:hover {
-            background: #666;
-            transform: none;
-            box-shadow: none;
         }
 
         .blocked-notice-estimates {
-            background: linear-gradient(135deg, #656565, #3b3b3b);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-            text-align: center;
-        }
-        .arrow-icon-estimates {
-            color: #9fa3b8;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .guarantee-badge-estimates {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: rgba(0, 153, 102, 0.15);
-            border: 1px solid rgba(0, 153, 102, 0.3);
-            color: #00cc88;
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
+            padding: 0.75rem 0.9rem;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.025);
+            color: #8f97a7;
             font-size: 0.8rem;
-            font-weight: 500;
-            margin-left: auto;
-        }
-        
-        .no-guarantee-estimates {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #a0a0a0;
-        }
-        
-        .guarantee-icon-estimates {
-            font-size: 0.9rem;
-        }
-        
-        .exchange-features-estimates {
-            display: flex;
-            align-items: center;
-            grid-column: 1 / -1;
-            gap: 0.6rem;
-            padding-top: 0.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .feature-tag-estimates {
-            font-size: 0.75rem;
-            color: #d0d0d0;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        
-        .feature-tag-estimates.kyc {
-            background: rgba(26, 156, 81, 0.15);
-            color: #2ecc71;
-        }
-        
-        .feature-tag-estimates.log {
-            background: rgba(255, 193, 7, 0.15);
-            color: #ffc107;
+            line-height: 1.45;
         }
 
         @media (max-width: 768px) {
+            .estimate-toolbar-estimates {
+                align-items: stretch;
+            }
+
+            .sort-options-estimates {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .sort-btn-estimates {
+                flex: 1;
+                text-align: center;
+            }
+
             .card-estimates {
-                padding: 1.2rem;
-                grid-gap: 0.8rem;
+                padding: 1rem;
+                gap: 0.85rem;
+            }
+
+            .exchange-info-estimates,
+            .estimate-details-estimates {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .exchange-meta-estimates {
+                justify-content: flex-start;
             }
 
             .amount-highlight-estimates {
                 font-size: 1.25rem;
             }
 
-            .exchange-name-estimates {
-                font-size: 1.1rem;
-            }
-            
-            .estimate-details-estimates {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            
             .btn-select-estimates, .btn-select2-estimates {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
-                min-width: 120px;
-                align-self: stretch;
                 width: 100%;
             }
-            
-            .guarantee-badge-estimates {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.4rem;
-            }
-            
-            .exchange-features-estimates {
-                padding-top: 0.8rem;
-            }
-            
-            .sort-options-estimates {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            
-            .sort-btn-estimates {
-                flex-grow: 1;
-                text-align: center;
-            }
-            
-            .coin-symbols-estimates {
-                flex-wrap: wrap;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container-estimates {
-                padding: 0.5rem;
-            }
-            
-            .card-estimates {
-                padding: 1rem;
-                grid-gap: 0.6rem;
-                margin-bottom: 0.8rem;
-            }
-            
-            .exchange-info-estimates {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-            
-            .exchange-name-estimates {
-                font-size: 1rem;
-            }
-            
-            .amount-highlight-estimates {
-                font-size: 1.2rem;
-            }
-            
-            .btn-select-estimates, .btn-select2-estimates {
-                padding: 0.7rem 0.8rem;
-                font-size: 0.9rem;
-                min-height: 44px;
-            }
-            
-            .feature-tag-estimates {
-                font-size: 0.7rem;
-                padding: 0.2rem 0.4rem;
-            }
-            
-            .coin-symbol-estimates {
-                padding: 0.3rem 0.5rem;
-                font-size: 0.85rem;
-            }
-        }
-                .guarantee-icon-estimates {
-            font-size: 0.9rem;
-            margin-right: 0.1rem;
-            vertical-align: middle;
-        }
-        
-        svg.guarantee-icon-estimates {
-            width: 14px;
-            height: 14px;
-            stroke: #00cc88;
-            margin-bottom: -2px;
         }
 
-                    .guarantee-badge-estimates {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: rgba(0, 153, 102, 0.15);
-            border: 1px solid rgba(0, 153, 102, 0.3);
-            color: #00cc88;
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-left: auto;
-            position: relative; /* For tooltip positioning */
-            cursor: help;
-        }
-        
-               .tooltip-content-estimates {
-            position: absolute;
-            bottom: 130%;
-            right: 0;
-            background-color: #1a1f2e;
-            color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-            width: max-content;
-            max-width: 250px;
-            font-size: 0.75rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0s linear 0.2s;
-            z-index: 100;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            text-align: left;
-            pointer-events: none;
-        }
-        
-        /* Add invisible connector between badge and tooltip */
-        .guarantee-badge-estimates::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            right: 0;
-            height: 15px; /* Create an invisible bridge to the tooltip */
-            background: transparent;
-        }
-        
-        .guarantee-badge-estimates:hover .tooltip-content-estimates {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transition-delay: 0s;
-        }
-        
-        /* Keep tooltip visible while hovering over it */
-        .tooltip-content-estimates:hover {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-        
-        /* Add significant delay before hiding */
-        .guarantee-badge-estimates.tooltip-active .tooltip-content-estimates {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-                .tooltip-content-estimates a {
-            color: #00cc88;
-            font-weight: 600;
-            text-decoration: underline;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            display: inline-block;
-        }
-        
-        .tooltip-content-estimates a:hover {
-            color: #00e699;
-            box-shadow: 0 0 0 2px rgba(0, 204, 136, 0.1);
+        @media (max-width: 480px) {
+            .coin-symbols-estimates,
+            .exchange-features-estimates {
+                gap: 0.45rem;
+            }
+
+            .feature-tag-estimates,
+            .guarantee-badge-estimates,
+            .coin-symbol-estimates {
+                font-size: 0.68rem;
+            }
         }
     </style>
     <div class="container-estimates">
-        <div class="sort-options-estimates">
-            <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Best Rate</button>
-            <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Lowest KYC</button>
+        <div class="estimate-toolbar-estimates">
+            <div class="sort-options-estimates">
+                <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Best Rate</button>
+                <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Lowest KYC</button>
+            </div>
         </div>
 
-        
         <div id="estimates-container-estimates" data-mode={ mode }>
-        <p>{offers.TradeValue_fiat}</p>
             for i, offer := range offers.Results {
                 if !(offer.SendAmount == 0) {
                     <form method="GET" action="/step2" class="estimate-form-estimates" data-kyc={ fmt.Sprintf("%d", offer.KYCScore) } 
@@ -608,7 +512,8 @@ templ EstimateCard(offers api.Estimates, mode string) {
                                 
                                 
 
-                                                                 if offer.CGShield{
+                                <div class="exchange-meta-estimates">
+                                if offer.CGShield{
                                      <div class="guarantee-badge-estimates">
                                         <svg class="guarantee-icon-estimates" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#00cc88" stroke="#00cc88" stroke-width="0">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -627,9 +532,15 @@ templ EstimateCard(offers api.Estimates, mode string) {
                                     //     No Guarantee
                                     // </div>
                                 }
+                                </div>
                             </div>
-                            
-                            
+
+                            <div class="coin-symbols-estimates">
+                                <span class="coin-symbol-estimates">{ strings.ToUpper(offer.Coin1) }</span>
+                                <span class="arrow-icon-estimates">-&gt;</span>
+                                <span class="coin-symbol-estimates">{ strings.ToUpper(offer.Coin2) }</span>
+                            </div>
+
                             <div class="estimate-details-estimates">
                                 <div class="amount-highlight-estimates">
                                     if mode == "pay" {
@@ -753,20 +664,17 @@ templ EstimateCard(offers api.Estimates, mode string) {
             
             forms.forEach((form, index) => {
                 const button = form.querySelector('button');
-                if (index === 0) {
+                if (index === 0 && button && !button.disabled) {
                     button.className = 'btn-select2-estimates btn-primary-estimates';
                     form.classList.add('selected');
                 } else {
-                    button.className = 'btn-select2-estimates';
+                    if (button) {
+                        button.className = 'btn-select2-estimates';
+                    }
                     form.classList.remove('selected');
                 }
                 
                 container.appendChild(form);
-                
-                if (index < forms.length - 1) {
-                    const br = document.createElement('br');
-                    container.appendChild(br);
-                }
             });
             document.dispatchEvent(new CustomEvent('estimatesSorted'));
             document.dispatchEvent(new CustomEvent('firstEstimateUpdated'));

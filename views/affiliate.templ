@@ -16,22 +16,20 @@
 package views
 
 import (
-    "github.com/CypherGoat/web/cmd/api"
-    "fmt"
+	"fmt"
+	"github.com/CypherGoat/web/cmd/api"
 )
 
 templ Affiliate() {
-    @HeaderCustomTitle("Affiliate Program", "https://cyphergoat.com/affiliate", "Earn crypto by referring users to CypherGoat. Join our affiliate program and receive competitive commissions on every swap — no KYC, transparent on-chain payouts."){}
-    <style>
+	@HeaderCustomTitle("Affiliate Program", "https://cyphergoat.com/affiliate", "Earn crypto by referring users to CypherGoat. Join our affiliate program and receive competitive commissions on every swap — no KYC, transparent on-chain payouts.")
+	<style>
     html, body {
         margin: 0;
         scroll-behavior: smooth;
     }
 
     body {
-        background:
-            radial-gradient(circle at top, rgba(0, 136, 255, 0.14), transparent 32%),
-            linear-gradient(180deg, #121520 0%, #0f131d 100%);
+        background: #0b0d14;
         font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
         color: #e5edf7;
     }
@@ -47,31 +45,6 @@ templ Affiliate() {
         overflow-x: hidden;
     }
 
-    .affiliate-shell::before,
-    .affiliate-shell::after {
-        content: "";
-        position: absolute;
-        border-radius: 999px;
-        pointer-events: none;
-        filter: blur(12px);
-        opacity: 0.7;
-    }
-
-    .affiliate-shell::before {
-        width: 18rem;
-        height: 18rem;
-        top: 2rem;
-        right: -5rem;
-        background: radial-gradient(circle, rgba(0, 136, 255, 0.18), transparent 68%);
-    }
-
-    .affiliate-shell::after {
-        width: 14rem;
-        height: 14rem;
-        top: 30rem;
-        left: -4rem;
-        background: radial-gradient(circle, rgba(77, 172, 255, 0.12), transparent 70%);
-    }
 
     .section {
         margin-top: 1.75rem;
@@ -79,11 +52,12 @@ templ Affiliate() {
 
     .panel {
         position: relative;
-        background: linear-gradient(145deg, rgba(26, 31, 46, 0.96), rgba(34, 38, 51, 0.96));
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
         border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 22px;
-        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
     }
 
     .hero-panel {
@@ -104,12 +78,12 @@ templ Affiliate() {
         gap: 0.5rem;
         padding: 0.45rem 0.85rem;
         border-radius: 999px;
-        border: 1px solid rgba(0, 136, 255, 0.22);
-        background: rgba(0, 136, 255, 0.08);
-        color: #8fc8ff;
-        font-size: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 0.14em;
+        border: 1px solid rgba(243, 238, 226, 0.16);
+        background: rgba(243, 238, 226, 0.06);
+        color: #d8ccb2;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
     }
 
@@ -117,18 +91,14 @@ templ Affiliate() {
         margin: 1.1rem 0 1rem;
         font-size: clamp(2.7rem, 5vw, 4.6rem);
         line-height: 0.97;
-        font-weight: 900;
+        font-weight: 500;
         color: #ffffff;
-        letter-spacing: -0.04em;
+        letter-spacing: -0.06em;
     }
 
     .hero-title .accent {
         display: block;
-        background: linear-gradient(135deg, #8ed0ff, #0088ff 45%, #4dacff 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        text-shadow: 0 0 24px rgba(0, 136, 255, 0.12);
+        color: #f3eee2;
     }
 
     .hero-copy {
@@ -158,32 +128,29 @@ templ Affiliate() {
         font-size: 1rem;
         font-weight: 700;
         text-decoration: none;
-        transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
-        border: 1px solid rgba(125, 190, 255, 0.25);
-        box-shadow: 0 12px 30px rgba(0, 102, 204, 0.3);
+        background: #f3eee2;
+        color: #0b0d14;
+        border: 1px solid transparent;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
 
     .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 18px 36px rgba(0, 102, 204, 0.38);
-        background: linear-gradient(135deg, #1393ff, #0062dd);
+        background: #faf7ef;
     }
 
     .btn-secondary {
-        color: #dbe9f8;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(255, 255, 255, 0.03);
+        color: #c4cbd8;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
     }
 
     .btn-secondary:hover {
-        transform: translateY(-2px);
-        border-color: rgba(0, 136, 255, 0.28);
-        background: rgba(0, 136, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.14);
+        color: #f3f4f6;
     }
 
     .hero-notes {
@@ -199,14 +166,14 @@ templ Affiliate() {
         gap: 0.5rem;
         padding: 0.65rem 0.9rem;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.06);
         color: #c3cfdf;
         font-size: 0.92rem;
     }
 
     .pill i {
-        color: #4dacff;
+        color: #d8ccb2;
     }
 
     .hero-aside {
@@ -220,9 +187,11 @@ templ Affiliate() {
     .stat-card,
     .audience-card,
     .faq-item {
-        background: linear-gradient(145deg, rgba(24, 29, 42, 0.96), rgba(20, 24, 35, 0.96));
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #12161d;
         border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 18px;
+        border-radius: 22px;
     }
 
     .spotlight-card {
@@ -235,10 +204,10 @@ templ Affiliate() {
     }
 
     .spotlight-kicker {
-        color: #8fc8ff;
-        font-size: 0.82rem;
-        font-weight: 700;
-        letter-spacing: 0.12em;
+        color: #8d95a5;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
     }
 
@@ -251,10 +220,7 @@ templ Affiliate() {
     }
 
     .spotlight-value span {
-        background: linear-gradient(135deg, #8ed0ff, #0088ff 45%, #4dacff 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
+        color: #f3eee2;
     }
 
     .spotlight-copy {
@@ -296,8 +262,8 @@ templ Affiliate() {
         margin: 0;
         color: #ffffff;
         font-size: clamp(1.8rem, 3vw, 2.4rem);
-        font-weight: 800;
-        letter-spacing: -0.03em;
+        font-weight: 600;
+        letter-spacing: -0.05em;
     }
 
     .section-subtitle {
@@ -331,7 +297,7 @@ templ Affiliate() {
     .audience-card:hover,
     .faq-item:hover {
         transform: translateY(-3px);
-        border-color: rgba(0, 136, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.1);
     }
 
     .stat-value {
@@ -374,10 +340,10 @@ templ Affiliate() {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
-        font-weight: 800;
-        box-shadow: 0 10px 22px rgba(0, 102, 204, 0.28);
+        background: #f3eee2;
+        color: #0b0d14;
+        font-weight: 700;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
         flex-shrink: 0;
     }
 
@@ -415,13 +381,13 @@ templ Affiliate() {
         gap: 0.5rem;
         padding: 0.5rem 0.8rem;
         border-radius: 999px;
-        background: rgba(0, 136, 255, 0.08);
-        border: 1px solid rgba(0, 136, 255, 0.18);
-        color: #8fc8ff;
-        font-size: 0.84rem;
-        font-weight: 700;
+        background: rgba(243, 238, 226, 0.06);
+        border: 1px solid rgba(243, 238, 226, 0.16);
+        color: #d8ccb2;
+        font-size: 0.78rem;
+        font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.16em;
     }
 
     .commission-value {
@@ -433,10 +399,7 @@ templ Affiliate() {
     }
 
     .commission-value span {
-        background: linear-gradient(135deg, #8ed0ff, #0088ff 45%, #4dacff 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
+        color: #f3eee2;
     }
 
     .commission-copy {
@@ -463,7 +426,7 @@ templ Affiliate() {
 
     .detail-list i {
         margin-top: 0.25rem;
-        color: #4dacff;
+        color: #d8ccb2;
     }
 
     .breakdown-stack {
@@ -509,9 +472,9 @@ templ Affiliate() {
         align-items: center;
         justify-content: center;
         border-radius: 14px;
-        background: rgba(0, 136, 255, 0.12);
-        border: 1px solid rgba(0, 136, 255, 0.18);
-        color: #8fc8ff;
+        background: rgba(243, 238, 226, 0.06);
+        border: 1px solid rgba(243, 238, 226, 0.14);
+        color: #d8ccb2;
         font-size: 1.15rem;
     }
 
@@ -531,14 +494,14 @@ templ Affiliate() {
     .faq-a a,
     .login-link,
     .terms-link {
-        color: #76bcff;
+        color: #ece6d8;
         text-decoration: none;
     }
 
     .faq-a a:hover,
     .login-link:hover,
     .terms-link:hover {
-        color: #9fd2ff;
+        color: #faf7ef;
         text-decoration: underline;
     }
 
@@ -546,8 +509,9 @@ templ Affiliate() {
         padding: 2rem;
         text-align: center;
         background:
-            radial-gradient(circle at top, rgba(0, 136, 255, 0.14), transparent 42%),
-            linear-gradient(145deg, rgba(26, 31, 46, 0.96), rgba(34, 38, 51, 0.96));
+            radial-gradient(circle at top, rgba(243, 238, 226, 0.08), transparent 42%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
     }
 
     .final-cta .section-subtitle {
@@ -639,255 +603,248 @@ templ Affiliate() {
         }
     }
     </style>
-
-    <main class="main-content affiliate-shell">
-        <section class="panel hero-panel section">
-            <div class="hero-grid">
-                <div>
-                    <span class="eyebrow"><i class="fas fa-handshake"></i> Affiliate Program</span>
-                    <h1 class="hero-title">
-                        Turn crypto traffic into
-                        <span class="accent">repeat revenue.</span>
-                    </h1>
-                    <p class="hero-copy">
-                        Share CypherGoat with your audience and earn up to 50% of our fees on every qualifying swap. Fast signup, direct crypto payouts, and a straightforward value proposition built for crypto-native audiences.
-                    </p>
-                    <div class="hero-actions">
-                        <a href="/affiliate/register" class="btn-primary">Start earning for free <i class="fas fa-arrow-right"></i></a>
-                        <a href="/affiliate/login" class="btn-secondary">Existing affiliate login</a>
-                    </div>
-                    <div class="hero-notes">
-                        <span class="pill"><i class="fas fa-bolt"></i> Instant signup</span>
-                        <span class="pill"><i class="fas fa-link"></i> Permanent attribution</span>
-                        <span class="pill"><i class="fas fa-wallet"></i> Crypto payouts</span>
-                        <span class="pill"><i class="fas fa-chart-line"></i> Real-time dashboard</span>
-                    </div>
-                </div>
-
-                <div class="hero-aside">
-                    <div class="spotlight-card">
-                        <div>
-                            <span class="spotlight-kicker">Topline Offer</span>
-                            <p class="spotlight-value"><span>50%</span></p>
-                            <p class="spotlight-copy">
-                                Earn a share of CypherGoat fees whenever your audience swaps through your link. No application review. No manual approval queue.
-                            </p>
-                        </div>
-                        <div class="mini-grid">
-                            <div class="mini-card">
-                                <span class="mini-label">Minimum payout</span>
-                                <span class="mini-value">$200 equivalent</span>
-                            </div>
-                            <div class="mini-card">
-                                <span class="mini-label">Payout speed</span>
-                                <span class="mini-value">24-48 hours</span>
-                            </div>
-                            <div class="mini-card">
-                                <span class="mini-label">Payment method</span>
-                                <span class="mini-value">Any supported coin</span>
-                            </div>
-                            <div class="mini-card">
-                                <span class="mini-label">Best for</span>
-                                <span class="mini-value">Crypto-native audiences</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-value">50%</span>
-                    <span class="stat-caption">Commission on qualifying swaps referred through your tracking link.</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-value">$200</span>
-                    <span class="stat-caption">Minimum payout threshold in BTC or another supported asset.</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-value">Real-time</span>
-                    <span class="stat-caption">Dashboard reporting for clicks, conversions, and earned balance.</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-value">Global</span>
-                    <span class="stat-caption">No country-based join restrictions, subject to local compliance.</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-head">
-                <h2 class="section-title">How it works</h2>
-                <p class="section-subtitle">Fast onboarding, clear attribution, and the same no-nonsense positioning the core product already uses.</p>
-            </div>
-            <div class="steps-grid">
-                <article class="card">
-                    <div class="step-head">
-                        <span class="step-number">1</span>
-                        <h3 class="step-title">Create your account</h3>
-                    </div>
-                    <p class="step-copy">Register with your email and password. There is no application form and no approval wait.</p>
-                </article>
-                <article class="card">
-                    <div class="step-head">
-                        <span class="step-number">2</span>
-                        <h3 class="step-title">Grab your referral link</h3>
-                    </div>
-                    <p class="step-copy">Your dashboard gives you a unique tracking link you can drop into videos, guides, bios, newsletters, and community posts.</p>
-                </article>
-                <article class="card">
-                    <div class="step-head">
-                        <span class="step-number">3</span>
-                        <h3 class="step-title">Send qualified traffic</h3>
-                    </div>
-                    <p class="step-copy">When users click through and complete swaps on CypherGoat, those qualifying transactions are attributed back to you.</p>
-                </article>
-                <article class="card">
-                    <div class="step-head">
-                        <span class="step-number">4</span>
-                        <h3 class="step-title">Withdraw in crypto</h3>
-                    </div>
-                    <p class="step-copy">Track performance in real time and request payout once you cross the minimum threshold.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="detail-grid">
-                <div class="panel commission-panel">
-                    <span class="commission-badge"><i class="fas fa-percent"></i> Commission structure</span>
-                    <p class="commission-value"><span>Up to 50%</span></p>
-                    <p class="commission-copy">
-                        The pitch is simple: send users who already need a privacy-conscious swap aggregator, and earn a revenue share when they transact. No hidden tiers and no cluttered explanation block.
-                    </p>
-                    <ul class="detail-list">
-                        <li><i class="fas fa-check-circle"></i><span>Commissions are credited after a referred swap confirms.</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>Payouts are requested from your dashboard and sent directly to your wallet.</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>Referrals remain tied to your tracking link for future qualifying swaps.</span></li>
-                    </ul>
-                </div>
-                <div class="breakdown-stack">
-                    <div class="card breakdown-card">
-                        <span class="breakdown-label">When do I get paid?</span>
-                        <span class="breakdown-value">After swaps confirm</span>
-                        <p>Balances update after confirmation, and payout requests are typically handled within 24-48 hours.</p>
-                    </div>
-                    <div class="card breakdown-card">
-                        <span class="breakdown-label">What is the threshold?</span>
-                        <span class="breakdown-value">$200 minimum</span>
-                        <p>Withdraw in BTC or another supported coin once your balance reaches the equivalent of 200 USD.</p>
-                    </div>
-                    <div class="card breakdown-card">
-                        <span class="breakdown-label">How is attribution handled?</span>
-                        <span class="breakdown-value">Unique referral link</span>
-                        <p>Use your personal affiliate URL across your content and traffic sources. Self-referrals do not qualify.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-head">
-                <h2 class="section-title">Who this fits</h2>
-                <p class="section-subtitle">The page should speak to the same people already using CypherGoat: privacy-minded users, educators, builders, and communities around crypto execution.</p>
-            </div>
-            <div class="audience-grid">
-                <article class="audience-card">
-                    <span class="audience-icon"><i class="fas fa-video"></i></span>
-                    <h3>Creators and streamers</h3>
-                    <p>Add your link to descriptions, pinned comments, and callouts wherever you already discuss swaps and privacy tools.</p>
-                </article>
-                <article class="audience-card">
-                    <span class="audience-icon"><i class="fas fa-pen-nib"></i></span>
-                    <h3>Writers and newsletter operators</h3>
-                    <p>Monetize comparison posts, tutorials, and market explainers without forcing readers through a sales-heavy funnel.</p>
-                </article>
-                <article class="audience-card">
-                    <span class="audience-icon"><i class="fas fa-user-shield"></i></span>
-                    <h3>Privacy-first communities</h3>
-                    <p>CypherGoat already resonates with users looking for open, privacy-conscious swap flows, especially around XMR-adjacent audiences.</p>
-                </article>
-                <article class="audience-card">
-                    <span class="audience-icon"><i class="fas fa-share-nodes"></i></span>
-                    <h3>Social channels and communities</h3>
-                    <p>Telegram groups, X accounts, Discord servers, and niche forums can all drive recurring qualified traffic.</p>
-                </article>
-                <article class="audience-card">
-                    <span class="audience-icon"><i class="fas fa-code"></i></span>
-                    <h3>Wallets and app builders</h3>
-                    <p>Integrate or surface your link inside products where users already need a swap option and a clear destination.</p>
-                </article>
-                <article class="audience-card">
-                    <span class="audience-icon"><i class="fas fa-users"></i></span>
-                    <h3>Community operators</h3>
-                    <p>If people ask you where to swap, you can turn that recommendation into a measurable revenue stream.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="section-head">
-                <h2 class="section-title">Frequently asked questions</h2>
-                <p class="section-subtitle">Short answers, consistent styling, and less visual noise.</p>
-            </div>
-            <div class="faq-grid">
-                <article class="faq-item">
-                    <p class="faq-q">How and when are commissions paid?</p>
-                    <p class="faq-a">Commissions are credited once a referred swap confirms on-chain. Payout requests are sent from your dashboard and are typically processed within 24-48 hours.</p>
-                </article>
-                <article class="faq-item">
-                    <p class="faq-q">What is the minimum payout threshold?</p>
-                    <p class="faq-a">The minimum payout is 200 USD equivalent in your chosen supported coin. Balances roll over until you decide to withdraw.</p>
-                </article>
-                <article class="faq-item">
-                    <p class="faq-q">Which cryptocurrencies can I be paid in?</p>
-                    <p class="faq-a">Payouts are available in Bitcoin and other supported cryptocurrencies. Set your preferred payout asset from the affiliate dashboard.</p>
-                </article>
-                <article class="faq-item">
-                    <p class="faq-q">Is there an approval process to join?</p>
-                    <p class="faq-a">No. Registration is immediate and free, and your links are available as soon as the account is created.</p>
-                </article>
-                <article class="faq-item">
-                    <p class="faq-q">Can I promote on social media, YouTube, or paid ads?</p>
-                    <p class="faq-a">Social media, YouTube, blogs, newsletters, forums, and other organic channels are allowed. Paid search bidding on the CypherGoat brand name is not. See the <a href="/affiliate/terms">full terms</a> { "for" } details.</p>
-                </article>
-                <article class="faq-item">
-                    <p class="faq-q">Are there geographic restrictions?</p>
-                    <p class="faq-a">There are no country-based restrictions on joining the program. You remain responsible for complying with the laws in your jurisdiction.</p>
-                </article>
-                <article class="faq-item">
-                    <p class="faq-q">What counts as a qualifying swap?</p>
-                    <p class="faq-a">A qualifying swap is a completed transaction made by a user who arrived through your referral link. Self-referrals do not qualify. See the <a href="/affiliate/terms">terms and conditions</a> { "for" } the full definition.</p>
-                </article>
-                <article class="faq-item">
-                    <p class="faq-q">What traffic sources work best?</p>
-                    <p class="faq-a">Guides, comparisons, tutorials, wallet recommendations, and community referrals tend to convert best because they reach users who already intend to swap.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="panel final-cta">
-                <div class="section-head">
-                    <h2 class="section-title">Start with the link, not the paperwork</h2>
-                    <p class="section-subtitle">Join in under two minutes and start earning whenever your audience uses CypherGoat to swap.</p>
-                </div>
-                <div class="hero-actions" style="justify-content:center; margin-top:0;">
-                    <a href="/affiliate/register" class="btn-primary">Get my affiliate link <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <p class="final-links">
-                    Already registered? <a href="/affiliate/login" class="login-link">Log in here</a>
-                    &nbsp;|&nbsp;
-                    <a href="/affiliate/terms" class="terms-link">View program terms</a>
-                </p>
-            </div>
-        </section>
-    </main>
+	<main class="main-content affiliate-shell">
+		<section class="panel hero-panel section">
+			<div class="hero-grid">
+				<div>
+					<span class="eyebrow"><i class="fas fa-handshake"></i> Affiliate Program</span>
+					<h1 class="hero-title">
+						Turn crypto traffic into
+						<span class="accent">repeat revenue.</span>
+					</h1>
+					<p class="hero-copy">
+						Share CypherGoat with your audience and earn up to 50% of our fees on every qualifying swap. Fast signup, direct crypto payouts, and a straightforward value proposition built for crypto-native audiences.
+					</p>
+					<div class="hero-actions">
+						<a href="/affiliate/register" class="btn-primary">Start earning for free <i class="fas fa-arrow-right"></i></a>
+						<a href="/affiliate/login" class="btn-secondary">Existing affiliate login</a>
+					</div>
+					<div class="hero-notes">
+						<span class="pill"><i class="fas fa-bolt"></i> Instant signup</span>
+						<span class="pill"><i class="fas fa-link"></i> Permanent attribution</span>
+						<span class="pill"><i class="fas fa-wallet"></i> Crypto payouts</span>
+						<span class="pill"><i class="fas fa-chart-line"></i> Real-time dashboard</span>
+					</div>
+				</div>
+				<div class="hero-aside">
+					<div class="spotlight-card">
+						<div>
+							<span class="spotlight-kicker">Topline Offer</span>
+							<p class="spotlight-value"><span>50%</span></p>
+							<p class="spotlight-copy">
+								Earn a share of CypherGoat fees whenever your audience swaps through your link. No application review. No manual approval queue.
+							</p>
+						</div>
+						<div class="mini-grid">
+							<div class="mini-card">
+								<span class="mini-label">Minimum payout</span>
+								<span class="mini-value">$200 equivalent</span>
+							</div>
+							<div class="mini-card">
+								<span class="mini-label">Payout speed</span>
+								<span class="mini-value">24-48 hours</span>
+							</div>
+							<div class="mini-card">
+								<span class="mini-label">Payment method</span>
+								<span class="mini-value">Any supported coin</span>
+							</div>
+							<div class="mini-card">
+								<span class="mini-label">Best for</span>
+								<span class="mini-value">Crypto-native audiences</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="section">
+			<div class="stats-grid">
+				<div class="stat-card">
+					<span class="stat-value">50%</span>
+					<span class="stat-caption">Commission on qualifying swaps referred through your tracking link.</span>
+				</div>
+				<div class="stat-card">
+					<span class="stat-value">$200</span>
+					<span class="stat-caption">Minimum payout threshold in BTC or another supported asset.</span>
+				</div>
+				<div class="stat-card">
+					<span class="stat-value">Real-time</span>
+					<span class="stat-caption">Dashboard reporting for clicks, conversions, and earned balance.</span>
+				</div>
+				<div class="stat-card">
+					<span class="stat-value">Global</span>
+					<span class="stat-caption">No country-based join restrictions, subject to local compliance.</span>
+				</div>
+			</div>
+		</section>
+		<section class="section">
+			<div class="section-head">
+				<h2 class="section-title">How it works</h2>
+				<p class="section-subtitle">Fast onboarding, clear attribution, and the same no-nonsense positioning the core product already uses.</p>
+			</div>
+			<div class="steps-grid">
+				<article class="card">
+					<div class="step-head">
+						<span class="step-number">1</span>
+						<h3 class="step-title">Create your account</h3>
+					</div>
+					<p class="step-copy">Register with your email and password. There is no application form and no approval wait.</p>
+				</article>
+				<article class="card">
+					<div class="step-head">
+						<span class="step-number">2</span>
+						<h3 class="step-title">Grab your referral link</h3>
+					</div>
+					<p class="step-copy">Your dashboard gives you a unique tracking link you can drop into videos, guides, bios, newsletters, and community posts.</p>
+				</article>
+				<article class="card">
+					<div class="step-head">
+						<span class="step-number">3</span>
+						<h3 class="step-title">Send qualified traffic</h3>
+					</div>
+					<p class="step-copy">When users click through and complete swaps on CypherGoat, those qualifying transactions are attributed back to you.</p>
+				</article>
+				<article class="card">
+					<div class="step-head">
+						<span class="step-number">4</span>
+						<h3 class="step-title">Withdraw in crypto</h3>
+					</div>
+					<p class="step-copy">Track performance in real time and request payout once you cross the minimum threshold.</p>
+				</article>
+			</div>
+		</section>
+		<section class="section">
+			<div class="detail-grid">
+				<div class="panel commission-panel">
+					<span class="commission-badge"><i class="fas fa-percent"></i> Commission structure</span>
+					<p class="commission-value"><span>Up to 50%</span></p>
+					<p class="commission-copy">
+						The pitch is simple: send users who already need a privacy-conscious swap aggregator, and earn a revenue share when they transact. No hidden tiers and no cluttered explanation block.
+					</p>
+					<ul class="detail-list">
+						<li><i class="fas fa-check-circle"></i><span>Commissions are credited after a referred swap confirms.</span></li>
+						<li><i class="fas fa-check-circle"></i><span>Payouts are requested from your dashboard and sent directly to your wallet.</span></li>
+						<li><i class="fas fa-check-circle"></i><span>Referrals remain tied to your tracking link for future qualifying swaps.</span></li>
+					</ul>
+				</div>
+				<div class="breakdown-stack">
+					<div class="card breakdown-card">
+						<span class="breakdown-label">When do I get paid?</span>
+						<span class="breakdown-value">After swaps confirm</span>
+						<p>Balances update after confirmation, and payout requests are typically handled within 24-48 hours.</p>
+					</div>
+					<div class="card breakdown-card">
+						<span class="breakdown-label">What is the threshold?</span>
+						<span class="breakdown-value">$200 minimum</span>
+						<p>Withdraw in BTC or another supported coin once your balance reaches the equivalent of 200 USD.</p>
+					</div>
+					<div class="card breakdown-card">
+						<span class="breakdown-label">How is attribution handled?</span>
+						<span class="breakdown-value">Unique referral link</span>
+						<p>Use your personal affiliate URL across your content and traffic sources. Self-referrals do not qualify.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="section">
+			<div class="section-head">
+				<h2 class="section-title">Who this fits</h2>
+				<p class="section-subtitle">The page should speak to the same people already using CypherGoat: privacy-minded users, educators, builders, and communities around crypto execution.</p>
+			</div>
+			<div class="audience-grid">
+				<article class="audience-card">
+					<span class="audience-icon"><i class="fas fa-video"></i></span>
+					<h3>Creators and streamers</h3>
+					<p>Add your link to descriptions, pinned comments, and callouts wherever you already discuss swaps and privacy tools.</p>
+				</article>
+				<article class="audience-card">
+					<span class="audience-icon"><i class="fas fa-pen-nib"></i></span>
+					<h3>Writers and newsletter operators</h3>
+					<p>Monetize comparison posts, tutorials, and market explainers without forcing readers through a sales-heavy funnel.</p>
+				</article>
+				<article class="audience-card">
+					<span class="audience-icon"><i class="fas fa-user-shield"></i></span>
+					<h3>Privacy-first communities</h3>
+					<p>CypherGoat already resonates with users looking for open, privacy-conscious swap flows, especially around XMR-adjacent audiences.</p>
+				</article>
+				<article class="audience-card">
+					<span class="audience-icon"><i class="fas fa-share-nodes"></i></span>
+					<h3>Social channels and communities</h3>
+					<p>Telegram groups, X accounts, Discord servers, and niche forums can all drive recurring qualified traffic.</p>
+				</article>
+				<article class="audience-card">
+					<span class="audience-icon"><i class="fas fa-code"></i></span>
+					<h3>Wallets and app builders</h3>
+					<p>Integrate or surface your link inside products where users already need a swap option and a clear destination.</p>
+				</article>
+				<article class="audience-card">
+					<span class="audience-icon"><i class="fas fa-users"></i></span>
+					<h3>Community operators</h3>
+					<p>If people ask you where to swap, you can turn that recommendation into a measurable revenue stream.</p>
+				</article>
+			</div>
+		</section>
+		<section class="section">
+			<div class="section-head">
+				<h2 class="section-title">Frequently asked questions</h2>
+				<p class="section-subtitle">Short answers, consistent styling, and less visual noise.</p>
+			</div>
+			<div class="faq-grid">
+				<article class="faq-item">
+					<p class="faq-q">How and when are commissions paid?</p>
+					<p class="faq-a">Commissions are credited once a referred swap confirms on-chain. Payout requests are sent from your dashboard and are typically processed within 24-48 hours.</p>
+				</article>
+				<article class="faq-item">
+					<p class="faq-q">What is the minimum payout threshold?</p>
+					<p class="faq-a">The minimum payout is 200 USD equivalent in your chosen supported coin. Balances roll over until you decide to withdraw.</p>
+				</article>
+				<article class="faq-item">
+					<p class="faq-q">Which cryptocurrencies can I be paid in?</p>
+					<p class="faq-a">Payouts are available in Bitcoin and other supported cryptocurrencies. Set your preferred payout asset from the affiliate dashboard.</p>
+				</article>
+				<article class="faq-item">
+					<p class="faq-q">Is there an approval process to join?</p>
+					<p class="faq-a">No. Registration is immediate and free, and your links are available as soon as the account is created.</p>
+				</article>
+				<article class="faq-item">
+					<p class="faq-q">Can I promote on social media, YouTube, or paid ads?</p>
+					<p class="faq-a">Social media, YouTube, blogs, newsletters, forums, and other organic channels are allowed. Paid search bidding on the CypherGoat brand name is not. See the <a href="/affiliate/terms">full terms</a> { "for" } details.</p>
+				</article>
+				<article class="faq-item">
+					<p class="faq-q">Are there geographic restrictions?</p>
+					<p class="faq-a">There are no country-based restrictions on joining the program. You remain responsible for complying with the laws in your jurisdiction.</p>
+				</article>
+				<article class="faq-item">
+					<p class="faq-q">What counts as a qualifying swap?</p>
+					<p class="faq-a">A qualifying swap is a completed transaction made by a user who arrived through your referral link. Self-referrals do not qualify. See the <a href="/affiliate/terms">terms and conditions</a> { "for" } the full definition.</p>
+				</article>
+				<article class="faq-item">
+					<p class="faq-q">What traffic sources work best?</p>
+					<p class="faq-a">Guides, comparisons, tutorials, wallet recommendations, and community referrals tend to convert best because they reach users who already intend to swap.</p>
+				</article>
+			</div>
+		</section>
+		<section class="section">
+			<div class="panel final-cta">
+				<div class="section-head">
+					<h2 class="section-title">Start with the link, not the paperwork</h2>
+					<p class="section-subtitle">Join in under two minutes and start earning whenever your audience uses CypherGoat to swap.</p>
+				</div>
+				<div class="hero-actions" style="justify-content:center; margin-top:0;">
+					<a href="/affiliate/register" class="btn-primary">Get my affiliate link <i class="fas fa-arrow-right"></i></a>
+				</div>
+				<p class="final-links">
+					Already registered? <a href="/affiliate/login" class="login-link">Log in here</a>
+					&nbsp;|&nbsp;
+					<a href="/affiliate/terms" class="terms-link">View program terms</a>
+				</p>
+			</div>
+		</section>
+	</main>
 }
+
 templ AffiliatePortalStyles() {
-    <style>
+	<style>
     html, body {
         margin: 0;
         scroll-behavior: smooth;
@@ -895,10 +852,10 @@ templ AffiliatePortalStyles() {
 
     body {
         background:
-            radial-gradient(circle at top, rgba(0, 136, 255, 0.14), transparent 28%),
-            linear-gradient(180deg, #121520 0%, #0f131d 100%);
+            radial-gradient(circle at top, rgba(233, 226, 209, 0.08), transparent 28%),
+            linear-gradient(180deg, #0b0d14 0%, #0d1118 100%);
         font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
-        color: #e5edf7;
+        color: #e5e7eb;
     }
 
     .aff-page {
@@ -925,10 +882,12 @@ templ AffiliatePortalStyles() {
     .aff-alert,
     .aff-info,
     .aff-balance-card {
-        background: linear-gradient(145deg, rgba(26, 31, 46, 0.96), rgba(34, 38, 51, 0.96));
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
         border: 1px solid rgba(255, 255, 255, 0.06);
         border-radius: 22px;
-        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+        box-shadow: 0 24px 56px rgba(0, 0, 0, 0.26);
     }
 
     .aff-hero,
@@ -954,7 +913,7 @@ templ AffiliatePortalStyles() {
         width: 18rem;
         height: 18rem;
         border-radius: 999px;
-        background: radial-gradient(circle, rgba(0, 136, 255, 0.16), transparent 70%);
+        background: radial-gradient(circle, rgba(233, 226, 209, 0.1), transparent 70%);
         pointer-events: none;
     }
 
@@ -964,9 +923,9 @@ templ AffiliatePortalStyles() {
         gap: 0.55rem;
         padding: 0.45rem 0.85rem;
         border-radius: 999px;
-        background: rgba(0, 136, 255, 0.08);
-        border: 1px solid rgba(0, 136, 255, 0.18);
-        color: #8fc8ff;
+        background: rgba(231, 234, 239, 0.06);
+        border: 1px solid rgba(231, 234, 239, 0.12);
+        color: #ddd4bf;
         font-size: 0.8rem;
         font-weight: 700;
         letter-spacing: 0.12em;
@@ -983,7 +942,7 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-title .accent {
-        background: linear-gradient(135deg, #8ed0ff, #0088ff 48%, #4dacff 100%);
+        background: linear-gradient(135deg, #ffffff, #ddd4bf 58%, #9098a8 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -996,7 +955,7 @@ templ AffiliatePortalStyles() {
     .aff-table th,
     .aff-list,
     .aff-list li {
-        color: #9ca9bd;
+        color: #98a1b1;
         line-height: 1.7;
     }
 
@@ -1033,10 +992,10 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-btn {
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
-        border-color: rgba(125, 190, 255, 0.22);
-        box-shadow: 0 12px 28px rgba(0, 102, 204, 0.28);
+        background: #e7eaef;
+        color: #11151c;
+        border-color: rgba(231, 234, 239, 0.18);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
 
     .aff-btn:hover,
@@ -1054,21 +1013,24 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-btn-success {
-        background: linear-gradient(135deg, #22c55e, #15803d);
-        color: #ffffff;
-        box-shadow: 0 12px 28px rgba(34, 197, 94, 0.2);
+        background: rgba(127, 214, 180, 0.12);
+        border-color: rgba(127, 214, 180, 0.2);
+        color: #b5ead2;
+        box-shadow: none;
     }
 
     .aff-btn-danger {
-        background: linear-gradient(135deg, #ef4444, #b91c1c);
-        color: #ffffff;
-        box-shadow: 0 12px 28px rgba(239, 68, 68, 0.2);
+        background: rgba(248, 113, 113, 0.1);
+        border-color: rgba(248, 113, 113, 0.18);
+        color: #f4b1b1;
+        box-shadow: none;
     }
 
     .aff-btn-muted {
-        background: linear-gradient(135deg, #475569, #334155);
-        color: #ffffff;
-        box-shadow: 0 12px 28px rgba(71, 85, 105, 0.18);
+        background: rgba(255, 255, 255, 0.03);
+        color: #dce8f6;
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: none;
     }
 
     .aff-btn:disabled,
@@ -1124,7 +1086,7 @@ templ AffiliatePortalStyles() {
     .aff-check-list i,
     .aff-terms-list i,
     .aff-eyebrow i {
-        color: #4dacff;
+        color: #ddd4bf;
         margin-top: 0.2rem;
     }
 
@@ -1139,9 +1101,11 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-label {
-        color: #d8e2ee;
-        font-size: 0.96rem;
+        color: #d7dde6;
+        font-size: 0.78rem;
         font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
     }
 
     .aff-input,
@@ -1152,7 +1116,7 @@ templ AffiliatePortalStyles() {
         padding: 0.95rem 1rem;
         border-radius: 14px;
         border: 1px solid rgba(255, 255, 255, 0.08);
-        background: rgba(13, 18, 28, 0.52);
+        background: #0b0e13;
         color: #eff5fb;
         font-size: 1rem;
         transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
@@ -1161,9 +1125,9 @@ templ AffiliatePortalStyles() {
     .aff-input:focus,
     .aff-select:focus {
         outline: none;
-        border-color: rgba(0, 136, 255, 0.55);
-        box-shadow: 0 0 0 3px rgba(0, 136, 255, 0.15);
-        background: rgba(15, 22, 34, 0.78);
+        border-color: rgba(231, 234, 239, 0.24);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
+        background: #0d1118;
     }
 
     .aff-code {
@@ -1182,21 +1146,21 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-alert--error {
-        border-color: rgba(239, 68, 68, 0.3);
-        background: linear-gradient(145deg, rgba(68, 18, 18, 0.9), rgba(46, 18, 22, 0.92));
-        color: #fca5a5;
+        border-color: rgba(248, 113, 113, 0.18);
+        background: rgba(248, 113, 113, 0.08);
+        color: #f4b1b1;
     }
 
     .aff-alert--success {
-        border-color: rgba(34, 197, 94, 0.26);
-        background: linear-gradient(145deg, rgba(11, 44, 27, 0.92), rgba(16, 52, 35, 0.92));
-        color: #86efac;
+        border-color: rgba(127, 214, 180, 0.2);
+        background: rgba(127, 214, 180, 0.08);
+        color: #b5ead2;
     }
 
     .aff-info {
-        border-color: rgba(59, 130, 246, 0.24);
-        background: linear-gradient(145deg, rgba(18, 34, 58, 0.92), rgba(20, 39, 68, 0.92));
-        color: #93c5fd;
+        border-color: rgba(233, 226, 209, 0.16);
+        background: rgba(233, 226, 209, 0.06);
+        color: #e6dfd1;
     }
 
     .aff-stats-grid,
@@ -1219,7 +1183,7 @@ templ AffiliatePortalStyles() {
     .aff-summary-label {
         display: block;
         margin-bottom: 0.5rem;
-        color: #7f8ba2;
+        color: #7f8898;
         font-size: 0.82rem;
         font-weight: 700;
         letter-spacing: 0.08em;
@@ -1241,12 +1205,12 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-balance-value {
-        color: #86efac;
+        color: #b5ead2;
         margin-bottom: 0.35rem;
     }
 
     .aff-balance-label {
-        color: #95a3b8;
+        color: #95a1b2;
         text-transform: uppercase;
         letter-spacing: 0.1em;
         font-size: 0.82rem;
@@ -1281,7 +1245,7 @@ templ AffiliatePortalStyles() {
         overflow-x: auto;
         border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.06);
-        background: rgba(7, 11, 18, 0.28);
+        background: rgba(7, 11, 18, 0.24);
     }
 
     .aff-table {
@@ -1299,7 +1263,7 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-table th {
-        color: #d8e2ee;
+        color: #e5e7eb;
         font-size: 0.85rem;
         font-weight: 700;
         letter-spacing: 0.04em;
@@ -1325,34 +1289,39 @@ templ AffiliatePortalStyles() {
 
     .aff-status--complete,
     .aff-chip--green {
-        background: rgba(34, 197, 94, 0.12);
-        color: #86efac;
-        border: 1px solid rgba(34, 197, 94, 0.18);
+        background: rgba(127, 214, 180, 0.12);
+        color: #b5ead2;
+        border: 1px solid rgba(127, 214, 180, 0.18);
     }
 
     .aff-status--pending,
     .aff-chip--amber {
-        background: rgba(245, 158, 11, 0.12);
-        color: #fcd34d;
-        border: 1px solid rgba(245, 158, 11, 0.18);
+        background: rgba(244, 210, 140, 0.1);
+        color: #f3d18b;
+        border: 1px solid rgba(244, 210, 140, 0.16);
     }
 
     .aff-status--approved,
     .aff-chip--blue {
-        background: rgba(59, 130, 246, 0.12);
-        color: #93c5fd;
-        border: 1px solid rgba(59, 130, 246, 0.18);
+        background: rgba(231, 234, 239, 0.08);
+        color: #e7eaef;
+        border: 1px solid rgba(231, 234, 239, 0.14);
     }
 
     .aff-status--rejected,
     .aff-chip--red {
-        background: rgba(239, 68, 68, 0.12);
-        color: #fca5a5;
-        border: 1px solid rgba(239, 68, 68, 0.18);
+        background: rgba(248, 113, 113, 0.1);
+        color: #f4b1b1;
+        border: 1px solid rgba(248, 113, 113, 0.16);
     }
 
     .aff-number-positive {
-        color: #86efac;
+        color: #b5ead2;
+        font-weight: 700;
+    }
+
+    .aff-number-warm {
+        color: #f3d18b;
         font-weight: 700;
     }
 
@@ -1363,12 +1332,12 @@ templ AffiliatePortalStyles() {
     }
 
     .aff-link {
-        color: #76bcff;
+        color: #e9e2d1;
         text-decoration: none;
     }
 
     .aff-link:hover {
-        color: #9fd2ff;
+        color: #faf7ef;
         text-decoration: underline;
     }
 
@@ -1432,342 +1401,326 @@ templ AffiliatePortalStyles() {
 }
 
 templ AffiliateTerms() {
-    @HeaderCustomTitle("Affiliate Terms", "https://cyphergoat.com/affiliate/terms", "Read the CypherGoat Affiliate Program terms and conditions. Transparent rules, fair commissions, and on-chain crypto payouts."){}
-    @AffiliatePortalStyles()
-    <div class="aff-page aff-page--narrow">
-        <section class="aff-hero">
-            <span class="aff-eyebrow"><i class="fas fa-scale-balanced"></i> Affiliate Terms</span>
-            <h1 class="aff-title">Program <span class="accent">terms and conditions</span></h1>
-            <p class="aff-subtitle">The affiliate portal should carry the same visual language as the landing page while keeping the legal content straightforward and readable.</p>
-        </section>
-
-        <section class="aff-page-section aff-terms-grid">
-            <article class="aff-card">
-                <h2 class="aff-card-title">1. Eligibility</h2>
-                <ul class="aff-terms-list aff-muted">
-                    <li><i class="fas fa-check-circle"></i><span>CypherGoat reserves the right to reject any application at its sole discretion.</span></li>
-                </ul>
-            </article>
-            <article class="aff-card">
-                <h2 class="aff-card-title">2. Affiliate responsibilities</h2>
-                <ul class="aff-terms-list aff-muted">
-                    <li><i class="fas fa-check-circle"></i><span>You agree to promote CypherGoat in a lawful and ethical manner.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>You may not engage in spam, misleading advertising, or fraudulent activities.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>You are responsible for ensuring compliance with applicable laws and regulations.</span></li>
-                </ul>
-            </article>
-            <article class="aff-card">
-                <h2 class="aff-card-title">3. Commissions and payouts</h2>
-                <ul class="aff-terms-list aff-muted">
-                    <li><i class="fas fa-check-circle"></i><span>Affiliates earn commission for qualifying transactions made through their referral link.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Payments are made in cryptocurrency, with a minimum payout threshold of 0.002 Bitcoin.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>CypherGoat may adjust commission rates at any time.</span></li>
-                </ul>
-            </article>
-            <article class="aff-card">
-                <h2 class="aff-card-title">4. Restrictions</h2>
-                <ul class="aff-terms-list aff-muted">
-                    <li><i class="fas fa-check-circle"></i><span>Paid advertising may not bid on the CypherGoat brand name or close variations.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Impersonation, misleading claims, or deceptive promotion are prohibited.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Self-referrals or fraudulent transactions result in disqualification.</span></li>
-                </ul>
-            </article>
-            <article class="aff-card">
-                <h2 class="aff-card-title">5. Termination and changes</h2>
-                <ul class="aff-terms-list aff-muted">
-                    <li><i class="fas fa-check-circle"></i><span>CypherGoat may terminate or modify the program at any time.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Violations may result in suspension without prior notice.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Unclaimed commissions may be forfeited in cases of rule violations.</span></li>
-                </ul>
-            </article>
-            <article class="aff-card">
-                <h2 class="aff-card-title">6. Liability and disclaimer</h2>
-                <ul class="aff-terms-list aff-muted">
-                    <li><i class="fas fa-check-circle"></i><span>CypherGoat is not liable for indirect damages resulting from program participation.</span></li>
-                    <li><i class="fas fa-check-circle"></i><span>Affiliates are independent contractors, not employees or partners.</span></li>
-                </ul>
-            </article>
-        </section>
-
-        <section class="aff-page-section aff-panel">
-            <p class="aff-copy">By using the affiliate program, you acknowledge and agree to these terms. For questions, contact support through the main CypherGoat channels.</p>
-            <div class="aff-actions">
-                <a href="/affiliate" class="aff-btn-secondary">Back to affiliate page</a>
-                <a href="/affiliate/login" class="aff-btn">Affiliate login</a>
-            </div>
-        </section>
-    </div>
-    @Footer(){}
+	@HeaderCustomTitle("Affiliate Terms", "https://cyphergoat.com/affiliate/terms", "Read the CypherGoat Affiliate Program terms and conditions. Transparent rules, fair commissions, and on-chain crypto payouts.")
+	@AffiliatePortalStyles()
+	<div class="aff-page aff-page--narrow">
+		<section class="aff-hero">
+			<span class="aff-eyebrow"><i class="fas fa-scale-balanced"></i> Affiliate Terms</span>
+			<h1 class="aff-title">Program <span class="accent">terms and conditions</span></h1>
+			<p class="aff-subtitle">The affiliate portal should carry the same visual language as the landing page while keeping the legal content straightforward and readable.</p>
+		</section>
+		<section class="aff-page-section aff-terms-grid">
+			<article class="aff-card">
+				<h2 class="aff-card-title">1. Eligibility</h2>
+				<ul class="aff-terms-list aff-muted">
+					<li><i class="fas fa-check-circle"></i><span>CypherGoat reserves the right to reject any application at its sole discretion.</span></li>
+				</ul>
+			</article>
+			<article class="aff-card">
+				<h2 class="aff-card-title">2. Affiliate responsibilities</h2>
+				<ul class="aff-terms-list aff-muted">
+					<li><i class="fas fa-check-circle"></i><span>You agree to promote CypherGoat in a lawful and ethical manner.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>You may not engage in spam, misleading advertising, or fraudulent activities.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>You are responsible for ensuring compliance with applicable laws and regulations.</span></li>
+				</ul>
+			</article>
+			<article class="aff-card">
+				<h2 class="aff-card-title">3. Commissions and payouts</h2>
+				<ul class="aff-terms-list aff-muted">
+					<li><i class="fas fa-check-circle"></i><span>Affiliates earn commission for qualifying transactions made through their referral link.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>Payments are made in cryptocurrency, with a minimum payout threshold of 0.002 Bitcoin.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>CypherGoat may adjust commission rates at any time.</span></li>
+				</ul>
+			</article>
+			<article class="aff-card">
+				<h2 class="aff-card-title">4. Restrictions</h2>
+				<ul class="aff-terms-list aff-muted">
+					<li><i class="fas fa-check-circle"></i><span>Paid advertising may not bid on the CypherGoat brand name or close variations.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>Impersonation, misleading claims, or deceptive promotion are prohibited.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>Self-referrals or fraudulent transactions result in disqualification.</span></li>
+				</ul>
+			</article>
+			<article class="aff-card">
+				<h2 class="aff-card-title">5. Termination and changes</h2>
+				<ul class="aff-terms-list aff-muted">
+					<li><i class="fas fa-check-circle"></i><span>CypherGoat may terminate or modify the program at any time.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>Violations may result in suspension without prior notice.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>Unclaimed commissions may be forfeited in cases of rule violations.</span></li>
+				</ul>
+			</article>
+			<article class="aff-card">
+				<h2 class="aff-card-title">6. Liability and disclaimer</h2>
+				<ul class="aff-terms-list aff-muted">
+					<li><i class="fas fa-check-circle"></i><span>CypherGoat is not liable for indirect damages resulting from program participation.</span></li>
+					<li><i class="fas fa-check-circle"></i><span>Affiliates are independent contractors, not employees or partners.</span></li>
+				</ul>
+			</article>
+		</section>
+		<section class="aff-page-section aff-panel">
+			<p class="aff-copy">By using the affiliate program, you acknowledge and agree to these terms. For questions, contact support through the main CypherGoat channels.</p>
+			<div class="aff-actions">
+				<a href="/affiliate" class="aff-btn-secondary">Back to affiliate page</a>
+				<a href="/affiliate/login" class="aff-btn">Affiliate login</a>
+			</div>
+		</section>
+	</div>
+	@Footer()
 }
 
 templ AffiliateLogin(errors []string, success string) {
-    @Header(){}
-    @AffiliatePortalStyles()
-    <div class="aff-page aff-page--auth">
-        <section class="aff-auth-grid">
-            <aside class="aff-side-card">
-                <span class="aff-eyebrow"><i class="fas fa-lock"></i> Affiliate Access</span>
-                <h1 class="aff-title">Log in to the <span class="accent">affiliate portal</span></h1>
-                <p class="aff-subtitle">View referral activity, copy your link, check commission totals, and request payouts from the same portal style used across the rest of the affiliate area.</p>
-                <ul class="aff-check-list aff-muted">
-                    <li><i class="fas fa-chart-line"></i><span>Track clicks, completed swaps, and earned commission.</span></li>
-                    <li><i class="fas fa-link"></i><span>Access your referral URL and share it anywhere your audience already discovers swap tools.</span></li>
-                    <li><i class="fas fa-wallet"></i><span>Request payouts directly in supported cryptocurrencies.</span></li>
-                </ul>
-            </aside>
-
-            <section class="aff-panel">
-                <h2 class="aff-section-title">Affiliate login</h2>
-                <p class="aff-muted">Use the username and password created for your affiliate account.</p>
-
-                if len(errors) > 0 {
-                    <div class="aff-page-section aff-alert aff-alert--error">
-                        <ul>
-                            for _, err := range errors {
-                                <li>{ err }</li>
-                            }
-                        </ul>
-                    </div>
-                }
-
-                if success != "" {
-                    <div class="aff-page-section aff-alert aff-alert--success">{ success }</div>
-                }
-
-                <form method="POST" action="/affiliate/login" class="aff-form-grid aff-page-section">
-                    <div class="aff-form-group">
-                        <label class="aff-label" for="username">Username</label>
-                        <input class="aff-input" type="text" id="username" name="username" required placeholder="Enter your username" autocomplete="username"/>
-                    </div>
-                    <div class="aff-form-group">
-                        <label class="aff-label" for="password">Password</label>
-                        <input class="aff-input" type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password"/>
-                    </div>
-                    <button type="submit" class="aff-btn">Log in</button>
-                </form>
-
-                <div class="aff-page-section aff-muted">
-                    Need an account? <a href="/affiliate/register" class="aff-link">Create an affiliate account</a>
-                </div>
-            </section>
-        </section>
-    </div>
-    @Footer(){}
+	@Header()
+	@AffiliatePortalStyles()
+	<div class="aff-page aff-page--auth">
+		<section class="aff-auth-grid">
+			<aside class="aff-side-card">
+				<span class="aff-eyebrow"><i class="fas fa-lock"></i> Affiliate Access</span>
+				<h1 class="aff-title">Log in to the <span class="accent">affiliate portal</span></h1>
+				<p class="aff-subtitle">View referral activity, copy your link, check commission totals, and request payouts from the same portal style used across the rest of the affiliate area.</p>
+				<ul class="aff-check-list aff-muted">
+					<li><i class="fas fa-chart-line"></i><span>Track clicks, completed swaps, and earned commission.</span></li>
+					<li><i class="fas fa-link"></i><span>Access your referral URL and share it anywhere your audience already discovers swap tools.</span></li>
+					<li><i class="fas fa-wallet"></i><span>Request payouts directly in supported cryptocurrencies.</span></li>
+				</ul>
+			</aside>
+			<section class="aff-panel">
+				<h2 class="aff-section-title">Affiliate login</h2>
+				<p class="aff-muted">Use the username and password created for your affiliate account.</p>
+				if len(errors) > 0 {
+					<div class="aff-page-section aff-alert aff-alert--error">
+						<ul>
+							for _, err := range errors {
+								<li>{ err }</li>
+							}
+						</ul>
+					</div>
+				}
+				if success != "" {
+					<div class="aff-page-section aff-alert aff-alert--success">{ success }</div>
+				}
+				<form method="POST" action="/affiliate/login" class="aff-form-grid aff-page-section">
+					<div class="aff-form-group">
+						<label class="aff-label" for="username">Username</label>
+						<input class="aff-input" type="text" id="username" name="username" required placeholder="Enter your username" autocomplete="username"/>
+					</div>
+					<div class="aff-form-group">
+						<label class="aff-label" for="password">Password</label>
+						<input class="aff-input" type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password"/>
+					</div>
+					<button type="submit" class="aff-btn">Log in</button>
+				</form>
+				<div class="aff-page-section aff-muted">
+					Need an account? <a href="/affiliate/register" class="aff-link">Create an affiliate account</a>
+				</div>
+			</section>
+		</section>
+	</div>
+	@Footer()
 }
 
 templ AffiliateRegister(errors []string, success string, token string) {
-    @Header(){}
-    @AffiliatePortalStyles()
-    <div class="aff-page aff-page--auth">
-        <section class="aff-auth-grid">
-            <aside class="aff-side-card">
-                <span class="aff-eyebrow"><i class="fas fa-user-plus"></i> Affiliate Signup</span>
-                <h1 class="aff-title">Complete your <span class="accent">registration</span></h1>
-                <p class="aff-subtitle">Finish setting up your affiliate account and get immediate access to your referral link and dashboard.</p>
-                <ul class="aff-check-list aff-muted">
-                    <li><i class="fas fa-bolt"></i><span>No manual approval queue once registration is complete.</span></li>
-                    <li><i class="fas fa-shield"></i><span>Use a strong password. This account controls your payout requests and referral reporting.</span></li>
-                    <li><i class="fas fa-right-to-bracket"></i><span>After registration, log in to manage links, balances, and payout details.</span></li>
-                </ul>
-            </aside>
-
-            <section class="aff-panel">
-                <h2 class="aff-section-title">Create affiliate account</h2>
-                <p class="aff-muted">Choose a username, attach your email, and finish setup.</p>
-
-                if len(errors) > 0 {
-                    <div class="aff-page-section aff-alert aff-alert--error">
-                        <ul>
-                            for _, err := range errors {
-                                <li>{ err }</li>
-                            }
-                        </ul>
-                    </div>
-                }
-
-                if success != "" {
-                    <div class="aff-page-section aff-alert aff-alert--success">
-                        { success }
-                        <div style="margin-top: 0.8rem;">
-                            <a href="/affiliate/login" class="aff-link">Log in now</a>
-                        </div>
-                    </div>
-                } else {
-                    <form method="POST" action="/affiliate/register" class="aff-form-grid aff-page-section">
-                        <input type="hidden" name="token" value={ token } />
-                        <div class="aff-form-group">
-                            <label class="aff-label" for="username">Username</label>
-                            <input class="aff-input" type="text" id="username" name="username" required placeholder="Choose a username" autocomplete="username"/>
-                        </div>
-                        <div class="aff-form-group">
-                            <label class="aff-label" for="email">Email</label>
-                            <input class="aff-input" type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email"/>
-                        </div>
-                        <div class="aff-form-group">
-                            <label class="aff-label" for="password">Password</label>
-                            <input class="aff-input" type="password" id="password" name="password" required placeholder="Create a strong password" autocomplete="new-password"/>
-                        </div>
-                        <div class="aff-form-group">
-                            <label class="aff-label" for="confirm_password">Confirm password</label>
-                            <input class="aff-input" type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password" autocomplete="new-password"/>
-                        </div>
-                        <button type="submit" class="aff-btn">Complete registration</button>
-                    </form>
-                }
-
-                <div class="aff-page-section aff-muted">
-                    Already registered? <a href="/affiliate/login" class="aff-link">Log in here</a>
-                </div>
-            </section>
-        </section>
-    </div>
-    @Footer(){}
+	@Header()
+	@AffiliatePortalStyles()
+	<div class="aff-page aff-page--auth">
+		<section class="aff-auth-grid">
+			<aside class="aff-side-card">
+				<span class="aff-eyebrow"><i class="fas fa-user-plus"></i> Affiliate Signup</span>
+				<h1 class="aff-title">Complete your <span class="accent">registration</span></h1>
+				<p class="aff-subtitle">Finish setting up your affiliate account and get immediate access to your referral link and dashboard.</p>
+				<ul class="aff-check-list aff-muted">
+					<li><i class="fas fa-bolt"></i><span>No manual approval queue once registration is complete.</span></li>
+					<li><i class="fas fa-shield"></i><span>Use a strong password. This account controls your payout requests and referral reporting.</span></li>
+					<li><i class="fas fa-right-to-bracket"></i><span>After registration, log in to manage links, balances, and payout details.</span></li>
+				</ul>
+			</aside>
+			<section class="aff-panel">
+				<h2 class="aff-section-title">Create affiliate account</h2>
+				<p class="aff-muted">Choose a username, attach your email, and finish setup.</p>
+				if len(errors) > 0 {
+					<div class="aff-page-section aff-alert aff-alert--error">
+						<ul>
+							for _, err := range errors {
+								<li>{ err }</li>
+							}
+						</ul>
+					</div>
+				}
+				if success != "" {
+					<div class="aff-page-section aff-alert aff-alert--success">
+						{ success }
+						<div style="margin-top: 0.8rem;">
+							<a href="/affiliate/login" class="aff-link">Log in now</a>
+						</div>
+					</div>
+				} else {
+					<form method="POST" action="/affiliate/register" class="aff-form-grid aff-page-section">
+						<input type="hidden" name="token" value={ token }/>
+						<div class="aff-form-group">
+							<label class="aff-label" for="username">Username</label>
+							<input class="aff-input" type="text" id="username" name="username" required placeholder="Choose a username" autocomplete="username"/>
+						</div>
+						<div class="aff-form-group">
+							<label class="aff-label" for="email">Email</label>
+							<input class="aff-input" type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email"/>
+						</div>
+						<div class="aff-form-group">
+							<label class="aff-label" for="password">Password</label>
+							<input class="aff-input" type="password" id="password" name="password" required placeholder="Create a strong password" autocomplete="new-password"/>
+						</div>
+						<div class="aff-form-group">
+							<label class="aff-label" for="confirm_password">Confirm password</label>
+							<input class="aff-input" type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password" autocomplete="new-password"/>
+						</div>
+						<button type="submit" class="aff-btn">Complete registration</button>
+					</form>
+				}
+				<div class="aff-page-section aff-muted">
+					Already registered? <a href="/affiliate/login" class="aff-link">Log in here</a>
+				</div>
+			</section>
+		</section>
+	</div>
+	@Footer()
 }
 
 templ AffiliateDashboard(stats *api.AffiliateStats) {
-    @Header(){}
-    @AffiliatePortalStyles()
-    <div class="aff-page">
-        <section class="aff-hero">
-            <div class="aff-toolbar">
-                <div>
-                    <span class="aff-eyebrow"><i class="fas fa-chart-column"></i> Affiliate Dashboard</span>
-                    <h1 class="aff-title">Referral performance <span class="accent">at a glance</span></h1>
-                    <p class="aff-subtitle">Monitor traffic, qualified swaps, total commission, and payout availability from a dashboard that now matches the landing and auth pages.</p>
-                </div>
-                <div class="aff-toolbar-actions">
-                    <a href="/affiliate/payout" class="aff-btn-success">Request payout</a>
-                    <a href="/affiliate/payout/history" class="aff-btn-secondary">Payout history</a>
-                    <a href="/affiliate/logout" class="aff-btn-danger">Logout</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="aff-page-section aff-stats-grid">
-            <article class="aff-stat-card">
-                <span class="aff-stat-kicker">Total clicks</span>
-                <p class="aff-stat-value">{ fmt.Sprintf("%d", stats.TotalClicks) }</p>
-                <p class="aff-muted">All tracked referral visits and swap starts.</p>
-            </article>
-            <article class="aff-stat-card">
-                <span class="aff-stat-kicker">Completed swaps</span>
-                <p class="aff-stat-value">{ fmt.Sprintf("%d", stats.TotalSwaps) }</p>
-                <p class="aff-muted">Successfully completed swaps attributed to your link.</p>
-            </article>
-            <article class="aff-stat-card">
-                <span class="aff-stat-kicker">Total commission</span>
-                <p class="aff-stat-value">{ fmt.Sprintf("$%.2f", stats.TotalCommission) }</p>
-                <p class="aff-muted">All-time affiliate earnings.</p>
-            </article>
-            <article class="aff-stat-card">
-                <span class="aff-stat-kicker">Pending payout</span>
-                <p class="aff-stat-value">{ fmt.Sprintf("$%.2f", stats.PendingPayout) }</p>
-                <p class="aff-muted">Available balance before payout request.</p>
-            </article>
-        </section>
-
-        <section class="aff-page-section aff-panel">
-            <div class="aff-toolbar">
-                <div>
-                    <h2 class="aff-section-title">Your referral link</h2>
-                    <p class="aff-muted">Share this URL in videos, guides, comparison pages, newsletters, and crypto communities.</p>
-                </div>
-                <div class="aff-referral-actions">
-                    <a href="/affiliate/payout" class="aff-btn-success">Request payout</a>
-                    <a href="/affiliate/payout/history" class="aff-btn-muted">Payout history</a>
-                </div>
-            </div>
-
-            if stats.ReferralLink != "" {
-                <div class="aff-referral-row">
-                    <input type="text" class="aff-code" value={ fmt.Sprintf("https://cyphergoat.com/?ref=%s", stats.ReferralLink) } readonly id="referral-link"/>
-                    <button class="aff-btn" onclick="copyReferralLink()" type="button">Copy link</button>
-                </div>
-            } else {
-                <div class="aff-alert aff-alert--error">
-                    <p>Your referral link is being generated. Contact support if this persists.</p>
-                    <p><strong>Affiliate ID:</strong> { stats.AffiliateID }</p>
-                    <p><strong>Referral Code:</strong> "{ stats.ReferralLink }"</p>
-                </div>
-            }
-        </section>
-
-        if len(stats.AllTrades) > 0 {
-            <section class="aff-page-section aff-table-section">
-                <h2 class="aff-section-title">All referral trades</h2>
-                <div class="aff-table-wrap">
-                    <table class="aff-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>ID</th>
-                                <th>Swap</th>
-                                <th>Amount</th>
-                                <th>Exchange</th>
-                                <th>Status</th>
-                                <th>Commission</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            for _, trade := range stats.AllTrades {
-                                <tr>
-                                    <td>{ trade.Date }</td>
-                                    <td><span class="aff-code">{ trade.ID }</span></td>
-                                    <td>{ trade.Coin1 } -> { trade.Coin2 }</td>
-                                    <td>{ fmt.Sprintf("%.4f", trade.Amount) }</td>
-                                    <td>{ trade.Exchange }</td>
-                                    <td>
-                                        if trade.Complete {
-                                            <span class="aff-status aff-status--complete">Complete</span>
-                                        } else {
-                                            <span class="aff-status aff-status--pending">{ trade.Status }</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        if trade.Complete && trade.Commission > 0 {
-                                            <span class="aff-number-positive">{ fmt.Sprintf("$%.2f", trade.Commission) }</span>
-                                        } else {
-                                            <span class="aff-muted">-</span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        } else if len(stats.RecentSwaps) > 0 {
-            <section class="aff-page-section aff-table-section">
-                <h2 class="aff-section-title">Recent swaps</h2>
-                <div class="aff-table-wrap">
-                    <table class="aff-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Swap</th>
-                                <th>Amount</th>
-                                <th>Exchange</th>
-                                <th>Commission</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            for _, swap := range stats.RecentSwaps {
-                                <tr>
-                                    <td>{ swap.Date }</td>
-                                    <td>{ swap.Coin1 } -> { swap.Coin2 }</td>
-                                    <td>{ fmt.Sprintf("%.4f", swap.Amount) }</td>
-                                    <td>{ swap.Exchange }</td>
-                                    <td><span class="aff-number-positive">{ fmt.Sprintf("$%.2f", swap.Commission) }</span></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        }
-    </div>
-
-    <script>
+	@Header()
+	@AffiliatePortalStyles()
+	<div class="aff-page">
+		<section class="aff-hero">
+			<div class="aff-toolbar">
+				<div>
+					<span class="aff-eyebrow"><i class="fas fa-chart-column"></i> Affiliate Dashboard</span>
+					<h1 class="aff-title">Referral performance <span class="accent">at a glance</span></h1>
+					<p class="aff-subtitle">Monitor traffic, qualified swaps, total commission, and payout availability from a dashboard that now matches the landing and auth pages.</p>
+				</div>
+				<div class="aff-toolbar-actions">
+					<a href="/affiliate/payout" class="aff-btn-success">Request payout</a>
+					<a href="/affiliate/payout/history" class="aff-btn-secondary">Payout history</a>
+					<a href="/affiliate/logout" class="aff-btn-danger">Logout</a>
+				</div>
+			</div>
+		</section>
+		<section class="aff-page-section aff-stats-grid">
+			<article class="aff-stat-card">
+				<span class="aff-stat-kicker">Total clicks</span>
+				<p class="aff-stat-value">{ fmt.Sprintf("%d", stats.TotalClicks) }</p>
+				<p class="aff-muted">All tracked referral visits and swap starts.</p>
+			</article>
+			<article class="aff-stat-card">
+				<span class="aff-stat-kicker">Completed swaps</span>
+				<p class="aff-stat-value">{ fmt.Sprintf("%d", stats.TotalSwaps) }</p>
+				<p class="aff-muted">Successfully completed swaps attributed to your link.</p>
+			</article>
+			<article class="aff-stat-card">
+				<span class="aff-stat-kicker">Total commission</span>
+				<p class="aff-stat-value">{ fmt.Sprintf("$%.2f", stats.TotalCommission) }</p>
+				<p class="aff-muted">All-time affiliate earnings.</p>
+			</article>
+			<article class="aff-stat-card">
+				<span class="aff-stat-kicker">Pending payout</span>
+				<p class="aff-stat-value">{ fmt.Sprintf("$%.2f", stats.PendingPayout) }</p>
+				<p class="aff-muted">Available balance before payout request.</p>
+			</article>
+		</section>
+		<section class="aff-page-section aff-panel">
+			<div class="aff-toolbar">
+				<div>
+					<h2 class="aff-section-title">Your referral link</h2>
+					<p class="aff-muted">Share this URL in videos, guides, comparison pages, newsletters, and crypto communities.</p>
+				</div>
+				<div class="aff-referral-actions">
+					<a href="/affiliate/payout" class="aff-btn-success">Request payout</a>
+					<a href="/affiliate/payout/history" class="aff-btn-muted">Payout history</a>
+				</div>
+			</div>
+			if stats.ReferralLink != "" {
+				<div class="aff-referral-row">
+					<input type="text" class="aff-code" value={ fmt.Sprintf("https://cyphergoat.com/?ref=%s", stats.ReferralLink) } readonly id="referral-link"/>
+					<button class="aff-btn" onclick="copyReferralLink()" type="button">Copy link</button>
+				</div>
+			} else {
+				<div class="aff-alert aff-alert--error">
+					<p>Your referral link is being generated. Contact support if this persists.</p>
+					<p><strong>Affiliate ID:</strong> { stats.AffiliateID }</p>
+					<p><strong>Referral Code:</strong> "{ stats.ReferralLink }"</p>
+				</div>
+			}
+		</section>
+		if len(stats.AllTrades) > 0 {
+			<section class="aff-page-section aff-table-section">
+				<h2 class="aff-section-title">All referral trades</h2>
+				<div class="aff-table-wrap">
+					<table class="aff-table">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>ID</th>
+								<th>Swap</th>
+								<th>Amount</th>
+								<th>Exchange</th>
+								<th>Status</th>
+								<th>Commission</th>
+							</tr>
+						</thead>
+						<tbody>
+							for _, trade := range stats.AllTrades {
+								<tr>
+									<td>{ trade.Date }</td>
+									<td><span class="aff-code">{ trade.ID }</span></td>
+									<td>{ trade.Coin1 } -> { trade.Coin2 }</td>
+									<td>{ fmt.Sprintf("%.4f", trade.Amount) }</td>
+									<td>{ trade.Exchange }</td>
+									<td>
+										if trade.Complete {
+											<span class="aff-status aff-status--complete">Complete</span>
+										} else {
+											<span class="aff-status aff-status--pending">{ trade.Status }</span>
+										}
+									</td>
+									<td>
+										if trade.Complete && trade.Commission > 0 {
+											<span class="aff-number-positive">{ fmt.Sprintf("$%.2f", trade.Commission) }</span>
+										} else {
+											<span class="aff-muted">-</span>
+										}
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		} else if len(stats.RecentSwaps) > 0 {
+			<section class="aff-page-section aff-table-section">
+				<h2 class="aff-section-title">Recent swaps</h2>
+				<div class="aff-table-wrap">
+					<table class="aff-table">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Swap</th>
+								<th>Amount</th>
+								<th>Exchange</th>
+								<th>Commission</th>
+							</tr>
+						</thead>
+						<tbody>
+							for _, swap := range stats.RecentSwaps {
+								<tr>
+									<td>{ swap.Date }</td>
+									<td>{ swap.Coin1 } -> { swap.Coin2 }</td>
+									<td>{ fmt.Sprintf("%.4f", swap.Amount) }</td>
+									<td>{ swap.Exchange }</td>
+									<td><span class="aff-number-positive">{ fmt.Sprintf("$%.2f", swap.Commission) }</span></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		}
+	</div>
+	<script>
         function copyReferralLink() {
             const linkInput = document.getElementById('referral-link');
             linkInput.select();
@@ -1782,98 +1735,100 @@ templ AffiliateDashboard(stats *api.AffiliateStats) {
             });
         }
     </script>
-    @Footer(){}
+	@Footer()
 }
 
 templ AffiliatePayout(errors []string, success string, stats *api.AffiliateStats) {
-    @Header(){}
-    @AffiliatePortalStyles()
-    <div class="aff-page aff-page--narrow">
-        <section class="aff-hero">
-            <div class="aff-toolbar">
-                <div>
-                    <span class="aff-eyebrow"><i class="fas fa-wallet"></i> Payout Request</span>
-                    <h1 class="aff-title">Withdraw your <span class="accent">affiliate balance</span></h1>
-                    <p class="aff-subtitle">Request crypto payouts once your available balance reaches the minimum threshold.</p>
-                </div>
-                <div class="aff-toolbar-actions">
-                    <a href="/affiliate/dashboard" class="aff-btn-secondary">Back to dashboard</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="aff-page-section aff-balance-card">
-            <p class="aff-balance-value">{ fmt.Sprintf("$%.2f", stats.PendingPayout) }</p>
-            <p class="aff-balance-label">Available balance</p>
-        </section>
-
-        if len(errors) > 0 {
-            <div class="aff-page-section aff-alert aff-alert--error">
-                <ul>
-                    for _, err := range errors {
-                        <li>{ err }</li>
-                    }
-                </ul>
-            </div>
-        }
-
-        if success != "" {
-            <div class="aff-page-section aff-alert aff-alert--success">
-                { success }
-                <div style="margin-top: 0.8rem;">
-                    <a href="/affiliate/payout/history" class="aff-link">View payout history</a>
-                </div>
-            </div>
-        }
-
-        <section class="aff-page-section aff-info">
-            <strong>Payout information</strong>
-            <ul class="aff-check-list" style="margin-top: 0.8rem;">
-                <li><i class="fas fa-check-circle"></i><span>Minimum payout: $200.00</span></li>
-                <li><i class="fas fa-check-circle"></i><span>Payments available in USDC on Solana or Monero (XMR).</span></li>
-                <li><i class="fas fa-check-circle"></i><span>Processing time is typically 1-3 business days.</span></li>
-                <li><i class="fas fa-check-circle"></i><span>All payouts are processed manually.</span></li>
-            </ul>
-        </section>
-
-        <section class="aff-page-section aff-panel">
-            <h2 class="aff-section-title">Payout details</h2>
-            <form method="POST" action="/affiliate/payout" class="aff-form-grid">
-                <div class="aff-form-group">
-                    <label class="aff-label" for="amount">Payout amount (USD)</label>
-                    <input class="aff-input" type="number" id="amount" name="amount" step="0.01" min="200"
-                        max={ fmt.Sprintf("%.2f", stats.PendingPayout) } required
-                        placeholder="Enter amount (minimum $200.00)"/>
-                </div>
-
-                <div class="aff-form-group">
-                    <label class="aff-label" for="payout_currency">Payout currency</label>
-                    <select class="aff-select" id="payout_currency" name="payout_currency" required onchange="updateAddressPlaceholder()">
-                        <option value="">Select payout currency</option>
-                        <option value="USDC_SOL">USDC (Solana)</option>
-                        <option value="XMR">Monero (XMR)</option>
-                    </select>
-                </div>
-
-                <div class="aff-form-group">
-                    <label class="aff-label" for="wallet_address">Wallet address</label>
-                    <input class="aff-input" type="text" id="wallet_address" name="wallet_address" required placeholder="Select currency first"/>
-                </div>
-
-                <button type="submit" class="aff-btn-success"
-                    if stats.PendingPayout < 200.00 {
-                        disabled
-                    }>
-                    if stats.PendingPayout < 200.00 {
-                        Insufficient Balance (Minimum $200.00)
-                    } else {
-                        Request payout
-                    }
-                </button>
-            </form>
-        </section>
-
-        <script>
+	@Header()
+	@AffiliatePortalStyles()
+	<div class="aff-page aff-page--narrow">
+		<section class="aff-hero">
+			<div class="aff-toolbar">
+				<div>
+					<span class="aff-eyebrow"><i class="fas fa-wallet"></i> Payout Request</span>
+					<h1 class="aff-title">Withdraw your <span class="accent">affiliate balance</span></h1>
+					<p class="aff-subtitle">Request crypto payouts once your available balance reaches the minimum threshold.</p>
+				</div>
+				<div class="aff-toolbar-actions">
+					<a href="/affiliate/dashboard" class="aff-btn-secondary">Back to dashboard</a>
+				</div>
+			</div>
+		</section>
+		<section class="aff-page-section aff-balance-card">
+			<p class="aff-balance-value">{ fmt.Sprintf("$%.2f", stats.PendingPayout) }</p>
+			<p class="aff-balance-label">Available balance</p>
+		</section>
+		if len(errors) > 0 {
+			<div class="aff-page-section aff-alert aff-alert--error">
+				<ul>
+					for _, err := range errors {
+						<li>{ err }</li>
+					}
+				</ul>
+			</div>
+		}
+		if success != "" {
+			<div class="aff-page-section aff-alert aff-alert--success">
+				{ success }
+				<div style="margin-top: 0.8rem;">
+					<a href="/affiliate/payout/history" class="aff-link">View payout history</a>
+				</div>
+			</div>
+		}
+		<section class="aff-page-section aff-info">
+			<strong>Payout information</strong>
+			<ul class="aff-check-list" style="margin-top: 0.8rem;">
+				<li><i class="fas fa-check-circle"></i><span>Minimum payout: $200.00</span></li>
+				<li><i class="fas fa-check-circle"></i><span>Payments available in USDC on Solana or Monero (XMR).</span></li>
+				<li><i class="fas fa-check-circle"></i><span>Processing time is typically 1-3 business days.</span></li>
+				<li><i class="fas fa-check-circle"></i><span>All payouts are processed manually.</span></li>
+			</ul>
+		</section>
+		<section class="aff-page-section aff-panel">
+			<h2 class="aff-section-title">Payout details</h2>
+			<form method="POST" action="/affiliate/payout" class="aff-form-grid">
+				<div class="aff-form-group">
+					<label class="aff-label" for="amount">Payout amount (USD)</label>
+					<input
+						class="aff-input"
+						type="number"
+						id="amount"
+						name="amount"
+						step="0.01"
+						min="200"
+						max={ fmt.Sprintf("%.2f", stats.PendingPayout) }
+						required
+						placeholder="Enter amount (minimum $200.00)"
+					/>
+				</div>
+				<div class="aff-form-group">
+					<label class="aff-label" for="payout_currency">Payout currency</label>
+					<select class="aff-select" id="payout_currency" name="payout_currency" required onchange="updateAddressPlaceholder()">
+						<option value="">Select payout currency</option>
+						<option value="USDC_SOL">USDC (Solana)</option>
+						<option value="XMR">Monero (XMR)</option>
+					</select>
+				</div>
+				<div class="aff-form-group">
+					<label class="aff-label" for="wallet_address">Wallet address</label>
+					<input class="aff-input" type="text" id="wallet_address" name="wallet_address" required placeholder="Select currency first"/>
+				</div>
+				<button
+					type="submit"
+					class="aff-btn-success"
+					if stats.PendingPayout < 200.00 {
+						disabled
+					}
+				>
+					if stats.PendingPayout < 200.00 {
+						Insufficient Balance (Minimum $200.00)
+					} else {
+						Request payout
+					}
+				</button>
+			</form>
+		</section>
+		<script>
             function updateAddressPlaceholder() {
                 const currencySelect = document.getElementById('payout_currency');
                 const addressInput = document.getElementById('wallet_address');
@@ -1890,148 +1845,145 @@ templ AffiliatePayout(errors []string, success string, stats *api.AffiliateStats
                 }
             }
         </script>
-    </div>
-    @Footer(){}
+	</div>
+	@Footer()
 }
 
 templ AffiliatePayoutHistory(history *api.PayoutHistory) {
-    @Header(){}
-    @AffiliatePortalStyles()
-    <div class="aff-page">
-        <section class="aff-hero">
-            <div class="aff-toolbar">
-                <div>
-                    <span class="aff-eyebrow"><i class="fas fa-clock-rotate-left"></i> Payout History</span>
-                    <h1 class="aff-title">Track requested and <span class="accent">completed payouts</span></h1>
-                    <p class="aff-subtitle">See what has been paid, what is still pending, and any transaction details attached to processed requests.</p>
-                </div>
-                <div class="aff-toolbar-actions">
-                    <a href="/affiliate/dashboard" class="aff-btn-secondary">Back to dashboard</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="aff-page-section aff-summary-grid">
-            <article class="aff-summary-card">
-                <span class="aff-summary-label">Total paid out</span>
-                <p class="aff-summary-value" style="color: #86efac;">{ fmt.Sprintf("$%.2f", history.TotalPaidOut) }</p>
-            </article>
-            <article class="aff-summary-card">
-                <span class="aff-summary-label">Pending payouts</span>
-                <p class="aff-summary-value" style="color: #fcd34d;">{ fmt.Sprintf("$%.2f", history.PendingAmount) }</p>
-            </article>
-        </section>
-
-        if len(history.PendingPayouts) > 0 {
-            <section class="aff-page-section aff-table-section">
-                <h2 class="aff-section-title">Pending payouts</h2>
-                <div class="aff-table-wrap">
-                    <table class="aff-table">
-                        <thead>
-                            <tr>
-                                <th>Date requested</th>
-                                <th>Amount</th>
-                                <th>Currency</th>
-                                <th>Wallet address</th>
-                                <th>Status</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            for _, payout := range history.PendingPayouts {
-                                <tr>
-                                    <td>{ payout.RequestedAt.Format("Jan 2, 2006") }</td>
-                                    <td>{ fmt.Sprintf("$%.2f", payout.Amount) }</td>
-                                    <td>
-                                        if payout.PayoutCurrency == "USDC_SOL" {
-                                            <span class="aff-chip aff-chip--blue">USDC</span>
-                                        } else if payout.PayoutCurrency == "XMR" {
-                                            <span class="aff-chip aff-chip--amber">XMR</span>
-                                        } else {
-                                            { payout.PayoutCurrency }
-                                        }
-                                    </td>
-                                    <td><span class="aff-code">{ payout.WalletAddress }</span></td>
-                                    <td><span class="aff-status aff-status--pending">{ payout.Status }</span></td>
-                                    <td>{ payout.AdminNotes }</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        }
-
-        if len(history.CompletedPayouts) > 0 {
-            <section class="aff-page-section aff-table-section">
-                <h2 class="aff-section-title">Completed payouts</h2>
-                <div class="aff-table-wrap">
-                    <table class="aff-table">
-                        <thead>
-                            <tr>
-                                <th>Date requested</th>
-                                <th>Date completed</th>
-                                <th>Amount</th>
-                                <th>Currency</th>
-                                <th>Status</th>
-                                <th>Transaction hash</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            for _, payout := range history.CompletedPayouts {
-                                <tr>
-                                    <td>{ payout.RequestedAt.Format("Jan 2, 2006") }</td>
-                                    <td>
-                                        if payout.ProcessedAt != nil {
-                                            { payout.ProcessedAt.Format("Jan 2, 2006") }
-                                        } else {
-                                            -
-                                        }
-                                    </td>
-                                    <td>{ fmt.Sprintf("$%.2f", payout.Amount) }</td>
-                                    <td>
-                                        if payout.PayoutCurrency == "USDC_SOL" {
-                                            <span class="aff-chip aff-chip--blue">USDC</span>
-                                        } else if payout.PayoutCurrency == "XMR" {
-                                            <span class="aff-chip aff-chip--amber">XMR</span>
-                                        } else {
-                                            { payout.PayoutCurrency }
-                                        }
-                                    </td>
-                                    <td>
-                                        if payout.Status == "completed" {
-                                            <span class="aff-status aff-status--complete">Completed</span>
-                                        } else if payout.Status == "rejected" {
-                                            <span class="aff-status aff-status--rejected">Rejected</span>
-                                        } else {
-                                            <span class="aff-status aff-status--approved">{ payout.Status }</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        if payout.TxHash != "" {
-                                            <span class="aff-code">{ payout.TxHash }</span>
-                                        } else {
-                                            -
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        } else {
-            <section class="aff-page-section aff-table-section">
-                <div class="aff-empty">
-                    if len(history.PendingPayouts) == 0 && history.TotalPaidOut == 0 && history.PendingAmount == 0 {
-                        <p>No payout history available yet.</p>
-                        <p>The payout system is ready. Once you request a payout, it will appear here.</p>
-                    } else {
-                        No completed payouts yet.
-                    }
-                </div>
-            </section>
-        }
-    </div>
-    @Footer(){}
+	@Header()
+	@AffiliatePortalStyles()
+	<div class="aff-page">
+		<section class="aff-hero">
+			<div class="aff-toolbar">
+				<div>
+					<span class="aff-eyebrow"><i class="fas fa-clock-rotate-left"></i> Payout History</span>
+					<h1 class="aff-title">Track requested and <span class="accent">completed payouts</span></h1>
+					<p class="aff-subtitle">See what has been paid, what is still pending, and any transaction details attached to processed requests.</p>
+				</div>
+				<div class="aff-toolbar-actions">
+					<a href="/affiliate/dashboard" class="aff-btn-secondary">Back to dashboard</a>
+				</div>
+			</div>
+		</section>
+		<section class="aff-page-section aff-summary-grid">
+			<article class="aff-summary-card">
+				<span class="aff-summary-label">Total paid out</span>
+				<p class="aff-summary-value aff-number-positive">{ fmt.Sprintf("$%.2f", history.TotalPaidOut) }</p>
+			</article>
+			<article class="aff-summary-card">
+				<span class="aff-summary-label">Pending payouts</span>
+				<p class="aff-summary-value aff-number-warm">{ fmt.Sprintf("$%.2f", history.PendingAmount) }</p>
+			</article>
+		</section>
+		if len(history.PendingPayouts) > 0 {
+			<section class="aff-page-section aff-table-section">
+				<h2 class="aff-section-title">Pending payouts</h2>
+				<div class="aff-table-wrap">
+					<table class="aff-table">
+						<thead>
+							<tr>
+								<th>Date requested</th>
+								<th>Amount</th>
+								<th>Currency</th>
+								<th>Wallet address</th>
+								<th>Status</th>
+								<th>Notes</th>
+							</tr>
+						</thead>
+						<tbody>
+							for _, payout := range history.PendingPayouts {
+								<tr>
+									<td>{ payout.RequestedAt.Format("Jan 2, 2006") }</td>
+									<td>{ fmt.Sprintf("$%.2f", payout.Amount) }</td>
+									<td>
+										if payout.PayoutCurrency == "USDC_SOL" {
+											<span class="aff-chip aff-chip--blue">USDC</span>
+										} else if payout.PayoutCurrency == "XMR" {
+											<span class="aff-chip aff-chip--amber">XMR</span>
+										} else {
+											{ payout.PayoutCurrency }
+										}
+									</td>
+									<td><span class="aff-code">{ payout.WalletAddress }</span></td>
+									<td><span class="aff-status aff-status--pending">{ payout.Status }</span></td>
+									<td>{ payout.AdminNotes }</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		}
+		if len(history.CompletedPayouts) > 0 {
+			<section class="aff-page-section aff-table-section">
+				<h2 class="aff-section-title">Completed payouts</h2>
+				<div class="aff-table-wrap">
+					<table class="aff-table">
+						<thead>
+							<tr>
+								<th>Date requested</th>
+								<th>Date completed</th>
+								<th>Amount</th>
+								<th>Currency</th>
+								<th>Status</th>
+								<th>Transaction hash</th>
+							</tr>
+						</thead>
+						<tbody>
+							for _, payout := range history.CompletedPayouts {
+								<tr>
+									<td>{ payout.RequestedAt.Format("Jan 2, 2006") }</td>
+									<td>
+										if payout.ProcessedAt != nil {
+											{ payout.ProcessedAt.Format("Jan 2, 2006") }
+										} else {
+											-
+										}
+									</td>
+									<td>{ fmt.Sprintf("$%.2f", payout.Amount) }</td>
+									<td>
+										if payout.PayoutCurrency == "USDC_SOL" {
+											<span class="aff-chip aff-chip--blue">USDC</span>
+										} else if payout.PayoutCurrency == "XMR" {
+											<span class="aff-chip aff-chip--amber">XMR</span>
+										} else {
+											{ payout.PayoutCurrency }
+										}
+									</td>
+									<td>
+										if payout.Status == "completed" {
+											<span class="aff-status aff-status--complete">Completed</span>
+										} else if payout.Status == "rejected" {
+											<span class="aff-status aff-status--rejected">Rejected</span>
+										} else {
+											<span class="aff-status aff-status--approved">{ payout.Status }</span>
+										}
+									</td>
+									<td>
+										if payout.TxHash != "" {
+											<span class="aff-code">{ payout.TxHash }</span>
+										} else {
+											-
+										}
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		} else {
+			<section class="aff-page-section aff-table-section">
+				<div class="aff-empty">
+					if len(history.PendingPayouts) == 0 && history.TotalPaidOut == 0 && history.PendingAmount == 0 {
+						<p>No payout history available yet.</p>
+						<p>The payout system is ready. Once you request a payout, it will appear here.</p>
+					} else {
+						No completed payouts yet.
+					}
+				</div>
+			</section>
+		}
+	</div>
+	@Footer()
 }

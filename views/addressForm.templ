@@ -24,30 +24,35 @@ import (
 templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
 <style>
     body {
-        background-color: #121520;
+        background-color: #0b0d14;
+        color: #e5e7eb;
         font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
     }
 
     .container {
-        max-width: 400px;
+        max-width: 720px;
         margin: 2rem auto;
         padding: 1rem;
         color: #f5f5f5;
     }
 
     .card {
-        max-width: 600px;
-        background: linear-gradient(145deg, #1a1f2e, #222633);
-        border-radius: 16px;
+        width: 100%;
+        max-width: 640px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        border-radius: 24px;
         padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
-        transition: box-shadow 0.3s ease, transform 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+        transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .card:hover {
-        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 3px 10px rgba(0, 102, 204, 0.1);
-        transform: translateY(-2px);
+        box-shadow: 0 34px 86px rgba(0, 0, 0, 0.38);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
     }
 
     .card h2 {
@@ -65,57 +70,59 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
     }
 
     .form-label {
-        color: #e0e0e0;
+        color: #9aa2b2;
         font-weight: 600;
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
+        font-size: 0.72rem;
+        margin-bottom: 0.55rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
     }
 
     .form-input {
         width: 100%;
-        padding: 0.75rem;
-        background-color: #1a1f2e;
-        color: #e0e0e0;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.95rem 1rem;
+        background-color: #0b0e13;
+        color: #f3f4f6;
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
         font-size: 1rem;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .form-input:focus {
-        border-color: #0066cc;
+        border-color: rgba(231, 234, 239, 0.24);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
-        padding: 0.75rem;
+        background: #e7eaef;
+        color: #11151c;
+        padding: 0.9rem 1rem;
         border: none;
         border-radius: 12px;
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
         width: 100%;
-        transition: transform 0.2s ease, box-shadow 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
 
     .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
+        background: #f3f5f7;
+        transform: translateY(-1px);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
     }
 
     .btn-primary:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.3);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
     }
 
     .action-button {
-        background: linear-gradient(135deg, #0088ff, #0055cc);
-        color: #ffffff;
+        background: #e7eaef;
+        color: #11151c;
         padding: 0.85rem 1.5rem;
         border: none;
         border-radius: 12px;
@@ -124,8 +131,8 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
         letter-spacing: 0.01em;
         cursor: pointer;
         width: 100%;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 102, 204, 0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
         position: relative;
         overflow: hidden;
         display: flex;
@@ -146,9 +153,9 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
     }
     
     .action-button:hover {
-        background: linear-gradient(135deg, #0099ff, #0066dd);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 102, 204, 0.3);
+        background: #f3f5f7;
+        transform: translateY(-1px);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
     }
     
     .action-button:hover::before {
@@ -157,7 +164,7 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
     
     .action-button:active {
         transform: translateY(0);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 102, 204, 0.2);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
     }
 
     .exchange-logo {
@@ -180,17 +187,17 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
         align-items: center;
         width: 100%;
         margin-top: 1.5rem;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 18px;
         padding: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .partner-label {
-        color: #a0a0a0;
-        font-size: 0.8rem;
+        color: #7f8898;
+        font-size: 0.72rem;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.16em;
         margin-bottom: 0.75rem;
     }
 
@@ -202,11 +209,11 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
     }
 
     .trade-summary {
-        background: rgba(0, 102, 204, 0.1);
-        border-radius: 12px;
-        padding: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 18px;
+        padding: 1rem 1.1rem;
         margin-bottom: 1.5rem;
-        border: 1px solid rgba(0, 102, 204, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .trade-row {
@@ -221,7 +228,7 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
     }
 
     .trade-label {
-        color: #b0b0b0;
+        color: #9098a8;
         font-size: 0.9rem;
     }
 
@@ -235,7 +242,7 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
         border-left: 4px solid #dc3545;
         color: white;
         padding: 1rem;
-        border-radius: 8px;
+        border-radius: 12px;
         margin-bottom: 1.5rem;
         box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
     }
@@ -270,8 +277,8 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
             <p>There was an error while creating your trade. Please check that you have entered a valid { strings.ToUpper(estimate.Network2) } address. If the issue persists try a different exchange or <a href="/contact/">contact us</a>.</p>
         </div>
     }
-    <div class="flex items-center justify-center min-h-screen bg-[#121520]">
-        <div class="w-[600px] bg-gradient-to-br from-[#1a1f2e] to-[#222633] rounded-2xl p-8 shadow-lg border border-gray-800 transition-all hover:shadow-xl text-white hover:translate-y-[-2px]">
+    <div class="flex items-center justify-center min-h-screen px-4 py-10">
+        <div class="card text-white">
             <div class="flex justify-center items-center gap-4 mb-6">
                 <h2 class="text-3xl font-bold text-white">Complete Your Trade</h2>
             </div>
@@ -318,18 +325,18 @@ templ AddressForm(estimate api.Estimate, err bool, mode string, estimateId int){
 
 
                 <div>
-                    <label for="address" class="block text-gray-300 font-semibold mb-2">Your { strings.ToUpper(estimate.Coin2) } Address</label>
+                    <label for="address" class="form-label">Your { strings.ToUpper(estimate.Coin2) } Address</label>
                     <input type="text" id="address" name="address" placeholder={ "Enter your " + strings.ToUpper(estimate.Coin2) + " address" } required step="any"
-                        class="w-full p-3 bg-[#1a1f2e] text-gray-300 border border-gray-700 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 transition-all">
+                        class="form-input">
                 </div>
 
                 if strings.ToLower(estimate.ExchangeName) == "thorchain" {
-                    <div style="background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(255, 140, 0, 0.15)); border: 1px solid rgba(255, 165, 0, 0.3); border-radius: 12px; padding: 1rem;">
-                        <label style="display: flex; align-items: flex-start; cursor: pointer; color: #e0e0e0;">
+                    <div style="background: rgba(214, 158, 46, 0.12); border: 1px solid rgba(214, 158, 46, 0.24); border-radius: 18px; padding: 1rem 1.1rem;">
+                        <label style="display: flex; align-items: flex-start; cursor: pointer; color: #e6dfd1;">
                             <input type="checkbox" id="thorchain-memo-check" required
-                                style="width: 20px; height: 20px; margin-right: 0.75rem; margin-top: 0.125rem; cursor: pointer; flex-shrink: 0; accent-color: #FFA500;">
+                                style="width: 20px; height: 20px; margin-right: 0.75rem; margin-top: 0.125rem; cursor: pointer; flex-shrink: 0; accent-color: #d6a14b;">
                             <span style="line-height: 1.5;">
-                                <strong style="color: #FFA500;">I understand that ThorChain integration is in beta</strong> and a memo is required for this transaction, I must include it or <strong>my transaction will fail</strong>.
+                                <strong style="color: #f3d18b;">I understand that ThorChain integration is in beta</strong> and a memo is required for this transaction, I must include it or <strong>my transaction will fail</strong>.
                             </span>
                         </label>
                     </div>

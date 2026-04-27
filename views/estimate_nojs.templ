@@ -15,7 +15,8 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         }
 
         body {
-            background-color: #121520;
+            background-color: #0b0d14;
+            color: #e5e7eb;
             font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -31,38 +32,43 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         }
 
         .container {
-            max-width: 700px;
+            max-width: 760px;
             height: auto;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 1rem 1rem 3rem;
             color: #f5f5f5;
             align-items: center;
         }
 
         .error-message {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-            padding: 0.75rem 1.25rem;
-            margin-bottom: 1rem;
-            border: 1px solid transparent;
-            border-radius: 0.25rem;
+            max-width: 760px;
+            margin: 1rem auto 0;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.84), rgba(200, 35, 51, 0.84));
+            border-left: 4px solid #dc3545;
+            color: #fff;
+            padding: 1rem 1.1rem;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(220, 53, 69, 0.18);
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 500;
             color: #ffffff;
             text-align: center;
             margin-bottom: 1rem;
+            line-height: 0.96;
+            letter-spacing: -0.06em;
         }
 
         h2 {
-            font-size: 1.75rem;
-            font-weight: 500;
-            color: #cccccc;
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: #98a1b1;
             text-align: center;
-            margin-bottom: 2rem;
+            margin: 0 auto 2.5rem;
+            max-width: 640px;
+            line-height: 1.7;
         }
 
         #estimates-container {
@@ -81,7 +87,7 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
 
         /* Estimates styles */
         body-estimates {
-            background-color: #121520;
+            background-color: #0b0d14;
             font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
         }
 
@@ -93,12 +99,14 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         }
 
         .card-estimates {
-            background-color: #1a1f2e;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.01)),
+                #11151c;
+            border-radius: 22px;
+            padding: 1.2rem 1.25rem;
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.24);
+            transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             margin-bottom: 1rem;
             display: grid;
             grid-template-columns: 1fr auto;
@@ -106,8 +114,8 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         }
 
         .card-estimates:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-            transform: translateY(-2px);
+            box-shadow: 0 28px 56px rgba(0, 0, 0, 0.28);
+            transform: translateY(-1px);
             border-color: rgba(255, 255, 255, 0.1);
         }
 
@@ -138,44 +146,44 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
 
         .amount-highlight-estimates {
             font-size: 1.4rem;
-            font-weight: 700;
+            font-weight: 500;
             color: #ffffff;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            letter-spacing: 0.01em;
+            letter-spacing: -0.03em;
         }
 
         .btn-select-estimates, .btn-select2-estimates {
-            background-color: #2a3042;
-            color: #fff;
-            padding: 0.7rem 1.2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            color: #e5e7eb;
+            padding: 0.78rem 1.15rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            font-size: 0.76rem;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            transition: all 0.2s ease;
+            transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
             grid-column: 1 / -1;
             justify-self: end;
             min-width: 140px;
-            letter-spacing: 0.02em;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
         }
 
         .btn-select-estimates:hover, .btn-select2-estimates:hover {
-            background-color: #353d52;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.16);
         }
 
         .btn-primary-estimates {
-            background-color: #0066cc;
-            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
+            background: #e7eaef;
+            border-color: #e7eaef;
+            color: #11151c;
         }
 
         .btn-primary-estimates:hover {
-            background-color: #0077e6;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.35);
+            background: #f3f5f7;
+            border-color: #f3f5f7;
+            color: #11151c;
         }
         
         .btn-select2-estimates:active {
@@ -204,7 +212,7 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
             bottom: 130%;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #1a1f2e;
+            background-color: #12161d;
             color: white;
             padding: 0.5rem 0.75rem;
             border-radius: 6px;
@@ -248,26 +256,27 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         }
         
         .sort-btn-estimates {
-            background-color: #1a1f2e;
-            color: #e0e0e0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #939cad;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
             padding: 0.5rem 1rem;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             transition: all 0.2s ease;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
         
         .sort-btn-estimates.active {
-            background-color: rgba(0, 102, 204, 0.2);
-            border-color: rgba(0, 102, 204, 0.4);
-            color: #ffffff;
-            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
+            background-color: rgba(231, 234, 239, 0.08);
+            border-color: rgba(231, 234, 239, 0.12);
+            color: #e7eaef;
         }
         
         .sort-btn-estimates:hover {
-            background-color: #232838;
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .estimate-details-estimates {
@@ -285,8 +294,8 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
 
         .card-estimates.blocked {
             opacity: 0.6;
-            background: linear-gradient(145deg, #2a2a2a, #333333);
-            border: 1px solid #555;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.012), rgba(255, 255, 255, 0.006)), #161616;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .card-estimates.blocked .btn-select-estimates,
@@ -305,13 +314,14 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         }
 
         .blocked-notice-estimates {
-            background: linear-gradient(135deg, #656565, #3b3b3b);
-            color: white;
+            background: rgba(255, 255, 255, 0.04);
+            color: #cbd5e1;
             padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
             margin-top: 1rem;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .ip-badge-estimates {
@@ -327,7 +337,7 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
             justify-content: center;
             cursor: help;
             vertical-align: middle;
-            background: linear-gradient(145deg, #626262, #4a4545);
+            background: linear-gradient(145deg, #6b7280, #525866);
             color: white;
             clip-path: polygon(50% 0%, 100% 30%, 80% 100%, 20% 100%, 0% 30%);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -341,7 +351,7 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
             bottom: 130%;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #333;
+            background-color: #161b22;
             color: white;
             padding: 0.75rem;
             border-radius: 6px;
@@ -373,7 +383,7 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         svg.guarantee-icon-estimates {
             width: 14px;
             height: 14px;
-            stroke: #00cc88;
+            stroke: #7fd6b4;
             margin-bottom: -2px;
         }
 
@@ -381,12 +391,12 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            background: rgba(0, 153, 102, 0.15);
-            border: 1px solid rgba(0, 153, 102, 0.3);
-            color: #00cc88;
+            background: rgba(127, 214, 180, 0.12);
+            border: 1px solid rgba(127, 214, 180, 0.2);
+            color: #9be2c4;
             padding: 0.3rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
+            border-radius: 999px;
+            font-size: 0.74rem;
             font-weight: 500;
             margin-left: auto;
             position: relative; /* For tooltip positioning */
@@ -397,7 +407,7 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
             position: absolute;
             bottom: 130%;
             right: 0;
-            background-color: #1a1f2e;
+            background-color: #12161d;
             color: white;
             padding: 0.5rem 0.75rem;
             border-radius: 6px;
@@ -445,8 +455,8 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
             visibility: visible;
             pointer-events: auto;
         }
-                .tooltip-content-estimates a {
-            color: #00cc88;
+        .tooltip-content-estimates a {
+            color: #b5ead2;
             font-weight: 600;
             text-decoration: underline;
             border-radius: 4px;
@@ -455,8 +465,8 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
         }
         
         .tooltip-content-estimates a:hover {
-            color: #00e699;
-            box-shadow: 0 0 0 2px rgba(0, 204, 136, 0.1);
+            color: #e8fff2;
+            box-shadow: 0 0 0 2px rgba(181, 234, 210, 0.08);
         }
 
         @media (max-width: 768px) {
@@ -532,16 +542,16 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
     </style>
     
     @Header(){}    
-    <br/>
-    
+
     if errors != ""{
         <div class="error-message" role="alert">
             <span class="block sm:inline">{errors}</span>
         </div>
     }
 
+    <div class="container">
     <h1>Estimates</h1>
-    <h2>Estimates found from our partnered exchanges:</h2>
+    <h2>Estimates found from our partnered exchanges.</h2>
 
     <div id="estimates-container">
         <div class="sort-options-estimates">
@@ -623,4 +633,6 @@ if est.NoTextURL != "" {
             }
         }
     </div>
+    </div>
+    @Footer(){}
 }

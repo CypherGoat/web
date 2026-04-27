@@ -15,53 +15,391 @@
 
 package views
 
-    import (
-        "fmt"
-        "strings"
-        "encoding/json"
-    )
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
+
+templ SharedNavbarHead() {
+	<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const menuToggle = document.getElementById("menu-toggle");
+            const navMenu = document.getElementById("nav-menu");
+
+            if (!menuToggle || !navMenu) {
+                return;
+            }
+
+            const setExpanded = function (expanded) {
+                menuToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+            };
+
+            const closeMenu = function () {
+                navMenu.classList.remove("nav-active");
+                setExpanded(false);
+            };
+
+            menuToggle.addEventListener("click", function () {
+                const isOpen = navMenu.classList.toggle("nav-active");
+                setExpanded(isOpen);
+            });
+
+            document.addEventListener("click", function (e) {
+                if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains("nav-active")) {
+                    closeMenu();
+                }
+            });
+
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape" && navMenu.classList.contains("nav-active")) {
+                    closeMenu();
+                }
+            });
+
+            window.addEventListener("resize", function () {
+                if (window.innerWidth >= 1024) {
+                    closeMenu();
+                }
+            });
+
+            const menuLinks = navMenu.querySelectorAll("a");
+            menuLinks.forEach(link => {
+                link.addEventListener("click", function() {
+                    if (window.innerWidth < 1024) {
+                        closeMenu();
+                    }
+                });
+            });
+
+            setExpanded(false);
+        });
+    </script>
+	<style>
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 60;
+            padding: 0.85rem 0;
+            background: rgba(11, 13, 20, 0.84);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+        }
+
+        .site-nav-shell {
+            max-width: 92rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .site-nav-frame {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            min-height: 5.35rem;
+            padding: 0.25rem 0;
+            position: relative;
+        }
+
+        .logo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.2rem;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 4.85rem;
+            height: 4.85rem;
+            border-radius: 1.45rem;
+            background: rgba(255, 255, 255, 0.045);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .logo-img {
+            width: 3.3rem;
+            height: 3.3rem;
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+
+        .logo-copy {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            letter-spacing: -0.045em;
+        }
+
+        .logo-subtitle {
+            display: none;
+        }
+
+        .logo-link:hover .logo-img {
+            opacity: 0.88;
+            transform: scale(0.97);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .menu-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.7rem;
+            height: 2.7rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: transparent;
+            color: #9aa2b2;
+            transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+        }
+
+        .menu-toggle:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-toggle:focus-visible,
+        .nav-primary-link:focus-visible,
+        .nav-cta:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.18);
+            outline-offset: 2px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.1rem;
+        }
+
+        .nav-primary-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.45rem;
+            padding: 0.62rem 0.88rem;
+            border-radius: 0.7rem;
+            color: #98a1b1;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 550;
+            letter-spacing: 0.01em;
+            transition: color 0.18s ease, background 0.18s ease;
+        }
+
+        .nav-primary-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.45rem;
+            padding: 0.62rem 0.95rem;
+            border-radius: 0.75rem;
+            background: transparent;
+            color: #dbe1ea;
+            text-decoration: none;
+            font-size: 0.86rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+        }
+
+        .nav-cta:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }
+
+        @media (max-width: 1023px) {
+            .site-nav-shell {
+                padding: 0 1rem;
+            }
+
+            .site-nav-frame {
+                min-height: 4.6rem;
+                padding: 0.2rem 0;
+            }
+
+            .logo-badge {
+                width: 4.1rem;
+                height: 4.1rem;
+                border-radius: 1.25rem;
+            }
+
+            .logo-img {
+                width: 2.8rem;
+                height: 2.8rem;
+            }
+
+            .logo-title {
+                font-size: 1.55rem;
+            }
+
+            #nav-menu {
+                position: absolute;
+                top: calc(100% + 0.55rem);
+                left: 0;
+                right: 0;
+                display: flex !important;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.85rem;
+                padding: 0.85rem;
+                border-radius: 1rem;
+                background: rgba(14, 17, 25, 0.98);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+                opacity: 0;
+                transform: translateY(-10px);
+                pointer-events: none;
+                transition: opacity 0.18s ease, transform 0.18s ease;
+                z-index: 80;
+            }
+
+            #nav-menu.nav-active {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+
+            #nav-menu .nav-links {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.35rem;
+                padding: 0;
+                background: transparent;
+                border: 0;
+            }
+
+            #nav-menu .nav-primary-link,
+            #nav-menu .nav-cta {
+                width: 100%;
+                justify-content: flex-start;
+                border-radius: 0.95rem;
+            }
+
+            #nav-menu .nav-primary-link {
+                min-height: 2.75rem;
+                padding: 0.8rem 0.9rem;
+                background: rgba(255, 255, 255, 0.02);
+            }
+
+            #nav-menu .nav-primary-link:hover {
+                background: rgba(255, 255, 255, 0.04);
+            }
+
+            #nav-menu .nav-cta {
+                justify-content: center;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+    </style>
+	<script>
+        document.documentElement.classList.add("js-enabled");
+        document.body.classList.add("js-enabled");
+    </script>
+}
+
+templ SharedNavbar() {
+	<header class="site-header">
+		<nav class="site-nav-shell">
+			<div class="site-nav-frame">
+				<a class="logo-link" href="/" aria-label="CypherGoat home">
+					<span class="logo-badge">
+						<img src="/static/icons/cg-notext.svg" width="30" height="30" class="logo-img" alt="CypherGoat logo"/>
+					</span>
+					<span class="logo-copy">
+						<span class="logo-title">CypherGoat</span>
+					</span>
+				</a>
+				<div class="nav-right">
+					<button id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation" aria-controls="nav-menu" aria-expanded="false" type="button">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+						</svg>
+					</button>
+					<div id="nav-menu" class="nav-menu">
+						<div class="nav-links">
+							<a class="nav-primary-link" href="/">Home</a>
+							<a class="nav-primary-link" href="/exchanges">Exchanges</a>
+							<a class="nav-primary-link" href="/affiliate">Affiliate</a>
+							<a class="nav-primary-link" href="/this-week-in-monero" title="This Week In Monero">TWIM</a>
+						</div>
+						<a class="nav-cta" href="/">Swap</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
+}
 
 templ Header() {
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css?v=202508134" rel="stylesheet">
-        <link href="/static/styles.css?v=202508134" rel="stylesheet">
-        <script src="/static/htmx.min.js"></script>
-
-        <meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
-        <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
-        <meta property="og:image:type" content="image/png">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-        <meta property="og:url" content="https://cyphergoat.com">
-        <meta property="og:type" content="website">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
-        <meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
-        <meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap">
-        <meta name="author" content="CypherGoat">
-        <meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported.">
-
-        <title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
-
-        <script type="application/ld+json">
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" href="/favicon.ico" sizes="any"/>
+			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<script src="/static/htmx.min.js"></script>
+			<meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
+			<meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
+			<meta property="og:image:type" content="image/png"/>
+			<meta property="og:image:width" content="1200"/>
+			<meta property="og:image:height" content="630"/>
+			<meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			<meta property="og:url" content="https://cyphergoat.com"/>
+			<meta property="og:type" content="website"/>
+			<meta name="twitter:card" content="summary_large_image"/>
+			<meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
+			<meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
+			<meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+			<meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap"/>
+			<meta name="author" content="CypherGoat"/>
+			<meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported."/>
+			<title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
+			<script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "FinancialService",
@@ -75,226 +413,61 @@ templ Header() {
             ]
         }
         </script>
-
-<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const menuToggle = document.getElementById("menu-toggle");
-                const navMenu = document.getElementById("nav-menu");
-
-                // Toggle menu with animation
-                menuToggle.addEventListener("click", function () {
-                    navMenu.classList.toggle("nav-active");
-                });
-
-                // Close menu when clicking outside
-                document.addEventListener("click", function (e) {
-                    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains("nav-active")) {
-                        navMenu.classList.remove("nav-active");
-                    }
-                });
-
-                // Close menu when clicking on a menu item (mobile only)
-                const menuLinks = navMenu.querySelectorAll("a");
-                menuLinks.forEach(link => {
-                    link.addEventListener("click", function() {
-                        if (window.innerWidth < 1024) { // lg breakpoint
-                            navMenu.classList.remove("nav-active");
-                        }
-                    });
-                });
-            });
-        </script>
-
-        <style>
-            /* Mobile navigation styles */
-            @media (max-width: 1023px) {
-                #nav-menu {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    background: linear-gradient(145deg, #1a1f2e, #222633);
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                    padding: 1rem;
-                    border-bottom-left-radius: 0.5rem;
-                    border-bottom-right-radius: 0.5rem;
-                    z-index: 50;
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                    border-top: none;
-                    opacity: 0;
-                    transform: translateY(-10px);
-                    pointer-events: none;
-                    transition: opacity 0.2s ease, transform 0.2s ease;
-                    display: flex !important;
-                }
-                
-                #nav-menu.nav-active {
-                    opacity: 1;
-                    transform: translateY(0);
-                    pointer-events: auto;
-                }
-                
-                #nav-menu a {
-                    padding: 0.75rem 1rem;
-                    width: 100%;
-                    border-radius: 0.375rem;
-                    position: relative;
-                    overflow: hidden;
-                }
-                
-                #nav-menu a:hover {
-                    background-color: rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Desktop navigation enhancements */
-            @media (min-width: 1024px) {
-                #nav-menu a {
-                    position: relative;
-                    padding: 0.75rem 1.25rem;
-                    border-radius: 0.5rem;
-                    transition: all 0.3s ease;
-                    background: linear-gradient(145deg, transparent, transparent);
-                    border: 1px solid transparent;
-                }
-
-                #nav-menu a::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-                    border-radius: 0.5rem;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    z-index: -1;
-                }
-
-                #nav-menu a:hover {
-                    color: #ffffff;
-                    text-decoration: none;
-                    transform: translateY(-1px);
-                    border-color: rgba(255, 255, 255, 0.1);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-
-                #nav-menu a:hover::before {
-                    opacity: 1;
-                }
-
-                #nav-menu a:active {
-                    transform: translateY(0);
-                }
-
-                /* Add a subtle glow effect */
-                #nav-menu a:hover {
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Smooth focus states for accessibility */
-            #nav-menu a:focus {
-                outline: 2px solid rgba(255, 255, 255, 0.3);
-                outline-offset: 2px;
-            }
-
-            /* Logo hover animation */
-            .logo-link:hover .logo-img {
-                transform: scale(1.05);
-                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-            }
-
-            .logo-img {
-                transition: transform 0.2s ease, filter 0.2s ease;
-            }
-        </style>        
-        <script>
-            // Add js-enabled class immediately when JavaScript is available
-            document.documentElement.classList.add('js-enabled');
-            document.body.classList.add('js-enabled');
-        </script>    </head>
-    <body class="bg-[#121520]">
-    <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext-dark.png" width="75" height="75" class="mr-1 -my-2 logo-img"> 
-                CypherGoat               
-            </a>
-            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/exchanges">Exchanges</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/affiliate">Affiliate</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/this-week-in-monero" title="This Week In Monero">TWIM</a>
-
-            </div>
-        </nav>
-    </header>
-
-
-    { children... }
-    </body>
-    </html>
+			<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
+			<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+			@SharedNavbarHead()
+		</head>
+		<body class="bg-[#0b0d14] text-gray-100 antialiased">
+			@SharedNavbar()
+			{ children... }
+		</body>
+	</html>
 }
 
 templ HeaderCustomTitle(title, canonical, description string) {
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css?v=20250814" rel="stylesheet">
-        <link href="/static/styles.css?v=20250814" rel="stylesheet">
-        <script src="/static/htmx.min.js"></script>
-        if canonical != "" {
-            <link rel="canonical" href={ canonical }>
-        }
-
-        <meta property="og:title" content={fmt.Sprintf("CypherGoat - %s", title)}>
-        <meta property="og:description" content={ description }>
-        <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
-        <meta property="og:image:type" content="image/png">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-        if canonical != "" {
-            <meta property="og:url" content={ canonical }>
-        } else {
-            <meta property="og:url" content="https://cyphergoat.com">
-        }
-        <meta property="og:type" content="website">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content={fmt.Sprintf("CypherGoat - %s", title)}>
-        <meta name="twitter:description" content={ description }>
-        <meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
-        <meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap">
-        <meta name="author" content="CypherGoat">
-        <meta name="description" content={ description }>
-
-        <title>CypherGoat - { title }</title>
-
-        <script type="application/ld+json">
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" href="/favicon.ico" sizes="any"/>
+			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<script src="/static/htmx.min.js"></script>
+			if canonical != "" {
+				<link rel="canonical" href={ canonical }/>
+			}
+			<meta property="og:title" content={ fmt.Sprintf("CypherGoat - %s", title) }/>
+			<meta property="og:description" content={ description }/>
+			<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
+			<meta property="og:image:type" content="image/png"/>
+			<meta property="og:image:width" content="1200"/>
+			<meta property="og:image:height" content="630"/>
+			<meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			if canonical != "" {
+				<meta property="og:url" content={ canonical }/>
+			} else {
+				<meta property="og:url" content="https://cyphergoat.com"/>
+			}
+			<meta property="og:type" content="website"/>
+			<meta name="twitter:card" content="summary_large_image"/>
+			<meta name="twitter:title" content={ fmt.Sprintf("CypherGoat - %s", title) }/>
+			<meta name="twitter:description" content={ description }/>
+			<meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
+			<meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+			<meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap"/>
+			<meta name="author" content="CypherGoat"/>
+			<meta name="description" content={ description }/>
+			<title>CypherGoat - { title }</title>
+			<script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "FinancialService",
@@ -308,222 +481,55 @@ templ HeaderCustomTitle(title, canonical, description string) {
             ]
         }
         </script>
-
-<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const menuToggle = document.getElementById("menu-toggle");
-                const navMenu = document.getElementById("nav-menu");
-
-                // Toggle menu with animation
-                menuToggle.addEventListener("click", function () {
-                    navMenu.classList.toggle("nav-active");
-                });
-
-                // Close menu when clicking outside
-                document.addEventListener("click", function (e) {
-                    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains("nav-active")) {
-                        navMenu.classList.remove("nav-active");
-                    }
-                });
-
-                // Close menu when clicking on a menu item (mobile only)
-                const menuLinks = navMenu.querySelectorAll("a");
-                menuLinks.forEach(link => {
-                    link.addEventListener("click", function() {
-                        if (window.innerWidth < 1024) { // lg breakpoint
-                            navMenu.classList.remove("nav-active");
-                        }
-                    });
-                });
-            });
-        </script>
-
-        <style>
-            /* Mobile navigation styles */
-            @media (max-width: 1023px) {
-                #nav-menu {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    background: linear-gradient(145deg, #1a1f2e, #222633);
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                    padding: 1rem;
-                    border-bottom-left-radius: 0.5rem;
-                    border-bottom-right-radius: 0.5rem;
-                    z-index: 50;
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                    border-top: none;
-                    opacity: 0;
-                    transform: translateY(-10px);
-                    pointer-events: none;
-                    transition: opacity 0.2s ease, transform 0.2s ease;
-                    display: flex !important;
-                }
-                
-                #nav-menu.nav-active {
-                    opacity: 1;
-                    transform: translateY(0);
-                    pointer-events: auto;
-                }
-                
-                #nav-menu a {
-                    padding: 0.75rem 1rem;
-                    width: 100%;
-                    border-radius: 0.375rem;
-                    position: relative;
-                    overflow: hidden;
-                }
-                
-                #nav-menu a:hover {
-                    background-color: rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Desktop navigation enhancements */
-            @media (min-width: 1024px) {
-                #nav-menu a {
-                    position: relative;
-                    padding: 0.75rem 1.25rem;
-                    border-radius: 0.5rem;
-                    transition: all 0.3s ease;
-                    background: linear-gradient(145deg, transparent, transparent);
-                    border: 1px solid transparent;
-                }
-
-                #nav-menu a::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-                    border-radius: 0.5rem;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    z-index: -1;
-                }
-
-                #nav-menu a:hover {
-                    color: #ffffff;
-                    text-decoration: none;
-                    transform: translateY(-1px);
-                    border-color: rgba(255, 255, 255, 0.1);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-
-                #nav-menu a:hover::before {
-                    opacity: 1;
-                }
-
-                #nav-menu a:active {
-                    transform: translateY(0);
-                }
-
-                /* Add a subtle glow effect */
-                #nav-menu a:hover {
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Smooth focus states for accessibility */
-            #nav-menu a:focus {
-                outline: 2px solid rgba(255, 255, 255, 0.3);
-                outline-offset: 2px;
-            }
-
-            /* Logo hover animation */
-            .logo-link:hover .logo-img {
-                transform: scale(1.05);
-                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-            }
-
-            .logo-img {
-                transition: transform 0.2s ease, filter 0.2s ease;
-            }
-        </style>
-        
-        <script>
-            // Add js-enabled class immediately when JavaScript is available
-            document.documentElement.classList.add('js-enabled');
-            document.body.classList.add('js-enabled');
-        </script>
-    </head>
-    <body class="bg-[#121520]">
-    <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext-dark.png" width="75" height="75" class="mr-1 -my-2 logo-img"> 
-                CypherGoat               
-            </a>
-            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/exchanges">Exchanges</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/affiliate">Affiliate</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/this-week-in-monero" title="This Week In Monero">TWIM</a>
-
-            </div>
-        </nav>
-    </header>
-
-
-    { children... }
-    </body>
-    </html>
+			<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
+			<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+			@SharedNavbarHead()
+		</head>
+		<body class="bg-[#0b0d14] text-gray-100 antialiased">
+			@SharedNavbar()
+			{ children... }
+		</body>
+	</html>
 }
 
 templ IndexHeader() {
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css?v=202508134" rel="stylesheet">
-        <link href="/static/styles.css?v=202508134" rel="stylesheet">
-        <script src="/static/htmx.min.js"></script>
-        <link rel="canonical" href="https://cyphergoat.com">
-
-        <meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
-        <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
-        <meta property="og:image:type" content="image/png">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-        <meta property="og:url" content="https://cyphergoat.com">
-        <meta property="og:type" content="website">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market">
-        <meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source.">
-        <meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
-        <meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap">
-        <meta name="author" content="CypherGoat">
-        <meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported.">
-
-        <title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
-
-        <script type="application/ld+json">
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" href="/favicon.ico" sizes="any"/>
+			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<script src="/static/htmx.min.js"></script>
+			<link rel="canonical" href="https://cyphergoat.com"/>
+			<meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
+			<meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
+			<meta property="og:image:type" content="image/png"/>
+			<meta property="og:image:width" content="1200"/>
+			<meta property="og:image:height" content="630"/>
+			<meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			<meta property="og:url" content="https://cyphergoat.com"/>
+			<meta property="og:type" content="website"/>
+			<meta name="twitter:card" content="summary_large_image"/>
+			<meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
+			<meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
+			<meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+			<meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap"/>
+			<meta name="author" content="CypherGoat"/>
+			<meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported."/>
+			<title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
+			<script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "FinancialService",
@@ -537,177 +543,14 @@ templ IndexHeader() {
             ]
         }
         </script>
-
-<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const menuToggle = document.getElementById("menu-toggle");
-                const navMenu = document.getElementById("nav-menu");
-
-                // Toggle menu with animation
-                menuToggle.addEventListener("click", function () {
-                    navMenu.classList.toggle("nav-active");
-                });
-
-                // Close menu when clicking outside
-                document.addEventListener("click", function (e) {
-                    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains("nav-active")) {
-                        navMenu.classList.remove("nav-active");
-                    }
-                });
-
-                // Close menu when clicking on a menu item (mobile only)
-                const menuLinks = navMenu.querySelectorAll("a");
-                menuLinks.forEach(link => {
-                    link.addEventListener("click", function() {
-                        if (window.innerWidth < 1024) { // lg breakpoint
-                            navMenu.classList.remove("nav-active");
-                        }
-                    });
-                });
-            });
-        </script>
-
-        <style>
-            /* Mobile navigation styles */
-            @media (max-width: 1023px) {
-                #nav-menu {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    background: linear-gradient(145deg, #1a1f2e, #222633);
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                    padding: 1rem;
-                    border-bottom-left-radius: 0.5rem;
-                    border-bottom-right-radius: 0.5rem;
-                    z-index: 50;
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                    border-top: none;
-                    opacity: 0;
-                    transform: translateY(-10px);
-                    pointer-events: none;
-                    transition: opacity 0.2s ease, transform 0.2s ease;
-                    display: flex !important;
-                }
-                
-                #nav-menu.nav-active {
-                    opacity: 1;
-                    transform: translateY(0);
-                    pointer-events: auto;
-                }
-                
-                #nav-menu a {
-                    padding: 0.75rem 1rem;
-                    width: 100%;
-                    border-radius: 0.375rem;
-                    position: relative;
-                    overflow: hidden;
-                }
-                
-                #nav-menu a:hover {
-                    background-color: rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Desktop navigation enhancements */
-            @media (min-width: 1024px) {
-                #nav-menu a {
-                    position: relative;
-                    padding: 0.75rem 1.25rem;
-                    border-radius: 0.5rem;
-                    transition: all 0.3s ease;
-                    background: linear-gradient(145deg, transparent, transparent);
-                    border: 1px solid transparent;
-                }
-
-                #nav-menu a::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-                    border-radius: 0.5rem;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    z-index: -1;
-                }
-
-                #nav-menu a:hover {
-                    color: #ffffff;
-                    text-decoration: none;
-                    transform: translateY(-1px);
-                    border-color: rgba(255, 255, 255, 0.1);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-
-                #nav-menu a:hover::before {
-                    opacity: 1;
-                }
-
-                #nav-menu a:active {
-                    transform: translateY(0);
-                }
-
-                /* Add a subtle glow effect */
-                #nav-menu a:hover {
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Smooth focus states for accessibility */
-            #nav-menu a:focus {
-                outline: 2px solid rgba(255, 255, 255, 0.3);
-                outline-offset: 2px;
-            }
-
-            /* Logo hover animation */
-            .logo-link:hover .logo-img {
-                transform: scale(1.05);
-                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-            }
-
-            .logo-img {
-                transition: transform 0.2s ease, filter 0.2s ease;
-            }
-        </style>
-        
-        <script>
-            // Add js-enabled class immediately when JavaScript is available
-            document.documentElement.classList.add('js-enabled');
-            document.body.classList.add('js-enabled');
-        </script>
-    </head>
-    <body class="bg-[#121520]">
-    <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext-dark.png" width="75" height="75" class="mr-1 -my-2 logo-img"> 
-                CypherGoat               
-            </a>
-            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/exchanges">Exchanges</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/affiliate">Affiliate</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/this-week-in-monero" title="This Week In Monero">TWIM</a>
-
-            </div>
-        </nav>
-    </header>
-
-
-    { children... }
-    <script type="application/ld+json">
+			<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
+			<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+			@SharedNavbarHead()
+		</head>
+		<body class="bg-[#0b0d14] text-gray-100 antialiased">
+			@SharedNavbar()
+			{ children... }
+			<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -763,463 +606,247 @@ templ IndexHeader() {
   ]
 }
 </script>
-    </body>
-    </html>
+		</body>
+	</html>
 }
 
 func generateBlogPostJsonLD(post *BlogPostData) string {
-    jsonLD := map[string]interface{}{
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": post.Title,
-        "description": post.Description,
-        "image": post.Image,
-        "author": map[string]interface{}{
-            "@type": "Person",
-            "name": post.Author,
-        },
-        "publisher": map[string]interface{}{
-            "@type": "Organization",
-            "name": "CypherGoat",
-            "logo": map[string]interface{}{
-                "@type": "ImageObject",
-                "url": "https://cyphergoat.com/static/icons/cg-notext.svg",
-            },
-        },
-        "datePublished": post.Date,
-        "mainEntityOfPage": map[string]interface{}{
-            "@type": "WebPage",
-            "@id": fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug),
-        },
-    }
-    
-    jsonBytes, err := json.MarshalIndent(jsonLD, "", "  ")
-    if err != nil {
-        return "<script type=\"application/ld+json\">{}</script>"
-    }
-    
-    return "<script type=\"application/ld+json\">\n" + string(jsonBytes) + "\n</script>"
+	jsonLD := map[string]interface{}{
+		"@context":    "https://schema.org",
+		"@type":       "BlogPosting",
+		"headline":    post.Title,
+		"description": post.Description,
+		"image":       post.Image,
+		"author": map[string]interface{}{
+			"@type": "Person",
+			"name":  post.Author,
+		},
+		"publisher": map[string]interface{}{
+			"@type": "Organization",
+			"name":  "CypherGoat",
+			"logo": map[string]interface{}{
+				"@type": "ImageObject",
+				"url":   "https://cyphergoat.com/static/icons/cg-notext.svg",
+			},
+		},
+		"datePublished": post.Date,
+		"mainEntityOfPage": map[string]interface{}{
+			"@type": "WebPage",
+			"@id":   fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug),
+		},
+	}
+
+	jsonBytes, err := json.MarshalIndent(jsonLD, "", "  ")
+	if err != nil {
+		return "<script type=\"application/ld+json\">{}</script>"
+	}
+
+	return "<script type=\"application/ld+json\">\n" + string(jsonBytes) + "\n</script>"
 }
 
 templ BlogHeader(post *BlogPostData) {
-    <!DOCTYPE html>
-    <html lang="en">
-       <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)">
-        <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css?v=202508134" rel="stylesheet">
-        <link href="/static/styles.css?v=202508134" rel="stylesheet">
-        <script src="/static/htmx.min.js"></script>
-        
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-        <title>{ post.Title } | CypherGoat</title>
-        <meta name="title" content={ post.Title + " | CypherGoat" }>
-        <meta name="description" content={ post.Description }>
-        <meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto, exchange, cryptocurrency" }>
-        <meta name="author" content={ post.Author }>
-        if post.IssueSlug != "" {
-            <link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }>
-        } else {
-            <link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
-        }
-
-        <meta property="og:type" content="article">
-        if post.IssueSlug != "" {
-            <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }>
-        } else {
-            <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
-        }
-        <meta property="og:title" content={ post.Title + " | CypherGoat" }>
-        <meta property="og:description" content={ post.Description }>
-        if post.Image != "" {
-            <meta property="og:image" content={ post.Image }>
-        } else {
-            <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
-            <meta property="og:image:type" content="image/png">
-            <meta property="og:image:width" content="1200">
-            <meta property="og:image:height" content="630">
-            <meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-        }
-
-        <meta property="twitter:card" content="summary_large_image">
-        if post.IssueSlug != "" {
-            <meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }>
-        } else {
-            <meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }>
-        }
-        <meta property="twitter:title" content={ post.Title + " | CypherGoat Blog" }>
-        <meta property="twitter:description" content={ post.Description }>
-        if post.Image != "" {
-            <meta property="twitter:image" content={ post.Image }>
-        } else {
-            <meta property="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
-            <meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator">
-        }
-
-        <meta property="article:published_time" content={ post.Date }>
-        <meta property="article:author" content={ post.Author }>
-        for _, tag := range post.Tags {
-            <meta property="article:tag" content={ tag }>
-        }
-
-@templ.Raw(generateBlogPostJsonLD(post))    
-
-<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const menuToggle = document.getElementById("menu-toggle");
-                const navMenu = document.getElementById("nav-menu");
-
-                // Toggle menu with animation
-                menuToggle.addEventListener("click", function () {
-                    navMenu.classList.toggle("nav-active");
-                });
-
-                // Close menu when clicking outside
-                document.addEventListener("click", function (e) {
-                    if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains("nav-active")) {
-                        navMenu.classList.remove("nav-active");
-                    }
-                });
-
-                // Close menu when clicking on a menu item (mobile only)
-                const menuLinks = navMenu.querySelectorAll("a");
-                menuLinks.forEach(link => {
-                    link.addEventListener("click", function() {
-                        if (window.innerWidth < 1024) { // lg breakpoint
-                            navMenu.classList.remove("nav-active");
-                        }
-                    });
-                });
-            });
-        </script>
-
-        <style>
-            /* Mobile navigation styles */
-            @media (max-width: 1023px) {
-                #nav-menu {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    right: 0;
-                    background: linear-gradient(145deg, #1a1f2e, #222633);
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-                    padding: 1rem;
-                    border-bottom-left-radius: 0.5rem;
-                    border-bottom-right-radius: 0.5rem;
-                    z-index: 50;
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                    border-top: none;
-                    opacity: 0;
-                    transform: translateY(-10px);
-                    pointer-events: none;
-                    transition: opacity 0.2s ease, transform 0.2s ease;
-                    display: flex !important;
-                }
-                
-                #nav-menu.nav-active {
-                    opacity: 1;
-                    transform: translateY(0);
-                    pointer-events: auto;
-                }
-                
-                #nav-menu a {
-                    padding: 0.75rem 1rem;
-                    width: 100%;
-                    border-radius: 0.375rem;
-                    position: relative;
-                    overflow: hidden;
-                }
-                
-                #nav-menu a:hover {
-                    background-color: rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Desktop navigation enhancements */
-            @media (min-width: 1024px) {
-                #nav-menu a {
-                    position: relative;
-                    padding: 0.75rem 1.25rem;
-                    border-radius: 0.5rem;
-                    transition: all 0.3s ease;
-                    background: linear-gradient(145deg, transparent, transparent);
-                    border: 1px solid transparent;
-                }
-
-                #nav-menu a::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
-                    border-radius: 0.5rem;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    z-index: -1;
-                }
-
-                #nav-menu a:hover {
-                    color: #ffffff;
-                    text-decoration: none;
-                    transform: translateY(-1px);
-                    border-color: rgba(255, 255, 255, 0.1);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-
-                #nav-menu a:hover::before {
-                    opacity: 1;
-                }
-
-                #nav-menu a:active {
-                    transform: translateY(0);
-                }
-
-                /* Add a subtle glow effect */
-                #nav-menu a:hover {
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 255, 255, 0.05);
-                }
-            }
-
-            /* Smooth focus states for accessibility */
-            #nav-menu a:focus {
-                outline: 2px solid rgba(255, 255, 255, 0.3);
-                outline-offset: 2px;
-            }
-
-            /* Logo hover animation */
-            .logo-link:hover .logo-img {
-                transform: scale(1.05);
-                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-            }
-
-            .logo-img {
-                transition: transform 0.2s ease, filter 0.2s ease;
-            }
-        </style>
-        
-        <script>
-            // Add js-enabled class immediately when JavaScript is available
-            document.documentElement.classList.add('js-enabled');
-            document.body.classList.add('js-enabled');
-        </script>
-    </head>
-    <body class="bg-[#121520]">
-    <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext-dark.png" width="75" height="75" class="mr-1 -my-2 logo-img"> 
-                CypherGoat               
-            </a>
-            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/exchanges">Exchanges</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/affiliate">Affiliate</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/this-week-in-monero" title="This Week In Monero">TWIM</a>
-            </div>
-        </nav>
-    </header>
-
-
-    { children... }
-    </body>
-    </html>
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/light/favicon-32x32.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/light/favicon-16x16.png" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)"/>
+			<link rel="icon" href="/favicon.ico" sizes="any"/>
+			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<script src="/static/htmx.min.js"></script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+			<title>{ post.Title } | CypherGoat</title>
+			<meta name="title" content={ post.Title + " | CypherGoat" }/>
+			<meta name="description" content={ post.Description }/>
+			<meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto, exchange, cryptocurrency" }/>
+			<meta name="author" content={ post.Author }/>
+			if post.IssueSlug != "" {
+				<link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }/>
+			} else {
+				<link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }/>
+			}
+			<meta property="og:type" content="article"/>
+			if post.IssueSlug != "" {
+				<meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }/>
+			} else {
+				<meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }/>
+			}
+			<meta property="og:title" content={ post.Title + " | CypherGoat" }/>
+			<meta property="og:description" content={ post.Description }/>
+			if post.Image != "" {
+				<meta property="og:image" content={ post.Image }/>
+			} else {
+				<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
+				<meta property="og:image:type" content="image/png"/>
+				<meta property="og:image:width" content="1200"/>
+				<meta property="og:image:height" content="630"/>
+				<meta property="og:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			}
+			<meta property="twitter:card" content="summary_large_image"/>
+			if post.IssueSlug != "" {
+				<meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }/>
+			} else {
+				<meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/blog/%s", post.Slug) }/>
+			}
+			<meta property="twitter:title" content={ post.Title + " | CypherGoat Blog" }/>
+			<meta property="twitter:description" content={ post.Description }/>
+			if post.Image != "" {
+				<meta property="twitter:image" content={ post.Image }/>
+			} else {
+				<meta property="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
+				<meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
+			}
+			<meta property="article:published_time" content={ post.Date }/>
+			<meta property="article:author" content={ post.Author }/>
+			for _, tag := range post.Tags {
+				<meta property="article:tag" content={ tag }/>
+			}
+			@templ.Raw(generateBlogPostJsonLD(post))
+			<script defer data-domain="cyphergoat.com" src="https://stats.cyphergoat.com/js/script.outbound-links.tagged-events.js"></script>
+			<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+			@SharedNavbarHead()
+		</head>
+		<body class="bg-[#0b0d14] text-gray-100 antialiased">
+			@SharedNavbar()
+			{ children... }
+		</body>
+	</html>
 }
 
 templ GuidesIndexHeader() {
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css?v=20250814" rel="stylesheet">
-        <link href="/static/styles.css?v=20250814" rel="stylesheet">
-        <script src="/static/htmx.min.js"></script>
-
-        <title>CypherGoat Guides - Privacy, Monero &amp; Crypto Security</title>
-        <meta name="title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security">
-        <meta name="description" content="In-depth guides on crypto privacy, Monero, and security. Learn how to swap privately, use Monero effectively, and protect your financial sovereignty.">
-        <meta name="keywords" content="monero guides, crypto privacy guides, cryptocurrency security, monero tutorials, xmr swap guide, no kyc crypto, privacy coins">
-        <meta name="author" content="CypherGoat">
-
-        <link rel="canonical" href="https://cyphergoat.com/guides">
-
-        <meta property="og:title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security">
-        <meta property="og:description" content="In-depth guides on crypto privacy, Monero, and security. Learn how to swap privately, use Monero effectively, and protect your financial sovereignty.">
-        <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
-        <meta property="og:image:type" content="image/png">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="CypherGoat Guides">
-        <meta property="og:url" content="https://cyphergoat.com/guides">
-        <meta property="og:type" content="website">
-
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="CypherGoat Guides">
-        <meta name="twitter:description" content="In-depth guides on privacy, security, and using Monero and related tools effectively.">
-        <meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
-        <meta name="twitter:image:alt" content="CypherGoat Guides">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    </head>
-    <body class="bg-[#121520]">
-    <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext-dark.png" width="75" height="75" class="mr-1 -my-2 logo-img">
-                CypherGoat
-            </a>
-            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/exchanges">Exchanges</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/affiliate">Affiliate</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/this-week-in-monero" title="This Week In Monero">TWIM</a>
-            </div>
-        </nav>
-    </header>
-
-    { children... }
-    </body>
-    </html>
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<script src="/static/htmx.min.js"></script>
+			<title>CypherGoat Guides - Privacy, Monero &amp; Crypto Security</title>
+			<meta name="title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security"/>
+			<meta name="description" content="In-depth guides on crypto privacy, Monero, and security. Learn how to swap privately, use Monero effectively, and protect your financial sovereignty."/>
+			<meta name="keywords" content="monero guides, crypto privacy guides, cryptocurrency security, monero tutorials, xmr swap guide, no kyc crypto, privacy coins"/>
+			<meta name="author" content="CypherGoat"/>
+			<link rel="canonical" href="https://cyphergoat.com/guides"/>
+			<meta property="og:title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security"/>
+			<meta property="og:description" content="In-depth guides on crypto privacy, Monero, and security. Learn how to swap privately, use Monero effectively, and protect your financial sovereignty."/>
+			<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
+			<meta property="og:image:type" content="image/png"/>
+			<meta property="og:image:width" content="1200"/>
+			<meta property="og:image:height" content="630"/>
+			<meta property="og:image:alt" content="CypherGoat Guides"/>
+			<meta property="og:url" content="https://cyphergoat.com/guides"/>
+			<meta property="og:type" content="website"/>
+			<meta name="twitter:card" content="summary_large_image"/>
+			<meta name="twitter:title" content="CypherGoat Guides"/>
+			<meta name="twitter:description" content="In-depth guides on privacy, security, and using Monero and related tools effectively."/>
+			<meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
+			<meta name="twitter:image:alt" content="CypherGoat Guides"/>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+			@SharedNavbarHead()
+		</head>
+		<body class="bg-[#0b0d14] text-gray-100 antialiased">
+			@SharedNavbar()
+			{ children... }
+		</body>
+	</html>
 }
 
 templ GuidesPostHeader(post *BlogPostData) {
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)">
-        <link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/static/tailwind.css?v=202508134" rel="stylesheet">
-        <link href="/static/styles.css?v=202508134" rel="stylesheet">
-        <script src="/static/htmx.min.js"></script>
-
-        <title>{ post.Title } | CypherGoat Guides</title>
-        <meta name="title" content={ post.Title + " | CypherGoat Guides" }>
-        <meta name="description" content={ post.Description }>
-        <meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto guides, monero, privacy" }>
-        <meta name="author" content={ post.Author }>
-
-        <link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug) }>
-
-        <meta property="og:type" content="article">
-        <meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug) }>
-        <meta property="og:title" content={ post.Title + " | CypherGoat Guides" }>
-        <meta property="og:description" content={ post.Description }>
-        if post.Image != "" {
-            <meta property="og:image" content={ post.Image }>
-        } else {
-            <meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png">
-            <meta property="og:image:type" content="image/png">
-            <meta property="og:image:width" content="1200">
-            <meta property="og:image:height" content="630">
-            <meta property="og:image:alt" content="CypherGoat Guides">
-        }
-
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug) }>
-        <meta property="twitter:title" content={ post.Title + " | CypherGoat Guides" }>
-        <meta property="twitter:description" content={ post.Description }>
-        if post.Image != "" {
-            <meta property="twitter:image" content={ post.Image }>
-        } else {
-            <meta property="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png">
-            <meta name="twitter:image:alt" content="CypherGoat Guides">
-        }
-
-        <meta property="article:published_time" content={ post.Date }>
-        <meta property="article:author" content={ post.Author }>
-        for _, tag := range post.Tags {
-            <meta property="article:tag" content={ tag }>
-        }
-
-        @templ.Raw(generateGuidesPostJsonLD(post))
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    </head>
-    <body class="bg-[#121520]">
-    <header class="flex flex-wrap items-center w-full text-sm py-1 shadow-md relative" style="background: linear-gradient(145deg, #1a1f2e, #222633); border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-        <nav class="max-w-[85rem] w-full mx-auto px-6 flex items-center justify-between">
-            <a class="flex items-center font-semibold text-3xl text-white logo-link" href="/" aria-label="Brand">
-                <img src="/static/icons/cg-notext-dark.png" width="75" height="75" class="mr-1 -my-2 logo-img">
-                CypherGoat
-            </a>
-            <button id="menu-toggle" class="block lg:hidden px-3 py-2 text-gray-400 hover:text-white focus:outline-none z-20">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-            <div id="nav-menu" class="lg:!flex lg:!inline-flex flex-col lg:flex-row items-center gap-4 mt-5 lg:mt-0 lg:gap-6">
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/">Home</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/exchanges">Exchanges</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/affiliate">Affiliate</a>
-                <a class="font-semibold text-gray-300 hover:text-white transition-all duration-300 focus:outline-none" href="/this-week-in-monero" title="This Week In Monero">TWIM</a>
-            </div>
-        </nav>
-    </header>
-
-    { children... }
-    </body>
-    </html>
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
+			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<script src="/static/htmx.min.js"></script>
+			<title>{ post.Title } | CypherGoat Guides</title>
+			<meta name="title" content={ post.Title + " | CypherGoat Guides" }/>
+			<meta name="description" content={ post.Description }/>
+			<meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto guides, monero, privacy" }/>
+			<meta name="author" content={ post.Author }/>
+			<link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug) }/>
+			<meta property="og:type" content="article"/>
+			<meta property="og:url" content={ fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug) }/>
+			<meta property="og:title" content={ post.Title + " | CypherGoat Guides" }/>
+			<meta property="og:description" content={ post.Description }/>
+			if post.Image != "" {
+				<meta property="og:image" content={ post.Image }/>
+			} else {
+				<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
+				<meta property="og:image:type" content="image/png"/>
+				<meta property="og:image:width" content="1200"/>
+				<meta property="og:image:height" content="630"/>
+				<meta property="og:image:alt" content="CypherGoat Guides"/>
+			}
+			<meta property="twitter:card" content="summary_large_image"/>
+			<meta property="twitter:url" content={ fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug) }/>
+			<meta property="twitter:title" content={ post.Title + " | CypherGoat Guides" }/>
+			<meta property="twitter:description" content={ post.Description }/>
+			if post.Image != "" {
+				<meta property="twitter:image" content={ post.Image }/>
+			} else {
+				<meta property="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
+				<meta name="twitter:image:alt" content="CypherGoat Guides"/>
+			}
+			<meta property="article:published_time" content={ post.Date }/>
+			<meta property="article:author" content={ post.Author }/>
+			for _, tag := range post.Tags {
+				<meta property="article:tag" content={ tag }/>
+			}
+			@templ.Raw(generateGuidesPostJsonLD(post))
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+			@SharedNavbarHead()
+		</head>
+		<body class="bg-[#0b0d14] text-gray-100 antialiased">
+			@SharedNavbar()
+			{ children... }
+		</body>
+	</html>
 }
 
 func generateGuidesPostJsonLD(post *BlogPostData) string {
-    jsonLD := map[string]interface{}{
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": post.Title,
-        "description": post.Description,
-        "image": post.Image,
-        "author": map[string]interface{}{
-            "@type": "Person",
-            "name": post.Author,
-        },
-        "publisher": map[string]interface{}{
-            "@type": "Organization",
-            "name": "CypherGoat",
-            "logo": map[string]interface{}{
-                "@type": "ImageObject",
-                "url": "https://cyphergoat.com/static/icons/cg-notext.svg",
-            },
-        },
-        "datePublished": post.Date,
-        "mainEntityOfPage": map[string]interface{}{
-            "@type": "WebPage",
-            "@id": fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug),
-        },
-    }
+	jsonLD := map[string]interface{}{
+		"@context":    "https://schema.org",
+		"@type":       "Article",
+		"headline":    post.Title,
+		"description": post.Description,
+		"image":       post.Image,
+		"author": map[string]interface{}{
+			"@type": "Person",
+			"name":  post.Author,
+		},
+		"publisher": map[string]interface{}{
+			"@type": "Organization",
+			"name":  "CypherGoat",
+			"logo": map[string]interface{}{
+				"@type": "ImageObject",
+				"url":   "https://cyphergoat.com/static/icons/cg-notext.svg",
+			},
+		},
+		"datePublished": post.Date,
+		"mainEntityOfPage": map[string]interface{}{
+			"@type": "WebPage",
+			"@id":   fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug),
+		},
+	}
 
-    jsonBytes, err := json.MarshalIndent(jsonLD, "", "  ")
-    if err != nil {
-        return "<script type=\"application/ld+json\">{}</script>"
-    }
+	jsonBytes, err := json.MarshalIndent(jsonLD, "", "  ")
+	if err != nil {
+		return "<script type=\"application/ld+json\">{}</script>"
+	}
 
-    return "<script type=\"application/ld+json\">\n" + string(jsonBytes) + "\n</script>"
+	return "<script type=\"application/ld+json\">\n" + string(jsonBytes) + "\n</script>"
 }

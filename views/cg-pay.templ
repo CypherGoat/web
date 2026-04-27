@@ -10,14 +10,14 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
     
     <style>
         :root {
-            --bg-color: #111624;
-            --card-color: #191f2d;
-            --button-color: #0d74ff;
+            --bg-color: #0b0d14;
+            --card-color: #11151c;
+            --button-color: #f3eee2;
             --text-color: #e0e0e0;
-            --accent-color: #66b0ff;
-            --button-hover: #0c66e5;
-            --card-border: rgba(255, 255, 255, 0.04);
-            --accent-bg: rgba(13, 116, 255, 0.15);
+            --accent-color: #e9e2d1;
+            --button-hover: #faf7ef;
+            --card-border: rgba(255, 255, 255, 0.06);
+            --accent-bg: rgba(255, 255, 255, 0.05);
         }
 
         html, body {
@@ -68,7 +68,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
             background-color: var(--card-color);
             border-radius: 14px;
             padding: 1rem 0.9rem;
-            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32);
             border: 1px solid var(--card-border);
             transition: box-shadow 0.2s ease;
             width: 100%;
@@ -93,7 +93,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
             border-radius: 12px;
             margin-bottom: 0.75rem;
             background-color: var(--accent-bg);
-            border: 1px solid rgba(13, 116, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--accent-color);
         }
 
@@ -126,8 +126,8 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
             display: flex;
             flex-direction: column;
             gap: 0.55rem;
-            background-color: #171c29;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, 0.018);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             padding: 0.9rem 0.85rem;
         }
@@ -170,7 +170,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
         .send-input:focus {
             border-color: var(--button-color);
             outline: none;
-            box-shadow: 0 0 0 3px var(--button-color);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
         }
 
         .send-input.form-input {
@@ -223,7 +223,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
             background-color: var(--card-color);
             border-radius: 12px;
             padding: 1rem 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #1e2235;
         }
 
         .receive-summary .summary-label {
@@ -334,7 +334,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
             padding: 0.65rem;
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
-            background-color: #1a1f2e;
+            background-color: #0f1119;
             color: var(--text-color);
             font-size: 0.9rem;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -415,7 +415,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
 
         .btn-primary {
             background-color: var(--button-color);
-            color: #ffffff;
+            color: #0b0d14;
             padding: 0.75rem;
             border: none;
             border-radius: 10px;
@@ -425,19 +425,19 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
             width: 100%;
             transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
             position: relative;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-            box-shadow: 0 8px 18px rgba(13, 116, 255, 0.24);
+            text-shadow: none;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
         }
 
         .btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 10px 22px rgba(13, 116, 255, 0.32);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
             background-color: var(--button-hover);
         }
 
         .btn-primary:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(13, 116, 255, 0.18), 0 8px 18px rgba(13, 116, 255, 0.28);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08), 0 8px 18px rgba(0, 0, 0, 0.22);
         }
 
         .form-input.read-only {
@@ -447,7 +447,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
         }
 
         .form-input.pay-mode {
-            background-color: #1a1f2e;
+            background-color: #0f1119;
             color: #e0e0e0;
         }
 
@@ -510,11 +510,11 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
         }
 
         .modal-content {
-            background-color: #191f2d;
+            background-color: #0f1119;
             border-radius: 14px;
             padding: 1.35rem;
             width: min(400px, 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid #1e2235;
             box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42);
         }
 

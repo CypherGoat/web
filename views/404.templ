@@ -26,9 +26,11 @@ templ NotFoundPage() {
         <link href="/static/styles.css" rel="stylesheet">
         <style>
             body {
-    background-color: #121520;
+                background:
+                    radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 30%),
+                    #0b0d14;
                 color: #e0e0e0;
-    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+                font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -37,36 +39,48 @@ templ NotFoundPage() {
             }
             .container {
                 text-align: center;
+                padding: 2.25rem 2rem;
+                border-radius: 28px;
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                background:
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                    #11151c;
+                box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
             }
             .container h1 {
-                font-size: 6rem;
+                font-size: 5.5rem;
                 margin-bottom: 1rem;
+                letter-spacing: -0.08em;
+                line-height: 0.9;
             }
             .container p {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
                 margin-bottom: 2rem;
+                color: #98a1b1;
             }
             .container a {
                 display: inline-block;
-                padding: 0.75rem 1.5rem;
-                background-color: #00bfff;
-                color: #fff;
+                padding: 0.85rem 1.5rem;
+                background-color: #f3eee2;
+                color: #0b0d14;
                 border-radius: 12px;
                 text-decoration: none;
-                font-size: 1.1rem;
-                transition: background-color 0.3s ease;
+                font-size: 1rem;
+                font-weight: 600;
+                transition: background-color 0.15s ease;
             }
             .container a:hover {
-                background-color: #007bff;
+                background-color: #faf7ef;
             }
             .cute-image {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 2rem;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+                width: 112px;
+                height: 112px;
+                margin-bottom: 1.75rem;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                opacity: 0.95;
+            }
         </style>
     </head>
     <body>

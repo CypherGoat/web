@@ -21,35 +21,88 @@ templ Terms(){
     }
 <style>
     body {
- background-color: #121520;
-    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        background-color: #0b0d14;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    }
+
+    .legal-shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 3.25rem 1.5rem 0;
+    }
+
+    .legal-hero {
+        max-width: 52rem;
+        margin: 0 auto 2.5rem;
+        text-align: center;
+    }
+
+    .legal-card {
+        padding: 2rem;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    .legal-list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .legal-item {
+        padding-top: 1.4rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .legal-item:first-child {
+        padding-top: 0;
+        border-top: none;
+    }
+
+    .legal-item strong {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+        .legal-shell {
+            padding: 2.5rem 1rem 0;
+        }
+
+        .legal-card {
+            padding: 1.4rem;
+            border-radius: 18px;
+        }
     }
       
     </style>
-    <div class="text-gray-100 font-sans py-8 px-4">
-    <header class="mb-12 text-center">
+    <div class="legal-shell text-gray-100 font-sans">
+    <header class="legal-hero">
       <h1 class="text-4xl font-bold text-white mb-4">Welcome to CypherGoat!</h1>
       <p class="text-lg text-gray-400">By using our service, you agree to abide by the following terms:</p>
     </header>
 
-    <ul class="space-y-8 max-w-4xl mx-auto">
-      <li>
+    <ul class="legal-card legal-list max-w-4xl mx-auto">
+      <li class="legal-item">
         <strong class="text-white text-xl">1. No Custody of Funds:</strong>
         <p class="text-base text-gray-300">CypherGoat does not, at any point, take custody of your funds, ensuring your assets remain under your control.</p>
       </li>
-      <li>
+      <li class="legal-item">
         <strong class="text-white text-xl">2. Third-Party Communication:</strong>
         <p class="text-base text-gray-300">CypherGoat acts as a platform facilitating communication with third-party providers for instant swaps. It's imperative that users comprehend and adhere to the risks, terms, and privacy policies of these providers.</p>
       </li>
-      <li>
+      <li class="legal-item">
         <strong class="text-white text-xl">3. Investment Risks:</strong>
         <p class="text-base text-gray-300">Users understand and acknowledge the inherent risks associated with investments and trading activities facilitated through CypherGoat. It's recommended to conduct thorough research and seek professional advice before engaging in any investment activities.</p>
       </li>
-      <li>
+      <li class="legal-item">
         <strong class="text-white text-xl">4. No Responsibility for Loss:</strong>
         <p class="text-base text-gray-300">CypherGoat bears no responsibility for any loss of funds, investments, or assets incurred as a result of using our service or engaging with third-party providers. Users assume full responsibility for their investment decisions and outcomes.</p>
       </li>
-<li class="space-y-3">
+<li class="legal-item space-y-3">
   <strong class="text-white text-xl">5. KYC Requests:</strong>
   <p class="text-base text-gray-300">
     While it is rare for a partnered exchange to request KYC (Know Your Customer) verification, some exchanges may require it to comply with Anti-Money Laundering (AML) regulations. Partners independently monitor transactions and may request KYC if they suspect illegal activity.
@@ -67,11 +120,11 @@ templ Terms(){
   </p>
 </li>
 
-      <li>
+      <li class="legal-item">
         <strong class="text-white text-xl">6. Third-Party Accountability:</strong>
         <p class="text-base text-gray-300">CypherGoat bears no responsibility for the actions or outcomes resulting from interactions with third-party providers. Users are solely responsible for understanding and accepting the terms and risks associated with these providers.</p>
       </li>
-      <li>
+      <li class="legal-item">
         <strong class="text-white text-xl">7. On-Chain Fees:</strong>
         <p class="text-base text-gray-300">Users acknowledge that on-chain transactions may incur fees, such as network transaction fees (e.g., gas fees for Ethereum transactions). CypherGoat is not responsible for these fees, which are determined by the respective blockchain networks and may vary based on network conditions. Users are responsible for paying any applicable fees associated with their transactions.</p>
       </li>
@@ -88,38 +141,38 @@ templ Privacy(){
     }
 <style>
     body {
-   background-color: #121520;
+   background-color: #0b0d14;
     font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
     }
 </style>
-<div class="text-gray-100 font-sans py-8 px-4">
-    <header class="mb-12 text-center">
+<div class="legal-shell text-gray-100 font-sans">
+    <header class="legal-hero">
         <h1 class="text-4xl font-bold text-white mb-4">Privacy Policy</h1>
         <p class="text-lg text-gray-400">Your privacy is important to us. This policy outlines how CypherGoat collects, uses, and protects your information.</p>
     </header>
 
-    <ul class="space-y-8 max-w-4xl mx-auto">
-        <li>
+    <ul class="legal-card legal-list max-w-4xl mx-auto">
+        <li class="legal-item">
             <strong class="text-white text-xl">1. Information We Collect:</strong>
             <p class="text-base text-gray-300">CypherGoat does not collect personal information unless explicitly provided by the user. Any data collected is limited to what is necessary to provide our services.</p>
         </li>
-        <li>
+        <li class="legal-item">
             <strong class="text-white text-xl">2. Use of Information:</strong>
             <p class="text-base text-gray-300">We use the information you provide solely to facilitate the services offered by CypherGoat. We do not sell, rent, or share your information with third parties, except as required by law or to fulfill service requests.</p>
         </li>
-        <li>
+        <li class="legal-item">
             <strong class="text-white text-xl">3. Third-Party Services:</strong>
             <p class="text-base text-gray-300">CypherGoat integrates with third-party providers to facilitate transactions. These providers may have their own privacy policies, and we encourage users to review them before engaging with their services.</p>
         </li>
-        <li>
+        <li class="legal-item">
             <strong class="text-white text-xl">4. Cookies and Tracking:</strong>
             <p class="text-base text-gray-300">CypherGoat may use cookies or similar technologies for affiliate tracking. These cookies do not store personal information and can be disabled in your browser settings.</p>
         </li>
-        <li>
+        <li class="legal-item">
             <strong class="text-white text-xl">5. Data Security:</strong>
             <p class="text-base text-gray-300">We implement industry-standard security measures to protect your data. However, no system is completely secure, and we cannot guarantee the absolute security of your information.</p>
         </li>
-        <li>
+        <li class="legal-item">
             <strong class="text-white text-xl">6. Data Retention and Logging:</strong>
             <p class="text-base text-gray-300">IP logging is only triggered when users initiate a trade through specific exchange partners that require it for compliance purposes, such as FixedFloat, ChangeNOW, or StealthEx. For all other interactions, CypherGoat does not retain IP addresses, user agents, or language preferences.</p>
             <p class="text-base text-gray-300">CypherGoat collects and retains the following information for compliance purposes:</p>
@@ -131,11 +184,11 @@ templ Privacy(){
             <p class="text-base text-gray-300">Transaction data, including destination addresses and amounts, is anonymized after 14 days. However, some partnered exchanges may require IP logging for compliance purposes. For these exchanges, IP logs may be retained securely by us for longer periods as mandated by their policies.</p>
             <p class="text-base text-gray-300">In compliance with applicable laws, data may be provided to law enforcement agencies on an individual basis upon valid legal requests. We recommend users review the privacy policies of these exchanges to understand their data retention practices.</p>
         </li>
-        <li>
+        <li class="legal-item">
             <strong class="text-white text-xl">7. Open Source Transparency:</strong>
             <p class="text-base text-gray-300">CypherGoats web interface is open source, allowing anyone review the code and verify how user data is handled. This transparency ensures that our privacy practices align with the policy outlined here. You can access the source code on our public repository <a href="https://github.com/cyphergoat/web">here</a>.</p>
         </li>
-                <li>
+                <li class="legal-item">
             <strong class="text-white text-xl">8. Changes to This Policy:</strong>
             <p class="text-base text-gray-300">CypherGoat reserves the right to update this Privacy Policy at any time. Changes will be communicated through our platform, and continued use of our services constitutes acceptance of the updated policy.</p>
         </li>
@@ -156,7 +209,7 @@ templ CGShield(){
 
     <style>
     body {
-        background-color: #121520;
+        background-color: #0b0d14;
         font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
     }
     .shield-icon {
@@ -164,19 +217,22 @@ templ CGShield(){
         margin-right: 8px;
     }
     .section-card {
-        background-color: rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        border-radius: 24px;
         padding: 24px;
         margin-bottom: 24px;
-        border-left: 3px solid #3182ce;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
     }
     .highlight {
-        color: #4299e1;
+        color: #f3eee2;
         font-weight: 500;
     }
     </style>
 
-    <div class="text-gray-100 font-sans py-12 px-6">
+    <div class="legal-shell text-gray-100 font-sans py-12 px-6">
         <header class="mb-16 text-center max-w-4xl mx-auto">
             <div class="flex items-center justify-center mb-4">
                 <svg class="w-10 h-10 text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -193,7 +249,7 @@ templ CGShield(){
                 <h2 class="text-2xl font-bold text-white mb-4">1. What is the CypherGoat Shield Guarantee?</h2>
                 <p class="text-base text-gray-300 mt-3">The CypherGoat Shield is our promise to you. If you complete a transaction and do not receive your funds, we will step in to help. This protection covers you if an exchange fails to complete your transaction <span class="highlight">or</span> they hold your funds due to a verification (KYC) issue and refuse to provide a refund. If the exchange cannot give us a valid reason for their action (like high AML risk or a legal order), CypherGoat will reimburse you up to the insured amount.</p>
                 
-                <div class="bg-blue-900 bg-opacity-20 p-4 rounded-lg mt-4 border-l-4 border-blue-500">
+                <div class="bg-white/[0.03] p-4 rounded-[18px] mt-4 border border-white/8">
                     <p class="text-base text-gray-200"><span class="font-bold">How to Check Coverage:</span> The protection amount is set by each exchange. You can see the exact amount covered directly next to the <span class="font-bold">Shield icon</span> in the exchange listing before you start your trade. This amount is locked in for you the moment you begin your transaction.</p>
                 </div>
             </div>
@@ -204,17 +260,17 @@ templ CGShield(){
                 
                 <div class="mt-4 space-y-4">
                     <div class="flex">
-                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">1</span>
-                        <p class="text-base text-gray-300"><span class="font-semibold text-white">Contact Us:</span> If you have a problem, you must contact our support team within <span class="highlight">four (4) weeks</span> of creating your transaction. Please provide your CypherGoat Transaction ID and explain the issue. You can reach us at <a href="mailto:support@cyphergoat.com" class="text-blue-400 hover:underline">support@cyphergoat.com</a>.</p>
+                        <span class="bg-[#f3eee2] text-[#0b0d14] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">1</span>
+                        <p class="text-base text-gray-300"><span class="font-semibold text-white">Contact Us:</span> If you have a problem, you must contact our support team within <span class="highlight">four (4) weeks</span> of creating your transaction. Please provide your CypherGoat Transaction ID and explain the issue. You can reach us at <a href="mailto:support@cyphergoat.com" class="text-gray-200 hover:text-white hover:underline">support@cyphergoat.com</a>.</p>
                     </div>
                     
                     <div class="flex">
-                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">2</span>
+                        <span class="bg-[#f3eee2] text-[#0b0d14] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">2</span>
                         <p class="text-base text-gray-300"><span class="font-semibold text-white">Mediation:</span> We will first talk to the exchange on your behalf to try and solve the problem directly. Our goal is always to get your transaction completed or refunded by the exchange.</p>
                     </div>
                     
                     <div class="flex">
-                        <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">3</span>
+                        <span class="bg-[#f3eee2] text-[#0b0d14] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">3</span>
                         <p class="text-base text-gray-300"><span class="font-semibold text-white">Reimbursement:</span> If we can't solve the issue and the exchange doesn't provide a good reason for holding the funds, we will process your refund. The reimbursement will be for your lost amount, up to the covered limit that was shown when you started the trade. Please keep in mind the whole process can take a week or longer.</p>
                     </div>
                 </div>
@@ -296,7 +352,7 @@ templ CGShield(){
         </div>
         
         <div class="text-center mt-16 max-w-4xl mx-auto">
-            <div class="bg-gradient-to-r from-blue-800 to-indigo-900 rounded-lg p-6 shadow-lg">
+            <div class="bg-[#161a24] border border-[#1e2235] rounded-lg p-6">
                 <p class="text-lg text-white">Our mission with CypherGoat Shield is to create a safer and more trustworthy trading environment for everyone.</p>
             </div>
         </div>

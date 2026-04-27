@@ -2,20 +2,20 @@ package views
 
 templ GuidesIndex(posts []*BlogPostData) {
     @GuidesIndexHeader() {
-        <main class="min-h-screen bg-[#121520] text-white pb-16">
-            <div class="container max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <main class="min-h-screen bg-[#0b0d14] text-white pb-20">
+            <div class="container max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
                 <div class="text-center mb-12 sm:mb-16">
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent leading-tight">
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-medium mb-4 sm:mb-6 text-white leading-[0.95] tracking-[-0.06em]">
                         Guides
                     </h1>
-                    <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-2 leading-relaxed">
+                    <p class="text-lg sm:text-xl text-[#98a1b1] max-w-2xl mx-auto px-2 leading-relaxed">
                         In-depth guides on privacy, security, and using Monero and related tools effectively.
                     </p>
-                    <div class="mt-6 sm:mt-8 w-16 sm:w-20 h-1 bg-gradient-to-r from-green-400 to-green-600 mx-auto rounded-full"></div>
+                    <div class="mt-8 sm:mt-10 w-16 h-px bg-white/10 mx-auto"></div>
 
                     <!-- RSS Feed Link -->
                     <div class="mt-4">
-                        <a href="/guides/rss.xml" class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors text-sm font-medium">
+                        <a href="/guides/rss.xml" class="inline-flex items-center gap-2 text-[#ece6d8] hover:text-[#faf7ef] transition-colors text-sm font-medium">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M5 3a1 1 0 000 2c5.523 0 10 4.477 10 10a1 1 0 102 0C17 8.373 11.627 3 5 3z"></path>
                                 <path d="M4 9a1 1 0 000 2 7 7 0 017 7 1 1 0 102 0A9 9 0 004 9z"></path>
@@ -28,33 +28,33 @@ templ GuidesIndex(posts []*BlogPostData) {
                 <div class="grid gap-6 sm:gap-8">
                     for _, post := range posts {
                         if !post.Draft {
-                            <a href={ templ.URL("/guides/" + post.IssueSlug) } class="block group rounded-xl transition-all duration-300 touch-manipulation">
-                                <article class="flex flex-col p-4 sm:p-6 md:p-8 rounded-xl bg-gradient-to-br from-[#1a1f2e] to-[#222633] group-hover:shadow-lg border border-gray-800/60 group-hover:border-green-500/40 transition-all duration-300 shadow-md hover:shadow-green-500/10 group-active:scale-[0.98]">
+                            <a href={ templ.URL("/guides/" + post.IssueSlug) } class="block group rounded-[22px] transition-all duration-300 touch-manipulation">
+                                <article class="flex flex-col p-5 sm:p-7 md:p-8 rounded-[22px] bg-[#12161d] border border-white/6 shadow-[0_24px_56px_rgba(0,0,0,0.28)] group-hover:border-white/10 transition-colors duration-200">
                                     if post.Image != "" {
-                                        <div class="mb-4 overflow-hidden rounded-lg">
+                                        <div class="mb-5 overflow-hidden rounded-[16px]">
                                             <img src={ post.Image } alt={ post.Title } class="w-full rounded-lg object-cover max-h-96"/>
                                         </div>
                                     }
                                     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
                                         <div class="flex-1 min-w-0">
-                                            <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-white group-hover:text-green-300 transition-colors leading-tight mb-2 sm:mb-3">
+                                            <h2 class="text-lg sm:text-xl md:text-2xl font-medium text-white group-hover:text-gray-100 transition-colors leading-tight mb-2 sm:mb-3 tracking-[-0.04em]">
                                                 { post.Title }
                                             </h2>
                                             if post.Description != "" {
-                                                <p class="text-sm sm:text-base text-gray-400 leading-relaxed line-clamp-3">
+                                                <p class="text-sm sm:text-base text-[#98a1b1] leading-relaxed line-clamp-3">
                                                     { post.Description }
                                                 </p>
                                             }
                                         </div>
                                     </div>
-                                    <div class="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500">
+                                    <div class="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-[#7f8898]">
                                         <time datetime={ post.Date }>{ post.Date }</time>
-                                        <span class="text-gray-600">•</span>
+                                        <span class="text-white/12">•</span>
                                         <span>{ post.Author }</span>
                                         if len(post.Tags) > 0 {
-                                            <span class="text-gray-600">•</span>
+                                            <span class="text-white/12">•</span>
                                             for _, tag := range post.Tags {
-                                                <span class="px-2 py-0.5 bg-green-500/10 text-green-400 rounded-full text-xs">{ tag }</span>
+                                                <span class="px-2.5 py-1 bg-white/[0.03] text-[#8c95a5] rounded-full text-xs border border-white/6">{ tag }</span>
                                             }
                                         }
                                     </div>
@@ -75,10 +75,10 @@ templ GuidesPost(post *BlogPostData) {
             <div id="progressBar" class="progress-bar"></div>
         </div>
 
-        <main class="min-h-screen bg-[#121520] text-white pb-16">
-            <div class="container max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <main class="min-h-screen bg-[#0b0d14] text-white pb-20">
+            <div class="container max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
                 <nav class="mb-6 sm:mb-8">
-                    <a href="/guides" class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors font-medium py-2 px-2 -mx-2 rounded-md touch-manipulation">
+                    <a href="/guides" class="inline-flex items-center gap-2 text-[#ece6d8] hover:text-[#faf7ef] transition-colors font-medium py-2 px-2 -mx-2 rounded-md touch-manipulation">
                         <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
@@ -89,28 +89,28 @@ templ GuidesPost(post *BlogPostData) {
                 <article>
                     <header class="mb-8 sm:mb-10">
                         if post.Image != "" {
-                            <div class="mb-6 overflow-hidden rounded-xl">
+                            <div class="mb-6 overflow-hidden rounded-[18px]">
                                 <img src={ post.Image } alt={ post.Title } class="w-full rounded-lg object-cover max-h-96"/>
                             </div>
                         }
-                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-[#7f8898] mb-3 sm:mb-4">
                             <time datetime={ post.Date }>{ post.Date }</time>
                             <span class="text-gray-600">•</span>
                             <span>{ post.Author }</span>
                         </div>
                         <div><span class="text-sm text-gray-500">{ post.IssueSlug }</span></div>
-                        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent leading-tight">
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium mb-4 sm:mb-6 text-white leading-tight tracking-[-0.05em]">
                             { post.Title }
                         </h1>
                         if post.Description != "" {
-                            <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                            <p class="text-base sm:text-lg text-[#98a1b1] leading-relaxed">
                                 { post.Description }
                             </p>
                         }
                         if len(post.Tags) > 0 {
                             <div class="mt-4 flex flex-wrap gap-2">
                                 for _, tag := range post.Tags {
-                                    <span class="px-3 py-1 bg-green-500/10 text-green-400 rounded-full text-sm">{ tag }</span>
+                                    <span class="px-3 py-1 bg-white/[0.03] text-[#8c95a5] rounded-full text-sm border border-white/6">{ tag }</span>
                                 }
                             </div>
                         }
@@ -122,13 +122,13 @@ templ GuidesPost(post *BlogPostData) {
                 </article>
 
                 <div class="mt-12 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <a href="/guides" class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-green-500/20 hover:border-green-500/40 bg-green-500/10 hover:bg-green-500/20 touch-manipulation w-full sm:w-auto justify-center">
+                    <a href="/guides" class="inline-flex items-center gap-2 text-[#ece6d8] hover:text-[#faf7ef] transition-colors font-semibold py-3 px-4 rounded-xl border border-white/8 hover:border-white/14 bg-white/[0.03] hover:bg-white/[0.05] touch-manipulation w-full sm:w-auto justify-center">
                         <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                         <span>Back to Guides</span>
                     </a>
-                    <a href="#top" class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors font-semibold py-3 px-4 rounded-lg border border-gray-700/40 hover:border-gray-600/60 bg-gray-700/10 hover:bg-gray-700/20 touch-manipulation w-full sm:w-auto justify-center">
+                    <a href="#top" class="inline-flex items-center gap-2 text-[#98a1b1] hover:text-white transition-colors font-semibold py-3 px-4 rounded-xl border border-white/8 hover:border-white/14 bg-white/[0.03] hover:bg-white/[0.05] touch-manipulation w-full sm:w-auto justify-center">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
                         </svg>
@@ -155,9 +155,7 @@ templ GuidesPost(post *BlogPostData) {
                 margin-top: 2.5rem;
                 margin-bottom: 1.25rem;
                 color: #ffffff;
-                background: linear-gradient(to right, #4ade80, #16a34a);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
+                color: #ffffff;
             }
             @media (min-width: 640px) {
                 #blog-content h1 { font-size: 2rem; line-height: 2.5rem; margin-top: 3rem; margin-bottom: 1.5rem; }
@@ -181,7 +179,7 @@ templ GuidesPost(post *BlogPostData) {
                 font-weight: 700;
                 margin-top: 2rem;
                 margin-bottom: 0.75rem;
-                color: #4ade80;
+                color: #ddd4bf;
             }
             @media (min-width: 640px) {
                 #blog-content h3 { font-size: 1.5rem; line-height: 2rem; margin-top: 2.5rem; margin-bottom: 1rem; }
@@ -222,14 +220,14 @@ templ GuidesPost(post *BlogPostData) {
             #blog-content strong { font-weight: 700; color: #ffffff; }
             #blog-content em { font-style: italic; color: #f0f0f0; }
             #blog-content a {
-                color: #4ade80;
+                color: #e9e2d1;
                 text-decoration: underline;
                 text-decoration-thickness: 2px;
                 text-underline-offset: 3px;
                 transition: all 0.2s ease;
                 font-weight: 500;
             }
-            #blog-content a:hover { color: #16a34a; text-decoration-thickness: 3px; }
+            #blog-content a:hover { color: #faf7ef; text-decoration-thickness: 3px; }
             #blog-content ul, #blog-content ol {
                 list-style-type: disc;
                 padding-left: 1.5rem;
@@ -246,12 +244,12 @@ templ GuidesPost(post *BlogPostData) {
                 #blog-content li { margin: 0.75rem 0; line-height: 1.8; font-size: 1.1rem; }
             }
             #blog-content blockquote {
-                border-left: 4px solid #16a34a;
+                border-left: 4px solid rgba(233, 226, 209, 0.65);
                 padding: 1rem 1.5rem;
                 margin: 1.5rem 0;
-                background: rgba(74, 222, 128, 0.08);
+                background: rgba(255, 255, 255, 0.03);
                 border-radius: 8px;
-                border: 1px solid rgba(74, 222, 128, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.08);
                 font-style: italic;
             }
             @media (min-width: 640px) {
@@ -276,7 +274,7 @@ templ GuidesPost(post *BlogPostData) {
                 font-weight: 600;
                 padding: 0.5rem 0.75rem;
                 text-align: left;
-                border-bottom: 2px solid rgba(74, 222, 128, 0.5);
+                border-bottom: 2px solid rgba(233, 226, 209, 0.35);
                 font-size: 0.875rem;
             }
             @media (min-width: 640px) {
@@ -294,7 +292,7 @@ templ GuidesPost(post *BlogPostData) {
             #blog-content table tr:hover { background-color: rgba(60, 60, 80, 0.2); }
             #blog-content table tr:nth-child(even) { background-color: rgba(30, 30, 40, 0.3); }
             #blog-content pre {
-                background: linear-gradient(145deg, #1a1f2e, #222633);
+                background: #12161d;
                 border-radius: 8px;
                 padding: 1rem;
                 margin: 1.25rem 0;
@@ -311,7 +309,7 @@ templ GuidesPost(post *BlogPostData) {
                 border-radius: 6px;
                 padding: 0.125rem 0.375rem;
                 font-size: 0.8rem;
-                color: #4ade80;
+                color: #e9e2d1;
                 font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
                 border: 1px solid rgba(255, 255, 255, 0.12);
             }
@@ -360,7 +358,7 @@ templ GuidesPost(post *BlogPostData) {
             body.js-enabled .progress-container { display: block; }
             .progress-bar {
                 height: 3px;
-                background: linear-gradient(to right, #16a34a, #4ade80);
+                background: linear-gradient(to right, #d8ccb2, #faf7ef);
                 width: 0%;
             }
             @media (max-width: 639px) {

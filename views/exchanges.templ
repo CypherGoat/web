@@ -79,7 +79,7 @@ templ Exchanges(){
     
     <style>
         body {
-            background-color: #121520;
+            background-color: #0b0d14;
             font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -99,34 +99,36 @@ templ Exchanges(){
 
         .page-header {
             text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
+            margin-bottom: 2.5rem;
+            padding: 2.5rem 0 1rem;
         }
 
         .page-title {
             font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            color: #f8fbff;
+            font-weight: 500;
+            color: #ffffff;
             margin-bottom: 1rem;
-            line-height: 1.2;
-            letter-spacing: -0.03em;
+            line-height: 0.96;
+            letter-spacing: -0.06em;
         }
 
         .page-description {
             font-size: 1.125rem;
-            color: #9ca9bd;
+            color: #98a1b1;
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.7;
         }
 
         .filters-section {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 102, 204, 0.06);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                #11151c;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 1.15rem 1.3rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
         }
 
         .filters-grid {
@@ -143,9 +145,11 @@ templ Exchanges(){
         }
 
         .filter-label {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #94a3b8;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #7f8898;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
             white-space: nowrap;
         }
 
@@ -168,10 +172,10 @@ templ Exchanges(){
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
-            padding: 0.4rem 0.7rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
+            padding: 0.48rem 0.78rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
             font-size: 0.75rem;
             font-weight: 500;
             color: #94a3b8;
@@ -182,14 +186,14 @@ templ Exchanges(){
         }
 
         .filter-checkbox:checked + .filter-checkmark {
-            background: rgba(0, 136, 255, 0.15);
-            border-color: rgba(0, 136, 255, 0.4);
-            color: #0088ff;
+            background: rgba(243, 238, 226, 0.08);
+            border-color: rgba(243, 238, 226, 0.2);
+            color: #f3eee2;
         }
 
         .filter-checkmark:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         .filter-icon-small {
@@ -199,11 +203,11 @@ templ Exchanges(){
         }
 
         .clear-filters {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            color: #fbbf24;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #d7deea;
             padding: 0.4rem 0.7rem;
-            border-radius: 6px;
+            border-radius: 999px;
             font-size: 0.75rem;
             font-weight: 500;
             cursor: pointer;
@@ -215,14 +219,14 @@ templ Exchanges(){
         }
 
         .clear-filters:hover {
-            background: rgba(251, 191, 36, 0.15);
-            border-color: rgba(251, 191, 36, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         .sort-select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
             padding: 0.4rem 0.6rem;
             color: #e2e8f0;
             font-size: 0.75rem;
@@ -232,12 +236,12 @@ templ Exchanges(){
         }
 
         .sort-select:focus {
-            border-color: rgba(0, 136, 255, 0.4);
-            box-shadow: 0 0 0 2px rgba(0, 136, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.18);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
         }
 
         .sort-select option {
-            background: #1a1f2e;
+            background: #12161d;
             color: #e2e8f0;
         }
 
@@ -246,10 +250,10 @@ templ Exchanges(){
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            padding: 0.75rem 1rem;
+            padding: 0.95rem 1.1rem;
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
         }
 
         .results-count {
@@ -269,9 +273,11 @@ templ Exchanges(){
         }
 
         .exchange-card {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                #11151c;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
             padding: 2rem;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -279,7 +285,7 @@ templ Exchanges(){
             overflow: hidden;
             text-decoration: none;
             color: inherit;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+            box-shadow: 0 26px 60px rgba(0, 0, 0, 0.28);
         }
 
         .exchange-card::before {
@@ -289,16 +295,16 @@ templ Exchanges(){
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, rgba(124, 193, 255, 0.9), rgba(0, 136, 255, 0.75));
+            background: linear-gradient(90deg, rgba(243, 238, 226, 0.7), rgba(243, 238, 226, 0.08));
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.4s ease;
         }
 
         .exchange-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 102, 204, 0.3);
-            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 30px 72px rgba(0, 0, 0, 0.32);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         .exchange-card:hover::before {
@@ -316,17 +322,18 @@ templ Exchanges(){
             width: 56px;
             height: 56px;
             object-fit: contain;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.035);
             padding: 0.5rem;  /* Reduced padding from 0.75rem */
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .exchange-name {
             font-size: 1.375rem;
-            font-weight: 700;
+            font-weight: 600;
             color: #ffffff;
             margin: 0;
+            letter-spacing: -0.03em;
         }
 
         .exchange-description {
@@ -355,27 +362,27 @@ templ Exchanges(){
         }
 
         .badge-success {
-            background: rgba(34, 197, 94, 0.15);
-            border-color: rgba(34, 197, 94, 0.3);
-            color: #22c55e;
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #d7e4d4;
         }
 
         .badge-info {
-            background: rgba(0, 136, 255, 0.1);
-            border-color: rgba(0, 136, 255, 0.22);
-            color: #7cc1ff;
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #d7deea;
         }
 
         .badge-warning {
-            background: rgba(251, 191, 36, 0.15);
-            border-color: rgba(251, 191, 36, 0.3);
-            color: #fbbf24;
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #e6dac1;
         }
 
         .badge-premium {
-            background: rgba(0, 136, 255, 0.1);
-            border-color: rgba(0, 136, 255, 0.22);
-            color: #7cc1ff;
+            background: rgba(243, 238, 226, 0.08);
+            border-color: rgba(243, 238, 226, 0.16);
+            color: #f3eee2;
         }
 
         .trustpilot-rating {
@@ -384,9 +391,9 @@ templ Exchanges(){
             gap: 0.75rem;
             margin-bottom: 1.5rem;
             padding: 1rem;
-            background: rgba(34, 197, 94, 0.08);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
         }
 
         .rating-stars {
@@ -397,12 +404,12 @@ templ Exchanges(){
         .rating-star {
             width: 16px;
             height: 16px;
-            fill: #34d399;
+            fill: #d8ccb2;
         }
 
         .rating-text {
             font-weight: 700;
-            color: #22c55e;
+            color: #f3eee2;
             font-size: 1rem;
         }
 
@@ -420,11 +427,11 @@ templ Exchanges(){
         }
 
         .view-details-btn {
-            background: linear-gradient(135deg, #0088ff, #0055cc);
-            color: #ffffff;
+            background: #f3eee2;
+            color: #0b0d14;
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 0.9rem;
             font-weight: 600;
             text-decoration: none;
@@ -432,13 +439,13 @@ templ Exchanges(){
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
         }
 
         .view-details-btn:hover {
-            background: linear-gradient(135deg, #0099ff, #0066dd);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
+            background: #faf7ef;
+            transform: translateY(-1px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
         }
 
         .exchange-meta {
@@ -460,8 +467,8 @@ templ Exchanges(){
 
         /* Recently Added Exchange Card Styling */
         .trustpilot-rating.recently-added {
-            background: rgba(0, 136, 255, 0.08); 
-            border: 1px solid rgba(0, 136, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .recently-added-content {
@@ -475,7 +482,7 @@ templ Exchanges(){
         }
 
         .recently-added-title {
-            color: #0088ff;
+            color: #f3eee2;
             font-size: 1.125rem;
             font-weight: 600;
             margin-bottom: 1rem;
@@ -508,7 +515,7 @@ templ Exchanges(){
         .verification-icon {
             width: 14px;
             height: 14px;
-            fill: #22c55e;
+            fill: #d8ccb2;
             flex-shrink: 0;
         }
 
@@ -520,17 +527,17 @@ templ Exchanges(){
             align-items: center;
             gap: 0.5rem;
             padding: 0.75rem 1rem;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             text-decoration: none;
             transition: all 0.2s ease;
         }
 
         .trustpilot-check-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         .trustpilot-rating.recently-added {
@@ -546,7 +553,7 @@ templ Exchanges(){
         }
 
         .trustpilot-rating.recently-added .rating-text {
-            color: #ff9500;
+            color: #f3eee2;
             font-weight: 700;
         }
 
@@ -956,7 +963,7 @@ templ ExchangeDetail(exchange Exchange) {
     
         <style>
         body {
-            background-color: #121520;
+            background-color: #0b0d14;
             font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -989,7 +996,7 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .breadcrumb a:hover {
-            color: #0088ff;
+            color: #faf7ef;
         }
 
         .breadcrumb-separator {
@@ -1002,15 +1009,17 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .hero-section {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 1.5rem;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                #11151c;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 28px;
+            padding: 2rem;
             text-align: center;
             margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.32);
         }
 
         .hero-section::before {
@@ -1020,7 +1029,7 @@ templ ExchangeDetail(exchange Exchange) {
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #0088ff, #0055cc);
+            background: linear-gradient(90deg, rgba(243, 238, 226, 0.7), rgba(243, 238, 226, 0.08));
         }
 
         .hero-logo {
@@ -1028,20 +1037,18 @@ templ ExchangeDetail(exchange Exchange) {
             height: 72px;
             object-fit: contain;
             margin: 0 auto 1rem;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.035);
             padding: 0.5rem;  /* Reduced padding from 0.75rem */
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .hero-title {
             font-size: 2.25rem;
-            font-weight: 800;
+            font-weight: 600;
             color: #ffffff;
             margin-bottom: 0.75rem;
-            background: linear-gradient(45deg, #0088ff, #0066cc, #0055cc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.05em;
         }
 
         .hero-description {
@@ -1076,15 +1083,15 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #0088ff, #0055cc);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+            background: #f3eee2;
+            color: #0b0d14;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.35);
-            background: linear-gradient(135deg, #0099ff, #0066dd);
+            transform: translateY(-1px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+            background: #faf7ef;
         }
 
         .btn-secondary {
@@ -1122,21 +1129,21 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .badge-info {
-            background: rgba(0, 136, 255, 0.15);
-            border: 1px solid rgba(0, 136, 255, 0.3);
-            color: #0088ff;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #d7deea;
         }
 
         .badge-warning {
-            background: rgba(251, 191, 36, 0.15);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-            color: #fbbf24;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e6dac1;
         }
 
         .badge-premium {
-            background: rgba(0, 136, 255, 0.15);
-            border: 1px solid rgba(0, 136, 255, 0.3);
-            color: #0088ff;
+            background: rgba(243, 238, 226, 0.08);
+            border: 1px solid rgba(243, 238, 226, 0.16);
+            color: #f3eee2;
         }
 
         .content-grid {
@@ -1159,17 +1166,19 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .card {
-            background: linear-gradient(145deg, #1a1f2e, #222633);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                #11151c;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
             padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 102, 204, 0.07);
+            box-shadow: 0 24px 56px rgba(0, 0, 0, 0.28);
             transition: box-shadow 0.3s ease, transform 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 102, 204, 0.1);
+            transform: translateY(-1px);
+            box-shadow: 0 30px 64px rgba(0, 0, 0, 0.3);
         }
 
         .card-header {
@@ -1184,7 +1193,7 @@ templ ExchangeDetail(exchange Exchange) {
         .card-icon {
             width: 24px;
             height: 24px;
-            color: #0088ff;
+            color: #e9e2d1;
         }
 
         .card-title {
@@ -1209,8 +1218,8 @@ templ ExchangeDetail(exchange Exchange) {
 
         .stat-item {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
             padding: 1.25rem;
             text-align: center;
         }
@@ -1230,8 +1239,10 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .trustpilot-card {
-            background: linear-gradient(145deg, rgba(34, 197, 94, 0.05), rgba(26, 31, 46, 1));
-            border: 1px solid rgba(34, 197, 94, 0.2);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                #11151c;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .trustpilot-rating {
@@ -1253,13 +1264,13 @@ templ ExchangeDetail(exchange Exchange) {
         .rating-star {
             width: 20px;
             height: 20px;
-            fill: #22c55e;
+            fill: #d8ccb2;
         }
 
         .rating-score {
             font-size: 2rem;
             font-weight: 800;
-            color: #22c55e;
+            color: #f3eee2;
         }
 
         .rating-details {
@@ -1268,8 +1279,10 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .insurance-card {
-            background: linear-gradient(145deg, rgba(0, 136, 255, 0.05), rgba(26, 31, 46, 1));
-            border: 1px solid rgba(0, 136, 255, 0.2);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                #11151c;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .insurance-amount {
@@ -1280,7 +1293,7 @@ templ ExchangeDetail(exchange Exchange) {
         .insurance-value {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #0088ff;
+            color: #f3eee2;
             display: block;
         }
 
@@ -1314,13 +1327,15 @@ templ ExchangeDetail(exchange Exchange) {
         .feature-icon {
             width: 16px;
             height: 16px;
-            color: #22c55e;
+            color: #d8ccb2;
             flex-shrink: 0;
         }
 
         .no-insurance-card {
-            background: linear-gradient(145deg, rgba(100, 116, 139, 0.05), rgba(26, 31, 46, 1));
-            border: 1px solid rgba(100, 116, 139, 0.2);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+                #11151c;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .warning-icon {
