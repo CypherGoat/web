@@ -359,36 +359,51 @@ footer {
 
 @media (max-width: 768px) {
     .home-shell {
-        padding: 2rem 1rem 0;
+        min-height: auto;
+        padding: 0.75rem 0.875rem 0;
     }
 
     .hero-stage {
-        padding: 1.25rem 0 3rem;
+        padding: 0.35rem 0 1.35rem;
+        gap: 0.9rem;
     }
 
-    .hero-stage {
-        gap: 2rem;
+    .hero-kicker {
+        gap: 0.45rem;
+        font-size: 0.62rem;
+    }
+
+    .hero-kicker::before {
+        width: 2rem;
     }
 
     .hero-title {
-        max-width: none;
-        font-size: min(3rem, 14vw);
-        line-height: 0.94;
+        max-width: 12ch;
+        font-size: clamp(2.15rem, 7.4vw, 2.7rem);
+        line-height: 0.9;
+        letter-spacing: -0.05em;
+        margin: 0.35rem 0 0;
     }
 
     .trust-badges {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         max-width: none;
-        gap: 0.65rem;
+        gap: 0.35rem;
+        margin-top: 0.75rem;
     }
 
     .trust-badge {
-        width: 100%;
-        min-height: 2.5rem;
+        min-height: auto;
         justify-content: center;
         margin: 0;
-        padding: 0.55rem 0.7rem;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.64rem;
+    }
+
+    .hero-copy-wrap {
+        padding-bottom: 0;
+        max-width: 100%;
     }
 
     .hero-widget-shell {
@@ -449,12 +464,41 @@ footer {
     }
 
     .card {
-        padding: 1.5rem;
-        padding-bottom: 1rem;
+        padding: 1.25rem;
+        padding-bottom: 0.9rem;
     }
 
     .swap-form-shell .card {
-        padding: 1.35rem;
+        padding: 1.15rem;
+    }
+
+    .swap-card-header {
+        margin-bottom: 0.85rem;
+    }
+
+    .swap-card-title {
+        font-size: 1.15rem;
+    }
+
+    .minimal-note {
+        margin-top: 0.8rem;
+        padding-top: 0.8rem;
+    }
+
+    .home-divider {
+        margin-top: 1.4rem;
+    }
+
+    .lower-content {
+        padding-top: 2rem;
+    }
+
+    #faq-section {
+        margin-top: 0;
+    }
+
+    #scroll-to-faq-container {
+        bottom: 1rem;
     }
 
 }
@@ -1257,6 +1301,101 @@ footer {
         .partner-copy {
             max-width: 30rem;
             text-align: left;
+        }
+
+        .container3 {
+            max-width: 95%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .home-shell {
+            min-height: auto;
+            padding: 0.75rem 0.875rem 0;
+        }
+
+        .hero-stage {
+            padding: 0.35rem 0 1.35rem;
+            gap: 0.9rem;
+        }
+
+        .hero-kicker {
+            gap: 0.45rem;
+            font-size: 0.62rem;
+        }
+
+        .hero-kicker::before {
+            width: 2rem;
+        }
+
+        .hero-copy-wrap {
+            max-width: 100%;
+            padding-bottom: 0;
+        }
+
+        .hero-title {
+            max-width: 11ch;
+            margin: 0.35rem 0 0;
+            font-size: clamp(1.95rem, 8.4vw, 2.35rem);
+            line-height: 0.92;
+            letter-spacing: -0.05em;
+            text-wrap: balance;
+        }
+
+        .trust-badges {
+            gap: 0.35rem;
+            max-width: none;
+            margin-top: 0.75rem;
+        }
+
+        .trust-badge {
+            min-height: auto;
+            margin: 0;
+            padding: 0.3rem 0.5rem;
+            font-size: 0.64rem;
+            justify-content: center;
+        }
+
+        .card {
+            padding: 1.25rem;
+            padding-bottom: 0.9rem;
+        }
+
+        .swap-form-shell .card {
+            padding: 1.15rem;
+        }
+
+        .swap-card-header {
+            margin-bottom: 0.85rem;
+        }
+
+        .swap-card-title {
+            font-size: 1.15rem;
+        }
+
+        .minimal-note {
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+        }
+
+        .home-divider {
+            margin-top: 1.4rem;
+        }
+
+        .lower-content {
+            padding-top: 2rem;
+        }
+
+        #faq-section {
+            margin-top: 0;
+        }
+
+        #scroll-to-faq-container {
+            position: static;
+            bottom: auto;
+            left: auto;
+            transform: none;
+            margin: 0 auto 1rem;
         }
     }
     </style>
