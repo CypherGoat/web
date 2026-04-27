@@ -26,6 +26,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/skip2/go-qrcode"
+	"golang.org/x/time/rate"
 )
 
 func CacheMiddleware(duration time.Duration) echo.MiddlewareFunc {
@@ -94,6 +95,47 @@ func AllowedHostsMiddleware(allowedHosts []string) echo.MiddlewareFunc {
 	}
 }
 
+var knownBotUserAgents = []string{
+	"curl", "wget", "python-requests", "python-urllib", "go-http-client",
+	"scrapy", "libwww", "httpie", "axios", "java/", "okhttp", "aiohttp",
+}
+
+func newRateLimiter(r rate.Limit, burst int) echo.MiddlewareFunc {
+	return middleware.RateLimiterWithConfig(middleware.RateLimiterConfig{
+		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
+			middleware.RateLimiterMemoryStoreConfig{
+				Rate:      r,
+				Burst:     burst,
+				ExpiresIn: 5 * time.Minute,
+			},
+		),
+		IdentifierExtractor: func(c echo.Context) (string, error) {
+			return c.RealIP(), nil
+		},
+		ErrorHandler: func(c echo.Context, err error) error {
+			return c.String(http.StatusTooManyRequests, "Too many requests")
+		},
+		DenyHandler: func(c echo.Context, identifier string, err error) error {
+			return c.String(http.StatusTooManyRequests, "Too many requests. Please slow down.")
+		},
+	})
+}
+
+func BotBlockerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		ua := strings.ToLower(c.Request().Header.Get("User-Agent"))
+		if ua == "" {
+			return c.String(http.StatusForbidden, "Forbidden")
+		}
+		for _, bot := range knownBotUserAgents {
+			if strings.Contains(ua, bot) {
+				return c.String(http.StatusForbidden, "Forbidden")
+			}
+		}
+		return next(c)
+	}
+}
+
 func main() {
 	e := echo.New()
 
@@ -124,9 +166,9 @@ func main() {
 	e.File("/favicon.ico", "static/icons/favicon/dark/favicon.ico")
 
 	e.GET("/", handlers.IndexHandler)
-	e.GET("/estimate", handlers.EstimateHandler)
+	e.GET("/estimate", handlers.EstimateHandler, BotBlockerMiddleware, newRateLimiter(1, 30))
 	e.GET("/step2", handlers.Step2Handler)
-	e.GET("/step3", handlers.Step3Handler)
+	e.GET("/step3", handlers.Step3Handler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/10), 5))
 	e.GET("/generate", generateQRCodeHandler)
 	e.GET("/transaction/:id", handlers.GetTransactionHandler)
 	e.GET("/download/:id", handlers.DownloadReceiptHandler)
@@ -154,7 +196,7 @@ func main() {
 
 	e.GET("/cyphergoat-shield", handlers.CGShieldTermsHandler)
 
-	e.POST("/challenge", handlers.ChallengeHandler)
+	e.POST("/challenge", handlers.ChallengeHandler, newRateLimiter(rate.Limit(1.0/5), 5))
 
 	e.GET("/blog", handlers.BlogHandler, CacheMiddleware(1*time.Hour))
 	e.GET("/blog/:slug", handlers.TWIMRedirectHandler, CacheMiddleware(1*time.Hour))
@@ -168,7 +210,7 @@ func main() {
 	e.GET("/affiliate", handlers.AffiliateHandler)
 
 	e.GET("/pay", handlers.CGPayHandler)
-	e.GET("/pay/create", handlers.CGPayCreateHandler)
+	e.GET("/pay/create", handlers.CGPayCreateHandler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/10), 5))
 
 	e.GET("/affiliate/login", handlers.AffiliateLoginHandler)
 	e.POST("/affiliate/login", handlers.AffiliateLoginHandler)

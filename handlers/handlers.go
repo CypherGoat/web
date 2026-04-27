@@ -39,6 +39,7 @@ import (
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
+	"golang.org/x/time/rate"
 	"gopkg.in/yaml.v3"
 
 	"github.com/CypherGoat/web/cmd/api"
@@ -54,6 +55,49 @@ var (
 	transactions = make(map[string]api.Transaction)
 	mu           sync.Mutex
 )
+
+// Per-IP rate limiters for the nojs estimate path commonly used by bots
+type nojsEntry struct {
+	limiter  *rate.Limiter
+	lastSeen time.Time
+}
+
+var (
+	nojsLimiters   = make(map[string]*nojsEntry)
+	nojsLimitersMu sync.Mutex
+)
+
+func getNojsLimiter(ip string) *rate.Limiter {
+	nojsLimitersMu.Lock()
+	defer nojsLimitersMu.Unlock()
+	if e, ok := nojsLimiters[ip]; ok {
+		e.lastSeen = time.Now()
+		return e.limiter
+	}
+	// 1 request per 10 seconds sustained, burst of 3.
+	e := &nojsEntry{
+		limiter:  rate.NewLimiter(rate.Every(10*time.Second), 3),
+		lastSeen: time.Now(),
+	}
+	nojsLimiters[ip] = e
+	return e.limiter
+}
+
+func init() {
+	// Evict IPs not seen in the last 30 minutes; never resets active limiters.
+	go func() {
+		for range time.Tick(10 * time.Minute) {
+			cutoff := time.Now().Add(-30 * time.Minute)
+			nojsLimitersMu.Lock()
+			for ip, e := range nojsLimiters {
+				if e.lastSeen.Before(cutoff) {
+					delete(nojsLimiters, ip)
+				}
+			}
+			nojsLimitersMu.Unlock()
+		}
+	}()
+}
 
 func IndexHandler(c echo.Context) error {
 	return views.IndexTempl().Render(c.Request().Context(), c.Response())
@@ -206,6 +250,9 @@ func EstimateHandler(c echo.Context) error {
 	}
 
 	if nojs == "true" {
+		if !getNojsLimiter(c.RealIP()).Allow() {
+			return c.String(http.StatusTooManyRequests, "Too many requests. Please wait a moment before trying again.")
+		}
 
 		sorting := c.QueryParam("sort")
 
