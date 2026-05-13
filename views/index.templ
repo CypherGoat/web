@@ -1425,9 +1425,9 @@ footer {
 	//   </div>
 	// </noscript>
 	<div class="home-shell min-h-screen">
-		<section class="hero-stage">
+		<section id="hero-section" class="hero-stage">
 			<div class="hero-copy-wrap">
-					<div class="hero-kicker">Private execution layer</div>
+					<div class="hero-kicker">Best routes. No custody.</div>
 					<h1 class="hero-title">Private crypto swaps, without custody.</h1>
 					<div class="trust-badges">
 						<span
@@ -1527,7 +1527,6 @@ footer {
 								<p style="text-align:center;font-size:0.78rem;color:#6b7280;margin:0.5rem 0 0.75rem;">
 									Fees typically 0.4–0.6% · Best rate selected automatically across all exchanges
 								</p>
-								<p class="minimal-note">Handling size? <a href="/contact" class="text-gray-300 hover:text-white">Contact support</a>.</p>
 								<div class="tab-navigation">
 									<button id="swap-tab" class="tab-button active" onclick="switchTab('swap')" data-tooltip="Standard mode: Enter the amount you want to send and see how much you'll receive.">
 										<svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1557,11 +1556,12 @@ footer {
 			<div class="home-divider"></div>
 		</section>
 	</div>
+	@WhyCG()
 	<div class="hide-on-swap" id="scroll-to-faq-container">
 		<button onclick="scrollToFAQ()" class="text-sm font-semibold text-white bg-transparent hover:underline focus:outline-none">
 			Scroll to learn more
 		</button>
-		<a href="#faq-section" class="group mt-2 block">
+		<a href="#why-section" class="group mt-2 block">
 			<div class="relative inline-block">
 				<div class="scroll-orb">
 					<svg xmlns="http://www.w3.org/2000/svg" class="text-white w-6 h-6 group-hover:translate-y-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1796,8 +1796,6 @@ footer {
 
     </style>
 	</div>
-	<br/>
-	<br/>
 	<div class="hide-on-swap mt-16">
 		@Footer()
 	</div>
@@ -2346,10 +2344,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function scrollToFAQ() {
-    const faqSection = document.getElementById('faq-section');
-    if (faqSection) {
-        faqSection.scrollIntoView({ behavior: 'smooth' });
+    const sections = ['hero-section', 'why-section', 'faq-section']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+    const scrollY = window.scrollY + window.innerHeight * 0.3;
+    let next = sections[sections.length - 1];
+    for (let i = 0; i < sections.length - 1; i++) {
+        if (scrollY < sections[i + 1].getBoundingClientRect().top + window.scrollY) {
+            next = sections[i + 1];
+            break;
+        }
     }
+    next.scrollIntoView({ behavior: 'smooth' });
 }
 
 let currentMode = 'swap'; // Track current mode

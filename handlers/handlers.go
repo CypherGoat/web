@@ -117,7 +117,14 @@ func AffiliateTerms(c echo.Context) error {
 
 func AboutHandler(c echo.Context) error {
 	return views.About().Render(c.Request().Context(), c.Response())
+}
 
+func TransparencyHandler(c echo.Context) error {
+	stats := views.TransparencyStats{
+		KYCRate:     "0.041%",
+		LastUpdated: "2026-04-28",
+	}
+	return views.Transparency(stats).Render(c.Request().Context(), c.Response())
 }
 
 func TermsHandler(c echo.Context) error {
@@ -214,6 +221,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"bitania":      {"/exchanges/bitania.png", "/exchanges/no-text/bitania.jpg", false},
 	"ccecash":      {"/exchanges/ccecash.svg", "/exchanges/no-text/ccecash.png", false},
 	"baltex":       {"/exchanges/baltex.svg", "/exchanges/no-text/baltex.svg", false},
+	"swaponix":     {"/exchanges/swaponix.png", "/exchanges/no-text/swaponix.png", false},
 }
 
 func parseCoinValue(value string) (string, string) {
@@ -747,6 +755,7 @@ func SitemapHandler(c echo.Context) error {
 		{"/affiliate", "weekly", "0.9"},
 		{"/affiliate/terms", "monthly", "0.7"},
 		{"/cyphergoat-shield", "monthly", "0.6"},
+		{"/transparency", "monthly", "0.7"},
 		{"/blog", "daily", "0.9"},
 		{"/this-week-in-monero", "weekly", "0.9"},
 	}

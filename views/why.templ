@@ -1,0 +1,380 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+import "fmt"
+
+templ WhyCG() {
+	<style>
+	.wc-shell {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 5rem 2rem 5rem;
+	}
+
+	/* ── Header ──────────────────────────── */
+	.wc-kicker {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.65rem;
+		color: #8d95a5;
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		margin-bottom: 1.1rem;
+	}
+
+	.wc-kicker::before {
+		content: "";
+		width: 2.75rem;
+		height: 1px;
+		background: rgba(153, 161, 175, 0.24);
+	}
+
+	.wc-heading {
+		margin: 0 0 0.75rem;
+		color: #ffffff;
+		font-size: clamp(2.4rem, 4vw, 3.5rem);
+		line-height: 0.95;
+		font-weight: 500;
+		letter-spacing: -0.05em;
+	}
+
+	.wc-subheading {
+		margin: 0 0 3rem;
+		color: #64748b;
+		font-size: 1rem;
+		line-height: 1.75;
+		max-width: 48rem;
+	}
+
+	/* ── Stat strip ───────────────────────── */
+	.wc-stat-strip {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0;
+		border: 1px solid rgba(255,255,255,0.06);
+		border-radius: 18px;
+		background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.007)), #11151c;
+		overflow: hidden;
+		margin-bottom: 2.5rem;
+		box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+	}
+
+	.wc-strip-item {
+		padding: 1.5rem 1.4rem;
+		text-align: center;
+		position: relative;
+	}
+
+	.wc-strip-item + .wc-strip-item::before {
+		content: '';
+		position: absolute;
+		left: 0; top: 20%; bottom: 20%;
+		width: 1px;
+		background: rgba(255,255,255,0.06);
+	}
+
+	.wc-strip-label {
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #475569;
+		margin-bottom: 0.4rem;
+	}
+
+	.wc-strip-value {
+		font-size: 2rem;
+		font-weight: 700;
+		color: #f3eee2;
+		letter-spacing: -0.04em;
+		line-height: 1;
+	}
+
+	/* ── Shield callout ───────────────────── */
+	.wc-shield-callout {
+		position: relative;
+		padding: 2rem 2rem 2rem;
+		border-radius: 20px;
+		border: 1px solid rgba(74,222,128,0.18);
+		background: linear-gradient(145deg, rgba(74,222,128,0.032) 0%, rgba(74,222,128,0.008) 100%), #11151c;
+		box-shadow: 0 0 0 1px rgba(74,222,128,0.06) inset, 0 24px 60px rgba(0,0,0,0.3);
+		margin-bottom: 3rem;
+		overflow: hidden;
+	}
+
+	.wc-shield-callout::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(ellipse at 0% 50%, rgba(74,222,128,0.06) 0%, transparent 60%);
+		pointer-events: none;
+	}
+
+	.wc-shield-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.28rem 0.7rem;
+		border-radius: 999px;
+		background: rgba(74,222,128,0.1);
+		border: 1px solid rgba(74,222,128,0.25);
+		color: #4ade80;
+		font-size: 0.66rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		margin-bottom: 0.85rem;
+	}
+
+	.wc-shield-badge svg {
+		width: 10px;
+		height: 10px;
+		fill: currentColor;
+	}
+
+	.wc-shield-title {
+		margin: 0 0 0.6rem;
+		color: #ffffff;
+		font-size: 1.3rem;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+	}
+
+	.wc-shield-body {
+		color: #94a3b8;
+		font-size: 0.93rem;
+		line-height: 1.75;
+		max-width: 52rem;
+		margin: 0 0 1.5rem;
+	}
+
+	.wc-shield-stats {
+		display: flex;
+		gap: 2rem;
+		flex-wrap: wrap;
+	}
+
+	.wc-shield-stat {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.wc-shield-stat-value {
+		font-size: 1.35rem;
+		font-weight: 700;
+		color: #ffffff;
+		letter-spacing: -0.04em;
+		line-height: 1;
+	}
+
+	.wc-shield-stat-label {
+		font-size: 0.72rem;
+		font-weight: 600;
+		color: #475569;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	/* ── Section groups ───────────────────── */
+	.wc-section {
+		margin-bottom: 3rem;
+	}
+
+	.wc-section-heading {
+		margin: 0 0 1.25rem;
+		color: #ffffff;
+		font-size: 1.05rem;
+		font-weight: 600;
+		letter-spacing: -0.025em;
+		border-bottom: 1px solid rgba(255,255,255,0.06);
+		padding-bottom: 0.75rem;
+	}
+
+	.wc-card-grid-4 {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.85rem;
+	}
+
+	.wc-card-grid-3 {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.85rem;
+	}
+
+	.wc-card-grid-2 {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.85rem;
+	}
+
+	.wc-card {
+		padding: 1.5rem 1.5rem;
+		border-radius: 18px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.016), rgba(255,255,255,0.006)), #11151c;
+		box-shadow: 0 16px 42px rgba(0,0,0,0.22);
+		transition: border-color 0.2s, box-shadow 0.2s;
+	}
+
+	.wc-card:hover {
+		border-color: rgba(255,255,255,0.1);
+		box-shadow: 0 22px 56px rgba(0,0,0,0.28);
+	}
+
+	.wc-card-title {
+		margin: 0 0 0.5rem;
+		color: #e2e8f0;
+		font-size: 0.97rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.wc-card-body {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.875rem;
+		line-height: 1.75;
+	}
+
+	/* ── Responsive ───────────────────────── */
+	@media (max-width: 860px) {
+		.wc-stat-strip { grid-template-columns: repeat(2, 1fr); }
+		.wc-strip-item:nth-child(3)::before { display: none; }
+		.wc-strip-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.06); }
+		.wc-strip-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.06); }
+		.wc-card-grid-3 { grid-template-columns: 1fr 1fr; }
+		.wc-card-grid-4 { grid-template-columns: 1fr 1fr; }
+		.wc-shield-stats { gap: 1.25rem; }
+	}
+
+	@media (max-width: 600px) {
+		.wc-shell { padding: 3rem 0.85rem 3rem; }
+		.wc-stat-strip { grid-template-columns: 1fr 1fr; border-radius: 14px; }
+		.wc-card-grid-4, .wc-card-grid-3, .wc-card-grid-2 { grid-template-columns: 1fr; }
+		.wc-shield-callout { padding: 1.5rem 1.25rem; }
+		.wc-shield-stats { gap: 1rem; }
+	}
+	</style>
+
+	<div id="why-section" class="wc-shell text-white hide-on-swap">
+
+		<!-- Header -->
+		<div class="wc-kicker">Why CypherGoat</div>
+		<h2 class="wc-heading">Built differently, on purpose.</h2>
+		<p class="wc-subheading">Most swap services optimize for simplicity. We optimize for outcome, meaning better rates, real user protections, and zero custody of your funds at any point.</p>
+
+		<!-- Stat strip -->
+		<div class="wc-stat-strip">
+			<div class="wc-strip-item">
+				<div class="wc-strip-label">Exchange partners</div>
+				<div class="wc-strip-value">{ fmt.Sprintf("%d+", len(ExchangesList)) }</div>
+			</div>
+			<div class="wc-strip-item">
+				<div class="wc-strip-label">Collateral held</div>
+				<div class="wc-strip-value">${ formatUSD(totalDepositsUSD()) }</div>
+			</div>
+			<div class="wc-strip-item">
+				<div class="wc-strip-label">KYC incident rate</div>
+				<div class="wc-strip-value">{ KYCIncidentRate }</div>
+			</div>
+		</div>
+
+		<!-- CG Shield callout -->
+		<div class="wc-shield-callout">
+			<div class="wc-shield-badge">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/><path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/></svg>
+				Unique to CypherGoat
+			</div>
+			<h3 class="wc-shield-title">CG Shield: partner-backed user protection</h3>
+			<p class="wc-shield-body">CypherGoat Shield partners hold a verified security deposit with CypherGoat. If one of them freezes your funds without cause, that deposit exists to make you whole. Every deposit address is publicly verifiable on-chain.</p>
+			<div class="wc-shield-stats">
+				<div class="wc-shield-stat">
+					<span class="wc-shield-stat-value">${ fmt.Sprintf("%s", formatUSD(totalDepositsUSD())) }</span>
+					<span class="wc-shield-stat-label">Collateral held</span>
+				</div>
+				<div class="wc-shield-stat">
+					<span class="wc-shield-stat-value">{ fmt.Sprintf("%d", cgShieldCount()) }</span>
+					<span class="wc-shield-stat-label">Protected partners</span>
+				</div>
+				<div style="margin-left:auto;align-self:flex-end;">
+					<a href="/transparency" style="font-size:0.78rem;font-weight:600;color:#4ade80;text-decoration:none;opacity:0.75;transition:opacity 0.15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.75'">Verify on-chain →</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Core principles -->
+		<div class="wc-section">
+			<h3 class="wc-section-heading">Core principles</h3>
+			<div class="wc-card-grid-4">
+				<div class="wc-card">
+					<div class="wc-card-title">Non-custodial, always</div>
+					<p class="wc-card-body">We never hold your funds. Swaps route directly between you and the exchange. CypherGoat is a router, not an intermediary.</p>
+				</div>
+				<div class="wc-card">
+					<div class="wc-card-title">SafeRoute <span style="display:inline-block;margin-left:0.35rem;padding:0.15rem 0.5rem;border-radius:999px;font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#a5b4fc;vertical-align:middle;">Beta</span></div>
+					<p class="wc-card-body">On larger swaps, a single exchange can't always fill your order at the quoted rate. SafeRoute splits it across multiple partners simultaneously bigger swap, better rate, handled automatically.</p>
+				</div>
+				<div class="wc-card">
+					<div class="wc-card-title">No account required</div>
+					<p class="wc-card-body">No email, no sign-up, no profile at CypherGoat. CypherGoat is available via Tor and I2P with or without javascript.</p>
+				</div>
+				<div class="wc-card">
+					<div class="wc-card-title">Monero-native</div>
+					<p class="wc-card-body">XMR is a first-class citizen not an afterthought. Built by Monero users, for people who take financial privacy seriously.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Trust & transparency -->
+		<div class="wc-section">
+			<div style="display:flex;align-items:baseline;justify-content:space-between;gap:1rem;border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:0.75rem;margin-bottom:1.25rem;">
+				<h3 style="margin:0;color:#ffffff;font-size:1.05rem;font-weight:600;letter-spacing:-0.025em;">Trust &amp; transparency</h3>
+				<a href="/transparency" style="font-size:0.78rem;font-weight:600;color:#64748b;text-decoration:none;white-space:nowrap;transition:color 0.15s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#64748b'">View transparency report →</a>
+			</div>
+			<div class="wc-card-grid-2">
+				<div class="wc-card">
+					<div class="wc-card-title">Published KYC incident rate</div>
+					<p class="wc-card-body">We log every KYC trigger from a partner exchange and publish the rate publicly, currently { KYCIncidentRate }. Most aggregators don't track this at all.</p>
+				</div>
+				<div class="wc-card">
+					<div class="wc-card-title">Open source web UI</div>
+					<p class="wc-card-body">Our frontend is open source. You can see exactly what the interface does and how it works — <a href="https://github.com/CypherGoat/web" target="_blank" style="color:#94a3b8;text-decoration:none;">view source on GitHub</a>.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- For developers -->
+		<div class="wc-section">
+			<h3 class="wc-section-heading">For developers</h3>
+			<div class="wc-card-grid-2">
+				<div class="wc-card">
+					<div class="wc-card-title">Full public API</div>
+					<p class="wc-card-body">Every endpoint we use internally is available to you. Build wallets, tools, and integrations on top of CypherGoat. <a href="https://api.cyphergoat.com" target="_blank" style="color:#94a3b8;text-decoration:none;">Read the docs →</a></p>
+				</div>
+				<div class="wc-card">
+					<div class="wc-card-title">MCP server</div>
+					<p class="wc-card-body">Native AI agent support via our live MCP server. The only swap aggregator you can wire directly into an AI workflow. See video demo <a href="https://www.youtube.com/watch?v=9sRwtqcKBMc" target="_blank">here</a>.</p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+}

@@ -45,6 +45,8 @@ func formatCoinValue(coin Coin) string {
 	return coin.Ticker + "(" + coin.Network + ")"
 }
 
+var KYCIncidentRate = "0.041%"
+
 func formatCoinDisplay(coin Coin) string {
 	if coin.Network == coin.Ticker {
 		return coin.Name + " - " + strings.ToUpper(coin.Ticker)

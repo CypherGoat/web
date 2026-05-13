@@ -1,0 +1,599 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+import "fmt"
+
+type TransparencyStats struct {
+	KYCRate     string
+	LastUpdated string
+}
+
+func btcExplorerURL(addr string) string {
+	return "https://mempool.space/address/" + addr
+}
+
+func ethExplorerURL(addr string) string {
+	return "https://etherscan.io/address/" + addr
+}
+
+
+templ Transparency(stats TransparencyStats) {
+	@HeaderCustomTitle("Transparency", "https://cyphergoat.com/transparency", "CypherGoat publishes its KYC incident rate, security deposits held from exchange partners with verifiable on-chain addresses, and every KYC case on record.") {
+	}
+	<style>
+	body {
+		background-color: #0b0d14;
+		font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+		min-height: 100vh;
+	}
+
+	.tp-shell {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 0 1.5rem 5rem;
+	}
+
+	/* ── Hero ─────────────────────────────── */
+	.tp-hero {
+		padding: 4rem 1rem 0;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+		align-items: center;
+		margin-bottom: 3rem;
+	}
+
+	.tp-hero-copy {}
+
+	.tp-eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #64748b;
+		margin-bottom: 1rem;
+	}
+
+	.tp-eyebrow svg {
+		width: 12px;
+		height: 12px;
+		fill: currentColor;
+	}
+
+	.tp-title {
+		color: #ffffff;
+		font-size: clamp(2.8rem, 5vw, 4.5rem);
+		line-height: 0.94;
+		font-weight: 500;
+		letter-spacing: -0.06em;
+		margin: 0 0 1.1rem;
+	}
+
+	.tp-lead {
+		color: #64748b;
+		font-size: 1rem;
+		line-height: 1.75;
+		margin: 0;
+		max-width: 32rem;
+	}
+
+	/* KYC rate feature card */
+	.tp-rate-card {
+		padding: 2.5rem 2rem;
+		border-radius: 24px;
+		border: 1px solid rgba(255,255,255,0.07);
+		background: linear-gradient(145deg, rgba(255,255,255,0.022) 0%, rgba(255,255,255,0.006) 100%), #11151c;
+		box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+		text-align: center;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.tp-rate-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.05) 0%, transparent 70%);
+		pointer-events: none;
+	}
+
+	.tp-rate-eyebrow {
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #4ade80;
+		margin-bottom: 0.75rem;
+	}
+
+	.tp-rate-value {
+		font-size: clamp(3.5rem, 7vw, 5.5rem);
+		font-weight: 700;
+		color: #ffffff;
+		letter-spacing: -0.05em;
+		line-height: 1;
+		margin-bottom: 0.5rem;
+	}
+
+	.tp-rate-desc {
+		font-size: 0.88rem;
+		color: #64748b;
+		line-height: 1.6;
+		margin-bottom: 1.5rem;
+	}
+
+	.tp-rate-pills {
+		display: flex;
+		justify-content: center;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+	}
+
+	.tp-rate-pill {
+		padding: 0.32rem 0.75rem;
+		border-radius: 999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		border: 1px solid rgba(255,255,255,0.08);
+		background: rgba(255,255,255,0.03);
+		color: #94a3b8;
+	}
+
+	.tp-rate-pill span {
+		color: #e2e8f0;
+	}
+
+	/* ── Stat strip ───────────────────────── */
+	.tp-stat-strip {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0;
+		border: 1px solid rgba(255,255,255,0.06);
+		border-radius: 18px;
+		background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.007)), #11151c;
+		overflow: hidden;
+		margin-bottom: 3rem;
+		box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+	}
+
+	.tp-strip-item {
+		padding: 1.5rem 1.4rem;
+		text-align: center;
+		position: relative;
+	}
+
+	.tp-strip-item + .tp-strip-item::before {
+		content: '';
+		position: absolute;
+		left: 0; top: 20%; bottom: 20%;
+		width: 1px;
+		background: rgba(255,255,255,0.06);
+	}
+
+	.tp-strip-label {
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #475569;
+		margin-bottom: 0.4rem;
+	}
+
+	.tp-strip-value {
+		font-size: 2.2rem;
+		font-weight: 700;
+		color: #f3eee2;
+		letter-spacing: -0.04em;
+		line-height: 1;
+		margin-bottom: 0.25rem;
+	}
+
+	.tp-strip-sub {
+		font-size: 0.74rem;
+		color: #475569;
+	}
+
+
+	/* ── Section chrome ───────────────────── */
+	.tp-section {
+		margin-bottom: 2.5rem;
+	}
+
+	.tp-section-top {
+		display: flex;
+		align-items: baseline;
+		gap: 0.75rem;
+		margin-bottom: 1.4rem;
+	}
+
+	.tp-section-heading {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: #ffffff;
+		letter-spacing: -0.035em;
+		margin: 0;
+	}
+
+	.tp-section-count {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: #475569;
+	}
+
+	/* ── Deposit cards ────────────────────── */
+	.tp-deposit-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+		gap: 0.85rem;
+	}
+
+	.tp-deposit-card {
+		padding: 1.4rem 1.5rem;
+		border-radius: 18px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.016), rgba(255,255,255,0.006)), #11151c;
+		box-shadow: 0 16px 42px rgba(0,0,0,0.22);
+		transition: border-color 0.2s, box-shadow 0.2s;
+	}
+
+	.tp-deposit-card:hover {
+		border-color: rgba(255,255,255,0.1);
+		box-shadow: 0 22px 56px rgba(0,0,0,0.28);
+	}
+
+	.tp-deposit-header {
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+		margin-bottom: 1.1rem;
+	}
+
+	.tp-exchange-logo {
+		width: 38px;
+		height: 38px;
+		object-fit: contain;
+		border-radius: 10px;
+		background: rgba(255,255,255,0.03);
+		padding: 0.3rem;
+		border: 1px solid rgba(255,255,255,0.08);
+		flex-shrink: 0;
+	}
+
+	.tp-exchange-info {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.tp-exchange-name {
+		font-size: 0.97rem;
+		font-weight: 600;
+		color: #e2e8f0;
+		letter-spacing: -0.02em;
+		margin: 0 0 0.18rem;
+		line-height: 1.2;
+	}
+
+	.tp-verified {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		font-size: 0.67rem;
+		font-weight: 600;
+		color: #4ade80;
+		letter-spacing: 0.02em;
+	}
+
+	.tp-verified svg {
+		width: 10px;
+		height: 10px;
+		fill: currentColor;
+	}
+
+	.tp-deposit-amount {
+		padding: 0.3rem 0.75rem;
+		border-radius: 999px;
+		background: rgba(243,238,226,0.06);
+		border: 1px solid rgba(243,238,226,0.12);
+		color: #d8ccb2;
+		font-size: 0.78rem;
+		font-weight: 700;
+		white-space: nowrap;
+		letter-spacing: 0.01em;
+	}
+
+	/* Address row */
+	.tp-addr-row {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.65rem 0.8rem;
+		border-radius: 10px;
+		background: rgba(255,255,255,0.02);
+		border: 1px solid rgba(255,255,255,0.045);
+	}
+
+	.tp-addr-chain {
+		font-size: 0.62rem;
+		font-weight: 800;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: #475569;
+		width: 2rem;
+		flex-shrink: 0;
+	}
+
+	.tp-addr-val {
+		font-family: 'Courier New', Courier, monospace;
+		font-size: 0.76rem;
+		color: #94a3b8;
+		word-break: break-all;
+		flex: 1;
+		min-width: 0;
+		line-height: 1.45;
+	}
+
+	.tp-addr-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+		flex-shrink: 0;
+	}
+
+	.tp-icon-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		border-radius: 7px;
+		background: rgba(255,255,255,0.03);
+		border: 1px solid rgba(255,255,255,0.07);
+		color: #475569;
+		cursor: pointer;
+		transition: background 0.15s, color 0.15s, border-color 0.15s;
+		text-decoration: none;
+	}
+
+	.tp-icon-btn:hover {
+		background: rgba(255,255,255,0.07);
+		border-color: rgba(255,255,255,0.12);
+		color: #c8d0e0;
+	}
+
+	.tp-icon-btn svg {
+		width: 13px;
+		height: 13px;
+		fill: currentColor;
+	}
+
+	/* ── Disclosure ───────────────────────── */
+	.tp-notice {
+		margin-top: 1.5rem;
+		padding: 1rem 1.3rem;
+		border-radius: 12px;
+		background: rgba(255,255,255,0.015);
+		border: 1px solid rgba(255,255,255,0.05);
+		color: #475569;
+		font-size: 0.8rem;
+		line-height: 1.7;
+	}
+
+	.tp-notice a { color: #64748b; text-decoration: underline; }
+	.tp-notice strong { color: #64748b; }
+
+	/* ── Responsive ───────────────────────── */
+	@media (max-width: 860px) {
+		.tp-hero { grid-template-columns: 1fr; gap: 2rem; padding-top: 2.5rem; }
+		.tp-deposit-grid { grid-template-columns: 1fr; }
+	}
+
+	@media (max-width: 600px) {
+		.tp-shell { padding: 0 0.85rem 3.5rem; }
+		.tp-title { font-size: clamp(2.2rem, 10vw, 2.8rem); }
+
+		/* stat strip: stack vertically */
+		.tp-stat-strip { grid-template-columns: 1fr; border-radius: 14px; }
+		.tp-strip-item + .tp-strip-item::before { display: none; }
+		.tp-strip-item { border-top: 1px solid rgba(255,255,255,0.06); padding: 1.25rem 1.2rem; }
+		.tp-strip-item:first-child { border-top: none; }
+
+		/* deposit cards */
+		.tp-deposit-card { padding: 1.1rem 1rem; border-radius: 14px; }
+		.tp-deposit-header { flex-wrap: wrap; gap: 0.6rem; }
+		.tp-deposit-amount { margin-left: auto; }
+
+		/* address rows */
+		.tp-addr-row { gap: 0.45rem; padding: 0.55rem 0.65rem; flex-wrap: nowrap; }
+		.tp-addr-chain { width: 1.8rem; font-size: 0.58rem; }
+		.tp-addr-val { font-size: 0.68rem; }
+		.tp-icon-btn { width: 26px; height: 26px; }
+
+		/* rate card */
+		.tp-rate-card { padding: 1.75rem 1.25rem; }
+	}
+	</style>
+
+	<div class="tp-shell text-white">
+
+		<!-- Hero: KYC rate front and centre -->
+		<div class="tp-hero">
+			<div class="tp-hero-copy">
+				<div class="tp-eyebrow">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/><path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/></svg>
+					CypherGoat Transparency
+				</div>
+				<h1 class="tp-title">Fully<br/>transparent.</h1>
+				<p class="tp-lead">
+					We publish our KYC incident rate, every security deposit we hold from partners with the exact on-chain address
+				</p>
+			</div>
+
+			<div class="tp-rate-card">
+				<div class="tp-rate-eyebrow">KYC incident rate</div>
+				<div class="tp-rate-value">{ stats.KYCRate }</div>
+				<div class="tp-rate-desc">
+					of all trades completed through CypherGoat<br/>triggered a KYC request from a partner exchange.
+				</div>
+			</div>
+		</div>
+
+		<!-- Stat strip -->
+		<div class="tp-stat-strip">
+			<div class="tp-strip-item">
+				<div class="tp-strip-label">Partner collateral held</div>
+				<div class="tp-strip-value">{ fmt.Sprintf("$%s", formatUSD(totalDepositsUSD())) }</div>
+				<div class="tp-strip-sub">{ fmt.Sprintf("≈ %.3f BTC · verifiable on-chain", totalDepositsBTC()) }</div>
+			</div>
+			<div class="tp-strip-item">
+				<div class="tp-strip-label">Protected partners</div>
+				<div class="tp-strip-value">{ fmt.Sprintf("%d", cgShieldCount()) }</div>
+				<div class="tp-strip-sub">exchanges with active CG Shield deposits</div>
+			</div>
+		</div>
+
+		<!-- Security Deposits -->
+		<div class="tp-section">
+			<div class="tp-section-top">
+				<h2 class="tp-section-heading">Security deposits</h2>
+				<span class="tp-section-count">{ fmt.Sprintf("%d partners", cgShieldCount()) }</span>
+			</div>
+
+			<div class="tp-deposit-grid">
+				for _, ex := range ExchangesList {
+					if ex.CGShield {
+						<div class="tp-deposit-card">
+							<div class="tp-deposit-header">
+								if ex.NoTextURL != "" {
+									<img src={ ex.NoTextURL } alt={ ex.Name } class="tp-exchange-logo" loading="lazy"/>
+								} else {
+									<img src={ ex.LogoURL } alt={ ex.Name } class="tp-exchange-logo" loading="lazy"/>
+								}
+								<div class="tp-exchange-info">
+									<div class="tp-exchange-name">{ ex.Name }</div>
+									<div class="tp-verified">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>
+										Deposit verified
+									</div>
+								</div>
+								<span class="tp-deposit-amount">{ ex.CGAmount }</span>
+							</div>
+
+							if ex.BTCDepositAddress != "" {
+								<div class="tp-addr-row">
+									<span class="tp-addr-chain">BTC</span>
+									<span class="tp-addr-val">{ ex.BTCDepositAddress }</span>
+									<div class="tp-addr-actions">
+										<button class="tp-icon-btn" onclick={ copyAddress(ex.BTCDepositAddress) } title="Copy">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+										</button>
+										<a class="tp-icon-btn" href={ templ.URL(btcExplorerURL(ex.BTCDepositAddress)) } target="_blank" rel="noopener noreferrer" title="View on mempool.space">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+										</a>
+									</div>
+								</div>
+							}
+							if ex.ETHDepositAddress != "" {
+								<div class="tp-addr-row">
+									<span class="tp-addr-chain">ETH</span>
+									<span class="tp-addr-val">{ ex.ETHDepositAddress }</span>
+									<div class="tp-addr-actions">
+										<button class="tp-icon-btn" onclick={ copyAddress(ex.ETHDepositAddress) } title="Copy">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+										</button>
+										<a class="tp-icon-btn" href={ templ.URL(ethExplorerURL(ex.ETHDepositAddress)) } target="_blank" rel="noopener noreferrer" title="View on Etherscan">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+										</a>
+									</div>
+								</div>
+							}
+						</div>
+					}
+				}
+			</div>
+		</div>
+
+		<!-- Disclosure -->
+		<div class="tp-notice">
+			<strong>Disclosure:</strong> Deposit addresses are wallets controlled by CypherGoat where partner collateral is held — balances are independently verifiable via the explorer links above. Deposit amounts are in the asset agreed at onboarding (BTC or stablecoin). KYC counts and trade totals are updated manually. Last updated: <strong>{ stats.LastUpdated }</strong>.
+		</div>
+
+	</div>
+
+	@Footer() {}
+}
+
+const btcPriceUSD = 94000.0
+
+func totalDepositsBTC() float64 {
+	var total float64
+	for _, ex := range ExchangesList {
+		if !ex.CGShield {
+			continue
+		}
+		if ex.CGSinStable {
+			total += ex.CGSAmountFloat / btcPriceUSD
+		} else {
+			total += ex.CGSAmountFloat
+		}
+	}
+	return total
+}
+
+func totalDepositsUSD() float64 {
+	var total float64
+	for _, ex := range ExchangesList {
+		if !ex.CGShield {
+			continue
+		}
+		if ex.CGSinStable {
+			total += ex.CGSAmountFloat
+		} else {
+			total += ex.CGSAmountFloat * btcPriceUSD
+		}
+	}
+	return total
+}
+
+func formatUSD(v float64) string {
+	n := int(v)
+	if n >= 1000 {
+		return fmt.Sprintf("%d,%03d", n/1000, n%1000)
+	}
+	return fmt.Sprintf("%d", n)
+}
+
+func cgShieldCount() int {
+	count := 0
+	for _, ex := range ExchangesList {
+		if ex.CGShield {
+			count++
+		}
+	}
+	return count
+}
+
+script copyAddress(addr string) {
+	var btn = event.currentTarget;
+	var orig = btn.innerHTML;
+	navigator.clipboard.writeText(addr).then(function() {
+		btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" style="width:13px;height:13px;fill:#4ade80"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>';
+		setTimeout(function() { btn.innerHTML = orig; }, 1800);
+	});
+}

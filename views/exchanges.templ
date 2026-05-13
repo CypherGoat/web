@@ -37,6 +37,10 @@ type Exchange struct{
     CGSinStable bool
     CGSAmountFloat float64
 
+    // Public deposit wallet addresses (used on /transparency page)
+    BTCDepositAddress string
+    ETHDepositAddress string
+
     TrustpilotURL string
     TrustpilotRating float64
     TrustpilotReviewCount int
