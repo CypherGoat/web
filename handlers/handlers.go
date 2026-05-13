@@ -67,6 +67,122 @@ var (
 	nojsLimitersMu sync.Mutex
 )
 
+type ghCommitEntry struct {
+	SHA     string `json:"sha"`
+	HTMLURL string `json:"html_url"`
+	Commit  struct {
+		Message string `json:"message"`
+		Author  struct {
+			Date string `json:"date"`
+		} `json:"author"`
+	} `json:"commit"`
+}
+
+type ghStats struct {
+	commits       int
+	recentCommits []views.GitHubCommit
+	openIssues    int
+}
+
+var (
+	ghStatsCache   *ghStats
+	ghStatsCacheAt time.Time
+	ghStatsCacheMu sync.Mutex
+)
+
+func fetchGitHubStats() ghStats {
+	ghStatsCacheMu.Lock()
+	defer ghStatsCacheMu.Unlock()
+	if ghStatsCache != nil && time.Since(ghStatsCacheAt) < time.Hour {
+		return *ghStatsCache
+	}
+	client := &http.Client{Timeout: 5 * time.Second}
+	result := ghStats{}
+
+	// Total commit count via Link header pagination trick
+	req, err := http.NewRequest("GET", "https://api.github.com/repos/CypherGoat/web/commits?per_page=1", nil)
+	if err == nil {
+		req.Header.Set("User-Agent", "CypherGoat-transparency")
+		if resp, err := client.Do(req); err == nil {
+			resp.Body.Close()
+			result.commits = parseGitHubLastPage(resp.Header.Get("Link"))
+		}
+	}
+
+	// Recent commits
+	req2, err := http.NewRequest("GET", "https://api.github.com/repos/CypherGoat/web/commits?per_page=5", nil)
+	if err == nil {
+		req2.Header.Set("User-Agent", "CypherGoat-transparency")
+		if resp2, err := client.Do(req2); err == nil && resp2.StatusCode == 200 {
+			var entries []ghCommitEntry
+			if json.NewDecoder(resp2.Body).Decode(&entries) == nil {
+				for _, e := range entries {
+					msg := e.Commit.Message
+					if nl := strings.IndexByte(msg, '\n'); nl >= 0 {
+						msg = msg[:nl]
+					}
+					if len(msg) > 72 {
+						msg = msg[:69] + "..."
+					}
+					date := ""
+					if t, err := time.Parse(time.RFC3339, e.Commit.Author.Date); err == nil {
+						date = t.Format("Jan 2, 2006")
+					}
+					result.recentCommits = append(result.recentCommits, views.GitHubCommit{
+						SHA:     e.SHA[:7],
+						Message: msg,
+						Date:    date,
+						URL:     e.HTMLURL,
+					})
+				}
+			}
+			resp2.Body.Close()
+		}
+	}
+
+	// Open issues from repo endpoint
+	req3, err := http.NewRequest("GET", "https://api.github.com/repos/CypherGoat/web", nil)
+	if err == nil {
+		req3.Header.Set("User-Agent", "CypherGoat-transparency")
+		if resp3, err := client.Do(req3); err == nil && resp3.StatusCode == 200 {
+			var r struct {
+				OpenIssues int `json:"open_issues_count"`
+			}
+			if json.NewDecoder(resp3.Body).Decode(&r) == nil {
+				result.openIssues = r.OpenIssues
+			}
+			resp3.Body.Close()
+		}
+	}
+
+	ghStatsCache = &result
+	ghStatsCacheAt = time.Now()
+	return result
+}
+
+// parseGitHubLastPage extracts the last page number from a GitHub Link header.
+// It looks for &page= or ?page= to avoid matching per_page=.
+func parseGitHubLastPage(link string) int {
+	for _, part := range strings.Split(link, ",") {
+		part = strings.TrimSpace(part)
+		if !strings.Contains(part, `rel="last"`) {
+			continue
+		}
+		for _, prefix := range []string{"&page=", "?page="} {
+			if start := strings.Index(part, prefix); start >= 0 {
+				sub := part[start+len(prefix):]
+				if end := strings.IndexAny(sub, "&>"); end >= 0 {
+					sub = sub[:end]
+				}
+				if n, err := strconv.Atoi(sub); err == nil {
+					return n
+				}
+			}
+		}
+	}
+	return 0
+}
+
 func getNojsLimiter(ip string) *rate.Limiter {
 	nojsLimitersMu.Lock()
 	defer nojsLimitersMu.Unlock()
@@ -120,9 +236,13 @@ func AboutHandler(c echo.Context) error {
 }
 
 func TransparencyHandler(c echo.Context) error {
+	gh := fetchGitHubStats()
 	stats := views.TransparencyStats{
-		KYCRate:     "0.041%",
-		LastUpdated: "2026-04-28",
+		KYCRate:       "0.041%",
+		LastUpdated:   "2026-04-28",
+		GitHubCommits: gh.commits,
+		GitHubIssues:  gh.openIssues,
+		RecentCommits: gh.recentCommits,
 	}
 	return views.Transparency(stats).Render(c.Request().Context(), c.Response())
 }
