@@ -72,4 +72,4 @@ CypherGoat requires an API key for fetching exchange rates and executing trades.
 
 See our API documentation at [api.cyphergoat.com](https://api.cyphergoat.com)
 
-You can request an api key sending us an email to [support@cyphergoat.com](mailto:support@cyphergoat.com)
+You can get an api key from [developer.cyphergoat.com](https://developer.cyphergoat.com)
