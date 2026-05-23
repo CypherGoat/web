@@ -1796,6 +1796,35 @@ footer {
 
     </style>
 	</div>
+	<div class="container3 hide-on-swap mb-50" style="margin-top:5rem;">
+		<style>
+			.dev-cta-section { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; background: linear-gradient(135deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.07); border-radius: 1.1rem; padding: 2.5rem 3rem; }
+			.dev-cta-text .section-kicker { margin-bottom: 0.75rem; }
+			.dev-cta-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em; color: #f3f5f7; margin: 0 0 0.5rem; }
+			.dev-cta-desc { font-size: 0.9rem; color: #9aa2b2; line-height: 1.6; margin: 0; max-width: 32rem; }
+			.dev-cta-actions { display: flex; gap: 0.75rem; flex-shrink: 0; flex-wrap: wrap; }
+			.dev-btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.35rem; border-radius: 0.65rem; background: #e7eaef; color: #0b0d14; font-weight: 700; font-size: 0.875rem; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
+			.dev-btn-primary:hover { background: #fff; }
+			.dev-btn-ghost { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.35rem; border-radius: 0.65rem; border: 1px solid rgba(255,255,255,0.1); color: #9aa2b2; font-weight: 600; font-size: 0.875rem; text-decoration: none; transition: border-color 0.15s, color 0.15s; white-space: nowrap; }
+			.dev-btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: #f3f5f7; }
+			@media (max-width: 640px) { .dev-cta-section { padding: 1.75rem; } .dev-cta-actions { width: 100%; } .dev-btn-primary, .dev-btn-ghost { flex: 1; justify-content: center; } }
+		</style>
+		<div class="dev-cta-section">
+			<div class="dev-cta-text">
+				<div class="section-kicker">For Developers</div>
+				<h2 class="dev-cta-title">Build with the CypherGoat API</h2>
+				<p class="dev-cta-desc">Integrate real-time swap rates and transactions from 20+ exchanges into your app. Free API keys, REST endpoints, and an MCP server for AI assistants.</p>
+			</div>
+			<div class="dev-cta-actions">
+				<a href="https://developer.cyphergoat.com" target="_blank" class="dev-btn-primary">
+					<i class="fas fa-key"></i> Get API Key
+				</a>
+				<a href="https://api.cyphergoat.com" target="_blank" class="dev-btn-ghost">
+					<i class="fas fa-book-open"></i> API Docs
+				</a>
+			</div>
+		</div>
+	</div>
 	<div class="hide-on-swap mt-16">
 		@Footer()
 	</div>
