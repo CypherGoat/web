@@ -173,6 +173,7 @@ func main() {
 	e.GET("/transaction/:id", handlers.GetTransactionHandler)
 	e.GET("/download/:id", handlers.DownloadReceiptHandler)
 	e.GET("/about", handlers.AboutHandler)
+	e.GET("/simplex-bot", handlers.SimplexBotHandler)
 	e.GET("/transparency", handlers.TransparencyHandler)
 	e.GET("/terms", handlers.TermsHandler)
 	e.GET("/contact", handlers.ContactHandler)

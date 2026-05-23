@@ -1,0 +1,406 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program, if not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+templ SimplexBot() {
+	@HeaderCustomTitle("CypherGoat SimpleX Bot", "https://cyphergoat.com/simplex-bot", "Swap crypto privately via SimpleX Chat. Compare rates across 23+ exchanges, execute swaps, and track transactions — no account, no KYC.") {
+	}
+	<style>
+	body {
+		background-color: #0b0d14;
+		font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+		min-height: 100vh;
+	}
+
+	.sx-shell {
+		max-width: 1080px;
+		margin: 0 auto;
+		padding: 3.5rem 1.5rem 0;
+	}
+
+	.sx-hero {
+		max-width: 52rem;
+		margin: 0 auto 3rem;
+		text-align: center;
+	}
+
+	.sx-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.35rem 0.9rem;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		background: rgba(255, 255, 255, 0.04);
+		font-size: 0.8rem;
+		color: #98a1b1;
+		margin-bottom: 1.5rem;
+	}
+
+	.sx-badge span {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #4ade80;
+		display: inline-block;
+		box-shadow: 0 0 6px #4ade80;
+	}
+
+	.sx-title {
+		margin: 0 0 0;
+		color: #ffffff;
+		font-size: clamp(3rem, 6vw, 5rem);
+		line-height: 0.92;
+		font-weight: 500;
+		letter-spacing: -0.06em;
+	}
+
+	.sx-lead {
+		margin: 1.25rem auto 0;
+		max-width: 40rem;
+		color: #98a1b1;
+		font-size: 1.05rem;
+		line-height: 1.8;
+	}
+
+	.sx-cta-group {
+		margin-top: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		justify-content: center;
+	}
+
+	.sx-btn-primary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.8rem 1.5rem;
+		border-radius: 12px;
+		background: #f3eee2;
+		color: #0b0d14;
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
+		transition: background 0.2s;
+	}
+
+	.sx-btn-primary:hover {
+		background: #faf7ef;
+	}
+
+	.sx-btn-secondary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.8rem 1.5rem;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.04);
+		color: #d9deea;
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		transition: background 0.2s, border-color 0.2s;
+	}
+
+	.sx-btn-secondary:hover {
+		background: rgba(255, 255, 255, 0.07);
+		border-color: rgba(255, 255, 255, 0.14);
+		color: #ffffff;
+	}
+
+	.sx-panel {
+		margin-top: 1.4rem;
+		padding: 2rem;
+		border-radius: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		background:
+			linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+			#11151c;
+		box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+	}
+
+	.sx-panel-title {
+		color: #ffffff;
+		font-size: 1.6rem;
+		font-weight: 500;
+		letter-spacing: -0.04em;
+		margin-bottom: 1.25rem;
+	}
+
+	.sx-feature-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		margin-top: 1.4rem;
+	}
+
+	.sx-feature-card {
+		padding: 1.4rem;
+		border-radius: 18px;
+		background: rgba(255, 255, 255, 0.018);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.sx-feature-icon {
+		font-size: 1.4rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.sx-feature-card h3 {
+		color: #ffffff;
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		margin-bottom: 0.4rem;
+	}
+
+	.sx-feature-card p {
+		color: #98a1b1;
+		font-size: 0.9rem;
+		line-height: 1.65;
+	}
+
+	.sx-cmd-table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 0.5rem;
+	}
+
+	.sx-cmd-table th {
+		text-align: left;
+		padding: 0.6rem 1rem;
+		color: #737b89;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.sx-cmd-table td {
+		padding: 0.75rem 1rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+		color: #98a1b1;
+		font-size: 0.9rem;
+		vertical-align: top;
+	}
+
+	.sx-cmd-table td:first-child {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		color: #e9e2d1;
+		white-space: nowrap;
+	}
+
+	.sx-cmd-table tr:last-child td {
+		border-bottom: none;
+	}
+
+	.sx-cmd-table tr:hover td {
+		background: rgba(255, 255, 255, 0.02);
+	}
+
+	.sx-example-block {
+		margin-top: 1rem;
+		background: rgba(255, 255, 255, 0.025);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: 14px;
+		padding: 1.25rem 1.5rem;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		font-size: 0.875rem;
+		color: #e9e2d1;
+		line-height: 1.9;
+	}
+
+	.sx-open-source-bar {
+		margin-top: 1.4rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+		padding: 1.4rem 1.75rem;
+		border-radius: 18px;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		background: rgba(255, 255, 255, 0.018);
+	}
+
+	.sx-open-source-bar p {
+		color: #98a1b1;
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+
+	.sx-open-source-bar strong {
+		color: #e0e6f0;
+	}
+
+	@media (max-width: 900px) {
+		.sx-feature-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.sx-shell {
+			padding: 2.5rem 1rem 0;
+		}
+
+		.sx-feature-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.sx-panel {
+			padding: 1.4rem;
+			border-radius: 18px;
+		}
+
+		.sx-cmd-table th,
+		.sx-cmd-table td {
+			padding: 0.6rem 0.5rem;
+		}
+	}
+	</style>
+
+	<div class="sx-shell text-white">
+		<div class="sx-hero">
+			<div class="sx-badge">
+				<span></span> Open Source &amp; Free to Use
+			</div>
+			<h1 class="sx-title">SimpleX Bot</h1>
+			<p class="sx-lead">
+				Swap crypto privately via SimpleX Chat. Compare live rates across 23+ exchanges,
+				execute swaps, and track transactions — no account, no KYC, no surveillance.
+			</p>
+			<div class="sx-cta-group">
+				<a
+					href="https://simplex.chat/contact#/?v=2-7&smp=smp%3A%2F%2FPQUV2eL0t7OStZOoAsPEV2QYWt4-xilbakvGUGOItUo%3D%40smp6.simplex.im%2FW2PhxjMgDiW_ixkUzUILX134F-jVaZoI%23%2F%3Fv%3D1-4%26dh%3DMCowBQYDK2VuAyEAk1pA3Z3CHYalX12Km2xy8gbTcr8EFXCwVzPdGkc5WxE%253D%26q%3Dc%26srv%3Dbylepyau3ty4czmn77q4fglvperknl4bi2eb2fdy2bh4jxtf32kf73yd.onion"
+					target="_blank"
+					class="sx-btn-primary"
+				>
+					<i class="fas fa-comment-dots"></i> Add Bot on SimpleX
+				</a>
+				<a href="https://github.com/cyphergoat/simplex-bot" target="_blank" class="sx-btn-secondary">
+					<i class="fab fa-github"></i> View Source
+				</a>
+			</div>
+		</div>
+
+		<div class="sx-feature-grid">
+			<div class="sx-feature-card">
+				<div class="sx-feature-icon">🔒</div>
+				<h3>No Account Required</h3>
+				<p>SimpleX has no user IDs. Your conversations are end-to-end encrypted and leave no metadata trail.</p>
+			</div>
+			<div class="sx-feature-card">
+				<div class="sx-feature-icon">📊</div>
+				<h3>Live Rate Comparison</h3>
+				<p>Compare swap rates across 23+ exchanges in real time and pick the best deal before committing.</p>
+			</div>
+			<div class="sx-feature-card">
+				<div class="sx-feature-icon">⚡</div>
+				<h3>Multi-Network Support</h3>
+				<p>Supports ETH, Tron, BSC, Lightning, and more. Use <code style="background:rgba(255,255,255,0.08);padding:0.1rem 0.3rem;border-radius:4px;font-size:0.8rem;">ticker:network</code> { "for" } explicit routing.</p>
+			</div>
+			<div class="sx-feature-card">
+				<div class="sx-feature-icon">🔍</div>
+				<h3>Transaction Tracking</h3>
+				<p>Track any swap by its CGID at any time, directly in your chat window.</p>
+			</div>
+			<div class="sx-feature-card">
+				<div class="sx-feature-icon">🤖</div>
+				<h3>Always-On</h3>
+				<p>The bot auto-accepts contact requests and responds around the clock.</p>
+			</div>
+			<div class="sx-feature-card">
+				<div class="sx-feature-icon">🐐</div>
+				<h3>Powered by CypherGoat</h3>
+				<p>Uses the same aggregator and rates as cyphergoat.com</p>
+			</div>
+		</div>
+
+		<div class="sx-panel">
+			<h2 class="sx-panel-title">Commands</h2>
+			<table class="sx-cmd-table">
+				<thead>
+					<tr>
+						<th>Command</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>estimate &lt;amount&gt; &lt;from&gt; &lt;to&gt;</td>
+						<td>Compare live rates across all exchanges</td>
+					</tr>
+					<tr>
+						<td>swap &lt;amount&gt; &lt;from&gt; &lt;to&gt; &lt;address&gt;</td>
+						<td>See rates then pick an exchange interactively</td>
+					</tr>
+					<tr>
+						<td>swap &lt;amount&gt; &lt;from&gt; &lt;to&gt; &lt;exchange&gt; &lt;address&gt;</td>
+						<td>Swap directly with a specific exchange</td>
+					</tr>
+					<tr>
+						<td>track &lt;cgid&gt;</td>
+						<td>Check swap status by CypherGoat transaction ID</td>
+					</tr>
+					<tr>
+						<td>coins [search]</td>
+						<td>List supported coins and networks</td>
+					</tr>
+					<tr>
+						<td>help</td>
+						<td>Show the help message</td>
+					</tr>
+					<tr>
+						<td>cancel</td>
+						<td>Cancel a pending exchange selection</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="sx-panel">
+			<h2 class="sx-panel-title">Examples</h2>
+			<div class="sx-example-block">
+				estimate 0.1 btc xmr<br/>
+				swap 0.1 btc xmr &lt;your_xmr_address&gt;<br/>
+				swap 100 usdt:tron xmr QuickEx &lt;your_xmr_address&gt;<br/>
+				track 443eeccf-e620-403d-a2d3-e25141152f28<br/>
+				coins usdt
+			</div>
+			<p style="margin-top:1rem;color:#98a1b1;font-size:0.9rem;line-height:1.7;">
+				Some coins exist on multiple networks. Use <code style="background:rgba(255,255,255,0.08);padding:0.1rem 0.3rem;border-radius:4px;font-size:0.8rem;">ticker:network</code> to be explicit —
+				e.g. <code style="background:rgba(255,255,255,0.08);padding:0.1rem 0.3rem;border-radius:4px;font-size:0.8rem;">usdt:tron</code>, <code style="background:rgba(255,255,255,0.08);padding:0.1rem 0.3rem;border-radius:4px;font-size:0.8rem;">usdt:eth</code>, <code style="background:rgba(255,255,255,0.08);padding:0.1rem 0.3rem;border-radius:4px;font-size:0.8rem;">btc:lightning</code>.
+				Run <code style="background:rgba(255,255,255,0.08);padding:0.1rem 0.3rem;border-radius:4px;font-size:0.8rem;">coins usdt</code> to see all available networks { "for" } a coin.
+			</p>
+		</div>
+
+		<div class="sx-open-source-bar">
+			<div>
+				<strong>Self-hostable &amp; open source</strong>
+				<p>The bot is licensed under GPL v3. You can run your own instance with your own API key.</p>
+			</div>
+			<a href="https://github.com/cyphergoat/simplex-bot" target="_blank" class="sx-btn-secondary" style="flex-shrink:0;">
+				<i class="fab fa-github"></i> cyphergoat/simplex-bot
+			</a>
+		</div>
+	</div>
+
+	@Footer() {}
+}
