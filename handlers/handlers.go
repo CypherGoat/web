@@ -239,6 +239,46 @@ func SimplexBotHandler(c echo.Context) error {
 	return views.SimplexBot().Render(c.Request().Context(), c.Response())
 }
 
+func Monerokon2026Handler(c echo.Context) error {
+	return views.Monerokon2026(HuntPrizeStatus()).Render(c.Request().Context(), c.Response())
+}
+
+func Monerokon2026CheckHandler(c echo.Context) error {
+	code := strings.TrimSpace(c.FormValue("code"))
+	entry, ok := lookupHuntCode(code)
+	if !ok {
+		time.Sleep(500 * time.Millisecond)
+		return views.HuntError("Invalid code. Double-check the sticker and try again.").Render(c.Request().Context(), c.Response())
+	}
+	if huntCodeClaimed(code) {
+		return views.HuntError("This code has already been claimed.").Render(c.Request().Context(), c.Response())
+	}
+	return views.HuntCodeResult(strings.ToUpper(code), entry.Label, entry.Prize).Render(c.Request().Context(), c.Response())
+}
+
+func Monerokon2026ClaimHandler(c echo.Context) error {
+	code := strings.TrimSpace(c.FormValue("code"))
+	contact := strings.TrimSpace(c.FormValue("contact"))
+
+	if contact == "" {
+		return views.HuntError("Please enter a valid address or contact.").Render(c.Request().Context(), c.Response())
+	}
+
+	entry, ok := lookupHuntCode(code)
+	if !ok {
+		return views.HuntError("Invalid code.").Render(c.Request().Context(), c.Response())
+	}
+
+	if err := recordHuntClaim(code, contact); err != nil {
+		if err == errAlreadyClaimed {
+			return views.HuntError("This code has already been claimed.").Render(c.Request().Context(), c.Response())
+		}
+		return views.HuntError("Something went wrong. Please try again.").Render(c.Request().Context(), c.Response())
+	}
+
+	return views.HuntSuccess(strings.ToUpper(strings.TrimSpace(code)), entry.Label).Render(c.Request().Context(), c.Response())
+}
+
 func TransparencyHandler(c echo.Context) error {
 	gh := fetchGitHubStats()
 	stats := views.TransparencyStats{

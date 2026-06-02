@@ -1,6 +1,6 @@
 run:
 	@templ generate
-	@go run cmd/main.go
+	@bash -c 'set -a; [ -f .env ] && source .env; set +a; go run cmd/main.go'
 
 build:
 	@templ generate 

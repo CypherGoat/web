@@ -137,6 +137,8 @@ func BotBlockerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func main() {
+	handlers.InitHunt()
+
 	e := echo.New()
 
 	e.IPExtractor = echo.ExtractIPFromXFFHeader()
@@ -174,6 +176,9 @@ func main() {
 	e.GET("/download/:id", handlers.DownloadReceiptHandler)
 	e.GET("/about", handlers.AboutHandler)
 	e.GET("/simplex-bot", handlers.SimplexBotHandler)
+	e.GET("/monerokon2026", handlers.Monerokon2026Handler)
+	e.POST("/monerokon2026/check", handlers.Monerokon2026CheckHandler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/10), 3))
+	e.POST("/monerokon2026/claim", handlers.Monerokon2026ClaimHandler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/30), 2))
 	e.GET("/transparency", handlers.TransparencyHandler)
 	e.GET("/terms", handlers.TermsHandler)
 	e.GET("/contact", handlers.ContactHandler)

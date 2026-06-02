@@ -1,0 +1,1116 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program, if not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+import "fmt"
+
+// ── Partial templates used by HTMX ──────────────────────────────────────────
+
+templ HuntError(msg string) {
+	<div class="hunt-msg hunt-msg--error">
+		<i class="fas fa-times-circle"></i> { msg }
+	</div>
+}
+
+templ HuntCodeResult(code, label, prizeType string) {
+	<div class="hunt-prize-reveal">
+		<div class="hunt-valid-badge">
+			<i class="fas fa-check-circle"></i> Valid code!
+		</div>
+		<div class="hunt-prize-label">{ label }</div>
+		if prizeType == "shirt" {
+			<p class="hunt-instructions">
+				Enter your contact info (email, SimpleX, X handle — anything works).
+				Find us at MoneroKon to collect your t-shirt and we'll match it to your claim.
+			</p>
+			<form
+				hx-post="/monerokon2026/claim"
+				hx-target="#hunt-result"
+				hx-swap="innerHTML"
+				hx-indicator="#hunt-spinner"
+				class="hunt-form"
+			>
+				<input type="hidden" name="code" value={ code }/>
+				<input
+					type="text"
+					name="contact"
+					class="hunt-input"
+					placeholder="email, SimpleX, or X handle"
+					required
+					autocomplete="off"
+				/>
+				<button type="submit" class="hunt-btn-submit">
+					<span id="hunt-spinner" class="htmx-indicator hunt-spinner">
+						<i class="fas fa-circle-notch fa-spin"></i>
+					</span>
+					Claim T-Shirt
+				</button>
+			</form>
+		} else {
+			<p class="hunt-instructions">
+				Enter your Monero address and we'll send the XMR to you directly.
+			</p>
+			<form
+				hx-post="/monerokon2026/claim"
+				hx-target="#hunt-result"
+				hx-swap="innerHTML"
+				hx-indicator="#hunt-spinner"
+				class="hunt-form"
+			>
+				<input type="hidden" name="code" value={ code }/>
+				<input
+					type="text"
+					name="contact"
+					class="hunt-input"
+					placeholder="4... (your Monero address)"
+					required
+					autocomplete="off"
+					minlength="95"
+					maxlength="106"
+				/>
+				<button type="submit" class="hunt-btn-submit">
+					<span id="hunt-spinner" class="htmx-indicator hunt-spinner">
+						<i class="fas fa-circle-notch fa-spin"></i>
+					</span>
+					Claim XMR
+				</button>
+			</form>
+		}
+	</div>
+}
+
+templ HuntSuccess(code, label string) {
+	<div class="hunt-msg hunt-msg--success">
+		<div class="hunt-success-icon"><i class="fas fa-check-circle"></i></div>
+		<div class="hunt-success-title">Claim received!</div>
+		if label == "CypherGoat T-Shirt" {
+			<p>Find us at MoneroKon and show us this screen — we'll hand you your <strong>{ label }</strong> on the spot.</p>
+		} else {
+			<p>Your <strong>{ label }</strong> will be sent to the address you provided.</p>
+		}
+		<p class="hunt-ref">Reference: <span class="hunt-code-mono">{ code }</span></p>
+		<div class="hunt-share">
+			<p class="hunt-share-nudge">Found a card at MoneroKon? Let the world know 👇</p>
+			<a
+				href={ templ.SafeURL("https://x.com/intent/post?text=Just+found+a+%40cyphergoatcom+card+at+%23MoneroKon+and+won+" + label + "+%F0%9F%90%90+Found+mine+at%3A+[where+did+you+find+it%3F]") }
+				target="_blank"
+				rel="noopener noreferrer"
+				class="hunt-share-btn"
+			>
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+				Post on X
+			</a>
+		</div>
+	</div>
+}
+
+// ── Main page ────────────────────────────────────────────────────────────────
+
+templ Monerokon2026(status map[string]PrizeStatus) {
+	@HeaderCustomTitle("CypherGoat × MoneroKon 2026", "https://cyphergoat.com/monerokon2026", "CypherGoat at MoneroKon 6 in Warsaw. Find hidden cards around the venue, enter the code, and win XMR prizes.") {
+	}
+	<style>
+	body {
+		background-color: #0b0d14;
+		font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+		min-height: 100vh;
+	}
+
+	.mk-shell {
+		max-width: 1080px;
+		margin: 0 auto;
+		padding: 3.5rem 1.5rem 4rem;
+	}
+
+	.mk-hero {
+		max-width: 56rem;
+		margin: 0 auto 3.5rem;
+		text-align: center;
+	}
+
+	.mk-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.35rem 0.9rem;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 132, 0, 0.25);
+		background: rgba(255, 132, 0, 0.07);
+		font-size: 0.8rem;
+		color: #f5c97a;
+		margin-bottom: 1.5rem;
+		font-weight: 500;
+	}
+
+	.mk-badge-dot {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #ff8400;
+		display: inline-block;
+		box-shadow: 0 0 6px #ff8400;
+	}
+
+	.mk-title {
+		margin: 0;
+		color: #ffffff;
+		font-size: clamp(3rem, 6vw, 5rem);
+		line-height: 0.92;
+		font-weight: 500;
+		letter-spacing: -0.06em;
+	}
+
+	.mk-title-accent { color: #ff8400; }
+
+	.mk-lead {
+		margin: 1.25rem auto 0;
+		max-width: 42rem;
+		color: #98a1b1;
+		font-size: 1.05rem;
+		line-height: 1.8;
+	}
+
+	.mk-meta-row {
+		margin-top: 1.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		justify-content: center;
+	}
+
+	.mk-meta-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.4rem 0.9rem;
+		border-radius: 999px;
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		color: #d0d6e2;
+		font-size: 0.85rem;
+	}
+
+	.mk-cta-group {
+		margin-top: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		justify-content: center;
+	}
+
+	.mk-btn-primary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.8rem 1.5rem;
+		border-radius: 12px;
+		background: #ff8400;
+		color: #0b0d14;
+		font-weight: 700;
+		font-size: 0.95rem;
+		text-decoration: none;
+		transition: background 0.2s;
+	}
+	.mk-btn-primary:hover { background: #ffa033; }
+
+	.mk-btn-secondary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.8rem 1.5rem;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.04);
+		color: #d9deea;
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		transition: background 0.2s, border-color 0.2s;
+	}
+	.mk-btn-secondary:hover {
+		background: rgba(255, 255, 255, 0.07);
+		border-color: rgba(255, 255, 255, 0.14);
+		color: #ffffff;
+	}
+
+	.mk-section-title {
+		color: #ffffff;
+		font-size: 1.75rem;
+		font-weight: 500;
+		letter-spacing: -0.04em;
+		margin: 0 0 0.4rem;
+	}
+
+	.mk-section-sub {
+		color: #98a1b1;
+		font-size: 0.95rem;
+		line-height: 1.7;
+		margin: 0 0 1.75rem;
+	}
+
+	.mk-panel {
+		padding: 2rem;
+		border-radius: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		background:
+			linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+			#11151c;
+		box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+		margin-bottom: 1.5rem;
+	}
+
+	/* ── Code entry ── */
+	.mk-code-entry {
+		max-width: 36rem;
+		margin: 0 auto 3.5rem;
+		text-align: center;
+	}
+
+	.mk-code-entry h2 {
+		color: #ffffff;
+		font-size: 1.5rem;
+		font-weight: 500;
+		letter-spacing: -0.04em;
+		margin: 0 0 0.5rem;
+	}
+
+	.mk-code-entry p {
+		color: #98a1b1;
+		font-size: 0.95rem;
+		margin: 0 0 1.5rem;
+	}
+
+	.mk-code-form {
+		display: flex;
+		gap: 0.6rem;
+	}
+
+	.mk-code-input {
+		flex: 1;
+		padding: 0.85rem 1.1rem;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		color: #ffffff;
+		font-size: 1rem;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		letter-spacing: 0.06em;
+		outline: none;
+		transition: border-color 0.2s;
+	}
+	.mk-code-input::placeholder { color: #555e6e; }
+	.mk-code-input:focus { border-color: rgba(255, 132, 0, 0.5); }
+
+	.mk-code-btn {
+		padding: 0.85rem 1.4rem;
+		border-radius: 12px;
+		background: #ff8400;
+		color: #0b0d14;
+		font-weight: 700;
+		font-size: 0.95rem;
+		border: none;
+		cursor: pointer;
+		transition: background 0.2s;
+		white-space: nowrap;
+	}
+	.mk-code-btn:hover { background: #ffa033; }
+
+	/* ── Hunt result area ── */
+	#hunt-result { margin-top: 1.25rem; }
+
+	.hunt-msg {
+		padding: 1rem 1.25rem;
+		border-radius: 14px;
+		font-size: 0.95rem;
+		display: flex;
+		align-items: flex-start;
+		gap: 0.6rem;
+	}
+
+	.hunt-msg--error {
+		background: rgba(239, 68, 68, 0.08);
+		border: 1px solid rgba(239, 68, 68, 0.2);
+		color: #fca5a5;
+	}
+
+	.hunt-msg--success {
+		background: rgba(74, 222, 128, 0.07);
+		border: 1px solid rgba(74, 222, 128, 0.2);
+		color: #d9deea;
+		flex-direction: column;
+		gap: 0.4rem;
+		text-align: center;
+		padding: 1.75rem;
+	}
+
+	.hunt-success-icon {
+		font-size: 2rem;
+		color: #4ade80;
+		margin-bottom: 0.25rem;
+	}
+
+	.hunt-success-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: #ffffff;
+	}
+
+	.hunt-msg--success p {
+		margin: 0;
+		color: #98a1b1;
+		font-size: 0.9rem;
+		line-height: 1.6;
+	}
+
+	.hunt-msg--success strong { color: #e0e6f0; }
+
+	.hunt-ref {
+		margin-top: 0.5rem !important;
+		font-size: 0.85rem !important;
+		color: #737b89 !important;
+	}
+
+	.hunt-share {
+		margin-top: 1.25rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.07);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.hunt-share-nudge {
+		color: #98a1b1 !important;
+		font-size: 0.88rem !important;
+		margin: 0 !important;
+	}
+
+	.hunt-share-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.65rem 1.25rem;
+		border-radius: 10px;
+		background: #000000;
+		color: #ffffff;
+		font-weight: 600;
+		font-size: 0.9rem;
+		text-decoration: none;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		transition: background 0.2s;
+	}
+	.hunt-share-btn:hover { background: #1a1a1a; }
+
+	.hunt-code-mono {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		color: #ff8400;
+		background: rgba(255, 132, 0, 0.09);
+		padding: 0.15rem 0.5rem;
+		border-radius: 6px;
+	}
+
+	/* ── Prize reveal ── */
+	.hunt-prize-reveal {
+		padding: 1.75rem;
+		border-radius: 18px;
+		border: 1px solid rgba(255, 132, 0, 0.25);
+		background: rgba(255, 132, 0, 0.05);
+		text-align: center;
+	}
+
+	.hunt-valid-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.82rem;
+		font-weight: 600;
+		color: #4ade80;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin-bottom: 0.75rem;
+	}
+
+	.hunt-prize-label {
+		color: #ffffff;
+		font-size: 1.6rem;
+		font-weight: 700;
+		letter-spacing: -0.04em;
+		margin-bottom: 0.75rem;
+	}
+
+	.hunt-instructions {
+		color: #98a1b1;
+		font-size: 0.9rem;
+		line-height: 1.65;
+		margin: 0 0 1.25rem;
+	}
+
+	.hunt-form {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		max-width: 28rem;
+		margin: 0 auto;
+	}
+
+	.hunt-input {
+		padding: 0.85rem 1.1rem;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		color: #ffffff;
+		font-size: 0.9rem;
+		outline: none;
+		transition: border-color 0.2s;
+		width: 100%;
+		box-sizing: border-box;
+	}
+	.hunt-input::placeholder { color: #555e6e; }
+	.hunt-input:focus { border-color: rgba(255, 132, 0, 0.5); }
+
+	.hunt-btn-submit {
+		padding: 0.85rem 1.4rem;
+		border-radius: 12px;
+		background: #ff8400;
+		color: #0b0d14;
+		font-weight: 700;
+		font-size: 0.95rem;
+		border: none;
+		cursor: pointer;
+		transition: background 0.2s;
+		position: relative;
+	}
+	.hunt-btn-submit:hover { background: #ffa033; }
+
+	.hunt-spinner { display: none; margin-right: 0.4rem; }
+	.htmx-request .hunt-spinner { display: inline; }
+
+	/* ── Steps ── */
+	.mk-steps { display: flex; flex-direction: column; gap: 1rem; }
+
+	.mk-step { display: flex; gap: 1.25rem; align-items: flex-start; }
+
+	.mk-step-num {
+		flex-shrink: 0;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: 50%;
+		background: rgba(255, 132, 0, 0.12);
+		border: 1px solid rgba(255, 132, 0, 0.3);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #ff8400;
+		font-size: 0.9rem;
+		font-weight: 700;
+	}
+
+	.mk-step-body h3 {
+		color: #ffffff;
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		margin: 0 0 0.3rem;
+	}
+
+	.mk-step-body p {
+		color: #98a1b1;
+		font-size: 0.9rem;
+		line-height: 1.65;
+		margin: 0;
+	}
+
+	.mk-code-example {
+		display: inline-block;
+		margin-top: 0.4rem;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		font-size: 1.1rem;
+		color: #ff8400;
+		background: rgba(255, 132, 0, 0.09);
+		border: 1px solid rgba(255, 132, 0, 0.2);
+		border-radius: 8px;
+		padding: 0.3rem 0.75rem;
+		letter-spacing: 0.08em;
+	}
+
+	/* ── Playing card prizes ── */
+	.mk-deck-wrap {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.mk-deck-row {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.mk-deck-row--top { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.mk-deck-row--bottom { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+	/* The card itself */
+	.pc {
+		position: relative;
+		border-radius: 16px;
+		padding: 1.1rem 1rem 1rem;
+		display: flex;
+		flex-direction: column;
+		min-height: 200px;
+		box-shadow:
+			0 2px 0 rgba(255,255,255,0.06) inset,
+			0 12px 40px rgba(0,0,0,0.45);
+		transition: transform 0.18s ease, box-shadow 0.18s ease;
+		overflow: hidden;
+	}
+
+	.pc:hover {
+		transform: translateY(-4px) rotate(0.5deg);
+		box-shadow:
+			0 2px 0 rgba(255,255,255,0.08) inset,
+			0 20px 52px rgba(0,0,0,0.55);
+	}
+
+	/* Suit colour variants */
+	.pc--spades {
+		background: linear-gradient(155deg, #1a1f2e 0%, #0f1219 100%);
+		border: 1px solid rgba(255,255,255,0.09);
+	}
+	.pc--hearts {
+		background: linear-gradient(155deg, #1f1318 0%, #130b0e 100%);
+		border: 1px solid rgba(220,50,50,0.18);
+	}
+	.pc--diamonds {
+		background: linear-gradient(155deg, #1a1510 0%, #120e08 100%);
+		border: 1px solid rgba(255,132,0,0.2);
+	}
+	.pc--clubs {
+		background: linear-gradient(155deg, #0f1a12 0%, #0a110c 100%);
+		border: 1px solid rgba(74,222,128,0.14);
+	}
+
+	/* Claimed state: face-down card back */
+	.pc--claimed {
+		background:
+			repeating-linear-gradient(
+				45deg,
+				rgba(255,255,255,0.025) 0px,
+				rgba(255,255,255,0.025) 2px,
+				transparent 2px,
+				transparent 10px
+			),
+			linear-gradient(155deg, #12151e 0%, #0c0e15 100%) !important;
+		border-color: rgba(255,255,255,0.06) !important;
+		cursor: default;
+	}
+	.pc--claimed:hover {
+		transform: none;
+		box-shadow:
+			0 2px 0 rgba(255,255,255,0.04) inset,
+			0 12px 40px rgba(0,0,0,0.45);
+	}
+
+	/* Corner rank+suit */
+	.pc-corner {
+		display: flex;
+		flex-direction: column;
+		line-height: 1;
+		gap: 2px;
+	}
+	.pc-corner--tl { position: absolute; top: 0.75rem; left: 0.85rem; }
+	.pc-corner--br {
+		position: absolute;
+		bottom: 0.75rem;
+		right: 0.85rem;
+		transform: rotate(180deg);
+	}
+
+	.pc-rank {
+		font-size: 1.1rem;
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		line-height: 1;
+	}
+	.pc-suit-sm { font-size: 0.9rem; line-height: 1; }
+
+	/* Suit colours */
+	.pc--spades .pc-rank,
+	.pc--spades .pc-suit-sm { color: #c8d4f0; }
+
+	.pc--hearts .pc-rank,
+	.pc--hearts .pc-suit-sm { color: #f87171; }
+
+	.pc--diamonds .pc-rank,
+	.pc--diamonds .pc-suit-sm { color: #ff8400; }
+
+	.pc--clubs .pc-rank,
+	.pc--clubs .pc-suit-sm { color: #4ade80; }
+
+	/* Center content */
+	.pc-body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		gap: 0.35rem;
+		padding: 0 1.5rem;
+	}
+
+	.pc-suit-lg { font-size: 2.4rem; line-height: 1; margin-bottom: 0.25rem; }
+
+	.pc-prize-label {
+		font-size: 0.72rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: #737b89;
+		margin-bottom: 0.1rem;
+	}
+
+	.pc-prize-amount {
+		font-size: 1.8rem;
+		font-weight: 800;
+		letter-spacing: -0.05em;
+		line-height: 1;
+	}
+	.pc--spades .pc-prize-amount { color: #e2e8f8; }
+	.pc--hearts .pc-prize-amount { color: #fca5a5; }
+	.pc--diamonds .pc-prize-amount { color: #ff8400; }
+	.pc--clubs .pc-prize-amount { color: #86efac; }
+
+	.pc-prize-sub {
+		font-size: 0.78rem;
+		color: #555e6e;
+		margin-top: 0.15rem;
+	}
+
+	/* Claimed overlay text */
+	.pc-claimed-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4rem;
+	}
+
+	.pc-claimed-icon {
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+		background: rgba(255,50,50,0.12);
+		border: 1px solid rgba(255,50,50,0.3);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1rem;
+		color: #f87171;
+	}
+
+	.pc-claimed-text {
+		font-size: 0.75rem;
+		font-weight: 800;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: #f87171;
+	}
+
+	/* Remaining badge */
+	.pc-remaining {
+		position: absolute;
+		top: 0.65rem;
+		right: 0.75rem;
+		font-size: 0.68rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.09em;
+		padding: 0.18rem 0.55rem;
+		border-radius: 999px;
+	}
+	.pc--spades .pc-remaining {
+		background: rgba(180,200,255,0.08);
+		border: 1px solid rgba(180,200,255,0.18);
+		color: #a0b0d8;
+	}
+	.pc--hearts .pc-remaining {
+		background: rgba(248,113,113,0.08);
+		border: 1px solid rgba(248,113,113,0.2);
+		color: #fca5a5;
+	}
+	.pc--diamonds .pc-remaining {
+		background: rgba(255,132,0,0.08);
+		border: 1px solid rgba(255,132,0,0.2);
+		color: #fbbf70;
+	}
+	.pc--clubs .pc-remaining {
+		background: rgba(74,222,128,0.07);
+		border: 1px solid rgba(74,222,128,0.18);
+		color: #86efac;
+	}
+
+	/* ── Talk card ── */
+	.mk-talk-card { display: flex; gap: 1.5rem; align-items: flex-start; }
+
+	.mk-talk-icon {
+		flex-shrink: 0;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 14px;
+		background: rgba(255, 132, 0, 0.1);
+		border: 1px solid rgba(255, 132, 0, 0.2);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.4rem;
+	}
+
+	.mk-talk-body h3 {
+		color: #ffffff;
+		font-size: 1.1rem;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+		margin: 0 0 0.4rem;
+	}
+
+	.mk-talk-body p {
+		color: #98a1b1;
+		font-size: 0.9rem;
+		line-height: 1.65;
+		margin: 0 0 0.75rem;
+	}
+
+	@media (max-width: 900px) {
+		.mk-deck-row--top { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+		.mk-deck-row--bottom { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	}
+
+	@media (max-width: 640px) {
+		.mk-shell { padding: 2.5rem 1rem 3rem; }
+		.mk-deck-row--top { grid-template-columns: 1fr; }
+		.mk-deck-row--bottom { grid-template-columns: 1fr; }
+		.mk-panel { padding: 1.4rem; border-radius: 18px; }
+		.mk-talk-card { flex-direction: column; gap: 1rem; }
+		.mk-code-form { flex-direction: column; }
+		.pc { min-height: 160px; }
+	}
+	</style>
+
+	<div class="mk-shell text-white">
+		<!-- Hero -->
+		<div class="mk-hero">
+			<div class="mk-badge">
+				<span class="mk-badge-dot"></span> Live at MoneroKon 6 · Warsaw
+			</div>
+			<h1 class="mk-title">
+				CypherGoat<br/>
+				<span class="mk-title-accent">× MoneroKon</span>
+			</h1>
+			<p class="mk-lead">
+				We're at MoneroKon 2026 in Warsaw. Find our hidden cards around the venue,
+				enter the code on the back, and win XMR.
+			</p>
+			<div class="mk-meta-row">
+				<span class="mk-meta-chip">
+					<i class="fas fa-calendar" style="color:#ff8400;font-size:0.8rem;"></i>
+					June 5–7, 2026
+				</span>
+				<span class="mk-meta-chip">
+					<i class="fas fa-map-marker-alt" style="color:#ff8400;font-size:0.8rem;"></i>
+					Kinoteka, Palace of Culture and Science
+				</span>
+				<span class="mk-meta-chip">
+					<i class="fas fa-map-pin" style="color:#ff8400;font-size:0.8rem;"></i>
+					Warsaw, Poland
+				</span>
+			</div>
+			<div class="mk-cta-group">
+				<a href="#treasure-hunt" class="mk-btn-primary">
+					<i class="fas fa-search"></i> Find a Card
+				</a>
+				<a href="https://www.monerokon.org/" target="_blank" rel="noopener noreferrer" class="mk-btn-secondary">
+					<i class="fas fa-external-link-alt"></i> MoneroKon 6
+				</a>
+			</div>
+		</div>
+
+		<!-- Code entry -->
+		<div id="treasure-hunt" class="mk-code-entry">
+			<h2>Found a card?</h2>
+			<p>Cards will be hidden at the venue when MoneroKon starts. Check back June 5.</p>
+			<div style="display:flex;align-items:center;gap:0.6rem;justify-content:center;padding:0.9rem 1.25rem;border-radius:14px;background:rgba(255,132,0,0.06);border:1px solid rgba(255,132,0,0.18);color:#f5c97a;font-size:0.92rem;">
+				<i class="fas fa-clock"></i>
+				Hunt opens June 5 · Warsaw
+			</div>
+		</div>
+
+		<!-- How it works -->
+		<div>
+			<h2 class="mk-section-title">How it works</h2>
+			<p class="mk-section-sub">
+				CypherGoat cards from a standard deck are hidden around the MoneroKon venue.
+				Each card has a unique code on the back — first to claim it wins.
+			</p>
+
+			<div class="mk-panel">
+				<div class="mk-steps">
+					<div class="mk-step">
+						<div class="mk-step-num">1</div>
+						<div class="mk-step-body">
+							<h3>Find a card</h3>
+							<p>Look around the venue — tables, chairs, common areas. Cards from a CypherGoat deck are hidden throughout.</p>
+						</div>
+					</div>
+					<div class="mk-step">
+						<div class="mk-step-num">2</div>
+						<div class="mk-step-body">
+							<h3>Read the code on the back</h3>
+							<p>Each card has a unique code printed on the reverse side:</p>
+							<div class="mk-code-example">GOAT-A3B7K2M9</div>
+						</div>
+					</div>
+					<div class="mk-step">
+						<div class="mk-step-num">3</div>
+						<div class="mk-step-body">
+							<h3>Enter it above</h3>
+							<p>Type the code into the field above. If it's valid and unclaimed, you'll see your prize and a form to provide your Monero address. We send the XMR directly.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Prizes — playing card grid -->
+		<div style="margin-top:2.5rem;">
+			<h2 class="mk-section-title">Prize cards</h2>
+			<p class="mk-section-sub">Each hidden card is a prize. First to claim wins. Some cards may have multiple copies in the deck.</p>
+
+			<div class="mk-deck-wrap">
+				<!-- Top row: XMR prizes -->
+				<div class="mk-deck-row mk-deck-row--top">
+
+					<!-- Ace of Spades — $500 -->
+					<div class={ "pc pc--spades", templ.KV("pc--claimed", status["500xmr"].Claimed >= status["500xmr"].Total && status["500xmr"].Total > 0) }>
+						if status["500xmr"].Claimed >= status["500xmr"].Total && status["500xmr"].Total > 0 {
+							<div class="pc-claimed-overlay">
+								<div class="pc-claimed-icon"><i class="fas fa-times"></i></div>
+								<div class="pc-claimed-text">Claimed</div>
+							</div>
+						} else {
+							if status["500xmr"].Total > 0 {
+								<div class="pc-remaining">
+									{ fmt.Sprintf("%d / %d available", status["500xmr"].Total - status["500xmr"].Claimed, status["500xmr"].Total) }
+								</div>
+							} else {
+								<div class="pc-remaining">1 card</div>
+							}
+							<div class="pc-corner pc-corner--tl">
+								<span class="pc-rank">A</span>
+								<span class="pc-suit-sm">♠</span>
+							</div>
+							<div class="pc-body">
+								<div class="pc-suit-lg">♠</div>
+								<div class="pc-prize-label">Grand Prize</div>
+								<div class="pc-prize-amount">$500</div>
+								<div class="pc-prize-sub">paid in XMR</div>
+							</div>
+							<div class="pc-corner pc-corner--br">
+								<span class="pc-rank">A</span>
+								<span class="pc-suit-sm">♠</span>
+							</div>
+						}
+					</div>
+
+					<!-- King of Hearts — $100 -->
+					<div class={ "pc pc--hearts", templ.KV("pc--claimed", status["100xmr"].Claimed >= status["100xmr"].Total && status["100xmr"].Total > 0) }>
+						if status["100xmr"].Claimed >= status["100xmr"].Total && status["100xmr"].Total > 0 {
+							<div class="pc-claimed-overlay">
+								<div class="pc-claimed-icon"><i class="fas fa-times"></i></div>
+								<div class="pc-claimed-text">Claimed</div>
+							</div>
+						} else {
+							if status["100xmr"].Total > 0 {
+								<div class="pc-remaining">
+									{ fmt.Sprintf("%d / %d available", status["100xmr"].Total - status["100xmr"].Claimed, status["100xmr"].Total) }
+								</div>
+							} else {
+								<div class="pc-remaining">1 card</div>
+							}
+							<div class="pc-corner pc-corner--tl">
+								<span class="pc-rank">K</span>
+								<span class="pc-suit-sm">♥</span>
+							</div>
+							<div class="pc-body">
+								<div class="pc-suit-lg">♥</div>
+								<div class="pc-prize-label">2nd Prize</div>
+								<div class="pc-prize-amount">$100</div>
+								<div class="pc-prize-sub">paid in XMR</div>
+							</div>
+							<div class="pc-corner pc-corner--br">
+								<span class="pc-rank">K</span>
+								<span class="pc-suit-sm">♥</span>
+							</div>
+						}
+					</div>
+
+					<!-- Queen of Diamonds — $50 -->
+					<div class={ "pc pc--diamonds", templ.KV("pc--claimed", status["50xmr"].Claimed >= status["50xmr"].Total && status["50xmr"].Total > 0) }>
+						if status["50xmr"].Claimed >= status["50xmr"].Total && status["50xmr"].Total > 0 {
+							<div class="pc-claimed-overlay">
+								<div class="pc-claimed-icon"><i class="fas fa-times"></i></div>
+								<div class="pc-claimed-text">Claimed</div>
+							</div>
+						} else {
+							if status["50xmr"].Total > 0 {
+								<div class="pc-remaining">
+									{ fmt.Sprintf("%d / %d available", status["50xmr"].Total - status["50xmr"].Claimed, status["50xmr"].Total) }
+								</div>
+							} else {
+								<div class="pc-remaining">1 card</div>
+							}
+							<div class="pc-corner pc-corner--tl">
+								<span class="pc-rank">Q</span>
+								<span class="pc-suit-sm">♦</span>
+							</div>
+							<div class="pc-body">
+								<div class="pc-suit-lg">♦</div>
+								<div class="pc-prize-label">3rd Prize</div>
+								<div class="pc-prize-amount">$50</div>
+								<div class="pc-prize-sub">paid in XMR</div>
+							</div>
+							<div class="pc-corner pc-corner--br">
+								<span class="pc-rank">Q</span>
+								<span class="pc-suit-sm">♦</span>
+							</div>
+						}
+					</div>
+				</div>
+
+				<!-- Bottom row: shirt + $20 prizes -->
+				<div class="mk-deck-row mk-deck-row--bottom">
+
+					<!-- Jack of Clubs — T-Shirt -->
+					<div class={ "pc pc--clubs", templ.KV("pc--claimed", status["shirt"].Claimed >= status["shirt"].Total && status["shirt"].Total > 0) }>
+						if status["shirt"].Claimed >= status["shirt"].Total && status["shirt"].Total > 0 {
+							<div class="pc-claimed-overlay">
+								<div class="pc-claimed-icon"><i class="fas fa-times"></i></div>
+								<div class="pc-claimed-text">All Claimed</div>
+							</div>
+						} else {
+							if status["shirt"].Total > 0 {
+								<div class="pc-remaining">
+									{ fmt.Sprintf("%d / %d available", status["shirt"].Total - status["shirt"].Claimed, status["shirt"].Total) }
+								</div>
+							} else {
+								<div class="pc-remaining">2 cards</div>
+							}
+							<div class="pc-corner pc-corner--tl">
+								<span class="pc-rank">J</span>
+								<span class="pc-suit-sm">♣</span>
+							</div>
+							<div class="pc-body">
+								<div class="pc-suit-lg">♣</div>
+								<div class="pc-prize-label">Prize</div>
+								<div class="pc-prize-amount" style="font-size:1.3rem;">T-Shirt</div>
+								<div class="pc-prize-sub">CypherGoat · MoneroKon edition</div>
+							</div>
+							<div class="pc-corner pc-corner--br">
+								<span class="pc-rank">J</span>
+								<span class="pc-suit-sm">♣</span>
+							</div>
+						}
+					</div>
+
+					<!-- 7 of Hearts — $20 -->
+					<div class={ "pc pc--hearts", templ.KV("pc--claimed", status["20xmr"].Claimed >= status["20xmr"].Total && status["20xmr"].Total > 0) }>
+						if status["20xmr"].Claimed >= status["20xmr"].Total && status["20xmr"].Total > 0 {
+							<div class="pc-claimed-overlay">
+								<div class="pc-claimed-icon"><i class="fas fa-times"></i></div>
+								<div class="pc-claimed-text">All Claimed</div>
+							</div>
+						} else {
+							if status["20xmr"].Total > 0 {
+								<div class="pc-remaining">
+									{ fmt.Sprintf("%d / %d available", status["20xmr"].Total - status["20xmr"].Claimed, status["20xmr"].Total) }
+								</div>
+							} else {
+								<div class="pc-remaining">4 cards</div>
+							}
+							<div class="pc-corner pc-corner--tl">
+								<span class="pc-rank">7</span>
+								<span class="pc-suit-sm">♥</span>
+							</div>
+							<div class="pc-body">
+								<div class="pc-suit-lg">♥</div>
+								<div class="pc-prize-label">Prize</div>
+								<div class="pc-prize-amount">$20</div>
+								<div class="pc-prize-sub">paid in XMR · multiple cards</div>
+							</div>
+							<div class="pc-corner pc-corner--br">
+								<span class="pc-rank">7</span>
+								<span class="pc-suit-sm">♥</span>
+							</div>
+						}
+					</div>
+
+					<!-- 5 of Diamonds — $10 placeholder / wildcard -->
+					<div class="pc pc--diamonds" style="opacity:0.35;pointer-events:none;">
+						<div class="pc-corner pc-corner--tl">
+							<span class="pc-rank">?</span>
+							<span class="pc-suit-sm">♦</span>
+						</div>
+						<div class="pc-body">
+							<div class="pc-suit-lg" style="opacity:0.5;">♦</div>
+							<div class="pc-prize-label">Mystery card</div>
+							<div class="pc-prize-amount" style="font-size:1.3rem;opacity:0.6;">???</div>
+							<div class="pc-prize-sub">hidden in the deck</div>
+						</div>
+						<div class="pc-corner pc-corner--br">
+							<span class="pc-rank">?</span>
+							<span class="pc-suit-sm">♦</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Talk -->
+		<div class="mk-panel" style="margin-top:2.5rem;">
+			<div class="mk-talk-card">
+				<div class="mk-talk-icon">🎤</div>
+				<div class="mk-talk-body">
+					<h3>"Liquidity Fragmentation in Non-Custodial XMR Markets"</h3>
+					<p>
+						Catch our talk at MoneroKon 6 on June 6. We cover how liquidity is split across non-custodial
+						exchanges, what that means for swap rates, and how CypherGoat aggregates across them to give
+						you the best deal — without custody.
+					</p>
+					<a href="https://cfp.twed.org/mk6/talk/ZGGEPB/" target="_blank" rel="noopener noreferrer" class="mk-btn-secondary" style="font-size:0.875rem;padding:0.6rem 1.1rem;">
+						<i class="fas fa-external-link-alt"></i> Talk details
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<p style="margin-top:2rem;text-align:center;color:#737b89;font-size:0.85rem;line-height:1.7;">
+			One code per person. Prizes paid in XMR at current market rate. Good luck.
+		</p>
+	</div>
+
+	@Footer() {}
+}
