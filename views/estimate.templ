@@ -18,6 +18,7 @@ package views
 import (
     "fmt"
     "github.com/CypherGoat/web/cmd/api"
+    "net/url"
     "strings"
     "strconv"
 )
@@ -43,7 +44,60 @@ func FormatCoveragePercent(num float64) string {
 }
 
 
-templ EstimateCard(offers api.Estimates, mode string) {
+templ splitCardBlock(split *api.SplitSuggestion, offers api.Estimates, cssClass string, initialStyle string) {
+    <div class={ "split-card-estimates", cssClass } style={ initialStyle }>
+        <div class="exchange-info-estimates">
+            <div class="exchange-name-estimates">
+                <div class="split-badge-estimates">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    SafeRoute Split
+                </div>
+            </div>
+            <div class="exchange-meta-estimates">
+                if split.ImprovementPct >= 0.01 {
+                    <div class="split-gain-estimates">+{ fmt.Sprintf("%.2f", split.ImprovementPct) }%</div>
+                }
+            </div>
+        </div>
+        <div class="amount-highlight-estimates">
+            { FormatFloat(split.TotalReceive) } { strings.ToUpper(offers.Coin2) }
+        </div>
+        <div class="split-amounts-estimates">
+            <div class="split-leg-estimates">
+                <span class="split-leg-label-estimates">{ split.Part1.Exchange }</span>
+                <span class="split-leg-amount-estimates">{ FormatFloat(split.Part1.SendAmount) } { strings.ToUpper(offers.Coin1) } → { FormatFloat(split.Part1.ReceiveAmount) } { strings.ToUpper(offers.Coin2) }</span>
+            </div>
+            <span class="split-divider-estimates">+</span>
+            <div class="split-leg-estimates">
+                <span class="split-leg-label-estimates">{ split.Part2.Exchange }</span>
+                <span class="split-leg-amount-estimates">{ FormatFloat(split.Part2.SendAmount) } { strings.ToUpper(offers.Coin1) } → { FormatFloat(split.Part2.ReceiveAmount) } { strings.ToUpper(offers.Coin2) }</span>
+            </div>
+        </div>
+        <div class="estimate-details-estimates">
+            <div style="font-size:0.78rem;color:#798192;line-height:1.4;">
+                if split.Forced {
+                    Recommended for large trades to spread across exchanges
+                } else {
+                    Split across 2 exchanges
+                }
+            </div>
+            <a href={ templ.URL(fmt.Sprintf("/split/step2?coin1=%s&coin2=%s&network1=%s&network2=%s&amount1=%s&amount2=%s&partner1=%s&partner2=%s&receive1=%s&receive2=%s&estimateid=%d",
+                url.QueryEscape(offers.Coin1), url.QueryEscape(offers.Coin2),
+                url.QueryEscape(offers.Network1), url.QueryEscape(offers.Network2),
+                url.QueryEscape(strconv.FormatFloat(split.Part1.SendAmount, 'f', -1, 64)),
+                url.QueryEscape(strconv.FormatFloat(split.Part2.SendAmount, 'f', -1, 64)),
+                url.QueryEscape(split.Part1.Exchange), url.QueryEscape(split.Part2.Exchange),
+                url.QueryEscape(strconv.FormatFloat(split.Part1.ReceiveAmount, 'f', -1, 64)),
+                url.QueryEscape(strconv.FormatFloat(split.Part2.ReceiveAmount, 'f', -1, 64)),
+                offers.EstimateId)) }
+                class="btn-select2-estimates btn-primary-estimates" style="text-decoration:none;">
+                Select
+            </a>
+        </div>
+    </div>
+}
+
+templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSuggestion, kycSplit *api.SplitSuggestion) {
      <style>
         .container-estimates {
             width: 100%;
@@ -464,8 +518,67 @@ templ EstimateCard(offers api.Estimates, mode string) {
                 font-size: 0.68rem;
             }
         }
+        .split-card-estimates {
+            display: grid;
+            gap: 0.95rem;
+            padding: 1.15rem 1.2rem;
+            background: linear-gradient(180deg, rgba(97, 196, 146, 0.04), rgba(97, 196, 146, 0.01)), #10141a;
+            border: 1px solid rgba(97, 196, 146, 0.2);
+            border-radius: 20px;
+            margin-bottom: 0.9rem;
+        }
+        .split-badge-estimates {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(97, 196, 146, 0.1);
+            border: 1px solid rgba(97, 196, 146, 0.22);
+            color: #9ce0c0;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .split-gain-estimates {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(97, 196, 146, 0.08);
+            border: 1px solid rgba(97, 196, 146, 0.18);
+            color: #9ce0c0;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .split-amounts-estimates {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .split-divider-estimates {
+            color: #626b7b;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .split-leg-estimates { display: flex; flex-direction: column; gap: 0.1rem; flex: 1; min-width: 0; }
+        .split-leg-label-estimates {
+            color: #9aa2b2;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+        }
+        .split-leg-amount-estimates { color: #798192; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     </style>
     <div class="container-estimates">
+        if rateSplit != nil {
+            @splitCardBlock(rateSplit, offers, "split-card-rate", "")
+        }
+        if kycSplit != nil {
+            @splitCardBlock(kycSplit, offers, "split-card-kyc", "display:none")
+        }
         <div class="estimate-toolbar-estimates">
             <div class="sort-options-estimates">
                 <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Best Rate</button>
@@ -610,17 +723,25 @@ templ EstimateCard(offers api.Estimates, mode string) {
             document.querySelectorAll('.sort-btn-estimates').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
+
             const buttonId = sortBy === 'kyc' ? 'sort-kyc-estimates' : 'sort-rate-estimates';
             const button = document.getElementById(buttonId);
             if (button) button.classList.add('active');
-            
+
             const container = document.getElementById('estimates-container-estimates');
             if (sortBy === 'kyc') {
                 container.classList.add('show-kyc-estimates');
             } else {
                 container.classList.remove('show-kyc-estimates');
             }
+
+            // Show the split card matching the active sort; hide the other.
+            document.querySelectorAll('.split-card-rate').forEach(el => {
+                el.style.display = sortBy === 'kyc' ? 'none' : '';
+            });
+            document.querySelectorAll('.split-card-kyc').forEach(el => {
+                el.style.display = sortBy === 'kyc' ? '' : 'none';
+            });
         }
         
         document.querySelectorAll('.sort-btn-estimates').forEach(btn => {

@@ -23,6 +23,7 @@ import (
 	"net/url"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -46,6 +47,31 @@ type Estimates struct {
 	TradeValue_btc  float64
 	CGSinStable     bool `json:"CGSinStable"`
 	EstimateId      int  `json:"estimateId,omitempty"`
+	// Set by the web layer for template use.
+	Coin1   string
+	Coin2   string
+	Amount  float64
+	Network1 string
+	Network2 string
+}
+
+type SplitPart struct {
+	Exchange      string  `json:"exchange"`
+	SendAmount    float64 `json:"send_amount"`
+	ReceiveAmount float64 `json:"receive_amount"`
+}
+
+type SplitSuggestion struct {
+	Part1          SplitPart `json:"part1"`
+	Part2          SplitPart `json:"part2"`
+	TotalReceive   float64   `json:"total_receive"`
+	ImprovementPct float64   `json:"improvement_pct"`
+	Forced         bool      `json:"forced"`
+}
+
+type SplitTransaction struct {
+	Transaction1 Transaction
+	Transaction2 Transaction
 }
 
 type Estimate struct {
@@ -375,6 +401,98 @@ func CreateQuickPaymentFromAPI(coin1, coin2 string, amount float64, address, net
 	}
 
 	return nil, transaction
+}
+
+// FetchSplitEstimatesFromAPI returns both the all-exchange and KYC-0 splits
+// from a single API request (one batch of exchange fetches on the server).
+func FetchSplitEstimatesFromAPI(coin1, coin2 string, amount float64, network1, network2 string, force bool) (rateSplit *SplitSuggestion, kycSplit *SplitSuggestion, err error) {
+	reqURL := fmt.Sprintf("%s/split/estimate?coin1=%s&coin2=%s&amount=%f&network1=%s&network2=%s&force=%t",
+		URL, coin1, coin2, amount, network1, network2, force)
+
+	data, fetchErr := SendRequest(reqURL)
+	if fetchErr != nil {
+		return nil, nil, fetchErr
+	}
+
+	var result struct {
+		Rate *SplitSuggestion `json:"rate"`
+		KYC0 *SplitSuggestion `json:"kyc0"`
+	}
+	if err := json.Unmarshal(data, &result); err != nil {
+		return nil, nil, err
+	}
+	return result.Rate, result.KYC0, nil
+}
+
+// SplitTradeResult holds the outcome of a split trade creation. One or both
+// legs may have failed; check Leg1Error/Leg2Error to determine partial failure.
+type SplitTradeResult struct {
+	Transaction1 Transaction
+	Transaction2 Transaction
+	Leg1Error    string
+	Leg2Error    string
+}
+
+func CreateSplitTradeFromAPI(coin1, coin2, network1, network2, partner1, partner2 string, amount1, amount2 float64, address, affiliate string, info Info, source string, estimateId int) (*SplitTradeResult, error) {
+	params := url.Values{}
+	params.Add("coin1", coin1)
+	params.Add("coin2", coin2)
+	params.Add("network1", network1)
+	params.Add("network2", network2)
+	params.Add("amount1", strconv.FormatFloat(amount1, 'f', -1, 64))
+	params.Add("amount2", strconv.FormatFloat(amount2, 'f', -1, 64))
+	params.Add("partner1", partner1)
+	params.Add("partner2", partner2)
+	params.Add("address", address)
+	params.Add("affiliate", affiliate)
+	params.Add("ip", info.IP)
+	params.Add("useragent", info.UserAgent)
+	params.Add("lang", info.LangList)
+	params.Add("source", source)
+	if estimateId > 0 {
+		params.Add("estimateid", fmt.Sprintf("%d", estimateId))
+	}
+
+	reqURL := fmt.Sprintf("%s/swap/split?%s", URL, params.Encode())
+	data, err := SendRequest(reqURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var raw struct {
+		Transaction1 Transaction `json:"transaction1"`
+		Transaction2 Transaction `json:"transaction2"`
+		Leg1Error    string      `json:"leg1_error"`
+		Leg2Error    string      `json:"leg2_error"`
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	t1 := raw.Transaction1
+	t1.Coin1 = coin1
+	t1.Coin2 = coin2
+	t1.Network1 = network1
+	t1.Network2 = network2
+	if t1.SendAmount == 0 {
+		t1.SendAmount = amount1
+	}
+
+	t2 := raw.Transaction2
+	t2.Coin1 = coin1
+	t2.Coin2 = coin2
+	t2.Network1 = network1
+	t2.Network2 = network2
+	if t2.SendAmount == 0 {
+		t2.SendAmount = amount2
+	}
+
+	return &SplitTradeResult{
+		Transaction1: t1,
+		Transaction2: t2,
+		Leg1Error:    raw.Leg1Error,
+		Leg2Error:    raw.Leg2Error,
+	}, nil
 }
 
 func TrackTxFromAPI(t Transaction) (error, Transaction) {

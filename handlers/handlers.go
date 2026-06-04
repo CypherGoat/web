@@ -518,10 +518,73 @@ func EstimateHandler(c echo.Context) error {
 			return c.JSON(http.StatusInternalServerError, fmt.Sprintf("%s", err.Error()))
 		}
 	} else {
+		// Run the normal split concurrently with the main estimate fetch.
+		type splitPairResult struct {
+			rate, kyc0 *api.SplitSuggestion
+		}
+		normalSplitCh := make(chan splitPairResult, 1)
+		go func() {
+			r, k, _ := api.FetchSplitEstimatesFromAPI(coin1, coin2, amount, network1, network2, false)
+			normalSplitCh <- splitPairResult{r, k}
+		}()
+
 		estimates, err = api.FetchEstimateFromAPI(coin1, coin2, amount, false, network1, network2)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, fmt.Sprintf("%s", err.Error()))
 		}
+
+		var rateSplit, kycSplit *api.SplitSuggestion
+		select {
+		case p := <-normalSplitCh:
+			rateSplit, kycSplit = p.rate, p.kyc0
+		case <-time.After(8 * time.Second):
+		}
+
+		// For large trades (>=20 BTC) force a split even with no rate gain.
+		// Only run the forced call when actually needed — it's expensive.
+		if estimates.TradeValue_btc >= 20 && (rateSplit == nil || kycSplit == nil) {
+			r, k, _ := api.FetchSplitEstimatesFromAPI(coin1, coin2, amount, network1, network2, true)
+			if rateSplit == nil {
+				rateSplit = r
+			}
+			if kycSplit == nil {
+				kycSplit = k
+			}
+		}
+		estimates.Coin1 = coin1
+		estimates.Coin2 = coin2
+		estimates.Amount = amount
+		estimates.Network1 = network1
+		estimates.Network2 = network2
+
+		isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
+		value_btc := estimates.TradeValue_btc
+		value_usd := estimates.TradeValue_fiat
+		for i := range estimates.Results {
+			name := strings.ToLower(estimates.Results[i].ExchangeName)
+			if info, ok := exchangeInfo[name]; ok {
+				estimates.Results[i].ImageURL = info.ImageURL
+				estimates.Results[i].NoTextURL = info.NoTextURL
+				for _, ex := range views.ExchangesList {
+					if strings.EqualFold(ex.ShortCode, name) {
+						estimates.Results[i].CGShield = ex.CGShield
+						if ex.CGShield {
+							cgAmt := ex.CGSAmountFloat
+							fiat := ex.CGSinStable
+							if fiat {
+								estimates.Results[i].CoveragePercent = math.Min(math.Max(cgAmt/value_usd*100, 0), 100)
+							} else {
+								estimates.Results[i].CoveragePercent = math.Min(math.Max(cgAmt/value_btc*100, 0), 100)
+							}
+						}
+						break
+					}
+				}
+			}
+			estimates.Results[i].Log = exchangeInfo[name].RequireIP
+			estimates.Results[i].Blocked = isExchangeBlocked(estimates.Results[i].ExchangeName, isAnonymousNetwork)
+		}
+		return views.EstimateCard(estimates, mode, rateSplit, kycSplit).Render(c.Request().Context(), c.Response())
 	}
 
 	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
@@ -557,7 +620,7 @@ func EstimateHandler(c echo.Context) error {
 
 	}
 
-	return views.EstimateCard(estimates, mode).Render(c.Request().Context(), c.Response())
+	return views.EstimateCard(estimates, mode, nil, nil).Render(c.Request().Context(), c.Response())
 }
 
 func Step2Handler(c echo.Context) error {
@@ -692,6 +755,130 @@ func Step3Handler(c echo.Context) error {
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/transaction/"+transaction.CGID)
+}
+
+func SplitStep2Handler(c echo.Context) error {
+	coin1 := c.QueryParam("coin1")
+	coin2 := c.QueryParam("coin2")
+	network1 := c.QueryParam("network1")
+	network2 := c.QueryParam("network2")
+	partner1 := c.QueryParam("partner1")
+	partner2 := c.QueryParam("partner2")
+
+	amount1, err := strconv.ParseFloat(c.QueryParam("amount1"), 64)
+	if err != nil || amount1 <= 0 {
+		return c.JSON(http.StatusBadRequest, "Error parsing amount1")
+	}
+	amount2, err := strconv.ParseFloat(c.QueryParam("amount2"), 64)
+	if err != nil || amount2 <= 0 {
+		return c.JSON(http.StatusBadRequest, "Error parsing amount2")
+	}
+	receive1, err := strconv.ParseFloat(c.QueryParam("receive1"), 64)
+	if err != nil || receive1 <= 0 {
+		return c.JSON(http.StatusBadRequest, "Error parsing receive1")
+	}
+	receive2, err := strconv.ParseFloat(c.QueryParam("receive2"), 64)
+	if err != nil || receive2 <= 0 {
+		return c.JSON(http.StatusBadRequest, "Error parsing receive2")
+	}
+
+	estimateIdStr := c.QueryParam("estimateid")
+
+	split := api.SplitSuggestion{
+		Part1:        api.SplitPart{Exchange: partner1, SendAmount: amount1, ReceiveAmount: receive1},
+		Part2:        api.SplitPart{Exchange: partner2, SendAmount: amount2, ReceiveAmount: receive2},
+		TotalReceive: receive1 + receive2,
+	}
+
+	return views.SplitAddressForm(coin1, coin2, network1, network2, split, estimateIdStr, false).Render(c.Request().Context(), c.Response())
+}
+
+func SplitStep3Handler(c echo.Context) error {
+	coin1 := c.QueryParam("coin1")
+	coin2 := c.QueryParam("coin2")
+	network1 := c.QueryParam("network1")
+	network2 := c.QueryParam("network2")
+	amount1Str := c.QueryParam("amount1")
+	amount2Str := c.QueryParam("amount2")
+	partner1 := c.QueryParam("partner1")
+	partner2 := c.QueryParam("partner2")
+	address := c.QueryParam("address")
+	receive1Str := c.QueryParam("receive1")
+	receive2Str := c.QueryParam("receive2")
+
+	// Input validation before hitting the exchanges.
+	if address == "" {
+		return c.JSON(http.StatusBadRequest, "address is required")
+	}
+	if partner1 == "" || partner2 == "" {
+		return c.JSON(http.StatusBadRequest, "partner1 and partner2 are required")
+	}
+	if strings.EqualFold(partner1, partner2) {
+		return c.JSON(http.StatusBadRequest, "partner1 and partner2 must be different exchanges")
+	}
+
+	amount1, err := strconv.ParseFloat(amount1Str, 64)
+	if err != nil || amount1 <= 0 {
+		return c.JSON(http.StatusBadRequest, "error parsing amount1")
+	}
+	amount2, err := strconv.ParseFloat(amount2Str, 64)
+	if err != nil || amount2 <= 0 {
+		return c.JSON(http.StatusBadRequest, "error parsing amount2")
+	}
+	receive1, err := strconv.ParseFloat(receive1Str, 64)
+	if err != nil || receive1 <= 0 {
+		return c.JSON(http.StatusBadRequest, "error parsing receive1")
+	}
+	receive2, err := strconv.ParseFloat(receive2Str, 64)
+	if err != nil || receive2 <= 0 {
+		return c.JSON(http.StatusBadRequest, "error parsing receive2")
+	}
+
+	split := api.SplitSuggestion{
+		Part1:        api.SplitPart{Exchange: partner1, SendAmount: amount1, ReceiveAmount: receive1},
+		Part2:        api.SplitPart{Exchange: partner2, SendAmount: amount2, ReceiveAmount: receive2},
+		TotalReceive: receive1 + receive2,
+	}
+
+	info := api.Info{}
+	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
+	source := "clearnet-main"
+	if isAnonymousNetwork {
+		source = "anonnet"
+	}
+	for _, partner := range []string{partner1, partner2} {
+		if exchangeData, ok := exchangeInfo[strings.ToLower(partner)]; ok && exchangeData.RequireIP {
+			info.IP = c.RealIP()
+			info.UserAgent = c.Request().Header.Get("User-Agent")
+			info.LangList = c.Request().Header.Get("Accept-Language")
+			break
+		}
+	}
+
+	affiliate := ""
+	if cookie, err := c.Cookie("affiliate"); err == nil {
+		affiliate = cookie.Value
+	}
+
+	estimateId, _ := strconv.Atoi(c.QueryParam("estimateid"))
+
+	result, apiErr := api.CreateSplitTradeFromAPI(
+		coin1, coin2, network1, network2,
+		partner1, partner2,
+		amount1, amount2,
+		address, affiliate, info, source, estimateId,
+	)
+
+	if apiErr != nil {
+		return views.SplitAddressForm(coin1, coin2, network1, network2, split, c.QueryParam("estimateid"), true).Render(c.Request().Context(), c.Response())
+	}
+
+	// If both legs failed, show the address form with the error flag.
+	if result.Transaction1.CGID == "" && result.Transaction2.CGID == "" {
+		return views.SplitAddressForm(coin1, coin2, network1, network2, split, c.QueryParam("estimateid"), true).Render(c.Request().Context(), c.Response())
+	}
+
+	return views.SplitTransactionPage(result.Transaction1, result.Transaction2, split, result.Leg1Error, result.Leg2Error).Render(c.Request().Context(), c.Response())
 }
 
 func CGPayHandler(c echo.Context) error {

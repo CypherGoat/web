@@ -1,0 +1,403 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+import (
+    "github.com/CypherGoat/web/cmd/api"
+    "strings"
+    "fmt"
+)
+
+templ SplitTransactionPage(tx1, tx2 api.Transaction, split api.SplitSuggestion, leg1Err, leg2Err string) {
+@Header() {
+    <style>
+    body {
+        background-color: #0b0d14;
+        color: #e0e0e0;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        min-height: 100vh;
+    }
+
+    .split-tx-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        padding: 2.5rem 1rem 4rem;
+        background: #121520;
+    }
+
+    .split-tx-title-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+        text-align: center;
+    }
+
+    .split-header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(97, 196, 146, 0.1);
+        border: 1px solid rgba(97, 196, 146, 0.22);
+        color: #9ce0c0;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    .split-tx-heading {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0;
+    }
+
+    .split-tx-subtitle {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+        max-width: 540px;
+    }
+
+    .split-summary-bar {
+        width: 100%;
+        max-width: 960px;
+        background: rgba(97, 196, 146, 0.06);
+        border: 1px solid rgba(97, 196, 146, 0.16);
+        border-radius: 16px;
+        padding: 1rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .split-summary-label {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+    }
+
+    .split-summary-value {
+        color: #9ce0c0;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .split-cards-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        width: 100%;
+        max-width: 960px;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 720px) {
+        .split-cards-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .transaction-card {
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        border-radius: 22px;
+        padding: 2rem;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .transaction-card:hover {
+        box-shadow: 0 34px 86px rgba(0, 0, 0, 0.38);
+    }
+
+    .leg-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #798192;
+        margin-bottom: 0.6rem;
+    }
+
+    .transaction-header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 1.25rem;
+    }
+
+    .transaction-section {
+        margin-bottom: 1.25rem;
+    }
+
+    .section-label {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+    }
+
+    .section-value {
+        color: #ffffff;
+        font-size: 1.05rem;
+        font-weight: 600;
+        word-break: break-all;
+    }
+
+    .code-block {
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        padding: 0.8rem;
+        font-family: 'Courier New', monospace;
+        color: #e0e0e0;
+        border: 1px solid #1e2235;
+        word-break: break-all;
+        overflow-wrap: break-word;
+        font-size: 0.85rem;
+    }
+
+    .qr-toggle-btn {
+        color: #ece6d8;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .qr-toggle-btn svg {
+        margin-right: 0.5rem;
+        vertical-align: middle;
+    }
+
+    .qr-toggle-btn:hover {
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    .divider {
+        height: 1px;
+        background: linear-gradient(to right, rgba(255,255,255,0.05), rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+        margin: 1.25rem 0;
+    }
+
+    .cgid-value {
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+        color: #ffffff;
+    }
+
+    .track-link {
+        color: #e9e2d1;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .track-link:hover {
+        color: #faf7ef;
+        text-decoration: underline;
+    }
+
+    .warning-box {
+        width: 100%;
+        max-width: 960px;
+        background: rgba(214, 158, 46, 0.08);
+        border: 1px solid rgba(214, 158, 46, 0.2);
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+        color: #e6dfd1;
+        font-size: 0.88rem;
+        line-height: 1.55;
+    }
+    </style>
+
+    <div class="split-tx-wrap">
+        <div class="split-tx-title-row">
+            <div class="split-header-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                SafeRoute Split
+            </div>
+            <h1 class="split-tx-heading">Split Trade Created</h1>
+            <p class="split-tx-subtitle">Send the exact amounts to each deposit address below. Both legs must be sent for the full trade to complete.</p>
+        </div>
+
+        <div class="split-summary-bar">
+            <span class="split-summary-label">Total you receive ≈</span>
+            <span class="split-summary-value">{ FormatFloat(split.TotalReceive) } { strings.ToUpper(tx1.Coin2) }</span>
+        </div>
+
+        if leg1Err != "" || leg2Err != "" {
+            <div style="width:100%;max-width:960px;background:rgba(220,53,69,0.08);border:1px solid rgba(220,53,69,0.25);border-radius:14px;padding:1rem 1.25rem;color:#f09090;font-size:0.88rem;line-height:1.55;margin-bottom:1.25rem;">
+                <strong style="color:#ef4444;">⚠ Partial failure</strong> — one leg of your split trade could not be created.
+                if leg1Err != "" {
+                    <div style="margin-top:0.5rem;">Leg 1 error: { leg1Err }</div>
+                }
+                if leg2Err != "" {
+                    <div style="margin-top:0.5rem;">Leg 2 error: { leg2Err }</div>
+                }
+                <div style="margin-top:0.5rem;">Contact support with the CypherGoat ID(s) shown below.</div>
+            </div>
+        }
+
+        <div class="split-cards-grid">
+            <!-- Leg 1 -->
+            <div class="transaction-card">
+                <div class="leg-label">Leg 1</div>
+                <h2 class="transaction-header">{ tx1.Provider }</h2>
+
+                <div class="transaction-section">
+                    <div class="section-label">You Send</div>
+                    <div class="section-value">{ FormatFloat(split.Part1.SendAmount) } { strings.ToUpper(tx1.Coin1) }</div>
+                </div>
+
+                <div class="transaction-section">
+                    <div class="section-label">You Receive ≈</div>
+                    <div class="section-value">{ FormatFloat(split.Part1.ReceiveAmount) } { strings.ToUpper(tx1.Coin2) }</div>
+                </div>
+
+                <div class="transaction-section">
+                    <div class="section-label">Deposit Address</div>
+                    <div class="code-block">{ tx1.Address }</div>
+                </div>
+
+                if tx1.Memo != "" {
+                    <div class="transaction-section">
+                        <div class="section-label">Memo <span style="background:rgba(220,38,38,0.2);color:#ef4444;font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600;margin-left:0.5rem;text-transform:uppercase;border:1px solid rgba(220,38,38,0.3);">REQUIRED</span></div>
+                        <div class="code-block">{ tx1.Memo }</div>
+                    </div>
+                }
+
+                if tx1.Address != "" {
+                    <div class="transaction-section text-center">
+                        <button type="button" onclick={ toggleQRLeg1(tx1.Address) } class="qr-toggle-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"></path><path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"></path></svg>
+                            Show QR Code
+                        </button>
+                        <div class="mt-4" id="qr-leg1">
+                            <img src={ "/generate?text=" + tx1.Address } alt="QR Code" class="mx-auto border-4 border-white rounded-lg hidden"/>
+                        </div>
+                    </div>
+                }
+
+                <div class="divider"></div>
+
+                <div class="transaction-section">
+                    <div class="section-label">CypherGoat ID</div>
+                    <div class="cgid-value">
+                        if tx1.CGID != "" {
+                            <a href={ templ.URL("/transaction/" + tx1.CGID) } class="track-link">{ tx1.CGID }</a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leg 2 -->
+            <div class="transaction-card">
+                <div class="leg-label">Leg 2</div>
+                <h2 class="transaction-header">{ tx2.Provider }</h2>
+
+                <div class="transaction-section">
+                    <div class="section-label">You Send</div>
+                    <div class="section-value">{ FormatFloat(split.Part2.SendAmount) } { strings.ToUpper(tx2.Coin1) }</div>
+                </div>
+
+                <div class="transaction-section">
+                    <div class="section-label">You Receive ≈</div>
+                    <div class="section-value">{ FormatFloat(split.Part2.ReceiveAmount) } { strings.ToUpper(tx2.Coin2) }</div>
+                </div>
+
+                <div class="transaction-section">
+                    <div class="section-label">Deposit Address</div>
+                    <div class="code-block">{ tx2.Address }</div>
+                </div>
+
+                if tx2.Memo != "" {
+                    <div class="transaction-section">
+                        <div class="section-label">Memo <span style="background:rgba(220,38,38,0.2);color:#ef4444;font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600;margin-left:0.5rem;text-transform:uppercase;border:1px solid rgba(220,38,38,0.3);">REQUIRED</span></div>
+                        <div class="code-block">{ tx2.Memo }</div>
+                    </div>
+                }
+
+                if tx2.Address != "" {
+                    <div class="transaction-section text-center">
+                        <button type="button" onclick={ toggleQRLeg2(tx2.Address) } class="qr-toggle-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M1 1h5v5H1zM1 10h5v5H1zM10 1h5v5h-5z"></path><path d="M10 10h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 0h1v-1h-1zm0-1h1V9h-1zm1-3h-1v1h1zm0 1h-1v1h1zm-2-1h-1v1h1zm0 1h-1v1h1z"></path></svg>
+                            Show QR Code
+                        </button>
+                        <div class="mt-4" id="qr-leg2">
+                            <img src={ "/generate?text=" + tx2.Address } alt="QR Code" class="mx-auto border-4 border-white rounded-lg hidden"/>
+                        </div>
+                    </div>
+                }
+
+                <div class="divider"></div>
+
+                <div class="transaction-section">
+                    <div class="section-label">CypherGoat ID</div>
+                    <div class="cgid-value">
+                        if tx2.CGID != "" {
+                            <a href={ templ.URL("/transaction/" + tx2.CGID) } class="track-link">{ tx2.CGID }</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong style="color:#f3d18b;">Send both transactions separately.</strong> Each leg is an independent swap — send { FormatFloat(split.Part1.SendAmount) } { strings.ToUpper(tx1.Coin1) } to Leg 1 and { FormatFloat(split.Part2.SendAmount) } { strings.ToUpper(tx1.Coin1) } to Leg 2. Save both CypherGoat IDs for your records.
+        </div>
+    </div>
+
+    <script>
+    function toggleQR(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const img = container.querySelector('img');
+        if (!img) return;
+        img.classList.toggle('hidden');
+    }
+    </script>
+}
+@Footer(){}
+
+}
+
+script toggleQRLeg1(addr string) {
+    toggleQR("qr-leg1");
+}
+
+script toggleQRLeg2(addr string) {
+    toggleQR("qr-leg2");
+}
+
+// suppress unused import
+var _ = fmt.Sprintf

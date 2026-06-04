@@ -171,6 +171,8 @@ func main() {
 	e.GET("/estimate", handlers.EstimateHandler, BotBlockerMiddleware, newRateLimiter(1, 30))
 	e.GET("/step2", handlers.Step2Handler)
 	e.GET("/step3", handlers.Step3Handler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/10), 5))
+	e.GET("/split/step2", handlers.SplitStep2Handler)
+	e.GET("/split/step3", handlers.SplitStep3Handler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/10), 5))
 	e.GET("/generate", generateQRCodeHandler)
 	e.GET("/transaction/:id", handlers.GetTransactionHandler)
 	e.GET("/download/:id", handlers.DownloadReceiptHandler)

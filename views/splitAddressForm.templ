@@ -1,0 +1,298 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+import (
+    "github.com/CypherGoat/web/cmd/api"
+    "strconv"
+    "strings"
+)
+
+templ SplitAddressForm(coin1, coin2, network1, network2 string, split api.SplitSuggestion, estimateId string, hasError bool) {
+<style>
+    body {
+        background-color: #0b0d14;
+        color: #e5e7eb;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 640px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+        transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .card:hover {
+        box-shadow: 0 34px 86px rgba(0, 0, 0, 0.38);
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .form-label {
+        color: #9aa2b2;
+        font-weight: 600;
+        font-size: 0.72rem;
+        margin-bottom: 0.55rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        background-color: #0b0e13;
+        color: #f3f4f6;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .form-input:focus {
+        border-color: rgba(231, 234, 239, 0.24);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
+    }
+
+    .action-button {
+        background: #e7eaef;
+        color: #11151c;
+        padding: 0.9rem 1rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .action-button:hover {
+        background: #f3f5f7;
+        transform: translateY(-1px);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+    }
+
+    .trade-summary {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 18px;
+        padding: 1rem 1.1rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .trade-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .trade-row:last-child {
+        border-bottom: none;
+    }
+
+    .trade-label {
+        color: #9098a8;
+        font-size: 0.9rem;
+    }
+
+    .trade-value {
+        color: #ffffff;
+        font-weight: 600;
+        text-align: right;
+        max-width: 60%;
+    }
+
+    .split-header-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(97, 196, 146, 0.1);
+        border: 1px solid rgba(97, 196, 146, 0.22);
+        color: #9ce0c0;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    .split-leg-divider {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.25rem 0;
+        color: #626b7b;
+        font-size: 0.78rem;
+        font-weight: 600;
+    }
+
+    .split-leg-divider::before,
+    .split-leg-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .notice-box {
+        background: rgba(214, 158, 46, 0.08);
+        border: 1px solid rgba(214, 158, 46, 0.2);
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        color: #e6dfd1;
+        font-size: 0.84rem;
+        line-height: 1.5;
+        margin-bottom: 1.25rem;
+    }
+
+    .error-message {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.8), rgba(200, 35, 51, 0.8));
+        border-left: 4px solid #dc3545;
+        color: white;
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+    }
+
+    .partner-section {
+        text-align: center;
+        margin-top: 1.25rem;
+    }
+
+    .partner-label {
+        color: #6b7280;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+        .card {
+            max-width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 0.5rem;
+        }
+    }
+</style>
+@Header(){
+    if hasError {
+        <div class="error-message text-center">
+            <p>There was an error creating one or both legs of your split trade. Please check your address and try again.</p>
+        </div>
+    }
+    <div class="flex items-center justify-center min-h-screen px-4 py-10">
+        <div class="card text-white">
+
+            <div class="split-header-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                SafeRoute Split
+            </div>
+
+            <div class="flex justify-center items-center gap-4 mb-6">
+                <h2 class="text-3xl font-bold text-white">Complete Your Split Trade</h2>
+            </div>
+
+            <div class="trade-summary mb-6">
+                <div class="trade-row">
+                    <span class="trade-label">Total You Send</span>
+                    <span class="trade-value">{ FormatFloat(split.Part1.SendAmount + split.Part2.SendAmount) } { strings.ToUpper(coin1) }</span>
+                </div>
+                <div class="trade-row">
+                    <span class="trade-label">Total You Receive</span>
+                    <span class="trade-value">{ FormatFloat(split.TotalReceive) } { strings.ToUpper(coin2) }</span>
+                </div>
+            </div>
+
+            <div class="trade-summary mb-6">
+                <div class="trade-row">
+                    <span class="trade-label">Leg 1 — { split.Part1.Exchange }</span>
+                    <span class="trade-value">{ FormatFloat(split.Part1.SendAmount) } { strings.ToUpper(coin1) } → { FormatFloat(split.Part1.ReceiveAmount) } { strings.ToUpper(coin2) }</span>
+                </div>
+                <div class="split-leg-divider">+</div>
+                <div class="trade-row">
+                    <span class="trade-label">Leg 2 — { split.Part2.Exchange }</span>
+                    <span class="trade-value">{ FormatFloat(split.Part2.SendAmount) } { strings.ToUpper(coin1) } → { FormatFloat(split.Part2.ReceiveAmount) } { strings.ToUpper(coin2) }</span>
+                </div>
+            </div>
+
+            <div class="notice-box">
+                You will receive <strong>two separate deposit addresses</strong>. Send { FormatFloat(split.Part1.SendAmount) } { strings.ToUpper(coin1) } to the first and { FormatFloat(split.Part2.SendAmount) } { strings.ToUpper(coin1) } to the second. Both go to the { strings.ToUpper(coin2) } address you enter below.
+            </div>
+
+            <form class="grid gap-6" method="GET" action="/split/step3">
+                <input type="hidden" name="coin1" value={ coin1 }/>
+                <input type="hidden" name="coin2" value={ coin2 }/>
+                <input type="hidden" name="network1" value={ network1 }/>
+                <input type="hidden" name="network2" value={ network2 }/>
+                <input type="hidden" name="amount1" value={ strconv.FormatFloat(split.Part1.SendAmount, 'f', -1, 64) }/>
+                <input type="hidden" name="amount2" value={ strconv.FormatFloat(split.Part2.SendAmount, 'f', -1, 64) }/>
+                <input type="hidden" name="partner1" value={ split.Part1.Exchange }/>
+                <input type="hidden" name="partner2" value={ split.Part2.Exchange }/>
+                <input type="hidden" name="receive1" value={ strconv.FormatFloat(split.Part1.ReceiveAmount, 'f', -1, 64) }/>
+                <input type="hidden" name="receive2" value={ strconv.FormatFloat(split.Part2.ReceiveAmount, 'f', -1, 64) }/>
+                if estimateId != "" {
+                    <input type="hidden" name="estimateid" value={ estimateId }/>
+                }
+
+                <div>
+                    <label for="address" class="form-label">Your { strings.ToUpper(coin2) } Address</label>
+                    <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        placeholder={ "Enter your " + strings.ToUpper(coin2) + " address" }
+                        required
+                        class="form-input"
+                    />
+                </div>
+
+                <button type="submit" class="action-button">
+                    Create Split Trade
+                </button>
+
+                <div class="partner-section">
+                    <p class="partner-label">Powered By</p>
+                    <p style="color:#9aa2b2;font-size:0.88rem;">{ split.Part1.Exchange } + { split.Part2.Exchange }</p>
+                </div>
+
+                <div class="text-center text-gray-400 mt-4" style="font-size:0.82rem;">
+                    <p>This split trade is executed across two exchanges. Creating orders confirms your agreement with { split.Part1.Exchange } and { split.Part2.Exchange } terms and conditions.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+@Footer(){}
+
+}
