@@ -947,7 +947,7 @@ templ CGPayForm(toCoin string, toNetwork string, toAmount float64, toAddress str
 
             async function loadCoins() {
                 try {
-                    const response = await fetch('/static/coins.json');
+                    const response = await fetch('/static/coins.json?v=20260608');
                     const jsonData = await response.json();
                     createModalOptions(jsonData);
                 } catch (error) {

@@ -286,7 +286,7 @@ footer {
         inset: 0;
         z-index: 3;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: flex-start;
         padding: 1rem;
         border-radius: 24px;
@@ -956,7 +956,7 @@ footer {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 500px);
         column-gap: 4rem;
-        align-items: center;
+        align-items: start;
         padding: 2rem 0 4rem;
     }
 
@@ -971,7 +971,7 @@ footer {
     .hero-copy-wrap {
         grid-column: 1;
         grid-row: 1;
-        align-self: center;
+        align-self: start;
         max-width: 40rem;
         padding-top: 1rem;
     }
@@ -1937,7 +1937,19 @@ footer {
 	<div id="coin-selection-modal" class="coin-selection-modal hidden">
 		<div class="modal-content">
 			<input type="text" id="modal-search" placeholder="Search coin..." onkeyup="filterModalOptions()" autocomplete="off"/>
-			<div id="modal-options" class="modal-options"></div>
+			<div id="modal-options" class="modal-options">
+				for _, coin := range getCoins() {
+					<div
+						data-ticker={ coin.Ticker }
+						data-network={ coin.Network }
+						data-name={ coin.Name }
+						data-display={ formatCoinModalDisplay(coin) }
+						data-text={ formatCoinModalSearchText(coin) }
+						data-icon={ coin.Icon }>
+						<img src={ coin.Icon } alt={ coin.Name + " icon" }/> { formatCoinModalDisplay(coin) }
+					</div>
+				}
+			</div>
 		</div>
 	</div>
 	<script>
@@ -2172,6 +2184,15 @@ function updateEstimatedAmountFromFirstCard() {
         modal.classList.add('hidden');
     }
 
+    function getModalCoins() {
+        return Array.from(modalOptions.getElementsByTagName('div')).map(option => ({
+            ticker: option.dataset.ticker,
+            name: option.dataset.name,
+            network: option.dataset.network,
+            icon: option.dataset.icon
+        }));
+    }
+
     function filterModalOptions() {
         const filter = modalSearch.value.toLowerCase();
         const options = modalOptions.getElementsByTagName('div');
@@ -2208,37 +2229,13 @@ function updateEstimatedAmountFromFirstCard() {
         return visibleCount;
     }
 
-    function createModalOptions(jsonData) {
-        modalOptions.innerHTML = '';
-
-        jsonData.forEach(item => {
-            const displayText = item.network ? `${item.name} (${item.network.toUpperCase()})` : `${item.name}`;
-            const displayTextWithTicker = `${displayText} (${item.ticker})`;
-
-            const optionDiv = document.createElement('div');
-            optionDiv.innerHTML = `<img src="${item.icon}" alt="${item.name} icon"> ${displayText}`;
-            optionDiv.dataset.ticker = item.ticker;
-            optionDiv.dataset.network = item.network;
-            optionDiv.dataset.name = item.name;
-            optionDiv.dataset.text = displayTextWithTicker;
-
-            optionDiv.onclick = () => {
-                selectOption(optionDiv);
-            };
-
-            modalOptions.appendChild(optionDiv);
-        });
-
-        setDefaultCoins(jsonData);
-    }
-    
     function selectOption(optionDiv) {
         if (!optionDiv || optionDiv.style.display === 'none') return;
         
         const ticker = optionDiv.dataset.ticker;
         const network = optionDiv.dataset.network;
         const name = optionDiv.dataset.name;
-        const icon = optionDiv.querySelector('img').src;
+        const icon = optionDiv.dataset.icon || optionDiv.querySelector('img').src;
         
         // Format display: "Name (TICKER)" or "Name (NETWORK)" if different from ticker
         let displayValue;
@@ -2373,17 +2370,13 @@ function updateEstimatedAmountFromFirstCard() {
         }
     }
 
-    async function loadCoins() {
-        try {
-            const response = await fetch('/static/coins.json?v=44');
-            const jsonData = await response.json();
-            createModalOptions(jsonData);
-        } catch (error) {
-            console.error('Error loading coins:', error);
-        }
-    }
+    Array.from(modalOptions.getElementsByTagName('div')).forEach(optionDiv => {
+        optionDiv.onclick = () => {
+            selectOption(optionDiv);
+        };
+    });
 
-    loadCoins();
+    setDefaultCoins(getModalCoins());
 
     // Function to swap the selected coins
     window.swapCoins = function() {

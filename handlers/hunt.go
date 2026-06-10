@@ -44,6 +44,12 @@ var (
 	huntClaimsFile string
 )
 
+var monerokon2026HuntClosedAt = time.Date(2026, time.June, 8, 0, 0, 0, 0, time.FixedZone("CEST", 2*60*60))
+
+func monerokon2026HuntClosed() bool {
+	return !time.Now().Before(monerokon2026HuntClosedAt)
+}
+
 // InitHunt loads codes from GOAT_HUNT_FILE and persisted claims from the
 // adjacent _claims.json file. Safe to call when the env var is not set.
 func InitHunt() {

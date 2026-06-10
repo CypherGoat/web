@@ -331,16 +331,6 @@ templ SharedNavbarHead() {
 }
 
 templ SharedNavbar() {
-	<div id="mk6-banner" style="background:linear-gradient(90deg,#1a1006 0%,#2a1a06 40%,#1a1006 100%);border-bottom:1px solid rgba(255,132,0,0.18);padding:0.55rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:0.75rem;position:relative;">
-		<span style="font-size:1.05rem;"></span>
-		<span style="font-size:0.82rem;color:#f5c97a;font-weight:500;line-height:1.4;text-align:center;">
-			CypherGoat is speaking at
-			<a href="https://www.monerokon.org/" target="_blank" rel="noopener noreferrer" style="color:#ff8400;font-weight:700;text-decoration:none;">MoneroKon 6</a>
-			— June 6 · Warsaw, Poland ·
-			<a href="https://cfp.twed.org/mk6/talk/ZGGEPB/" target="_blank" rel="noopener noreferrer" style="color:#ff8400;font-weight:600;text-decoration:underline;text-underline-offset:2px;">"Liquidity Fragmentation in Non-Custodial XMR Markets"</a>
-		</span>
-		<button onclick="document.getElementById('mk6-banner').style.display='none'" aria-label="Dismiss" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:transparent;border:none;color:#8a7050;cursor:pointer;font-size:1.1rem;line-height:1;padding:0.2rem;">✕</button>
-	</div>
 	<header class="site-header">
 		<nav class="site-nav-shell">
 			<div class="site-nav-frame">
@@ -387,8 +377,8 @@ templ Header() {
 			<link rel="icon" href="/favicon.ico" sizes="any"/>
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
-			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
 			<meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
@@ -448,8 +438,8 @@ templ HeaderCustomTitle(title, canonical, description string) {
 			<link rel="icon" href="/favicon.ico" sizes="any"/>
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
-			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			if canonical != "" {
 				<link rel="canonical" href={ canonical }/>
@@ -516,8 +506,8 @@ templ IndexHeader() {
 			<link rel="icon" href="/favicon.ico" sizes="any"/>
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
-			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<link rel="canonical" href="https://cyphergoat.com"/>
 			<meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
@@ -668,8 +658,8 @@ templ BlogHeader(post *BlogPostData) {
 			<link rel="icon" href="/favicon.ico" sizes="any"/>
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
-			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 			<title>{ post.Title } | CypherGoat</title>
@@ -738,8 +728,8 @@ templ GuidesIndexHeader() {
 			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
 			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
-			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<title>CypherGoat Guides - Privacy, Monero &amp; Crypto Security</title>
 			<meta name="title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security"/>
@@ -779,8 +769,8 @@ templ GuidesPostHeader(post *BlogPostData) {
 			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/light/favicon.ico" media="(prefers-color-scheme: light)"/>
 			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link href="/static/tailwind.css?v=202508145" rel="stylesheet"/>
-			<link href="/static/styles.css?v=202508145" rel="stylesheet"/>
+			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<title>{ post.Title } | CypherGoat Guides</title>
 			<meta name="title" content={ post.Title + " | CypherGoat Guides" }/>

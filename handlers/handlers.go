@@ -240,10 +240,13 @@ func SimplexBotHandler(c echo.Context) error {
 }
 
 func Monerokon2026Handler(c echo.Context) error {
-	return views.Monerokon2026(HuntPrizeStatus()).Render(c.Request().Context(), c.Response())
+	return views.Monerokon2026(HuntPrizeStatus(), monerokon2026HuntClosed()).Render(c.Request().Context(), c.Response())
 }
 
 func Monerokon2026CheckHandler(c echo.Context) error {
+	if monerokon2026HuntClosed() {
+		return views.HuntError("The MoneroKon scavenger hunt is over. Submissions are closed.").Render(c.Request().Context(), c.Response())
+	}
 	code := strings.TrimSpace(c.FormValue("code"))
 	entry, ok := lookupHuntCode(code)
 	if !ok {
@@ -257,6 +260,9 @@ func Monerokon2026CheckHandler(c echo.Context) error {
 }
 
 func Monerokon2026ClaimHandler(c echo.Context) error {
+	if monerokon2026HuntClosed() {
+		return views.HuntError("The MoneroKon scavenger hunt is over. Submissions are closed.").Render(c.Request().Context(), c.Response())
+	}
 	code := strings.TrimSpace(c.FormValue("code"))
 	contact := strings.TrimSpace(c.FormValue("contact"))
 
@@ -540,9 +546,9 @@ func EstimateHandler(c echo.Context) error {
 		case <-time.After(8 * time.Second):
 		}
 
-		// For large trades (>=20 BTC) force a split even with no rate gain.
+		// For large trades (>=10 BTC) force a split even with no rate gain.
 		// Only run the forced call when actually needed — it's expensive.
-		if estimates.TradeValue_btc >= 20 && (rateSplit == nil || kycSplit == nil) {
+		if estimates.TradeValue_btc >= 10 && (rateSplit == nil || kycSplit == nil) {
 			r, k, _ := api.FetchSplitEstimatesFromAPI(coin1, coin2, amount, network1, network2, true)
 			if rateSplit == nil {
 				rateSplit = r

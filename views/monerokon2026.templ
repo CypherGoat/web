@@ -119,7 +119,7 @@ templ HuntSuccess(code, label string) {
 
 // ── Main page ────────────────────────────────────────────────────────────────
 
-templ Monerokon2026(status map[string]PrizeStatus) {
+templ Monerokon2026(status map[string]PrizeStatus, huntClosed bool) {
 	@HeaderCustomTitle("CypherGoat × MoneroKon 2026", "https://cyphergoat.com/monerokon2026", "CypherGoat at MoneroKon 6 in Warsaw. Find hidden cards around the venue, enter the code, and win XMR prizes.") {
 	}
 	<style>
@@ -327,6 +327,12 @@ templ Monerokon2026(status map[string]PrizeStatus) {
 		white-space: nowrap;
 	}
 	.mk-code-btn:hover { background: #ffa033; }
+
+	.mk-code-note {
+		margin-top: 0.85rem;
+		font-size: 0.82rem;
+		color: #737b89;
+	}
 
 	/* ── Hunt result area ── */
 	#hunt-result { margin-top: 1.25rem; }
@@ -815,15 +821,24 @@ templ Monerokon2026(status map[string]PrizeStatus) {
 		<!-- Hero -->
 		<div class="mk-hero">
 			<div class="mk-badge">
-				<span class="mk-badge-dot"></span> Live at MoneroKon 6 · Warsaw
+				<span class="mk-badge-dot"></span>
+				if huntClosed {
+					Hunt complete · MoneroKon 6 · Warsaw
+				} else {
+					Live at MoneroKon 6 · Warsaw
+				}
 			</div>
 			<h1 class="mk-title">
 				CypherGoat<br/>
 				<span class="mk-title-accent">× MoneroKon</span>
 			</h1>
 			<p class="mk-lead">
-				We're at MoneroKon 2026 in Warsaw. Find our hidden cards around the venue,
-				enter the code on the back, and win XMR.
+				if huntClosed {
+					Our MoneroKon 2026 scavenger hunt has ended. The prize deck below remains online as a recap of what was hidden around the venue.
+				} else {
+					We're at MoneroKon 2026 in Warsaw. Find our hidden cards around the venue,
+					enter the code on the back, and win XMR.
+				}
 			</p>
 			<div class="mk-meta-row">
 				<span class="mk-meta-chip">
@@ -852,11 +867,40 @@ templ Monerokon2026(status map[string]PrizeStatus) {
 		<!-- Code entry -->
 		<div id="treasure-hunt" class="mk-code-entry">
 			<h2>Found a card?</h2>
-			<p>Cards will be hidden at the venue when MoneroKon starts. Check back June 5.</p>
-			<div style="display:flex;align-items:center;gap:0.6rem;justify-content:center;padding:0.9rem 1.25rem;border-radius:14px;background:rgba(255,132,0,0.06);border:1px solid rgba(255,132,0,0.18);color:#f5c97a;font-size:0.92rem;">
-				<i class="fas fa-clock"></i>
-				Hunt opens June 5 · Warsaw
-			</div>
+			if huntClosed {
+				<p>The scavenger hunt is over and the submission form has been closed.</p>
+				<div id="hunt-result">
+					@HuntError("The MoneroKon scavenger hunt is over. Submissions are closed.")
+				</div>
+			} else {
+				<p>Enter the code from the back of the card to reveal your prize and submit your claim.</p>
+				<form
+					hx-post="/monerokon2026/check"
+					hx-target="#hunt-result"
+					hx-swap="innerHTML"
+					hx-indicator="#hunt-check-spinner"
+					class="mk-code-form"
+				>
+					<input
+						type="text"
+						name="code"
+						class="mk-code-input"
+						placeholder="A3B7K2M9"
+						required
+						autocomplete="off"
+						autocapitalize="characters"
+						spellcheck="false"
+					/>
+					<button type="submit" class="mk-code-btn">
+						<span id="hunt-check-spinner" class="htmx-indicator hunt-spinner">
+							<i class="fas fa-circle-notch fa-spin"></i>
+						</span>
+						Check Code
+					</button>
+				</form>
+				<p class="mk-code-note">Codes are case-insensitive. Each card can be claimed once.</p>
+				<div id="hunt-result"></div>
+			}
 		</div>
 
 		<!-- How it works -->
@@ -881,14 +925,18 @@ templ Monerokon2026(status map[string]PrizeStatus) {
 						<div class="mk-step-body">
 							<h3>Read the code on the back</h3>
 							<p>Each card has a unique code printed on the reverse side:</p>
-							<div class="mk-code-example">GOAT-A3B7K2M9</div>
+							<div class="mk-code-example">A3B7K2M9</div>
 						</div>
 					</div>
 					<div class="mk-step">
 						<div class="mk-step-num">3</div>
 						<div class="mk-step-body">
 							<h3>Enter it above</h3>
-							<p>Type the code into the field above. If it's valid and unclaimed, you'll see your prize and a form to provide your Monero address. We send the XMR directly.</p>
+							if huntClosed {
+								<p>The hunt has now ended, so code submission is no longer available.</p>
+							} else {
+								<p>Type the code into the field above. If it's valid and unclaimed, you'll see your prize and a form to provide your Monero address. We send the XMR directly.</p>
+							}
 						</div>
 					</div>
 				</div>
@@ -898,7 +946,11 @@ templ Monerokon2026(status map[string]PrizeStatus) {
 		<!-- Prizes — playing card grid -->
 		<div style="margin-top:2.5rem;">
 			<h2 class="mk-section-title">Prize cards</h2>
-			<p class="mk-section-sub">Each hidden card is a prize. First to claim wins. Some cards may have multiple copies in the deck.</p>
+			if huntClosed {
+				<p class="mk-section-sub">The hunt is complete. This deck remains online as a record of the prize layout.</p>
+			} else {
+				<p class="mk-section-sub">Each hidden card is a prize. First to claim wins. Some cards may have multiple copies in the deck.</p>
+			}
 
 			<div class="mk-deck-wrap">
 				<!-- Top row: XMR prizes -->

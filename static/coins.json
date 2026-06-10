@@ -8,7 +8,8 @@
         "min": 4.449e-05,
         "coingecko_id": "bitcoin",
         "cg-pay": true,
-        "quickex": "btc"
+        "quickex": "btc",
+        "xmr2cex": "btc"
     },
     {
         "ticker": "btc",
@@ -43,7 +44,8 @@
         "min": 0.001114,
         "coingecko_id": "ethereum",
         "cg-pay": true,
-        "quickex": "eth"
+        "quickex": "eth",
+        "xmr2cex": "eth"
     },
     {
         "ticker": "xmr",
@@ -54,7 +56,8 @@
         "min": 0.01886,
         "coingecko_id": "monero",
         "cg-pay": true,
-        "quickex": "xmr"
+        "quickex": "xmr",
+        "xmr2cex": "xmr"
     },
     {
         "ticker": "ltc",
@@ -64,7 +67,8 @@
         "icon": "icons/ltc.png",
         "min": 0.04444,
         "coingecko_id": "litecoin",
-        "quickex": "ltc"
+        "quickex": "ltc",
+        "xmr2cex": "ltc"
     },
     {
         "ticker": "bch",
@@ -107,7 +111,8 @@
         "min": 0.0238,
         "coingecko_id": "solana",
         "cg-pay": true,
-        "quickex": "sol"
+        "quickex": "sol",
+        "xmr2cex": "sol"
     },
     {
         "ticker": "xtz",
@@ -151,7 +156,8 @@
         "min": 14.58,
         "coingecko_id": "tron",
         "cg-pay": true,
-        "quickex": "trx"
+        "quickex": "trx",
+        "xmr2cex": "trx"
     },
     {
         "ticker": "link",
@@ -353,7 +359,8 @@
         "wizardswap": "",
         "bitcoinvn": "usdterc20",
         "quickex": "usdterc20",
-        "cg-pay": true
+        "cg-pay": true,
+        "xmr2cex": "usdt-erc20"
     },
     {
         "ticker": "usdt",
@@ -375,7 +382,9 @@
         "wizardswap": "",
         "bitcoinvn": "usdttrc20",
         "quickex": "usdttrc20",
-        "cg-pay": true
+        "bitania": "usdttrc",
+        "cg-pay": true,
+        "xmr2cex": "usdt"
     },
     {
         "ticker": "usdt",
@@ -1040,5 +1049,14 @@
         "icon": "icons/gmex.webp",
         "min": 5,
         "coingecko_id": "gamestop-xstock"
+    },
+    {
+        "ticker": "hype",
+        "name": "Hyperliquid",
+        "network": "hype",
+        "isStable": false,
+        "icon": "icons/hype.png",
+        "coingecko_id": "hyperliquid",
+                "exolix": "hype"
     }
 ]

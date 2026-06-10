@@ -53,3 +53,14 @@ func formatCoinDisplay(coin Coin) string {
 	}
 	return coin.Name + " - " + strings.ToUpper(coin.Ticker) + " (" + strings.ToUpper(coin.Network) + ")"
 }
+
+func formatCoinModalDisplay(coin Coin) string {
+	if coin.Network == "" {
+		return coin.Name
+	}
+	return coin.Name + " (" + strings.ToUpper(coin.Network) + ")"
+}
+
+func formatCoinModalSearchText(coin Coin) string {
+	return strings.ToLower(formatCoinModalDisplay(coin) + " (" + coin.Ticker + ")")
+}
