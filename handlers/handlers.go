@@ -540,21 +540,23 @@ func EstimateHandler(c echo.Context) error {
 		}
 
 		var rateSplit, kycSplit *api.SplitSuggestion
-		select {
-		case p := <-normalSplitCh:
-			rateSplit, kycSplit = p.rate, p.kyc0
-		case <-time.After(8 * time.Second):
-		}
-
-		// For large trades (>=10 BTC) force a split even with no rate gain.
-		// Only run the forced call when actually needed — it's expensive.
-		if estimates.TradeValue_btc >= 10 && (rateSplit == nil || kycSplit == nil) {
-			r, k, _ := api.FetchSplitEstimatesFromAPI(coin1, coin2, amount, network1, network2, true)
-			if rateSplit == nil {
-				rateSplit = r
+		if estimates.TradeValue_btc >= 0.7 {
+			select {
+			case p := <-normalSplitCh:
+				rateSplit, kycSplit = p.rate, p.kyc0
+			case <-time.After(8 * time.Second):
 			}
-			if kycSplit == nil {
-				kycSplit = k
+
+			// For large trades (>=10 BTC) force a split even with no rate gain.
+			// Only run the forced call when actually needed — it's expensive.
+			if estimates.TradeValue_btc >= 10 && (rateSplit == nil || kycSplit == nil) {
+				r, k, _ := api.FetchSplitEstimatesFromAPI(coin1, coin2, amount, network1, network2, true)
+				if rateSplit == nil {
+					rateSplit = r
+				}
+				if kycSplit == nil {
+					kycSplit = k
+				}
 			}
 		}
 		estimates.Coin1 = coin1
@@ -1767,15 +1769,23 @@ func TransactionReceiptGenerator(tx api.Transaction) ([]byte, error) {
 	pdf.Cell(55, 7, "Date:")
 	pdf.SetFont("Arial", "", 11)
 	pdf.SetTextColor(80, 80, 80)
-	pdf.Cell(0, 7, tx.CreatedAt.Format("January 2, 2006 15:04 MST"))
+	dateStr := "N/A"
+	if !tx.CreatedAt.IsZero() {
+		dateStr = tx.CreatedAt.Format("January 2, 2006 15:04 MST")
+	}
+	pdf.Cell(0, 7, dateStr)
 	pdf.Ln(7)
 
 	pdf.SetFont("Arial", "B", 11)
 	pdf.SetTextColor(60, 60, 60)
 	pdf.Cell(55, 7, "Status:")
 	pdf.SetFont("Arial", "B", 11)
+	statusText := strings.ToUpper(tx.Status)
+	if statusText == "" {
+		statusText = "COMPLETED"
+	}
 	pdf.SetTextColor(34, 139, 34)
-	pdf.Cell(0, 7, "COMPLETED")
+	pdf.Cell(0, 7, statusText)
 	pdf.Ln(12)
 
 	// Transaction summary
@@ -1883,6 +1893,10 @@ func DownloadReceiptHandler(c echo.Context) error {
 	err, transaction := api.GetTransactionFromAPI(txID)
 	if err != nil {
 		return c.String(http.StatusNotFound, "Transaction not found")
+	}
+
+	if !transaction.Done {
+		return c.String(http.StatusForbidden, "Receipt is only available after the transaction has completed")
 	}
 
 	pdfBytes, err := TransactionReceiptGenerator(transaction)
