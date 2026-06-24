@@ -1,0 +1,419 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+templ SafeRoute() {
+	@HeaderCustomTitle("SafeRoute: Smart Split Swaps", "https://cyphergoat.com/saferoute", "SafeRoute is CypherGoat's smart splitting algorithm. On large swaps it automatically splits your order across multiple exchange partners to get you a better rate than any single exchange can offer.") {
+	}
+	<style>
+	.sr-shell {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 5rem 2rem 6rem;
+	}
+
+	/* ── Hero ───────────────────────────── */
+	.sr-kicker {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.3rem 0.75rem;
+		border-radius: 999px;
+		background: rgba(99,102,241,0.12);
+		border: 1px solid rgba(99,102,241,0.28);
+		color: #a5b4fc;
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		margin-bottom: 1.4rem;
+	}
+
+	.sr-kicker svg {
+		width: 11px;
+		height: 11px;
+	}
+
+	.sr-hero-title {
+		margin: 0 0 1rem;
+		color: #ffffff;
+		font-size: clamp(2.8rem, 5vw, 4.5rem);
+		line-height: 0.93;
+		font-weight: 500;
+		letter-spacing: -0.055em;
+	}
+
+	.sr-hero-title span {
+		background: linear-gradient(135deg, #818cf8 0%, #a5b4fc 50%, #c7d2fe 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.sr-hero-lead {
+		margin: 0 0 2.5rem;
+		color: #64748b;
+		font-size: 1.08rem;
+		line-height: 1.8;
+		max-width: 50rem;
+	}
+
+	.sr-hero-cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.7rem 1.5rem;
+		border-radius: 12px;
+		background: rgba(99,102,241,0.15);
+		border: 1px solid rgba(99,102,241,0.35);
+		color: #c7d2fe;
+		text-decoration: none;
+		font-size: 0.9rem;
+		font-weight: 600;
+		transition: background 0.2s, border-color 0.2s, color 0.2s;
+	}
+
+	.sr-hero-cta:hover {
+		background: rgba(99,102,241,0.22);
+		border-color: rgba(99,102,241,0.5);
+		color: #e0e7ff;
+	}
+
+	/* ── How it works ───────────────────── */
+	.sr-how-wrap {
+		margin: 4rem 0;
+	}
+
+	.sr-section-label {
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: #475569;
+		margin-bottom: 0.85rem;
+	}
+
+	.sr-section-title {
+		margin: 0 0 0.6rem;
+		color: #ffffff;
+		font-size: 1.65rem;
+		font-weight: 600;
+		letter-spacing: -0.04em;
+	}
+
+	.sr-section-body {
+		margin: 0 0 2.5rem;
+		color: #64748b;
+		font-size: 0.96rem;
+		line-height: 1.8;
+		max-width: 50rem;
+	}
+
+	.sr-steps {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+		counter-reset: step;
+	}
+
+	.sr-step {
+		position: relative;
+		padding: 1.75rem 1.5rem;
+		border-radius: 20px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.007)), #11151c;
+		box-shadow: 0 16px 42px rgba(0,0,0,0.22);
+		counter-increment: step;
+	}
+
+	.sr-step-num {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 10px;
+		background: rgba(99,102,241,0.12);
+		border: 1px solid rgba(99,102,241,0.22);
+		color: #a5b4fc;
+		font-size: 0.78rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+	}
+
+	.sr-step-title {
+		margin: 0 0 0.45rem;
+		color: #e2e8f0;
+		font-size: 0.97rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.sr-step-body {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.875rem;
+		line-height: 1.75;
+	}
+
+	/* ── Feature cards ──────────────────── */
+	.sr-features {
+		margin: 4rem 0;
+	}
+
+	.sr-feat-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+
+	.sr-feat-card {
+		padding: 1.75rem 1.75rem;
+		border-radius: 20px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.007)), #11151c;
+		box-shadow: 0 16px 42px rgba(0,0,0,0.22);
+		transition: border-color 0.2s, box-shadow 0.2s;
+	}
+
+	.sr-feat-card:hover {
+		border-color: rgba(99,102,241,0.18);
+		box-shadow: 0 22px 56px rgba(0,0,0,0.28);
+	}
+
+	.sr-feat-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		border-radius: 12px;
+		background: rgba(99,102,241,0.1);
+		border: 1px solid rgba(99,102,241,0.2);
+		color: #a5b4fc;
+		margin-bottom: 1rem;
+	}
+
+	.sr-feat-icon svg {
+		width: 16px;
+		height: 16px;
+	}
+
+	.sr-feat-title {
+		margin: 0 0 0.45rem;
+		color: #e2e8f0;
+		font-size: 0.97rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.sr-feat-body {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.875rem;
+		line-height: 1.75;
+	}
+
+	/* ── Callout ────────────────────────── */
+	.sr-callout {
+		position: relative;
+		padding: 2rem 2rem;
+		border-radius: 20px;
+		border: 1px solid rgba(99,102,241,0.2);
+		background: linear-gradient(145deg, rgba(99,102,241,0.04) 0%, rgba(99,102,241,0.01) 100%), #11151c;
+		box-shadow: 0 0 0 1px rgba(99,102,241,0.06) inset, 0 24px 60px rgba(0,0,0,0.28);
+		margin: 4rem 0;
+		overflow: hidden;
+	}
+
+	.sr-callout::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(ellipse at 0% 50%, rgba(99,102,241,0.08) 0%, transparent 60%);
+		pointer-events: none;
+	}
+
+	.sr-callout-title {
+		margin: 0 0 0.6rem;
+		color: #ffffff;
+		font-size: 1.2rem;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+	}
+
+	.sr-callout-body {
+		color: #94a3b8;
+		font-size: 0.93rem;
+		line-height: 1.8;
+		max-width: 52rem;
+		margin: 0;
+	}
+
+	/* ── Video section ──────────────────── */
+	.sr-video-wrap {
+		margin: 4rem 0;
+	}
+
+	.sr-video-container {
+		position: relative;
+		width: 100%;
+		border-radius: 20px;
+		overflow: hidden;
+		border: 1px solid rgba(255,255,255,0.07);
+		box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+		aspect-ratio: 16 / 9;
+	}
+
+	.sr-video-container iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border: none;
+	}
+
+	.sr-video-caption {
+		margin-top: 1rem;
+		color: #475569;
+		font-size: 0.82rem;
+		text-align: center;
+	}
+
+	/* ── Responsive ─────────────────────── */
+	@media (max-width: 860px) {
+		.sr-steps { grid-template-columns: 1fr 1fr; }
+		.sr-feat-grid { grid-template-columns: 1fr 1fr; }
+	}
+
+	@media (max-width: 600px) {
+		.sr-shell { padding: 3rem 0.85rem 4rem; }
+		.sr-steps { grid-template-columns: 1fr; }
+		.sr-feat-grid { grid-template-columns: 1fr; }
+		.sr-callout { padding: 1.5rem 1.25rem; }
+	}
+	</style>
+
+	<div class="sr-shell text-white">
+
+		<!-- Hero -->
+		<div class="sr-kicker">
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+			CypherGoat Feature
+		</div>
+		<h1 class="sr-hero-title">
+			<span>SafeRoute</span><br/>
+			Smart split swaps.
+		</h1>
+		<p class="sr-hero-lead">
+			On large swaps, a single exchange can't always fill your order at the quoted rate. SafeRoute detects when splitting makes sense and automatically routes your swap across multiple partners simultaneously. Bigger swap, better rate, handled automatically.
+		</p>
+		<a href="/" class="sr-hero-cta">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+			Try a swap now
+		</a>
+
+		<!-- How it works -->
+		<div class="sr-how-wrap">
+			<p class="sr-section-label">How it works</p>
+			<h2 class="sr-section-title">Three steps, fully automatic.</h2>
+			<p class="sr-section-body">SafeRoute runs silently in the background whenever you request a quote. If it finds a better outcome by splitting, it surfaces the option. You never have to think about it.</p>
+
+			<div class="sr-steps">
+				<div class="sr-step">
+					<div class="sr-step-num">1</div>
+					<h3 class="sr-step-title">You enter an amount</h3>
+					<p class="sr-step-body">You pick your coins and the amount you want to swap, exactly as you normally would on CypherGoat.</p>
+				</div>
+				<div class="sr-step">
+					<div class="sr-step-num">2</div>
+					<h3 class="sr-step-title">SafeRoute scores the split</h3>
+					<p class="sr-step-body">Our algorithm checks every exchange pair combination and calculates whether splitting the order across two partners yields a materially better total receive amount.</p>
+				</div>
+				<div class="sr-step">
+					<div class="sr-step-num">3</div>
+					<h3 class="sr-step-title">Two orders, one result</h3>
+					<p class="sr-step-body">If splitting wins, you send two separate amounts to two deposit addresses. Both legs execute simultaneously and the output lands in the same destination wallet.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Features -->
+		<div class="sr-features">
+			<p class="sr-section-label">Why SafeRoute</p>
+			<h2 class="sr-section-title">Built for large swaps.</h2>
+			<p class="sr-section-body">Rate slippage grows quickly as order size increases. SafeRoute exists specifically to fight that.</p>
+
+			<div class="sr-feat-grid">
+				<div class="sr-feat-card">
+					<div class="sr-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+					</div>
+					<h3 class="sr-feat-title">Better effective rate</h3>
+					<p class="sr-feat-body">Spreading the order thins out the pressure on any single exchange's liquidity, so each leg executes closer to the top-of-book rate.</p>
+				</div>
+				<div class="sr-feat-card">
+					<div class="sr-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+					</div>
+					<h3 class="sr-feat-title">Simultaneous execution</h3>
+					<p class="sr-feat-body">Both legs are created at the same time. There's no dependency between them, so one slow exchange can't hold up the other.</p>
+				</div>
+				<div class="sr-feat-card">
+					<div class="sr-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+					</div>
+					<h3 class="sr-feat-title">CG Shield eligible</h3>
+					<p class="sr-feat-body">SafeRoute splits only route through CypherGoat exchange partners. If a partner freezes your funds, CG Shield's collateral mechanism applies to each leg.</p>
+				</div>
+				<div class="sr-feat-card">
+					<div class="sr-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+					</div>
+					<h3 class="sr-feat-title">Score-gated quality</h3>
+					<p class="sr-feat-body">SafeRoute only suggests a split when its internal score is confident the improvement is real, not marginal rounding noise. If it doesn't beat single-exchange, it stays hidden.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Callout -->
+		<div class="sr-callout">
+			<h2 class="sr-callout-title">No extra steps for you.</h2>
+			<p class="sr-callout-body">
+				SafeRoute surfaces automatically on the estimate page whenever a split would benefit you. There's no separate interface, no manual configuration, and no account needed. The algorithm runs on every quote. When it finds an improvement that clears the quality threshold, you'll see a SafeRoute badge on the estimate and a breakdown of both legs. Otherwise the page looks exactly as it always does.
+			</p>
+		</div>
+
+		<!-- Video -->
+		<div class="sr-video-wrap">
+			<p class="sr-section-label">From MoneroKon 2026</p>
+			<h2 class="sr-section-title">See it presented live.</h2>
+			<p class="sr-section-body">SafeRoute was presented at MoneroKon 2026 in Warsaw. Watch the full talk below for a deep dive into the algorithm, the problem it solves, and how it was built.</p>
+
+			<div class="sr-video-container">
+				<iframe
+					src="https://www.youtube-nocookie.com/embed/mULjZnwT-jU"
+					title="SafeRoute presented at MoneroKon 2026"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allowfullscreen>
+				</iframe>
+			</div>
+			<p class="sr-video-caption">SafeRoute at MoneroKon 2026, Warsaw</p>
+		</div>
+
+	</div>
+	@Footer() {}
+}

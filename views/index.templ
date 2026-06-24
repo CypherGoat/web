@@ -1902,32 +1902,51 @@ footer {
 
     </style>
 	</div>
-	<div class="container3 hide-on-swap mb-50" style="margin-top:5rem;">
+	<div class="container3 hide-on-swap" style="margin-top:5rem;margin-bottom:4rem;">
 		<style>
-			.dev-cta-section { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; background: linear-gradient(135deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.07); border-radius: 1.1rem; padding: 2.5rem 3rem; }
-			.dev-cta-text .section-kicker { margin-bottom: 0.75rem; }
-			.dev-cta-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em; color: #f3f5f7; margin: 0 0 0.5rem; }
-			.dev-cta-desc { font-size: 0.9rem; color: #9aa2b2; line-height: 1.6; margin: 0; max-width: 32rem; }
-			.dev-cta-actions { display: flex; gap: 0.75rem; flex-shrink: 0; flex-wrap: wrap; }
-			.dev-btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.35rem; border-radius: 0.65rem; background: #e7eaef; color: #0b0d14; font-weight: 700; font-size: 0.875rem; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
-			.dev-btn-primary:hover { background: #fff; }
-			.dev-btn-ghost { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.35rem; border-radius: 0.65rem; border: 1px solid rgba(255,255,255,0.1); color: #9aa2b2; font-weight: 600; font-size: 0.875rem; text-decoration: none; transition: border-color 0.15s, color 0.15s; white-space: nowrap; }
-			.dev-btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: #f3f5f7; }
-			@media (max-width: 640px) { .dev-cta-section { padding: 1.75rem; } .dev-cta-actions { width: 100%; } .dev-btn-primary, .dev-btn-ghost { flex: 1; justify-content: center; } }
+			.bottom-cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+			.bottom-cta-card { display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; padding: 2rem 2rem; border-radius: 1.1rem; border: 1px solid rgba(255,255,255,0.07); background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.008)), #11151c; }
+			.bottom-cta-card.indigo { border-color: rgba(99,102,241,0.18); background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(99,102,241,0.02)), #11151c; }
+			.bottom-cta-kicker { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #475569; margin-bottom: 0.6rem; }
+			.bottom-cta-kicker.indigo { color: #a5b4fc; }
+			.bottom-cta-title { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.03em; color: #f3f5f7; margin: 0 0 0.45rem; }
+			.bottom-cta-desc { font-size: 0.875rem; color: #9aa2b2; line-height: 1.65; margin: 0; }
+			.bottom-cta-actions { display: flex; gap: 0.65rem; flex-wrap: wrap; }
+			.bcta-btn-primary { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.6rem 1.2rem; border-radius: 0.6rem; background: #e7eaef; color: #0b0d14; font-weight: 700; font-size: 0.85rem; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
+			.bcta-btn-primary:hover { background: #fff; }
+			.bcta-btn-ghost { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.6rem 1.2rem; border-radius: 0.6rem; border: 1px solid rgba(255,255,255,0.1); color: #9aa2b2; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: border-color 0.15s, color 0.15s; white-space: nowrap; }
+			.bcta-btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: #f3f5f7; }
+			.bcta-btn-indigo { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.6rem 1.2rem; border-radius: 0.6rem; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.35); color: #c7d2fe; font-weight: 700; font-size: 0.85rem; text-decoration: none; transition: background 0.15s, border-color 0.15s; white-space: nowrap; }
+			.bcta-btn-indigo:hover { background: rgba(99,102,241,0.22); border-color: rgba(99,102,241,0.5); color: #e0e7ff; }
+			@media (max-width: 700px) { .bottom-cta-grid { grid-template-columns: 1fr; } }
 		</style>
-		<div class="dev-cta-section">
-			<div class="dev-cta-text">
-				<div class="section-kicker">For Developers</div>
-				<h2 class="dev-cta-title">Build with the CypherGoat API</h2>
-				<p class="dev-cta-desc">Integrate real-time swap rates and transactions from 20+ exchanges into your app. Free API keys, REST endpoints, and an MCP server for AI assistants.</p>
+		<div class="bottom-cta-grid">
+			<div class="bottom-cta-card">
+				<div>
+					<div class="bottom-cta-kicker">For Developers</div>
+					<h2 class="bottom-cta-title">Build with the CypherGoat API</h2>
+					<p class="bottom-cta-desc">Integrate real-time swap rates and transactions from 20+ exchanges into your app. Free API keys, REST endpoints, and an MCP server for AI assistants.</p>
+				</div>
+				<div class="bottom-cta-actions">
+					<a href="https://developer.cyphergoat.com" target="_blank" class="bcta-btn-primary">
+						<i class="fas fa-key"></i> Get API Key
+					</a>
+					<a href="https://api.cyphergoat.com" target="_blank" class="bcta-btn-ghost">
+						<i class="fas fa-book-open"></i> API Docs
+					</a>
+				</div>
 			</div>
-			<div class="dev-cta-actions">
-				<a href="https://developer.cyphergoat.com" target="_blank" class="dev-btn-primary">
-					<i class="fas fa-key"></i> Get API Key
-				</a>
-				<a href="https://api.cyphergoat.com" target="_blank" class="dev-btn-ghost">
-					<i class="fas fa-book-open"></i> API Docs
-				</a>
+			<div class="bottom-cta-card indigo">
+				<div>
+					<div class="bottom-cta-kicker indigo">Smart routing</div>
+					<h2 class="bottom-cta-title">SafeRoute: smarter splits for large swaps</h2>
+					<p class="bottom-cta-desc">When a single exchange can't fill a large order at the quoted rate, SafeRoute splits it across two partners simultaneously. Better rate, no extra steps.</p>
+				</div>
+				<div class="bottom-cta-actions">
+					<a href="/saferoute" class="bcta-btn-indigo">
+						<i class="fas fa-route"></i> Learn how it works
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>

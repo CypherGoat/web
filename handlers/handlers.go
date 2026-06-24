@@ -235,6 +235,10 @@ func AboutHandler(c echo.Context) error {
 	return views.About().Render(c.Request().Context(), c.Response())
 }
 
+func SafeRouteHandler(c echo.Context) error {
+	return views.SafeRoute().Render(c.Request().Context(), c.Response())
+}
+
 func SimplexBotHandler(c echo.Context) error {
 	return views.SimplexBot().Render(c.Request().Context(), c.Response())
 }
