@@ -235,6 +235,7 @@ func main() {
 	e.GET("/guides/:slug", handlers.GuidesPostHandler)
 
 	e.GET("/saferoute", handlers.SafeRouteHandler)
+	e.GET("/binance-eu", handlers.BinanceEUHandler)
 
 	e.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError

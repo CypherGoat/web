@@ -371,4 +371,16 @@ var ExchangesList = []Exchange{
 		TrustpilotRating:      0,
 		TrustpilotReviewCount: 0,
 	},
+	{
+		Name:                  "fuguswap",
+		ShortCode:             "fuguswap",
+		KYCScore:              1,
+		URL:                   "https://fuguswap.com/",
+		LogoURL:               "/exchanges/fugu.svg",
+		NoTextURL:             "",
+		Description:           "Fast and privacy-focused non-custodial crypto exchange. Swap 300+ cryptocurrencies with fixed or floating rates while maintaining full control of your funds",
+		TrustpilotURL:         "https://www.trustpilot.com/review/fuguswap.com",
+		TrustpilotRating:      0,
+		TrustpilotReviewCount: 0,
+	},
 }
