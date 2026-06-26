@@ -239,6 +239,10 @@ func SafeRouteHandler(c echo.Context) error {
 	return views.SafeRoute().Render(c.Request().Context(), c.Response())
 }
 
+func BinanceEUHandler(c echo.Context) error {
+	return views.BinanceEU().Render(c.Request().Context(), c.Response())
+}
+
 func SimplexBotHandler(c echo.Context) error {
 	return views.SimplexBot().Render(c.Request().Context(), c.Response())
 }
@@ -397,6 +401,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"baltex":       {"/exchanges/baltex.svg", "/exchanges/no-text/baltex.svg", false},
 	"swaponix":     {"/exchanges/swaponix.png", "/exchanges/no-text/swaponix.png", false},
 	"xmr2cex":      {"/exchanges/xmr2cex.png", "", false},
+	"fugus":        {"/exchanges/fugu.svg", "", false},
 }
 
 func parseCoinValue(value string) (string, string) {
@@ -1119,6 +1124,7 @@ func SitemapHandler(c echo.Context) error {
 		{"/affiliate", "weekly", "0.9"},
 		{"/affiliate/terms", "monthly", "0.7"},
 		{"/cyphergoat-shield", "monthly", "0.6"},
+		{"/binance-eu", "weekly", "0.9"},
 		{"/transparency", "monthly", "0.7"},
 		{"/blog", "daily", "0.9"},
 		{"/this-week-in-monero", "weekly", "0.9"},

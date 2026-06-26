@@ -1,0 +1,553 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+templ BinanceEU() {
+	@HeaderCustomTitle("Binance EU Shutdown: Move Your Crypto Without KYC", "https://cyphergoat.com/binance-eu", "Binance is winding down EU services from July 1. Withdraw your funds and swap crypto without an account or KYC using CypherGoat.") {
+		<script type="application/ld+json">
+		{
+		  "@context": "https://schema.org",
+		  "@type": "FAQPage",
+		  "mainEntity": [
+		    {
+		      "@type": "Question",
+		      "name": "Is my money safe on Binance EU right now?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "According to Binance's own announcements, withdrawals remain open during the wind-down period. Your funds are not frozen. That said, keeping assets on a platform that has suspended core services introduces unnecessary risk. Withdrawing to self-custody removes that exposure."
+		      }
+		    },
+		    {
+		      "@type": "Question",
+		      "name": "Can I still withdraw from Binance EU after July 1?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "Based on current reporting, Binance has stated that withdrawals will remain available through the wind-down. Do not rely on that window staying open indefinitely. Withdraw as soon as practical."
+		      }
+		    },
+		    {
+		      "@type": "Question",
+		      "name": "What is the best Binance alternative for EU users?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "If your goal is to swap or hold crypto without handing control to another custodian, a non-custodial aggregator like CypherGoat is the more direct option. You are not swapping one exchange for another -- you are removing the custodian from the equation entirely."
+		      }
+		    },
+		    {
+		      "@type": "Question",
+		      "name": "Do I need KYC to swap crypto on CypherGoat?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "No. CypherGoat does not require identity verification, account creation, or any personal information. Provide a destination wallet address and the swap executes."
+		      }
+		    },
+		    {
+		      "@type": "Question",
+		      "name": "What is MiCA and why does it affect Binance EU?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "MiCA (Markets in Crypto-Assets) is the EU regulatory framework requiring licensed operation for crypto service providers. According to reports, Binance did not secure a MiCA licence ahead of the July 1, 2026 deadline, which triggered the suspension of its EU-facing services."
+		      }
+		    },
+		    {
+		      "@type": "Question",
+		      "name": "What is SafeRoute?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "SafeRoute is CypherGoat's split-routing feature. For larger swaps, it divides your order across multiple liquidity partners simultaneously to reduce slippage and improve the total amount you receive versus routing through a single provider."
+		      }
+		    }
+		  ]
+		}
+		</script>
+	}
+	<style>
+	.beu-shell {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 5rem 2rem 6rem;
+	}
+
+	/* Hero */
+	.beu-kicker {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.3rem 0.75rem;
+		border-radius: 999px;
+		background: rgba(251,191,36,0.1);
+		border: 1px solid rgba(251,191,36,0.28);
+		color: #fbbf24;
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		margin-bottom: 1.4rem;
+	}
+
+	.beu-hero-title {
+		margin: 0 0 1rem;
+		color: #ffffff;
+		font-size: clamp(2.6rem, 5vw, 4.4rem);
+		line-height: 0.93;
+		font-weight: 500;
+		letter-spacing: -0.055em;
+	}
+
+	.beu-hero-lead {
+		margin: 0 0 2.5rem;
+		color: #64748b;
+		font-size: 1.08rem;
+		line-height: 1.8;
+		max-width: 50rem;
+	}
+
+	.beu-cta-primary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.6rem;
+		border-radius: 12px;
+		background: rgba(99,102,241,0.15);
+		border: 1px solid rgba(99,102,241,0.35);
+		color: #c7d2fe;
+		text-decoration: none;
+		font-size: 0.92rem;
+		font-weight: 600;
+		transition: background 0.2s, border-color 0.2s, color 0.2s;
+	}
+
+	.beu-cta-primary:hover {
+		background: rgba(99,102,241,0.22);
+		border-color: rgba(99,102,241,0.5);
+		color: #e0e7ff;
+	}
+
+	/* Fact bar */
+	.beu-fact-bar {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+		margin: 3rem 0 4rem;
+	}
+
+	.beu-fact {
+		padding: 1.4rem 1.5rem;
+		border-radius: 18px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.007)), #11151c;
+	}
+
+	.beu-fact-label {
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #475569;
+		margin-bottom: 0.5rem;
+	}
+
+	.beu-fact-value {
+		color: #e2e8f0;
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.5;
+	}
+
+	.beu-fact-value.warn {
+		color: #fbbf24;
+	}
+
+	/* Section layout */
+	.beu-section {
+		margin: 4rem 0;
+	}
+
+	.beu-section-label {
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: #475569;
+		margin-bottom: 0.85rem;
+	}
+
+	.beu-section-title {
+		margin: 0 0 0.6rem;
+		color: #ffffff;
+		font-size: 1.65rem;
+		font-weight: 600;
+		letter-spacing: -0.04em;
+	}
+
+	.beu-section-body {
+		margin: 0 0 1.5rem;
+		color: #64748b;
+		font-size: 0.96rem;
+		line-height: 1.85;
+		max-width: 56rem;
+	}
+
+	/* Steps */
+	.beu-steps {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+
+	.beu-step {
+		padding: 1.75rem 1.5rem;
+		border-radius: 20px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.007)), #11151c;
+		box-shadow: 0 16px 42px rgba(0,0,0,0.22);
+	}
+
+	.beu-step-num {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 10px;
+		background: rgba(99,102,241,0.12);
+		border: 1px solid rgba(99,102,241,0.22);
+		color: #a5b4fc;
+		font-size: 0.78rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+	}
+
+	.beu-step-title {
+		margin: 0 0 0.45rem;
+		color: #e2e8f0;
+		font-size: 0.97rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.beu-step-body {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.875rem;
+		line-height: 1.75;
+	}
+
+	/* Feature grid */
+	.beu-feat-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+	}
+
+	.beu-feat-card {
+		padding: 1.75rem;
+		border-radius: 20px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.007)), #11151c;
+		box-shadow: 0 16px 42px rgba(0,0,0,0.22);
+		transition: border-color 0.2s, box-shadow 0.2s;
+	}
+
+	.beu-feat-card:hover {
+		border-color: rgba(99,102,241,0.18);
+		box-shadow: 0 22px 56px rgba(0,0,0,0.28);
+	}
+
+	.beu-feat-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		border-radius: 12px;
+		background: rgba(99,102,241,0.1);
+		border: 1px solid rgba(99,102,241,0.2);
+		color: #a5b4fc;
+		margin-bottom: 1rem;
+	}
+
+	.beu-feat-icon svg {
+		width: 16px;
+		height: 16px;
+	}
+
+	.beu-feat-title {
+		margin: 0 0 0.45rem;
+		color: #e2e8f0;
+		font-size: 0.97rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.beu-feat-body {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.875rem;
+		line-height: 1.75;
+	}
+
+	/* FAQ */
+	.beu-faq {
+		margin: 4rem 0;
+	}
+
+	.beu-faq-list {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.beu-faq-item {
+		padding: 1.5rem 1.75rem;
+		border-radius: 18px;
+		border: 1px solid rgba(255,255,255,0.06);
+		background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.007)), #11151c;
+	}
+
+	.beu-faq-q {
+		margin: 0 0 0.6rem;
+		color: #e2e8f0;
+		font-size: 0.97rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.beu-faq-a {
+		margin: 0;
+		color: #64748b;
+		font-size: 0.875rem;
+		line-height: 1.8;
+	}
+
+	/* CTA block */
+	.beu-cta-block {
+		position: relative;
+		padding: 2.5rem 2rem;
+		border-radius: 20px;
+		border: 1px solid rgba(99,102,241,0.2);
+		background: linear-gradient(145deg, rgba(99,102,241,0.04) 0%, rgba(99,102,241,0.01) 100%), #11151c;
+		box-shadow: 0 0 0 1px rgba(99,102,241,0.06) inset, 0 24px 60px rgba(0,0,0,0.28);
+		margin: 4rem 0 0;
+		overflow: hidden;
+		text-align: center;
+	}
+
+	.beu-cta-block::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 65%);
+		pointer-events: none;
+	}
+
+	.beu-cta-block-title {
+		margin: 0 0 0.6rem;
+		color: #ffffff;
+		font-size: 1.5rem;
+		font-weight: 600;
+		letter-spacing: -0.04em;
+	}
+
+	.beu-cta-block-body {
+		color: #94a3b8;
+		font-size: 0.93rem;
+		line-height: 1.8;
+		max-width: 40rem;
+		margin: 0 auto 1.75rem;
+	}
+
+	/* Responsive */
+	@media (max-width: 860px) {
+		.beu-steps { grid-template-columns: 1fr 1fr; }
+		.beu-fact-bar { grid-template-columns: 1fr 1fr; }
+		.beu-feat-grid { grid-template-columns: 1fr 1fr; }
+	}
+
+	@media (max-width: 600px) {
+		.beu-shell { padding: 3rem 0.85rem 4rem; }
+		.beu-steps { grid-template-columns: 1fr; }
+		.beu-fact-bar { grid-template-columns: 1fr; }
+		.beu-feat-grid { grid-template-columns: 1fr; }
+		.beu-cta-block { padding: 1.75rem 1.25rem; }
+	}
+	</style>
+
+	<div class="beu-shell text-white">
+
+		<!-- Hero -->
+		<div class="beu-kicker">July 1, 2026</div>
+		<h1 class="beu-hero-title">Binance is leaving the EU.<br/>Here is how to move your funds.</h1>
+		<p class="beu-hero-lead">
+			Withdraw to self-custody and swap for any coin you want. No account, no KYC, no custodian in the middle.
+		</p>
+		<a href="/" class="beu-cta-primary">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+			Start a swap now
+		</a>
+
+		<!-- Fact bar -->
+		<div class="beu-fact-bar">
+			<div class="beu-fact">
+				<div class="beu-fact-label">Deadline</div>
+				<div class="beu-fact-value warn">July 1, 2026</div>
+			</div>
+			<div class="beu-fact">
+				<div class="beu-fact-label">Withdrawals</div>
+				<div class="beu-fact-value">Open during wind-down</div>
+			</div>
+			<div class="beu-fact">
+				<div class="beu-fact-label">New orders and deposits</div>
+				<div class="beu-fact-value">Suspended</div>
+			</div>
+		</div>
+
+		<!-- What is happening -->
+		<div class="beu-section">
+			<p class="beu-section-label">What is happening</p>
+			<h2 class="beu-section-title">Binance failed to secure a MiCA licence.</h2>
+			<p class="beu-section-body">
+				According to multiple reports, Binance did not obtain a MiCA (Markets in Crypto-Assets) licence ahead of the EU's July 1, 2026 deadline. As a result, Binance is suspending EU-facing services including new orders, deposits, account signups, and products like Earn, staking, and Launchpool.
+			</p>
+			<p class="beu-section-body">
+				This is a service wind-down for EU users, not a freeze. Withdrawals remain open. The window to act is now.
+			</p>
+		</div>
+
+		<!-- What this means -->
+		<div class="beu-section">
+			<p class="beu-section-label">What this means for you</p>
+			<h2 class="beu-section-title">Your funds are accessible. Your service is not.</h2>
+			<p class="beu-section-body">
+				If you are an EU resident with assets on Binance, the practical situation is straightforward. You cannot open new positions or deposit additional funds after July 1. Earn, staking, and Launchpool products will stop accepting new entries. Withdrawals are expected to remain available during the wind-down period, but leaving assets on a platform mid-suspension introduces platform risk regardless of the cause.
+			</p>
+			<p class="beu-section-body">
+				The lowest-risk move is to withdraw to a wallet you control, then decide what to do with your assets from a position of full custody.
+			</p>
+		</div>
+
+		<!-- How to move off Binance -->
+		<div class="beu-section">
+			<p class="beu-section-label">Step by step</p>
+			<h2 class="beu-section-title">How to move off Binance without KYC.</h2>
+			<p class="beu-section-body">
+				You do not need a new exchange account to convert, swap, or consolidate your holdings.
+			</p>
+
+			<div class="beu-steps">
+				<div class="beu-step">
+					<div class="beu-step-num">1</div>
+					<h3 class="beu-step-title">Withdraw to a self-custody wallet</h3>
+					<p class="beu-step-body">Go to Binance Withdraw, select your asset, and send it to a wallet where you hold the private keys. A hardware wallet (Ledger, Trezor) is the most secure option. Software wallets like Exodus or Electrum also work. Do not withdraw to another custodial exchange if you want to fully exit platform risk.</p>
+				</div>
+				<div class="beu-step">
+					<div class="beu-step-num">2</div>
+					<h3 class="beu-step-title">Decide what you want to hold</h3>
+					<p class="beu-step-body">Once your assets are in self-custody you are in control. If you want to convert between coins, change exposure, or consolidate holdings, you can do that without signing up for another exchange.</p>
+				</div>
+				<div class="beu-step">
+					<div class="beu-step-num">3</div>
+					<h3 class="beu-step-title">Swap via CypherGoat</h3>
+					<p class="beu-step-body">CypherGoat routes your swap across 20+ exchange partners in real time to find the best available rate. Enter a destination wallet address, enter an amount, and receive funds directly. No account, no KYC, and CypherGoat never holds your funds.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Why CypherGoat -->
+		<div class="beu-section">
+			<p class="beu-section-label">Why CypherGoat</p>
+			<h2 class="beu-section-title">Non-custodial. No signup. Best rate.</h2>
+			<p class="beu-section-body">
+				You are not replacing one exchange with another. CypherGoat never takes custody of your funds.
+			</p>
+
+			<div class="beu-feat-grid">
+				<div class="beu-feat-card">
+					<div class="beu-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+					</div>
+					<h3 class="beu-feat-title">Non-custodial by design</h3>
+					<p class="beu-feat-body">CypherGoat never holds your funds. You send from your wallet, the swap executes across partner liquidity, and the output lands at the destination address you chose. There is no intermediate account, no deposit step, no waiting period.</p>
+				</div>
+				<div class="beu-feat-card">
+					<div class="beu-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+					</div>
+					<h3 class="beu-feat-title">No signup, no KYC</h3>
+					<p class="beu-feat-body">There is no account to create and no identity to verify. You enter an address, choose an amount, and swap. That is the entire process. No EU regulatory barriers apply to a non-custodial aggregator that never touches your funds.</p>
+				</div>
+				<div class="beu-feat-card">
+					<div class="beu-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+					</div>
+					<h3 class="beu-feat-title">Best rate across 20+ partners</h3>
+					<p class="beu-feat-body">CypherGoat queries multiple liquidity sources simultaneously and routes to the best rate at execution time. For larger orders, <a href="/saferoute" style="color:#a5b4fc;text-decoration:none;">SafeRoute</a> automatically splits your swap across multiple partners to reduce slippage and maximise total output.</p>
+				</div>
+				<div class="beu-feat-card">
+					<div class="beu-feat-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+					</div>
+					<h3 class="beu-feat-title">Monero-first privacy option</h3>
+					<p class="beu-feat-body">If you want to convert assets into Monero for privacy, CypherGoat fully supports XMR swaps using the same no-account, no-KYC interface, routed across partners that support the pair.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ -->
+		<div class="beu-faq">
+			<p class="beu-section-label">FAQ</p>
+			<h2 class="beu-section-title">Common questions.</h2>
+
+			<div class="beu-faq-list">
+				<div class="beu-faq-item">
+					<h3 class="beu-faq-q">Is my money safe on Binance EU right now?</h3>
+					<p class="beu-faq-a">According to Binance's own announcements, withdrawals remain open during the wind-down period. Your funds are not frozen. That said, keeping assets on a platform that has suspended core services introduces unnecessary risk. Withdrawing to self-custody removes that exposure.</p>
+				</div>
+				<div class="beu-faq-item">
+					<h3 class="beu-faq-q">Can I still withdraw from Binance EU after July 1?</h3>
+					<p class="beu-faq-a">Based on current reporting, Binance has stated that withdrawals will remain available through the wind-down. Do not rely on that window staying open indefinitely. Withdraw as soon as practical.</p>
+				</div>
+				<div class="beu-faq-item">
+					<h3 class="beu-faq-q">What is the best Binance alternative for EU users?</h3>
+					<p class="beu-faq-a">If your goal is to swap or hold crypto without handing control to another custodian, a non-custodial aggregator like CypherGoat is the more direct option. You are not swapping one exchange for another -- you are removing the custodian from the equation entirely.</p>
+				</div>
+				<div class="beu-faq-item">
+					<h3 class="beu-faq-q">Do I need KYC to swap crypto on CypherGoat?</h3>
+					<p class="beu-faq-a">No. CypherGoat does not require identity verification, account creation, or any personal information. Provide a destination wallet address and the swap executes.</p>
+				</div>
+				<div class="beu-faq-item">
+					<h3 class="beu-faq-q">What is MiCA and why does it affect Binance EU?</h3>
+					<p class="beu-faq-a">MiCA (Markets in Crypto-Assets) is the EU regulatory framework requiring licensed operation for crypto service providers. According to reports, Binance did not secure a MiCA licence ahead of the July 1, 2026 deadline, which triggered the suspension of its EU-facing services.</p>
+				</div>
+				<div class="beu-faq-item">
+					<h3 class="beu-faq-q">What is SafeRoute?</h3>
+					<p class="beu-faq-a">SafeRoute is CypherGoat's split-routing feature. For larger swaps, it divides your order across multiple liquidity partners simultaneously to reduce slippage and improve the total amount you receive versus routing through a single provider. Learn more on the <a href="/saferoute" style="color:#a5b4fc;text-decoration:none;">SafeRoute page</a>.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- CTA block -->
+		<div class="beu-cta-block">
+			<h2 class="beu-cta-block-title">Ready to move your funds?</h2>
+			<p class="beu-cta-block-body">Swap any coin directly to your wallet. No account. No KYC. No custodian.</p>
+			<a href="/" class="beu-cta-primary">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+				Start a swap on CypherGoat
+			</a>
+		</div>
+
+	</div>
+	@Footer() {}
+}
