@@ -332,7 +332,6 @@ var blockedExchangesForAnonymousNetworks = map[string]bool{
 	"changenow":  true,
 	"fixedfloat": true,
 	"simpleswap": true,
-	"exolix":     true,
 	"nanswap":    true,
 }
 
@@ -401,7 +400,7 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"baltex":       {"/exchanges/baltex.svg", "/exchanges/no-text/baltex.svg", false},
 	"swaponix":     {"/exchanges/swaponix.png", "/exchanges/no-text/swaponix.png", false},
 	"xmr2cex":      {"/exchanges/xmr2cex.png", "", false},
-	"fugus":        {"/exchanges/fugu.svg", "", false},
+	"fuguswap":     {"/exchanges/fuguswap.svg", "", false},
 }
 
 func parseCoinValue(value string) (string, string) {
