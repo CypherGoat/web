@@ -92,7 +92,7 @@ var ExchangesList = []Exchange{
 		URL:                   "https://pegasusswap.com",
 		LogoURL:               "/exchanges/pegasusswap.png",
 		NoTextURL:             "",
-		Description:           "PegasusSwap is an exchange service that will facilitate the exchange of cryptocurrencies! Speed, reliability and trust",
+		Description:           "PegasusSwap is a privacy-first crypto swap platform built for people who value speed, security, and complete anonymity. No registration. No KYC. No JavaScript required.",
 		CGShield:              true,
 		CGAmount:              "0.1 BTC",
 		CGSinStable:           false,
