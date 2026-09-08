@@ -16,6 +16,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -32,12 +33,34 @@ var URL = getEnv("CYPHERGOAT_API_URL", "https://api.cyphergoat.com")
 
 var API_KEY = getEnv("CYPHERGOAT_API_KEY", "")
 
+var ProURL = getEnv("PRO_URL", "https://pro.cyphergoat.com")
+
+var LargeTradeAPIKey = getEnv("LARGE_TRADE_API_KEY", "")
+
+// defaultLargeTradeThresholdUSD is used when LARGE_TRADE_THRESHOLD_USD is
+// unset or invalid.
+const defaultLargeTradeThresholdUSD = 15000
+
 func getEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
 	if value == "" {
 		return defaultValue
 	}
 	return value
+}
+
+// LargeTradeThresholdUSD mirrors the threshold enforced by Pro
+// (pro/db.LargeTradeThresholdUSD) - kept here too so web can skip the
+// invite request entirely for trades that obviously won't qualify. It's
+// configurable via LARGE_TRADE_THRESHOLD_USD so both services can be kept
+// in sync without a redeploy.
+func LargeTradeThresholdUSD() float64 {
+	if v := os.Getenv("LARGE_TRADE_THRESHOLD_USD"); v != "" {
+		if n, err := strconv.ParseFloat(v, 64); err == nil {
+			return n
+		}
+	}
+	return defaultLargeTradeThresholdUSD
 }
 
 type Estimates struct {
@@ -495,6 +518,93 @@ func CreateSplitTradeFromAPI(coin1, coin2, network1, network2, partner1, partner
 	}, nil
 }
 
+// BridgeLeg describes one hop of a Private Route (Bridge) trade.
+type BridgeLeg struct {
+	Exchange      string  `json:"exchange"`
+	Coin1         string  `json:"coin1"`
+	Coin2         string  `json:"coin2"`
+	SendAmount    float64 `json:"send_amount"`
+	ReceiveAmount float64 `json:"receive_amount"`
+}
+
+// BridgeQuote is the combined estimate for a coin1 -> XMR -> coin2 route.
+type BridgeQuote struct {
+	Leg1             BridgeLeg `json:"leg1"`
+	Leg2             BridgeLeg `json:"leg2"`
+	EstimatedReceive float64   `json:"estimated_receive"`
+}
+
+// FetchBridgeEstimateFromAPI returns the best two-leg Private Route quote
+// for coin1 -> XMR -> coin2.
+func FetchBridgeEstimateFromAPI(coin1, coin2, network1, network2 string, amount float64) (*BridgeQuote, error) {
+	reqURL := fmt.Sprintf("%s/bridge/estimate?coin1=%s&coin2=%s&amount=%f&network1=%s&network2=%s",
+		URL, coin1, coin2, amount, network1, network2)
+
+	data, err := SendRequest(reqURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var result struct {
+		Bridge *BridgeQuote `json:"bridge"`
+	}
+	if err := json.Unmarshal(data, &result); err != nil {
+		return nil, err
+	}
+	return result.Bridge, nil
+}
+
+// BridgeTradeResult holds the outcome of a Private Route trade creation.
+type BridgeTradeResult struct {
+	Transaction1  Transaction
+	Transaction2  Transaction
+	BridgeGroupID string
+}
+
+// CreateBridgeTradeFromAPI creates a Private Route trade: coin1 -> XMR ->
+// coin2 across two exchanges. partner1/partner2 pin each leg to the
+// exchanges the user was quoted.
+func CreateBridgeTradeFromAPI(coin1, coin2, network1, network2, address string, amount float64, affiliate, partner1, partner2, source string, info Info) (*BridgeTradeResult, error) {
+	params := url.Values{}
+	params.Add("coin1", coin1)
+	params.Add("coin2", coin2)
+	params.Add("network1", network1)
+	params.Add("network2", network2)
+	params.Add("amount", strconv.FormatFloat(amount, 'f', -1, 64))
+	params.Add("address", address)
+	params.Add("partner1", partner1)
+	params.Add("partner2", partner2)
+	params.Add("affiliate", affiliate)
+	params.Add("ip", info.IP)
+	params.Add("useragent", info.UserAgent)
+	params.Add("lang", info.LangList)
+	params.Add("source", source)
+
+	reqURL := fmt.Sprintf("%s/swap/bridge?%s", URL, params.Encode())
+	data, err := SendRequest(reqURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var raw struct {
+		Transaction1  Transaction `json:"transaction1"`
+		Transaction2  Transaction `json:"transaction2"`
+		BridgeGroupID string      `json:"bridge_group_id"`
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	t1 := raw.Transaction1
+	t2 := raw.Transaction2
+
+	return &BridgeTradeResult{
+		Transaction1:  t1,
+		Transaction2:  t2,
+		BridgeGroupID: raw.BridgeGroupID,
+	}, nil
+}
+
 func TrackTxFromAPI(t Transaction) (error, Transaction) {
 	url := fmt.Sprintf("%s/transaction?provider=%s&id=%s", URL, strings.ToLower(t.Provider), t.Id)
 	data, err := SendRequest(url)
@@ -546,6 +656,54 @@ func GetTransactionFromAPI(id string) (error, Transaction) {
 	}
 
 	return nil, transaction
+}
+
+// RequestLargeTradeInvite asks the Pro terminal to mint (or, if this cgid
+// already earned one, re-return) an invite code for a completed trade. The
+// $15k+ threshold and the one-per-day-per-coin-pair cap are enforced on the
+// Pro side; this call is idempotent per cgid.
+func RequestLargeTradeInvite(cgid string, pair string, tradeValueUSD float64) (string, error) {
+	if LargeTradeAPIKey == "" {
+		return "", fmt.Errorf("large trade invites not configured")
+	}
+
+	payload, err := json.Marshal(map[string]any{
+		"cgid":            cgid,
+		"pair":            pair,
+		"trade_value_usd": tradeValueUSD,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	req, err := http.NewRequest("POST", ProURL+"/api/large-trade-invite", bytes.NewReader(payload))
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+LargeTradeAPIKey)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	var out struct {
+		Code  string `json:"code"`
+		Error string `json:"error"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return "", err
+	}
+	if resp.StatusCode != http.StatusOK {
+		if out.Error != "" {
+			return "", fmt.Errorf("%s", out.Error)
+		}
+		return "", fmt.Errorf("large trade invite request failed: %s", resp.Status)
+	}
+	return out.Code, nil
 }
 
 type AffiliateApplication struct {

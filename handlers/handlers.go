@@ -247,6 +247,10 @@ func SimplexBotHandler(c echo.Context) error {
 	return views.SimplexBot().Render(c.Request().Context(), c.Response())
 }
 
+func MCPHandler(c echo.Context) error {
+	return views.MCP().Render(c.Request().Context(), c.Response())
+}
+
 func Monerokon2026Handler(c echo.Context) error {
 	return views.Monerokon2026(HuntPrizeStatus(), monerokon2026HuntClosed()).Render(c.Request().Context(), c.Response())
 }
@@ -401,6 +405,9 @@ var exchangeInfo = map[string]ExchangeInfo{
 	"swaponix":     {"/exchanges/swaponix.png", "/exchanges/no-text/swaponix.png", false},
 	"xmr2cex":      {"/exchanges/xmr2cex.png", "", false},
 	"fuguswap":     {"/exchanges/fuguswap.svg", "", false},
+	"priamex":      {"/exchanges/priamex.png", "/exchanges/no-text/priamex.png", false},
+	"mobit":        {"/exchanges/mobit.jpg", "", false},
+	"houdiniswap":  {"/exchanges/houdiniswap.png", "", false},
 }
 
 func parseCoinValue(value string) (string, string) {
@@ -567,6 +574,7 @@ func EstimateHandler(c echo.Context) error {
 				}
 			}
 		}
+
 		estimates.Coin1 = coin1
 		estimates.Coin2 = coin2
 		estimates.Amount = amount
@@ -600,7 +608,7 @@ func EstimateHandler(c echo.Context) error {
 			estimates.Results[i].Log = exchangeInfo[name].RequireIP
 			estimates.Results[i].Blocked = isExchangeBlocked(estimates.Results[i].ExchangeName, isAnonymousNetwork)
 		}
-		return views.EstimateCard(estimates, mode, rateSplit, kycSplit).Render(c.Request().Context(), c.Response())
+		return views.EstimateCard(estimates, mode, rateSplit, kycSplit, nil).Render(c.Request().Context(), c.Response())
 	}
 
 	isAnonymousNetwork, _ := c.Get("isAnonymousNetwork").(bool)
@@ -636,7 +644,7 @@ func EstimateHandler(c echo.Context) error {
 
 	}
 
-	return views.EstimateCard(estimates, mode, nil, nil).Render(c.Request().Context(), c.Response())
+	return views.EstimateCard(estimates, mode, nil, nil, nil).Render(c.Request().Context(), c.Response())
 }
 
 func Step2Handler(c echo.Context) error {
@@ -897,6 +905,14 @@ func SplitStep3Handler(c echo.Context) error {
 	return views.SplitTransactionPage(result.Transaction1, result.Transaction2, split, result.Leg1Error, result.Leg2Error).Render(c.Request().Context(), c.Response())
 }
 
+func BridgeStep2Handler(c echo.Context) error {
+	return c.NoContent(http.StatusNotFound)
+}
+
+func BridgeStep3Handler(c echo.Context) error {
+	return c.NoContent(http.StatusNotFound)
+}
+
 func CGPayHandler(c echo.Context) error {
 	coin1 := c.QueryParam("coin1")
 	network1 := c.QueryParam("network1")
@@ -999,8 +1015,36 @@ func GetTransactionHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, fmt.Sprintf("error getting transaction: %v", err))
 	}
 
-	return views.TransactionPage(transaction, cgPay).Render(c.Request().Context(), c.Response())
+	largeTradeCode := largeTradeInviteCode(transaction)
 
+	return views.TransactionPage(transaction, cgPay, largeTradeCode).Render(c.Request().Context(), c.Response())
+
+}
+
+// largeTradeInviteCode checks whether a completed transaction qualifies for
+// an automatic Pro invite and, if so, requests one. It re-derives the
+// trade's fiat value from the estimate API since Transaction itself doesn't
+// carry one; the threshold and the one-per-day-per-coin-pair cap are
+// re-enforced server-side by Pro, this is just what decides whether to ask
+// at all. Failures (not qualifying, Pro unreachable, cap already hit) are
+// silent - they just mean no code shows on the completion screen.
+func largeTradeInviteCode(transaction api.Transaction) string {
+	if !transaction.Done || transaction.CGID == "" {
+		return ""
+	}
+
+	estimates, err := api.FetchEstimateFromAPI(transaction.Coin1, transaction.Coin2, transaction.SendAmount, false, transaction.Network1, transaction.Network2)
+	if err != nil || estimates.TradeValue_fiat < api.LargeTradeThresholdUSD() {
+		return ""
+	}
+
+	pair := strings.ToUpper(transaction.Coin1) + "/" + strings.ToUpper(transaction.Coin2)
+	code, err := api.RequestLargeTradeInvite(transaction.CGID, pair, estimates.TradeValue_fiat)
+	if err != nil {
+		fmt.Printf("large trade invite: %v\n", err)
+		return ""
+	}
+	return code
 }
 
 func getCoinName(ticker string) string {

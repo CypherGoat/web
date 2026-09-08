@@ -98,7 +98,51 @@ templ splitCardBlock(split *api.SplitSuggestion, offers api.Estimates, cssClass 
     </div>
 }
 
-templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSuggestion, kycSplit *api.SplitSuggestion) {
+templ bridgeCardBlock(bridge *api.BridgeQuote, offers api.Estimates) {
+    <div class="split-card-estimates bridge-card-estimates">
+        <div class="exchange-info-estimates">
+            <div class="exchange-name-estimates">
+                <div class="split-badge-estimates bridge-badge-estimates">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"></path></svg>
+                    Private Route
+                </div>
+                <a href="/saferoute" target="_blank" style="font-size:0.7rem;color:#798192;text-decoration:none;margin-left:0.5rem;opacity:0.7;transition:opacity 0.15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">What is this?</a>
+            </div>
+        </div>
+        <div class="amount-highlight-estimates">
+            { FormatFloat(bridge.EstimatedReceive) } { strings.ToUpper(offers.Coin2) }
+        </div>
+        <div class="split-amounts-estimates">
+            <div class="split-leg-estimates">
+                <span class="split-leg-label-estimates">{ bridge.Leg1.Exchange }</span>
+                <span class="split-leg-amount-estimates">{ FormatFloat(bridge.Leg1.SendAmount) } { strings.ToUpper(offers.Coin1) } → { FormatFloat(bridge.Leg1.ReceiveAmount) } XMR</span>
+            </div>
+            <span class="split-divider-estimates">→</span>
+            <div class="split-leg-estimates">
+                <span class="split-leg-label-estimates">{ bridge.Leg2.Exchange }</span>
+                <span class="split-leg-amount-estimates">{ FormatFloat(bridge.Leg2.SendAmount) } XMR → { FormatFloat(bridge.Leg2.ReceiveAmount) } { strings.ToUpper(offers.Coin2) }</span>
+            </div>
+        </div>
+        <div class="estimate-details-estimates">
+            <div style="font-size:0.78rem;color:#798192;line-height:1.4;">
+                Routed through two independent exchanges — no single exchange sees both coins
+            </div>
+            <a href={ templ.URL(fmt.Sprintf("/bridge/step2?coin1=%s&coin2=%s&network1=%s&network2=%s&amount=%s&exchange1=%s&exchange2=%s&xmramount=%s&finalamount=%s&estimateid=%d",
+                url.QueryEscape(offers.Coin1), url.QueryEscape(offers.Coin2),
+                url.QueryEscape(offers.Network1), url.QueryEscape(offers.Network2),
+                url.QueryEscape(strconv.FormatFloat(bridge.Leg1.SendAmount, 'f', -1, 64)),
+                url.QueryEscape(bridge.Leg1.Exchange), url.QueryEscape(bridge.Leg2.Exchange),
+                url.QueryEscape(strconv.FormatFloat(bridge.Leg1.ReceiveAmount, 'f', -1, 64)),
+                url.QueryEscape(strconv.FormatFloat(bridge.Leg2.ReceiveAmount, 'f', -1, 64)),
+                offers.EstimateId)) }
+                class="btn-select2-estimates btn-primary-estimates" style="text-decoration:none;">
+                Select
+            </a>
+        </div>
+    </div>
+}
+
+templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSuggestion, kycSplit *api.SplitSuggestion, bridge *api.BridgeQuote) {
      <style>
         .container-estimates {
             width: 100%;
@@ -572,6 +616,15 @@ templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSugges
             letter-spacing: 0.06em;
         }
         .split-leg-amount-estimates { color: #798192; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bridge-card-estimates {
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.05), rgba(99, 102, 241, 0.01)), #10141a;
+            border: 1px solid rgba(99, 102, 241, 0.22);
+        }
+        .bridge-badge-estimates {
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.28);
+            color: #a5b4fc;
+        }
     </style>
     <div class="container-estimates">
         if rateSplit != nil {
@@ -579,6 +632,9 @@ templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSugges
         }
         if kycSplit != nil {
             @splitCardBlock(kycSplit, offers, "split-card-kyc", "display:none")
+        }
+        if bridge != nil {
+            @bridgeCardBlock(bridge, offers)
         }
         <div class="estimate-toolbar-estimates">
             <div class="sort-options-estimates">
