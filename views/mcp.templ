@@ -1,0 +1,419 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program, if not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+templ MCP() {
+	@HeaderCustomTitle("CypherGoat MCP Server", "https://cyphergoat.com/mcp", "Swap crypto directly inside Claude. CypherGoat's MCP server lets AI assistants check live rates, compare exchanges, and initiate swaps natively.") {
+	}
+	<style>
+	body {
+		background-color: #0b0d14;
+		font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+		min-height: 100vh;
+	}
+
+	.mcp-shell {
+		max-width: 1080px;
+		margin: 0 auto;
+		padding: 3.5rem 1.5rem 0;
+	}
+
+	.mcp-hero {
+		max-width: 52rem;
+		margin: 0 auto 3rem;
+		text-align: center;
+	}
+
+	.mcp-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.35rem 0.9rem;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		background: rgba(255, 255, 255, 0.04);
+		font-size: 0.8rem;
+		color: #98a1b1;
+		margin-bottom: 1.5rem;
+	}
+
+	.mcp-badge span {
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: #4ade80;
+		display: inline-block;
+		box-shadow: 0 0 6px #4ade80;
+	}
+
+	.mcp-title {
+		margin: 0 0 0;
+		color: #ffffff;
+		font-size: clamp(3rem, 6vw, 5rem);
+		line-height: 0.92;
+		font-weight: 500;
+		letter-spacing: -0.06em;
+	}
+
+	.mcp-lead {
+		margin: 1.25rem auto 0;
+		max-width: 40rem;
+		color: #98a1b1;
+		font-size: 1.05rem;
+		line-height: 1.8;
+	}
+
+	.mcp-cta-group {
+		margin-top: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		justify-content: center;
+	}
+
+	.mcp-btn-primary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.8rem 1.5rem;
+		border-radius: 12px;
+		background: #f3eee2;
+		color: #0b0d14;
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
+		transition: background 0.2s;
+	}
+
+	.mcp-btn-primary:hover {
+		background: #faf7ef;
+	}
+
+	.mcp-btn-secondary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.8rem 1.5rem;
+		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.04);
+		color: #d9deea;
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		transition: background 0.2s, border-color 0.2s;
+	}
+
+	.mcp-btn-secondary:hover {
+		background: rgba(255, 255, 255, 0.07);
+		border-color: rgba(255, 255, 255, 0.14);
+		color: #ffffff;
+	}
+
+	.mcp-panel {
+		margin-top: 1.4rem;
+		padding: 2rem;
+		border-radius: 24px;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		background:
+			linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+			#11151c;
+		box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+	}
+
+	.mcp-panel-title {
+		color: #ffffff;
+		font-size: 1.6rem;
+		font-weight: 500;
+		letter-spacing: -0.04em;
+		margin-bottom: 1.25rem;
+	}
+
+	.mcp-feature-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		margin-top: 1.4rem;
+	}
+
+	.mcp-feature-card {
+		padding: 1.4rem;
+		border-radius: 18px;
+		background: rgba(255, 255, 255, 0.018);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.mcp-feature-icon {
+		font-size: 1.4rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.mcp-feature-card h3 {
+		color: #ffffff;
+		font-size: 1rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		margin-bottom: 0.4rem;
+	}
+
+	.mcp-feature-card p {
+		color: #98a1b1;
+		font-size: 0.9rem;
+		line-height: 1.65;
+	}
+
+	.mcp-cmd-table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 0.5rem;
+	}
+
+	.mcp-cmd-table th {
+		text-align: left;
+		padding: 0.6rem 1rem;
+		color: #737b89;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.mcp-cmd-table td {
+		padding: 0.75rem 1rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+		color: #98a1b1;
+		font-size: 0.9rem;
+		vertical-align: top;
+	}
+
+	.mcp-cmd-table td:first-child {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		color: #e9e2d1;
+		white-space: nowrap;
+	}
+
+	.mcp-cmd-table tr:last-child td {
+		border-bottom: none;
+	}
+
+	.mcp-cmd-table tr:hover td {
+		background: rgba(255, 255, 255, 0.02);
+	}
+
+	.mcp-example-block {
+		margin-top: 1rem;
+		background: rgba(255, 255, 255, 0.025);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: 14px;
+		padding: 1.25rem 1.5rem;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		font-size: 0.875rem;
+		color: #e9e2d1;
+		line-height: 1.9;
+		white-space: pre-wrap;
+	}
+
+	.mcp-tabs {
+		display: flex;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.mcp-tab-label {
+		color: #737b89;
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		padding: 0.4rem 0.9rem;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		background: rgba(255, 255, 255, 0.02);
+	}
+
+	.mcp-open-source-bar {
+		margin-top: 1.4rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		flex-wrap: wrap;
+		padding: 1.4rem 1.75rem;
+		border-radius: 18px;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		background: rgba(255, 255, 255, 0.018);
+	}
+
+	.mcp-open-source-bar p {
+		color: #98a1b1;
+		font-size: 0.95rem;
+		line-height: 1.6;
+	}
+
+	.mcp-open-source-bar strong {
+		color: #e0e6f0;
+	}
+
+	@media (max-width: 900px) {
+		.mcp-feature-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 640px) {
+		.mcp-shell {
+			padding: 2.5rem 1rem 0;
+		}
+
+		.mcp-feature-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.mcp-panel {
+			padding: 1.4rem;
+			border-radius: 18px;
+		}
+
+		.mcp-cmd-table th,
+		.mcp-cmd-table td {
+			padding: 0.6rem 0.5rem;
+		}
+	}
+	</style>
+
+	<div class="mcp-shell text-white">
+		<div class="mcp-hero">
+			<div class="mcp-badge">
+				<span></span> Live &amp; Free to Use
+			</div>
+			<h1 class="mcp-title">MCP Server</h1>
+			<p class="mcp-lead">
+				Swap crypto directly inside Claude. Check live rates, compare exchanges, and
+				initiate swaps natively. No browser, no API key, no signup.
+			</p>
+			<div class="mcp-cta-group">
+				<a href="https://www.youtube.com/watch?v=9sRwtqcKBMc" target="_blank" class="mcp-btn-primary">
+					<i class="fab fa-youtube"></i> Watch Demo
+				</a>
+				<a href="/blog/mcp-server" class="mcp-btn-secondary">
+					<i class="fas fa-book"></i> Read the Blog Post
+				</a>
+			</div>
+		</div>
+
+		<div class="mcp-feature-grid">
+			<div class="mcp-feature-card">
+				<div class="mcp-feature-icon">🔌</div>
+				<h3>Native Tool Calls</h3>
+				<p>MCP (Model Context Protocol) lets Claude call CypherGoat directly and return results inline. No copy-pasting links.</p>
+			</div>
+			<div class="mcp-feature-card">
+				<div class="mcp-feature-icon">📊</div>
+				<h3>Live Rate Comparison</h3>
+				<p>Compare swap rates across 20+ partnered exchanges in real time from inside a chat.</p>
+			</div>
+			<div class="mcp-feature-card">
+				<div class="mcp-feature-icon">🔒</div>
+				<h3>No Account Required</h3>
+				<p>No API key, no signup. Connect the server and start querying rates immediately.</p>
+			</div>
+			<div class="mcp-feature-card">
+				<div class="mcp-feature-icon">⚡</div>
+				<h3>Initiate Swaps</h3>
+				<p>Create a swap and get a deposit address without leaving your AI workflow.</p>
+			</div>
+			<div class="mcp-feature-card">
+				<div class="mcp-feature-icon">🔍</div>
+				<h3>Track Status</h3>
+				<p>Check the status of any swap in progress directly through Claude.</p>
+			</div>
+			<div class="mcp-feature-card">
+				<div class="mcp-feature-icon">🐐</div>
+				<h3>Powered by CypherGoat</h3>
+				<p>Uses the same aggregator and rates as cyphergoat.com.</p>
+			</div>
+		</div>
+
+		<div class="mcp-panel">
+			<h2 class="mcp-panel-title">Available Tools</h2>
+			<table class="mcp-cmd-table">
+				<thead>
+					<tr>
+						<th>Tool</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>get_best_rate</td>
+						<td>Returns the top exchange and estimated output for a given pair and amount</td>
+					</tr>
+					<tr>
+						<td>get_all_rates</td>
+						<td>Returns the full ranked list across all partnered exchanges</td>
+					</tr>
+					<tr>
+						<td>create_swap</td>
+						<td>Initiates a swap and returns the deposit address</td>
+					</tr>
+					<tr>
+						<td>get_swap_status</td>
+						<td>Returns the current status of a swap</td>
+					</tr>
+					<tr>
+						<td>list_supported_pairs</td>
+						<td>Returns all available trading pairs</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="mcp-panel">
+			<h2 class="mcp-panel-title">Setup</h2>
+			<div class="mcp-tabs">
+				<span class="mcp-tab-label">Claude.ai</span>
+			</div>
+			<p style="color:#98a1b1;font-size:0.95rem;line-height:1.7;">
+				Go to Settings → Connectors → Add custom connector, then paste the URL below and connect.
+			</p>
+			<div class="mcp-example-block">https://mcp.cyphergoat.com/mcp</div>
+
+			<div class="mcp-tabs" style="margin-top:1.75rem;">
+				<span class="mcp-tab-label">Claude Desktop</span>
+			</div>
+			<p style="color:#98a1b1;font-size:0.95rem;line-height:1.7;">
+				Add the following to your config file and restart Claude Desktop.
+			</p>
+			<div class="mcp-example-block">"cyphergoat": { "{" }
+  "type": "url",
+  "url": "https://mcp.cyphergoat.com/mcp"
+{ "}" }</div>
+		</div>
+
+		<div class="mcp-open-source-bar">
+			<div>
+				<strong>No API key. No signup.</strong>
+				<p>The server is live at mcp.cyphergoat.com and free to connect to from any MCP-compatible client.</p>
+			</div>
+			<a href="https://www.youtube.com/watch?v=9sRwtqcKBMc" target="_blank" class="mcp-btn-secondary" style="flex-shrink:0;">
+				<i class="fab fa-youtube"></i> Setup Demo
+			</a>
+		</div>
+	</div>
+	@Footer(){}
+}
