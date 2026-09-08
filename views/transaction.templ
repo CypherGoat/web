@@ -24,7 +24,7 @@ script toggleQRCodeHandler(msg string) {
   toggleQRCode(msg);
 }
 
-templ TransactionPage(transaction api.Transaction, cgPay bool) {
+templ TransactionPage(transaction api.Transaction, cgPay bool, largeTradeInviteCode string) {
 	<!-- TrustBox script -->
 	<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
 	<!-- End TrustBox script -->
@@ -445,13 +445,100 @@ templ TransactionPage(transaction api.Transaction, cgPay bool) {
         background: rgba(0, 136, 204, 0.1);
         border-color: rgba(0, 136, 204, 0.3);
     }
-    
+
     .simplex-link:hover {
         background: rgba(76, 175, 80, 0.1);
         border-color: rgba(76, 175, 80, 0.3);
     }
+
+    .pro-invite-toggle {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .pro-invite-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+    }
+
+    .pro-invite-toggle:checked ~ .pro-invite-overlay {
+        display: none;
+    }
+
+    .pro-invite-modal {
+        position: relative;
+        background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)), #11151c;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1.5rem;
+        max-width: 440px;
+        width: 100%;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        text-align: left;
+    }
+
+    .pro-invite-close {
+        position: absolute;
+        top: 0.6rem;
+        right: 0.9rem;
+        cursor: pointer;
+        color: #a0a0a0;
+        font-size: 1.6rem;
+        line-height: 1;
+    }
+
+    .pro-invite-close:hover {
+        color: #ffffff;
+    }
+
+    .pro-invite-recall {
+        display: inline-block;
+        cursor: pointer;
+        color: #f3eee2;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .pro-invite-recall:hover {
+        text-decoration: underline;
+    }
  </style>
 		<form action="" method="get">
+			if largeTradeInviteCode != "" {
+				<input type="checkbox" id="pro-invite-dismiss" class="pro-invite-toggle"/>
+				<div class="pro-invite-overlay">
+					<div class="pro-invite-modal">
+						<label for="pro-invite-dismiss" class="pro-invite-close" aria-label="Close">×</label>
+						<p style="color: #ffffff; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem;">🔑 You've unlocked a CypherGoat Pro invite</p>
+						<p style="color: #a0a0a0; font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.75rem;">
+							This trade earned an invite to <strong>CypherGoat Pro</strong>, our invite-only trading terminal: numbered accounts with
+							zero personal data, guaranteed no-KYC providers only, and every trade insured up to $10,000.
+						</p>
+						<div class="code-block" style="text-align: center; font-size: 1.1rem; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
+							{ largeTradeInviteCode }
+						</div>
+						<a
+							href={ templ.URL("https://pro.cyphergoat.com/redeem?code=" + largeTradeInviteCode) }
+							target="_blank"
+							rel="noopener"
+							class="refresh-btn"
+							style="text-decoration: none; display: flex; align-items: center; justify-content: center;"
+						>
+							Redeem at pro.cyphergoat.com
+						</a>
+						<p style="color: #a0a0a0; font-size: 0.8rem; margin-top: 0.6rem;">
+							This code is a one-time invite - keep it safe.
+						</p>
+					</div>
+				</div>
+			}
 			<div class="flex items-center justify-center min-h-screen bg-[#121520] pb-4 sm:pb-0">
 				<div class="transaction-card mx-4 my-6">
 					<h2 class="transaction-header">{ transaction.Provider }</h2>
@@ -616,6 +703,10 @@ templ TransactionPage(transaction api.Transaction, cgPay bool) {
 							</div>
 							<p class="text-xl font-bold text-green-400 mb-2">Transaction Complete</p>
 							<p class="text-gray-300">Thank you for using CypherGoat</p>
+							if largeTradeInviteCode != "" {
+								<div class="divider"></div>
+								<label for="pro-invite-dismiss" class="pro-invite-recall">🔑 View your CypherGoat Pro invite</label>
+							}
 							<!-- Unified Review Section -->
 							<div class="review-section">
 								<h3 class="review-section-title">Share your experience</h3>

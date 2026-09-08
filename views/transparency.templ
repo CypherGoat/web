@@ -47,6 +47,13 @@ func bscExplorerURL(addr string) string {
 	return "https://bscscan.com/address/" + addr
 }
 
+func solExplorerURL(addr string) string {
+	return "https://solscan.io/account/" + addr
+}
+
+const proInsuranceFundAddress = "FSbLNTxoPEKssPD6j3GFTsMxrkjj4Zi624SUv5vMxzDD"
+const proInsuranceFundUSD = 50000.0
+
 
 templ Transparency(stats TransparencyStats) {
 	@HeaderCustomTitle("Transparency", "https://cyphergoat.com/transparency", "CypherGoat publishes its KYC incident rate, security deposits held from exchange partners with verifiable on-chain addresses, and every KYC case on record.") {
@@ -374,6 +381,125 @@ templ Transparency(stats TransparencyStats) {
 		.tp-commit-date { display: none; }
 	}
 
+	/* ── Pro insurance fund ───────────────── */
+	.tp-pro-card {
+		position: relative;
+		padding: 2rem 2rem 1.6rem;
+		border-radius: 22px;
+		border: 1px solid rgba(167,139,250,0.28);
+		background: linear-gradient(150deg, rgba(167,139,250,0.1) 0%, rgba(139,92,246,0.03) 45%, transparent 75%), #11151c;
+		box-shadow: 0 28px 70px rgba(124,58,237,0.16), 0 16px 42px rgba(0,0,0,0.28);
+		overflow: hidden;
+	}
+
+	.tp-pro-glow {
+		position: absolute;
+		top: -60%;
+		right: -20%;
+		width: 60%;
+		height: 160%;
+		background: radial-gradient(closest-side, rgba(167,139,250,0.16), transparent 70%);
+		pointer-events: none;
+	}
+
+	.tp-pro-top {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 1.2rem;
+	}
+
+	.tp-pro-icon {
+		width: 44px;
+		height: 44px;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 13px;
+		background: linear-gradient(150deg, rgba(167,139,250,0.22), rgba(139,92,246,0.06));
+		border: 1px solid rgba(167,139,250,0.32);
+		box-shadow: 0 0 24px rgba(167,139,250,0.18);
+	}
+
+	.tp-pro-icon svg {
+		width: 20px;
+		height: 20px;
+		fill: #c4b5fd;
+	}
+
+	.tp-pro-heading {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.tp-pro-name {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		font-size: 1rem;
+		font-weight: 600;
+		color: #ffffff;
+		letter-spacing: -0.02em;
+		margin-bottom: 0.3rem;
+	}
+
+	.tp-pro-badge {
+		padding: 0.2rem 0.55rem;
+		border-radius: 999px;
+		font-size: 0.6rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		color: #ede9fe;
+		background: linear-gradient(120deg, #7c3aed, #a855f7);
+		box-shadow: 0 4px 14px rgba(124,58,237,0.4);
+	}
+
+	.tp-pro-amount {
+		text-align: right;
+		flex-shrink: 0;
+	}
+
+	.tp-pro-amount-value {
+		font-size: 1.6rem;
+		font-weight: 700;
+		color: #ede9fe;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+	}
+
+	.tp-pro-amount-sub {
+		font-size: 0.72rem;
+		font-weight: 500;
+		color: #a78bfa;
+	}
+
+	.tp-pro-addr-row {
+		position: relative;
+		background: rgba(167,139,250,0.045);
+		border-color: rgba(167,139,250,0.14);
+	}
+
+	.tp-pro-footer {
+		position: relative;
+		margin-top: 1rem;
+		font-size: 0.8rem;
+		color: #7c8399;
+	}
+
+	.tp-pro-footer a {
+		color: #c4b5fd;
+		text-decoration: underline;
+	}
+
+	@media (max-width: 600px) {
+		.tp-pro-card { padding: 1.5rem 1.25rem; }
+		.tp-pro-top { flex-wrap: wrap; }
+		.tp-pro-amount { text-align: left; margin-left: 60px; }
+	}
+
 	/* ── Section chrome ───────────────────── */
 	.tp-section {
 		margin-bottom: 2.5rem;
@@ -629,7 +755,7 @@ templ Transparency(stats TransparencyStats) {
 		<!-- Stat strip -->
 		<div class="tp-stat-strip">
 			<div class="tp-strip-item">
-				<div class="tp-strip-label">Partner collateral held</div>
+				<div class="tp-strip-label">Collateral &amp; insurance held</div>
 				<div class="tp-strip-value">{ fmt.Sprintf("$%s", formatUSD(totalDepositsUSD())) }</div>
 				<div class="tp-strip-sub">{ fmt.Sprintf("≈ %.3f BTC · verifiable on-chain", totalDepositsBTC()) }</div>
 			</div>
@@ -639,6 +765,44 @@ templ Transparency(stats TransparencyStats) {
 				<div class="tp-strip-sub">exchanges with active CG Shield deposits</div>
 			</div>
 		</div>
+		<!-- Pro Insurance Fund -->
+		<div class="tp-section">
+			<div class="tp-pro-card">
+				<div class="tp-pro-glow"></div>
+				<div class="tp-pro-top">
+					<div class="tp-pro-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87A1.54 1.54 0 0 0 1.141 2.692C.545 7.169 1.928 10.487 3.437 12.483a11.775 11.775 0 0 0 2.517 2.453 7.159 7.159 0 0 0 1.048.625c.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.51-1.996 2.892-5.314 2.296-9.79A1.54 1.54 0 0 0 13.478 1.43C12.782 1.215 11.663.86 10.553.56 9.468.265 8.315 0 8 0z"/></svg>
+					</div>
+					<div class="tp-pro-heading">
+						<div class="tp-pro-name">CypherGoat Pro <span class="tp-pro-badge">INSURANCE FUND</span></div>
+						<div class="tp-verified">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>
+							Reserve verified on-chain
+						</div>
+					</div>
+					<div class="tp-pro-amount">
+						<div class="tp-pro-amount-value">$50,000</div>
+						<div class="tp-pro-amount-sub">50,000 USDC</div>
+					</div>
+				</div>
+				<div class="tp-addr-row tp-pro-addr-row">
+					<span class="tp-addr-chain">SOL</span>
+					<span class="tp-addr-val">{ proInsuranceFundAddress }</span>
+					<div class="tp-addr-actions">
+						<button class="tp-icon-btn" onclick={ copyAddress(proInsuranceFundAddress) } title="Copy">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>
+						</button>
+						<a class="tp-icon-btn" href={ templ.URL(solExplorerURL(proInsuranceFundAddress)) } target="_blank" rel="noopener noreferrer" title="View on Solscan">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
+						</a>
+					</div>
+				</div>
+				<div class="tp-pro-footer">
+					Backs every trade on <a href="https://pro.cyphergoat.com" target="_blank" rel="noopener noreferrer">CypherGoat Pro</a>
+				</div>
+			</div>
+		</div>
+
 		<!-- Security Deposits -->
 		<div class="tp-section">
 			<div class="tp-section-top">
@@ -762,7 +926,7 @@ templ Transparency(stats TransparencyStats) {
 const btcPriceUSD = 94000.0
 
 func totalDepositsBTC() float64 {
-	var total float64
+	total := proInsuranceFundUSD / btcPriceUSD
 	for _, ex := range ExchangesList {
 		if !ex.CGShield {
 			continue
@@ -777,7 +941,7 @@ func totalDepositsBTC() float64 {
 }
 
 func totalDepositsUSD() float64 {
-	var total float64
+	total := proInsuranceFundUSD
 	for _, ex := range ExchangesList {
 		if !ex.CGShield {
 			continue
