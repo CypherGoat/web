@@ -20,9 +20,9 @@ import "fmt"
 templ WhyCG() {
 	<style>
 	.wc-shell {
-		max-width: 1100px;
+		max-width: var(--cg-shell);
 		margin: 0 auto;
-		padding: 5rem 2rem 3rem;
+		padding: var(--cg-section-gap) var(--cg-gutter) 0;
 	}
 
 	/* ── Header ──────────────────────────── */
@@ -245,7 +245,7 @@ templ WhyCG() {
 	}
 
 	@media (max-width: 600px) {
-		.wc-shell { padding: 3rem 0.85rem 3rem; }
+		.wc-shell { padding: var(--cg-section-gap) var(--cg-gutter) 0; }
 		.wc-stat-strip { grid-template-columns: 1fr 1fr; border-radius: 14px; }
 		.wc-card-grid-4, .wc-card-grid-3, .wc-card-grid-2 { grid-template-columns: 1fr; }
 	}

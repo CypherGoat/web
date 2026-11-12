@@ -26,9 +26,9 @@ templ About(){
     }
 
     .info-shell {
-        max-width: 1180px;
+        max-width: var(--cg-shell);
         margin: 0 auto;
-        padding: 3.5rem 1.5rem 0;
+        padding: var(--cg-page-top) var(--cg-gutter) 0;
     }
 
     .info-hero {
@@ -40,10 +40,10 @@ templ About(){
     .info-title {
         margin: 1.1rem 0 0;
         color: #ffffff;
-        font-size: clamp(3rem, 6vw, 5.25rem);
-        line-height: 0.92;
-        font-weight: 500;
-        letter-spacing: -0.06em;
+        font-size: var(--cg-display-size);
+        line-height: var(--cg-display-leading);
+        font-weight: var(--cg-display-weight);
+        letter-spacing: var(--cg-display-tracking);
     }
 
     .info-lead {
@@ -113,7 +113,7 @@ templ About(){
 
     @media (max-width: 768px) {
         .info-shell {
-            padding: 2.5rem 1rem 0;
+            padding: var(--cg-page-top) var(--cg-gutter) 0;
         }
 
         .feature-grid {
@@ -200,9 +200,9 @@ templ Contact() {
         }
 
         .contact-shell {
-            max-width: 1080px;
+            max-width: var(--cg-shell);
             margin: 0 auto;
-            padding: 3.5rem 1.5rem 0;
+            padding: var(--cg-page-top) var(--cg-gutter) 0;
         }
 
         .contact-hero {
@@ -214,10 +214,10 @@ templ Contact() {
         .contact-title {
             margin: 1rem 0 0;
             color: #ffffff;
-            font-size: clamp(3rem, 5vw, 4.75rem);
-            line-height: 0.94;
-            font-weight: 500;
-            letter-spacing: -0.06em;
+            font-size: var(--cg-display-size);
+            line-height: var(--cg-display-leading);
+            font-weight: var(--cg-display-weight);
+            letter-spacing: var(--cg-display-tracking);
         }
 
         .contact-lead {
@@ -301,7 +301,7 @@ templ Contact() {
             }
 
             .contact-shell {
-                padding: 2.5rem 1rem 0;
+                padding: var(--cg-page-top) var(--cg-gutter) 0;
             }
 
             .contact-panel {

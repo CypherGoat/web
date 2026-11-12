@@ -26,9 +26,9 @@ templ MCP() {
 	}
 
 	.mcp-shell {
-		max-width: 1080px;
+		max-width: var(--cg-shell);
 		margin: 0 auto;
-		padding: 3.5rem 1.5rem 0;
+		padding: var(--cg-page-top) var(--cg-gutter) 0;
 	}
 
 	.mcp-hero {
@@ -62,10 +62,10 @@ templ MCP() {
 	.mcp-title {
 		margin: 0 0 0;
 		color: #ffffff;
-		font-size: clamp(3rem, 6vw, 5rem);
-		line-height: 0.92;
-		font-weight: 500;
-		letter-spacing: -0.06em;
+		font-size: var(--cg-display-size);
+		line-height: var(--cg-display-leading);
+		font-weight: var(--cg-display-weight);
+		letter-spacing: var(--cg-display-tracking);
 	}
 
 	.mcp-lead {
@@ -277,7 +277,7 @@ templ MCP() {
 
 	@media (max-width: 640px) {
 		.mcp-shell {
-			padding: 2.5rem 1rem 0;
+			padding: var(--cg-page-top) var(--cg-gutter) 0;
 		}
 
 		.mcp-feature-grid {

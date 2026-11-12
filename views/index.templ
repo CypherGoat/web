@@ -448,7 +448,7 @@ footer {
 @media (max-width: 768px) {
     .home-shell {
         min-height: auto;
-        padding: 0.75rem 0.875rem 0;
+        padding: 0.75rem var(--cg-gutter) 0;
     }
 
     .hero-stage {
@@ -824,7 +824,7 @@ footer {
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
         z-index: 10000;
-        width: 400px;
+        width: min(400px, calc(100vw - 2rem));
         white-space: normal;
         text-align: center;
         line-height: 1.4;
@@ -834,6 +834,14 @@ footer {
     .tab-button:hover::after {
         opacity: 1;
         visibility: visible;
+    }
+
+    /* Touch screens can't hover; hidden tooltips still widen the page. */
+    @media (hover: none), (max-width: 768px) {
+        .tab-button::before,
+        .tab-button::after {
+            display: none;
+        }
     }
 
     .tab-button::before {
@@ -931,9 +939,10 @@ footer {
     }
 
     .home-shell {
-        max-width: 1360px;
+        width: 100%;
+        max-width: var(--cg-shell);
         margin: 0 auto;
-        padding: 3rem 2rem 0;
+        padding: 2.5rem var(--cg-gutter) 0;
     }
 
     .hero-stage {
@@ -962,7 +971,7 @@ footer {
     }
 
     .hero-title {
-        max-width: 8ch;
+        max-width: 11ch;
         margin: 1.4rem 0 0;
         color: #ffffff;
         font-size: clamp(3.5rem, 5.6vw, 5.25rem);
@@ -1101,7 +1110,7 @@ footer {
     }
 
     .lower-content {
-        padding-top: 3.5rem;
+        padding-top: var(--cg-section-gap);
     }
 
     .section-kicker {
@@ -1262,7 +1271,7 @@ footer {
     }
 
     .partner-section {
-        margin-top: 5rem;
+        margin-top: var(--cg-section-gap);
     }
 
     .partner-overview {
@@ -1277,7 +1286,7 @@ footer {
         line-height: 0.96;
         font-weight: 500;
         letter-spacing: -0.05em;
-        max-width: 10ch;
+        max-width: 18ch;
     }
 
     .partner-copy {
@@ -1328,7 +1337,7 @@ footer {
         }
 
         .hero-title {
-            max-width: 8ch;
+            max-width: 11ch;
         }
 
         .faq-side-panel {
@@ -1352,7 +1361,7 @@ footer {
     @media (max-width: 768px) {
         .home-shell {
             min-height: auto;
-            padding: 0.75rem 0.875rem 0;
+            padding: 0.75rem var(--cg-gutter) 0;
         }
 
         .hero-stage {
@@ -1600,8 +1609,8 @@ footer {
 		</section>
 	</div>
 	@WhyCG()
-	<div id="faq-section" class="py-12 mt-8 lower-content">
-		<div class="container2 mx-auto">
+	<div id="faq-section" class="lower-content">
+		<div class="cg-shell">
 			<div class="faq-layout">
 				<div>
 					<div class="faq-intro">
@@ -1668,7 +1677,7 @@ footer {
 			</div>
 		</div>
 	</div>
-	<div class="partner-section container3 hide-on-swap mb-50">
+	<div class="partner-section cg-shell hide-on-swap">
 		<div class="partner-overview">
 			<div>
 				<div class="section-kicker">Partners</div>
@@ -1814,11 +1823,6 @@ footer {
                 height: 48px;
             }
             
-            #faq-section .container2 {
-                max-width: 100% !important;
-                padding-left: 0.5rem !important;
-                padding-right: 0.5rem !important;
-            }
             #faq-section .px-8 {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
@@ -1827,7 +1831,7 @@ footer {
 
     </style>
 	</div>
-	<div class="container3 hide-on-swap" style="margin-top:5rem;margin-bottom:4rem;">
+	<div class="cg-shell hide-on-swap" style="margin-top:var(--cg-section-gap);margin-bottom:var(--cg-section-gap);">
 		<style>
 			.bottom-cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 			.bottom-cta-card { display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; padding: 2rem 2rem; border-radius: 1.1rem; border: 1px solid rgba(255,255,255,0.07); background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.008)), #11151c; }

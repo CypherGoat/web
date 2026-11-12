@@ -1,5 +1,75 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   CypherGoat design tokens
+   Shared by every page. Page-level <style> blocks should reference
+   these instead of hard-coding widths, gutters, colors or title sizes.
+   ───────────────────────────────────────────────────────────── */
+:root {
+    /* Layout */
+    --cg-shell: 1240px;            /* header, footer and every page container */
+    --cg-gutter: clamp(1rem, 4vw, 2rem);
+    --cg-page-top: clamp(2.5rem, 5vw, 3.5rem);
+    --cg-section-gap: clamp(3.5rem, 7vw, 5.5rem);
+
+    /* Surfaces */
+    --cg-bg: #0b0d14;
+    --cg-surface: #11151c;
+    --cg-border: rgba(255, 255, 255, 0.07);
+    --cg-border-strong: rgba(255, 255, 255, 0.12);
+
+    /* Text */
+    --cg-text: #f3f5f7;
+    --cg-text-muted: #98a1b1;
+    --cg-text-faint: #64748b;
+    --cg-accent: #a5b4fc;
+
+    /* Primary button (cream) */
+    --cg-cta: #f3eee2;
+    --cg-cta-hover: #faf7ef;
+    --cg-cta-text: #0b0d14;
+
+    /* Radii */
+    --cg-radius-sm: 8px;
+    --cg-radius: 12px;
+    --cg-radius-lg: 18px;
+    --cg-radius-xl: 24px;
+    --cg-radius-pill: 999px;
+
+    /* Type scale for page titles */
+    --cg-display-size: clamp(2.6rem, 5.4vw, 4.75rem);
+    --cg-display-leading: 0.94;
+    --cg-display-tracking: -0.06em;
+    --cg-display-weight: 500;
+    --cg-h2-size: clamp(2rem, 3.6vw, 3.25rem);
+    --cg-h2-tracking: -0.05em;
+}
+
+/* Shared page container: matches header and footer edges. */
+.cg-shell {
+    width: 100%;
+    max-width: var(--cg-shell);
+    margin-inline: auto;
+    padding-inline: var(--cg-gutter);
+}
+
+/* Shared page title. */
+.cg-display {
+    margin: 0 0 1rem;
+    color: #ffffff;
+    font-size: var(--cg-display-size);
+    line-height: var(--cg-display-leading);
+    font-weight: var(--cg-display-weight);
+    letter-spacing: var(--cg-display-tracking);
+}
+
+.cg-lede {
+    margin: 0;
+    color: var(--cg-text-muted);
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
 /* Prevent FontAwesome from interfering with non-FA SVGs */
 svg:not([class*="fa-"]) {
     display: inline-block;

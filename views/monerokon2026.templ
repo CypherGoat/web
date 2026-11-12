@@ -130,9 +130,9 @@ templ Monerokon2026(status map[string]PrizeStatus, huntClosed bool) {
 	}
 
 	.mk-shell {
-		max-width: 1080px;
+		max-width: var(--cg-shell);
 		margin: 0 auto;
-		padding: 3.5rem 1.5rem 4rem;
+		padding: var(--cg-page-top) var(--cg-gutter) 4rem;
 	}
 
 	.mk-hero {
@@ -167,10 +167,10 @@ templ Monerokon2026(status map[string]PrizeStatus, huntClosed bool) {
 	.mk-title {
 		margin: 0;
 		color: #ffffff;
-		font-size: clamp(3rem, 6vw, 5rem);
-		line-height: 0.92;
-		font-weight: 500;
-		letter-spacing: -0.06em;
+		font-size: var(--cg-display-size);
+		line-height: var(--cg-display-leading);
+		font-weight: var(--cg-display-weight);
+		letter-spacing: var(--cg-display-tracking);
 	}
 
 	.mk-title-accent { color: #ff8400; }
@@ -807,7 +807,7 @@ templ Monerokon2026(status map[string]PrizeStatus, huntClosed bool) {
 	}
 
 	@media (max-width: 640px) {
-		.mk-shell { padding: 2.5rem 1rem 3rem; }
+		.mk-shell { padding: var(--cg-page-top) var(--cg-gutter) 3rem; }
 		.mk-deck-row--top { grid-template-columns: 1fr; }
 		.mk-deck-row--bottom { grid-template-columns: 1fr; }
 		.mk-panel { padding: 1.4rem; border-radius: 18px; }

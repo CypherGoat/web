@@ -25,9 +25,9 @@ templ AMLPolicy() {
     }
 
     .legal-shell {
-        max-width: 1100px;
+        max-width: var(--cg-shell);
         margin: 0 auto;
-        padding: 3.25rem 1.5rem 0;
+        padding: var(--cg-page-top) var(--cg-gutter) 0;
     }
 
     .legal-hero {
@@ -80,7 +80,7 @@ templ AMLPolicy() {
 
     @media (max-width: 768px) {
         .legal-shell {
-            padding: 2.5rem 1rem 0;
+            padding: var(--cg-page-top) var(--cg-gutter) 0;
         }
 
         .legal-card {
@@ -91,7 +91,7 @@ templ AMLPolicy() {
     </style>
 	<div class="legal-shell text-gray-100 font-sans">
 		<header class="legal-hero">
-			<h1 class="text-4xl font-bold text-white mb-4">Compliance and AML Policy</h1>
+			<h1 class="cg-display">Compliance and AML Policy</h1>
 			<p class="text-lg text-gray-400">How CypherGoat assesses and monitors the third-party providers it lists, applies sanctions controls, and cooperates with competent authorities.</p>
 			<p class="text-sm text-gray-500 mt-4">Last updated: September 8, 2026</p>
 		</header>

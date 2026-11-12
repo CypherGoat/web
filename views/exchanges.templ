@@ -97,9 +97,9 @@ templ Exchanges(){
         }
 
         .container {
-            max-width: 1400px;
+            max-width: var(--cg-shell);
             margin: 0 auto;
-            padding: 0 1.5rem;
+            padding: 0 var(--cg-gutter);
         }
 
         .page-header {
@@ -109,12 +109,12 @@ templ Exchanges(){
         }
 
         .page-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 500;
+            font-size: var(--cg-display-size);
+            font-weight: var(--cg-display-weight);
             color: #ffffff;
             margin-bottom: 1rem;
-            line-height: 0.96;
-            letter-spacing: -0.06em;
+            line-height: var(--cg-display-leading);
+            letter-spacing: var(--cg-display-tracking);
         }
 
         .page-description {
@@ -145,8 +145,10 @@ templ Exchanges(){
 
         .filter-group {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             gap: 0.5rem;
+            min-width: 0;
         }
 
         .filter-label {
@@ -268,7 +270,7 @@ templ Exchanges(){
 
         .exchanges-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3rem;
         }
@@ -570,7 +572,7 @@ templ Exchanges(){
 
         @media (max-width: 768px) {
             .container {
-                padding: 0 1rem;
+                padding: 0 var(--cg-gutter);
             }
             
             .exchanges-grid {
@@ -633,7 +635,7 @@ templ Exchanges(){
 
         @media (max-width: 768px) {
             .container {
-                padding: 0 1rem;
+                padding: 0 var(--cg-gutter);
             }
             
             .hero-section {
@@ -981,9 +983,9 @@ templ ExchangeDetail(exchange Exchange) {
         }
 
         .container {
-            max-width: 1200px;
+            max-width: var(--cg-shell);
             margin: 0 auto;
-            padding: 0 1.5rem;
+            padding: 0 var(--cg-gutter);
         }
 
         .breadcrumb {
@@ -1359,7 +1361,7 @@ templ ExchangeDetail(exchange Exchange) {
 
         @media (max-width: 768px) {
             .container {
-                padding: 0 1rem;
+                padding: 0 var(--cg-gutter);
             }
             
             .hero-section {

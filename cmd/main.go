@@ -168,7 +168,8 @@ func main() {
 	e.File("/favicon.ico", "static/icons/favicon/dark/favicon.ico")
 
 	e.GET("/", handlers.IndexHandler)
-	e.GET("/estimate", handlers.EstimateHandler, BotBlockerMiddleware, newRateLimiter(1, 30))
+	// Form only submits on click, so real users stay well under this.
+	e.GET("/estimate", handlers.EstimateHandler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/3), 10))
 	e.GET("/step2", handlers.Step2Handler)
 	e.GET("/step3", handlers.Step3Handler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/10), 5))
 	e.GET("/split/step2", handlers.SplitStep2Handler)
