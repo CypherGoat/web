@@ -53,8 +53,8 @@ Not exactly. Trading is order-book based inside an exchange account. Swapping is
 ### Can I get exactly the quoted amount?
 Not always. Final amount depends on execution conditions and protections.
 
-### Is no-KYC always guaranteed?
-No platform should promise this universally across all counterparties and scenarios. Always check partner policy and risk profile.
+### Can a platform guarantee no identity verification?
+No. Verification requirements are set by the provider that executes your trade, and any provider may request verification where its policy or the law requires. Always check the partner policy before you commit.
 
 ## Start points
 

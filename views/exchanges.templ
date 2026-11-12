@@ -80,7 +80,7 @@ func shuffleExchanges(exchanges []Exchange) []Exchange {
 }
 
 templ Exchanges(){
-    @HeaderCustomTitle("Exchange Partners", "https://cyphergoat.com/exchanges", "Compare all crypto exchange partners on CypherGoat. View KYC requirements, ratings, and reviews for 20+ non-custodial exchanges."){}
+    @HeaderCustomTitle("Exchange Partners", "https://cyphergoat.com/exchanges", "Compare all exchange partners on CypherGoat. View stated verification requirements, ratings, and reviews for 20+ providers."){}
     
     <style>
         body {
@@ -700,7 +700,7 @@ templ Exchanges(){
                     </div>
                     
                     <div class="filter-group">
-                        <label class="filter-label">KYC Level:</label>
+                        <label class="filter-label">Verification level:</label>
                         <div class="filter-options">
                             <div class="filter-option">
                                 <input type="checkbox" id="filter-kyc-0" class="filter-checkbox" onchange="filterExchanges()">
@@ -727,7 +727,7 @@ templ Exchanges(){
                         <label class="filter-label">Sort:</label>
                         <div class="filter-options">
                             <select id="sort-select" class="sort-select" onchange="sortExchanges()">
-                                <option value="default">KYC Level</option>
+                                <option value="default">Verification level</option>
                                 <option value="rating-high">Rating ↓</option>
                                 <option value="rating-low">Rating ↑</option>
                                 <option value="reviews-high">Reviews ↓</option>
@@ -779,7 +779,7 @@ templ Exchanges(){
                                     <svg class="badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                                         <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                                     </svg>
-                                    KYC Risk Level 0
+                                    Verification level 0
                                 </span>
                             } else if exchange.KYCScore == 1 {
                                 <span class="badge badge-info">
@@ -787,7 +787,7 @@ templ Exchanges(){
                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                         <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                                     </svg>
-                                    KYC Risk Level 1
+                                    Verification level 1
                                 </span>
                             } else {
                                 <span class="badge badge-info">
@@ -795,7 +795,7 @@ templ Exchanges(){
                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                         <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                                     </svg>
-                                    KYC Risk Level { strconv.Itoa(exchange.KYCScore) }
+                                    Verification level { strconv.Itoa(exchange.KYCScore) }
                             </span>
                             }                            if exchange.CGShield {
                                 <span class="badge badge-premium">
@@ -1508,13 +1508,13 @@ templ ExchangeDetail(exchange Exchange) {
                         </div>
                         <div class="card-content">
                             if exchange.ShortCode == "xmr2cex" {
-                                <p><strong>Excellent privacy protection:</strong> this exchange never requires KYC.</p>
+                                <p><strong>Privacy-focused provider:</strong> this exchange states that it does not routinely require identity verification.</p>
                                 <ul class="feature-list">
                                     <li>
                                         <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                                             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                                         </svg>
-                                        No KYC risk, no hidden fees, and all output coins are clean with a low AML risk score.
+                                        No hidden fees, with transparent quoting before you commit.
                                     </li>
                                     <li>
                                         <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">

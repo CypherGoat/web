@@ -46,7 +46,7 @@ Some great and easy to use non custodial wallets include:
 3. [Phantom](https://phantom.com/) (closed source)
 
 ## How CypherGoat helps against the risks of cex's
-CypherGoat is a crypto exchange aggregator. We find the best rates for your crypto swaps, with no sign up or KYC. All transactions occur on chain, meaning that an exchange never has access to your funds for longer than it takes for the swap to complete! This greatly minimizes the risks associated with using centralized exchanges. 
+CypherGoat is a crypto rate comparison and routing interface. We find the best rates for your crypto swaps, with no sign up on our side. All transactions occur on chain, meaning that an exchange never has access to your funds for longer than it takes for the swap to complete! This greatly minimizes the risks associated with using centralized exchanges. 
 
 See the magic for yourself at [cyphergoat.com](https://cyphergoat.com)
 

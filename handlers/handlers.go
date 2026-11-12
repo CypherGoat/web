@@ -235,12 +235,20 @@ func AboutHandler(c echo.Context) error {
 	return views.About().Render(c.Request().Context(), c.Response())
 }
 
-func SafeRouteHandler(c echo.Context) error {
-	return views.SafeRoute().Render(c.Request().Context(), c.Response())
+func CareersHandler(c echo.Context) error {
+	return views.Careers().Render(c.Request().Context(), c.Response())
 }
 
-func BinanceEUHandler(c echo.Context) error {
-	return views.BinanceEU().Render(c.Request().Context(), c.Response())
+func CareerDistributionHandler(c echo.Context) error {
+	return views.CareerDistribution().Render(c.Request().Context(), c.Response())
+}
+
+func CareerInstitutionalHandler(c echo.Context) error {
+	return views.CareerInstitutional().Render(c.Request().Context(), c.Response())
+}
+
+func SafeRouteHandler(c echo.Context) error {
+	return views.SafeRoute().Render(c.Request().Context(), c.Response())
 }
 
 func SimplexBotHandler(c echo.Context) error {
@@ -300,7 +308,6 @@ func Monerokon2026ClaimHandler(c echo.Context) error {
 func TransparencyHandler(c echo.Context) error {
 	gh := fetchGitHubStats()
 	stats := views.TransparencyStats{
-		KYCRate:       "0.041%",
 		LastUpdated:   "2026-04-28",
 		GitHubCommits: gh.commits,
 		GitHubIssues:  gh.openIssues,
@@ -319,11 +326,26 @@ func PrivacyPolicyHandler(c echo.Context) error {
 
 }
 
+func AMLPolicyHandler(c echo.Context) error {
+	return views.AMLPolicy().Render(c.Request().Context(), c.Response())
+}
+
 func AffiliateHandler(c echo.Context) error {
 	return views.Affiliate().Render(c.Request().Context(), c.Response())
 }
 
 func NotFoundHandler(c echo.Context) error {
+	return renderStatus(c, http.StatusNotFound)
+}
+
+// GoneHandler serves the not-found page with a 410 so search engines drop
+// permanently withdrawn URLs rather than treating them as a soft 404.
+func GoneHandler(c echo.Context) error {
+	return renderStatus(c, http.StatusGone)
+}
+
+func renderStatus(c echo.Context, code int) error {
+	c.Response().Status = code
 	return views.NotFoundPage().Render(c.Request().Context(), c.Response())
 }
 
@@ -1159,15 +1181,18 @@ func SitemapHandler(c echo.Context) error {
 	}{
 		{"/", "daily", "1.0"},
 		{"/about", "monthly", "0.8"},
+		{"/careers", "monthly", "0.6"},
+		{"/careers/distribution", "monthly", "0.5"},
+		{"/careers/institutional", "monthly", "0.5"},
 		{"/exchanges", "weekly", "0.9"},
 		{"/guides", "weekly", "0.8"},
 		{"/terms", "monthly", "0.7"},
 		{"/privacy", "monthly", "0.7"},
+		{"/aml-policy", "monthly", "0.7"},
 		{"/contact", "monthly", "0.8"},
 		{"/affiliate", "weekly", "0.9"},
 		{"/affiliate/terms", "monthly", "0.7"},
 		{"/cyphergoat-shield", "monthly", "0.6"},
-		{"/binance-eu", "weekly", "0.9"},
 		{"/transparency", "monthly", "0.7"},
 		{"/blog", "daily", "0.9"},
 		{"/this-week-in-monero", "weekly", "0.9"},
@@ -1351,6 +1376,10 @@ func TWIMPostHandler(c echo.Context) error {
 func BlogPostHandler(c echo.Context) error {
 	slug := c.Param("slug")
 
+	if retiredPosts[slug] {
+		return GoneHandler(c)
+	}
+
 	// Redirect TWIM posts to new location
 	if strings.HasPrefix(slug, "twim-") {
 		return c.Redirect(http.StatusMovedPermanently, "/this-week-in-monero/"+slug)
@@ -1363,8 +1392,19 @@ func BlogPostHandler(c echo.Context) error {
 	return render(c, views.BlogPost(post))
 }
 
+// retiredPosts are blog posts that have been permanently withdrawn. They return
+// 410 Gone rather than 404 so search engines deindex them promptly.
+var retiredPosts = map[string]bool{
+	"no-kyc-is-the-only-way": true,
+	"coinbase-hack":          true,
+}
+
 func TWIMRedirectHandler(c echo.Context) error {
 	slug := c.Param("slug")
+
+	if retiredPosts[slug] {
+		return GoneHandler(c)
+	}
 
 	if strings.HasPrefix(slug, "twim-") {
 		issueSlug := strings.Replace(slug, "twim-", "issue-", 1)

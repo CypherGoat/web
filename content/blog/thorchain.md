@@ -34,7 +34,7 @@ Instead:
 3. Liquidity pools are used to convert assets  
 4. Funds are released to the destination address  
 
-There is **no custody account**, **no order book**, and **no KYC** — but there *is* on-chain observability and protocol-level logic deciding execution.
+There is **no custody account** and **no order book**, but there *is* on-chain observability and protocol-level logic deciding execution.
 
 This is fundamentally different from how most CypherGoat routes work today.
 

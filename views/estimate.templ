@@ -639,7 +639,7 @@ templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSugges
         <div class="estimate-toolbar-estimates">
             <div class="sort-options-estimates">
                 <button id="sort-rate-estimates" class="sort-btn-estimates active" type="button">Best Rate</button>
-                <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Lowest KYC</button>
+                <button id="sort-kyc-estimates" class="sort-btn-estimates" type="button">Verification level</button>
             </div>
         </div>
 
@@ -675,7 +675,7 @@ templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSugges
                                     }
                                     { offer.ExchangeName }
                                     <span class={ fmt.Sprintf("kyc-badge-estimates kyc-%d-estimates", offer.KYCScore) } 
-                                          data-tooltip={ fmt.Sprintf("KYC Level %d: %s", offer.KYCScore, LogText(offer.Log)) }>
+                                          data-tooltip={ fmt.Sprintf("Verification level %d: %s", offer.KYCScore, LogText(offer.Log)) }>
                                         { fmt.Sprintf("%d", offer.KYCScore) }
                                     </span>
                                 </div>
@@ -736,16 +736,16 @@ templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSugges
                             
                             <div class="exchange-features-estimates">
                                 if offer.KYCScore == 0 {
-                                    <div class="feature-tag-estimates kyc" data-tooltip={ fmt.Sprintf("Exchange never asks for KYC. %s", LogText(offer.Log) ) }>
-                                        <span>KYC Level 0</span>
+                                    <div class="feature-tag-estimates kyc" data-tooltip={ fmt.Sprintf("This provider states it uses its own liquidity and does not routinely request identity verification. It may still do so where its policy or the law requires. %s", LogText(offer.Log) ) }>
+                                        <span>Verification level 0</span>
                                     </div>
                                 } else if offer.KYCScore == 1 {
-                                    <div class="feature-tag-estimates kyc" data-tooltip={ fmt.Sprintf("Exchange may ask for KYC very rarely or never. %s", LogText(offer.Log)) }>
-                                        <span>KYC Level 1</span>
+                                    <div class="feature-tag-estimates kyc" data-tooltip={ fmt.Sprintf("This provider states it requests identity verification infrequently. It may do so in any transaction where its policy or the law requires. %s", LogText(offer.Log)) }>
+                                        <span>Verification level 1</span>
                                     </div>
                                 } else {
-                                    <div class="feature-tag-estimates" data-tooltip={ fmt.Sprintf("Exchange may rarely ask for KYC. %s", LogText(offer.Log)) }>
-                                        <span>KYC Level { offer.KYCScore }</span>
+                                    <div class="feature-tag-estimates" data-tooltip={ fmt.Sprintf("This provider may request identity verification. %s", LogText(offer.Log)) }>
+                                        <span>Verification level { offer.KYCScore }</span>
                                     </div>
                                 }
                                 
@@ -801,6 +801,7 @@ templ EstimateCard(offers api.Estimates, mode string, rateSplit *api.SplitSugges
             });
         }
         
+
         document.querySelectorAll('.sort-btn-estimates').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

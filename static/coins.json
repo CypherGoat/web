@@ -100,7 +100,8 @@
         "min": 0.005711,
         "coingecko_id": "binancecoin",
         "cg-pay": true,
-        "quickex": "bnbbep20"
+        "quickex": "bnbbep20",
+        "xmr2cex": "bnb"
     },
     {
         "ticker": "sol",
@@ -177,7 +178,8 @@
         "isStable": true,
         "icon": "icons/usdc.png",
         "cg-pay": true,
-        "quickex": "usdcerc20"
+        "quickex": "usdcerc20",
+        "xmr2cex": "usdc-erc20"
     },
     {
         "ticker": "xno",
@@ -275,7 +277,8 @@
         "wizardswap": "",
         "bitcoinvn": "usdcbep20",
         "quickex": "",
-        "cg-pay": true
+        "cg-pay": true,
+        "xmr2cex": "usdc-bep20"
     },
     {
         "ticker": "usdc",
@@ -341,6 +344,28 @@
         "wizardswap": "",
         "bitcoinvn": "usdctrc20",
         "quickex": "usdctrc20",
+        "cg-pay": true
+    },
+    {
+        "ticker": "usdc",
+        "name": "USDC Coin",
+        "network": "arb",
+        "isStable": true,
+        "icon": "icons/usdc.png",
+        "alfacash": "",
+        "changee": "usdcarbitrum",
+        "changehero": "usdcarb",
+        "changelly": "",
+        "changenow": "usdcarb",
+        "coincraddle": "usdcarbitrum",
+        "fixedfloat": "usdcarbitrum",
+        "majesticbank": "",
+        "nanswap": "usdc-arbitrum",
+        "simpleswap": "usdcarb",
+        "stealthex": "",
+        "wizardswap": "",
+        "bitcoinvn": "usdcarbitrum2",
+        "quickex": "usdcarbtm",
         "cg-pay": true
     },
     {
@@ -427,7 +452,8 @@
         "wizardswap": "",
         "bitcoinvn": "usdtbep20",
         "quickex": "usdtbep20",
-        "cg-pay": true
+        "cg-pay": true,
+        "xmr2cex": "usdt-bep20"
     },
     {
         "ticker": "usdt",
@@ -469,6 +495,29 @@
         "wizardswap": "",
         "bitcoinvn": "usdtalgo",
         "quickex": "",
+        "cg-pay": true
+    },
+    {
+        "ticker": "usdt",
+        "name": "Tether USD",
+        "network": "arb",
+        "isStable": true,
+        "icon": "icons/usdt.png",
+        "alfacash": "",
+        "changee": "",
+        "changehero": "",
+        "changelly": "",
+        "changenow": "usdtarb",
+        "coincraddle": "usdtarbitrum",
+        "fixedfloat": "usdtarbitrum",
+        "majesticbank": "",
+        "nanswap": "usdt-arbitrum",
+        "simpleswap": "usdtarb",
+        "stealthex": "",
+        "wizardswap": "",
+        "bitcoinvn": "usdtarbitrum",
+        "quickex": "usdtarbtm",
+        "xmr2cex": "usdt-arb",
         "cg-pay": true
     },
     {
@@ -1057,6 +1106,7 @@
         "isStable": false,
         "icon": "icons/hype.png",
         "coingecko_id": "hyperliquid",
-                "exolix": "hype"
+        "exolix": "hype",
+        "xmr2cex": "hype"
     }
 ]

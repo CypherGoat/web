@@ -18,7 +18,6 @@ package views
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 )
 
 templ SharedNavbarHead() {
@@ -378,10 +377,10 @@ templ Header() {
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
-			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2026111101" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
-			<meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta property="og:description" content="Compare live rates from 20+ exchange providers and swap crypto in minutes. Non-custodial, no account needed, fully open source."/>
 			<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
 			<meta property="og:image:type" content="image/png"/>
 			<meta property="og:image:width" content="1200"/>
@@ -391,13 +390,12 @@ templ Header() {
 			<meta property="og:type" content="website"/>
 			<meta name="twitter:card" content="summary_large_image"/>
 			<meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
-			<meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta name="twitter:description" content="Compare live rates from 20+ exchange providers and swap crypto in minutes. Non-custodial, no account needed, fully open source."/>
 			<meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
 			<meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-			<meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap"/>
 			<meta name="author" content="CypherGoat"/>
-			<meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported."/>
+			<meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchange providers in real time. Non-custodial, no account needed, open source. 60+ coins supported."/>
 			<title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
 			<script type="application/ld+json">
         {
@@ -405,7 +403,7 @@ templ Header() {
             "@type": "FinancialService",
             "name": "CypherGoat",
             "url": "https://cyphergoat.com",
-            "description": "Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source.",
+            "description": "Swap crypto at the best rate on the market. Compare 20+ exchange providers in real time. Non-custodial, no account needed, open source.",
             "sameAs": [
                 "https://x.com/cyphergoatcom",
                 "https://github.com/cyphergoat",
@@ -439,7 +437,7 @@ templ HeaderCustomTitle(title, canonical, description string) {
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
-			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2026111101" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			if canonical != "" {
 				<link rel="canonical" href={ canonical }/>
@@ -463,7 +461,6 @@ templ HeaderCustomTitle(title, canonical, description string) {
 			<meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
 			<meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-			<meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap"/>
 			<meta name="author" content="CypherGoat"/>
 			<meta name="description" content={ description }/>
 			<title>CypherGoat - { title }</title>
@@ -473,7 +470,7 @@ templ HeaderCustomTitle(title, canonical, description string) {
             "@type": "FinancialService",
             "name": "CypherGoat",
             "url": "https://cyphergoat.com",
-            "description": "Swap your crypto at the best rate on the market. No account, no KYC, free and open source. 100+ coins supported.",
+            "description": "Swap your crypto at the best rate on the market. Non-custodial, no account needed, free and open source. 100+ coins supported.",
             "sameAs": [
                 "https://x.com/cyphergoatcom",
                 "https://github.com/cyphergoat",
@@ -507,11 +504,11 @@ templ IndexHeader() {
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
-			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2026111101" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<link rel="canonical" href="https://cyphergoat.com"/>
 			<meta property="og:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
-			<meta property="og:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta property="og:description" content="Compare live rates from 20+ exchange providers and swap crypto in minutes. Non-custodial, no account needed, fully open source."/>
 			<meta property="og:image" content="https://cyphergoat.com/static/icons/cg-notext-light.png"/>
 			<meta property="og:image:type" content="image/png"/>
 			<meta property="og:image:width" content="1200"/>
@@ -521,13 +518,12 @@ templ IndexHeader() {
 			<meta property="og:type" content="website"/>
 			<meta name="twitter:card" content="summary_large_image"/>
 			<meta name="twitter:title" content="CypherGoat - Swap Crypto at the Best Rate on the Market"/>
-			<meta name="twitter:description" content="Compare rates from 20+ exchanges and swap crypto instantly. No account, no KYC, non-custodial and open source."/>
+			<meta name="twitter:description" content="Compare live rates from 20+ exchange providers and swap crypto in minutes. Non-custodial, no account needed, fully open source."/>
 			<meta name="twitter:image" content="https://cyphergoat.com/static/icons/cg-notext-dark.png"/>
 			<meta name="twitter:image:alt" content="CypherGoat - Crypto Exchange Aggregator"/>
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-			<meta name="keywords" content="swap crypto, no kyc crypto exchange, best crypto rates, cryptocurrency swap, crypto aggregator, privacy crypto, monero exchange, non-custodial swap"/>
 			<meta name="author" content="CypherGoat"/>
-			<meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source. 60+ coins supported."/>
+			<meta name="description" content="Swap crypto at the best rate on the market. Compare 20+ exchange providers in real time. Non-custodial, no account needed, open source. 60+ coins supported."/>
 			<title>CypherGoat - Swap Crypto at the Best Rate on the Market</title>
 			<script type="application/ld+json">
         {
@@ -535,7 +531,7 @@ templ IndexHeader() {
             "@type": "FinancialService",
             "name": "CypherGoat",
             "url": "https://cyphergoat.com",
-            "description": "Swap crypto at the best rate on the market. Compare 20+ exchanges in real time — no account, no KYC, non-custodial and open source.",
+            "description": "Swap crypto at the best rate on the market. Compare 20+ exchange providers in real time. Non-custodial, no account needed, open source.",
             "sameAs": [
                 "https://x.com/cyphergoatcom",
                 "https://github.com/cyphergoat",
@@ -594,14 +590,6 @@ templ IndexHeader() {
         "@type": "Answer",
         "text": "Yes. CypherGoat does not get access to your funds at any stage of the swap. We are simply an aggregator interface. We are also the only exchange aggregator that is fully open source, which means that anyone can audit our code at any time."
       }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the CypherGoat Shield program?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The CypherGoat Shield is our user protection program that guarantees you'll receive your funds or get reimbursed if an exchange fails to complete your transaction or holds your funds due to KYC issues. Look for the Shield icon next to exchange names to see the coverage amount."
-      }
     }
   ]
 }
@@ -659,13 +647,12 @@ templ BlogHeader(post *BlogPostData) {
 			<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/favicon/light/apple-touch-icon.png"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
-			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2026111101" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 			<title>{ post.Title } | CypherGoat</title>
 			<meta name="title" content={ post.Title + " | CypherGoat" }/>
 			<meta name="description" content={ post.Description }/>
-			<meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto, exchange, cryptocurrency" }/>
 			<meta name="author" content={ post.Author }/>
 			if post.IssueSlug != "" {
 				<link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/this-week-in-monero/%s", post.IssueSlug) }/>
@@ -729,12 +716,11 @@ templ GuidesIndexHeader() {
 			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
-			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2026111101" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<title>CypherGoat Guides - Privacy, Monero &amp; Crypto Security</title>
 			<meta name="title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security"/>
 			<meta name="description" content="In-depth guides on crypto privacy, Monero, and security. Learn how to swap privately, use Monero effectively, and protect your financial sovereignty."/>
-			<meta name="keywords" content="monero guides, crypto privacy guides, cryptocurrency security, monero tutorials, xmr swap guide, no kyc crypto, privacy coins"/>
 			<meta name="author" content="CypherGoat"/>
 			<link rel="canonical" href="https://cyphergoat.com/guides"/>
 			<meta property="og:title" content="CypherGoat Guides - Privacy, Monero &amp; Crypto Security"/>
@@ -770,12 +756,11 @@ templ GuidesPostHeader(post *BlogPostData) {
 			<link rel="icon" type="image/x-icon" href="/static/icons/favicon/dark/favicon.ico" media="(prefers-color-scheme: dark)"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<link href="/static/tailwind.css?v=2025081451" rel="stylesheet"/>
-			<link href="/static/styles.css?v=2025081451" rel="stylesheet"/>
+			<link href="/static/styles.css?v=2026111101" rel="stylesheet"/>
 			<script src="/static/htmx.min.js"></script>
 			<title>{ post.Title } | CypherGoat Guides</title>
 			<meta name="title" content={ post.Title + " | CypherGoat Guides" }/>
 			<meta name="description" content={ post.Description }/>
-			<meta name="keywords" content={ strings.Join(post.Tags, ", ") + ", crypto guides, monero, privacy" }/>
 			<meta name="author" content={ post.Author }/>
 			<link rel="canonical" href={ fmt.Sprintf("https://cyphergoat.com/guides/%s", post.IssueSlug) }/>
 			<meta property="og:type" content="article"/>

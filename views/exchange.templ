@@ -21,7 +21,7 @@ import (
 )
 
 templ CoinExchangeScreen(coin string, coinName string) {
-	@HeaderCustomTitle(fmt.Sprintf("Exchange %v (%v) at the best rate on the market", coinName, strings.ToUpper(coin)), fmt.Sprintf("https://cyphergoat.com/swap/%v", strings.ToLower(coin)), fmt.Sprintf("Swap %v (%v) at the best rate. No account or KYC required. Compare rates across 20+ exchanges instantly on CypherGoat.", coinName, strings.ToUpper(coin)))
+	@HeaderCustomTitle(fmt.Sprintf("Exchange %v (%v) at the best rate on the market", coinName, strings.ToUpper(coin)), fmt.Sprintf("https://cyphergoat.com/swap/%v", strings.ToLower(coin)), fmt.Sprintf("Swap %v (%v) at the best rate. Non-custodial and no account needed. Compare rates across 20+ exchange providers instantly on CypherGoat.", coinName, strings.ToUpper(coin)))
 	<style>
 .rgb-effect {
     color: #e7eaef;
@@ -578,7 +578,7 @@ footer {
 	<div class="container2 mx-auto px-4 py-8">
 		<div class="coin-header">
 			<h1>Exchange { strings.ToUpper(coin) } at the Best Rate on the Market</h1>
-			<p class="text-xl text-gray-300">Get the best { coinName } exchange rates with no KYC and lowest fees</p>
+			<p class="text-xl text-gray-300">Get the best { coinName } exchange rates with low fees and no custody risk</p>
 		</div>
 		<div class="swap-form-section mt-4">
 			<div class="container">
@@ -670,7 +670,7 @@ footer {
 							<path d="M9 12l2 2 4-4"></path>
 						</svg>
 					</div>
-					<h3 class="text-xl font-bold mb-3">No KYC Required</h3>
+					<h3 class="text-xl font-bold mb-3">No Account Required</h3>
 					<p class="text-gray-300">Exchange { coinName } ({ strings.ToUpper(coin) }) privately without identity verification. Your financial privacy matters to us.</p>
 				</div>
 			</div>
@@ -692,7 +692,7 @@ footer {
 				</div>
 				<div class="faq-card">
 					<h3 class="text-lg font-semibold mb-2">Is KYC required for { strings.ToUpper(coin) } swaps?</h3>
-					<p class="text-gray-300">CypherGoat prioritizes no-KYC exchanges, displaying KYC score for each option so you can choose exchanges that respect your privacy.</p>
+					<p class="text-gray-300">Verification requirements are set by each provider, not by CypherGoat. We display each provider's stated verification level so you know who you are transacting with before you commit.</p>
 				</div>
 			</div>
 		</div>

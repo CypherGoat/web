@@ -179,6 +179,9 @@ func main() {
 	e.GET("/transaction/:id", handlers.GetTransactionHandler)
 	e.GET("/download/:id", handlers.DownloadReceiptHandler)
 	e.GET("/about", handlers.AboutHandler)
+	e.GET("/careers", handlers.CareersHandler)
+	e.GET("/careers/distribution", handlers.CareerDistributionHandler)
+	e.GET("/careers/institutional", handlers.CareerInstitutionalHandler)
 	e.GET("/simplex-bot", handlers.SimplexBotHandler)
 	e.GET("/mcp", handlers.MCPHandler)
 	e.GET("/monerokon2026", handlers.Monerokon2026Handler)
@@ -189,6 +192,7 @@ func main() {
 	e.GET("/contact", handlers.ContactHandler)
 
 	e.GET("/privacy", handlers.PrivacyPolicyHandler)
+	e.GET("/aml-policy", handlers.AMLPolicyHandler)
 
 	e.GET("/health", handlers.HealthHandler)
 	e.GET("/affiliate/terms", handlers.AffiliateTerms)
@@ -238,16 +242,21 @@ func main() {
 	e.GET("/guides/:slug", handlers.GuidesPostHandler)
 
 	e.GET("/saferoute", handlers.SafeRouteHandler)
-	e.GET("/binance-eu", handlers.BinanceEUHandler)
+
+	// Permanently withdrawn pages: 410 so search engines deindex them.
+	e.GET("/binance-eu", handlers.GoneHandler)
 
 	e.HTTPErrorHandler = func(err error, c echo.Context) {
 		code := http.StatusInternalServerError
 		if he, ok := err.(*echo.HTTPError); ok {
 			code = he.Code
 		}
-		if code == http.StatusNotFound {
+		switch code {
+		case http.StatusNotFound:
 			handlers.NotFoundHandler(c)
-		} else {
+		case http.StatusGone:
+			handlers.GoneHandler(c)
+		default:
 			c.String(code, err.Error())
 		}
 	}

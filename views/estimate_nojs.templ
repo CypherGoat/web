@@ -556,7 +556,7 @@ templ EstimateTempl(errors string, estimate []api.Estimate, sort string, baseQue
     <div id="estimates-container">
         <div class="sort-options-estimates">
             <a href={ fmt.Sprintf("?%s&sort=rate", baseQuery) } class={ "sort-btn-estimates", templ.KV("active", sort == "rate") }>Sort by Rate</a>
-            <a href={ fmt.Sprintf("?%s&sort=kyc", baseQuery) } class={ "sort-btn-estimates", templ.KV("active", sort == "kyc") }>Sort by KYC</a>
+            <a href={ fmt.Sprintf("?%s&sort=kyc", baseQuery) } class={ "sort-btn-estimates", templ.KV("active", sort == "kyc") }>Verification level</a>
         </div>
         
         for i, est := range estimate {
@@ -580,11 +580,11 @@ if est.NoTextURL != "" {
                                         <img src={ est.ImageURL } alt={ est.ExchangeName } class="estimate-image-estimates" loading="lazy" width="32" height="32">
                                     }                                <span>{ est.ExchangeName }</span>
                                 if est.KYCScore == 0 {
-                                    <span class="kyc-badge-estimates kyc-0-estimates" data-tooltip="Exchange never asks for KYC.">0</span>
+                                    <span class="kyc-badge-estimates kyc-0-estimates" data-tooltip="This provider states it does not routinely request identity verification. It may still do so where its policy or the law requires.">0</span>
                                 } else if est.KYCScore == 1 {
-                                    <span class="kyc-badge-estimates kyc-1-estimates" data-tooltip="Exchange may ask for KYC very rarely or never.">1</span>
+                                    <span class="kyc-badge-estimates kyc-1-estimates" data-tooltip="This provider states it requests identity verification infrequently.">1</span>
                                 } else {
-                                    <span class="kyc-badge-estimates kyc-2-estimates" data-tooltip="Exchange may rarely ask for KYC.">2</span>
+                                    <span class="kyc-badge-estimates kyc-2-estimates" data-tooltip="This provider may request identity verification.">2</span>
                                 }
                                 if est.Log {
                                     <span class="ip-badge-estimates" title="Exchange requires IP logging."></span>

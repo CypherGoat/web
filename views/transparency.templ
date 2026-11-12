@@ -28,7 +28,6 @@ type GitHubCommit struct {
 }
 
 type TransparencyStats struct {
-	KYCRate       string
 	LastUpdated   string
 	GitHubCommits int
 	GitHubIssues  int
@@ -56,7 +55,7 @@ const proInsuranceFundUSD = 50000.0
 
 
 templ Transparency(stats TransparencyStats) {
-	@HeaderCustomTitle("Transparency", "https://cyphergoat.com/transparency", "CypherGoat publishes its KYC incident rate, security deposits held from exchange partners with verifiable on-chain addresses, and every KYC case on record.") {
+	@HeaderCustomTitle("Transparency", "https://cyphergoat.com/transparency", "CypherGoat publishes the security deposits it holds from exchange partners with verifiable on-chain addresses, alongside its open source commit history.") {
 	}
 	<style>
 	body {
@@ -118,7 +117,7 @@ templ Transparency(stats TransparencyStats) {
 		max-width: 32rem;
 	}
 
-	/* KYC rate feature card */
+	/* Hero feature card */
 	.tp-rate-card {
 		padding: 2.5rem 2rem;
 		border-radius: 24px;
@@ -730,7 +729,7 @@ templ Transparency(stats TransparencyStats) {
 
 	<div class="tp-shell text-white">
 
-		<!-- Hero: KYC rate front and centre -->
+		<!-- Hero -->
 		<div class="tp-hero">
 			<div class="tp-hero-copy">
 				<div class="tp-eyebrow">
@@ -739,15 +738,15 @@ templ Transparency(stats TransparencyStats) {
 				</div>
 				<h1 class="tp-title">Fully<br/>transparent.</h1>
 				<p class="tp-lead">
-					We publish our KYC incident rate, every security deposit we hold from partners with the exact on-chain address, and our entire web interface is open source and auditable by anyone.
+					We publish every security deposit we hold from partners with the exact on-chain address, our partner assessment process, and our entire web interface is open source and auditable by anyone.
 				</p>
 			</div>
 
 			<div class="tp-rate-card">
-				<div class="tp-rate-eyebrow">KYC incident rate</div>
-				<div class="tp-rate-value">{ stats.KYCRate }</div>
+				<div class="tp-rate-eyebrow">Partner assessment</div>
+				<div class="tp-rate-value">{ fmt.Sprintf("%d", len(ExchangesList)) }</div>
 				<div class="tp-rate-desc">
-					of all trades completed through CypherGoat<br/>triggered a KYC request from a partner exchange.
+					partners assessed before listing and reviewed on an ongoing basis under our <a href="/aml-policy">compliance and AML policy</a>.
 				</div>
 			</div>
 		</div>
@@ -881,7 +880,7 @@ templ Transparency(stats TransparencyStats) {
 
 		<!-- Disclosure -->
 		<div class="tp-notice">
-			<strong>Disclosure:</strong> Deposit addresses are wallets controlled by CypherGoat where partner collateral is held — balances are independently verifiable via the explorer links above. Deposit amounts are in the asset agreed at onboarding (BTC or stablecoin). KYC counts and trade totals are updated manually. Last updated: <strong>{ stats.LastUpdated }</strong>.
+			<strong>Disclosure:</strong> Deposit addresses are wallets controlled by CypherGoat where partner collateral is held — balances are independently verifiable via the explorer links above. Deposit amounts are in the asset agreed at onboarding (BTC or stablecoin). Deposit figures are updated manually. Last updated: <strong>{ stats.LastUpdated }</strong>.
 		</div>
 
 				<!-- Open Source -->

@@ -1,0 +1,184 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+templ AMLPolicy() {
+	@HeaderCustomTitle("Compliance and AML Policy", "https://cyphergoat.com/aml-policy", "CypherGoat's compliance framework: our regulatory position, partner due diligence and monitoring, sanctions controls, and cooperation with competent authorities.") {
+	}
+	<style>
+    body {
+        background-color: #0b0d14;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+    }
+
+    .legal-shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 3.25rem 1.5rem 0;
+    }
+
+    .legal-hero {
+        max-width: 52rem;
+        margin: 0 auto 2.5rem;
+        text-align: center;
+    }
+
+    .legal-card {
+        padding: 2rem;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    .legal-list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .legal-item {
+        padding-top: 1.4rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .legal-item:first-child {
+        padding-top: 0;
+        border-top: none;
+    }
+
+    .legal-item strong {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .aml-callout {
+        max-width: 52rem;
+        margin: 0 auto 2rem;
+        padding: 1.25rem 1.5rem;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+        color: #cbd5e1;
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+        .legal-shell {
+            padding: 2.5rem 1rem 0;
+        }
+
+        .legal-card {
+            padding: 1.4rem;
+            border-radius: 18px;
+        }
+    }
+    </style>
+	<div class="legal-shell text-gray-100 font-sans">
+		<header class="legal-hero">
+			<h1 class="text-4xl font-bold text-white mb-4">Compliance and AML Policy</h1>
+			<p class="text-lg text-gray-400">How CypherGoat assesses and monitors the third-party providers it lists, applies sanctions controls, and cooperates with competent authorities.</p>
+			<p class="text-sm text-gray-500 mt-4">Last updated: September 8, 2026</p>
+		</header>
+		<div class="aml-callout">
+			This policy describes the controls CypherGoat operates as a software interface. It should be read together with our <a href="/terms" class="text-gray-200 hover:text-white underline">Terms of Service</a> and <a href="/privacy" class="text-gray-200 hover:text-white underline">Privacy Policy</a>. Compliance enquiries and legal process should be directed to <a href="mailto:compliance@cyphergoat.com" class="text-gray-200 hover:text-white underline">compliance@cyphergoat.com</a>.
+		</div>
+		<ul class="legal-card legal-list max-w-4xl mx-auto">
+			<li class="legal-item">
+				<strong class="text-white text-xl">1. Purpose</strong>
+				<p class="text-base text-gray-300">CypherGoat is committed to preventing its software from being used to facilitate money laundering, terrorist financing, sanctions evasion or any other criminal activity. This policy sets out the controls we apply, the limits of what a non-custodial interface can control, and how we work with the regulated and unregulated providers we list.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">2. Our Role and Regulatory Position</strong>
+				<p class="text-base text-gray-300">CypherGoat operates a rate comparison and routing interface. We query third-party exchange providers for live quotes, display them, and pass the user's instruction to the provider the user selects.</p>
+				<p class="text-base text-gray-300 mt-3">CypherGoat does not exchange fiat currency for digital assets, does not buy or sell digital assets as principal or agent, does not transmit value, and does not hold, pool or control customer assets at any point. We do not open accounts, hold balances, or maintain a customer relationship of the kind that gives rise to customer due diligence obligations.</p>
+				<p class="text-base text-gray-300 mt-3">Because we never take possession of funds and are not party to the trade, the customer relationship in every transaction is between the user and the executing provider. Customer due diligence, transaction screening and suspicious activity reporting for that trade sit with the provider, which carries out those functions under its own legal and regulatory obligations. We support our partners in meeting those obligations and do not assist any user in circumventing them.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">3. Governance and Responsibility</strong>
+				<p class="text-base text-gray-300">Responsibility for this policy sits with CypherGoat's designated compliance contact, reachable at <a href="mailto:compliance@cyphergoat.com" class="text-gray-200 hover:text-white underline">compliance@cyphergoat.com</a>. That function owns partner onboarding decisions, partner reviews, sanctions controls, responses to legal process, and the maintenance of this policy.</p>
+				<p class="text-base text-gray-300 mt-3">This policy is reviewed at least annually, and additionally whenever there is a material change to our partner set, our product, or the legal framework applicable to us.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">4. Partner Due Diligence</strong>
+				<p class="text-base text-gray-300">Every provider is assessed before it is integrated. Providers reach us through direct commercial approach or through our own market research, and no provider is listed without completing this assessment. We record the outcome of each assessment.</p>
+				<p class="text-base text-gray-300 mt-3">Onboarding assessment covers:</p>
+				<ul class="text-base text-gray-300 space-y-1 list-disc list-inside mt-3">
+					<li><strong>Corporate identity.</strong> Legal entity name, jurisdiction of incorporation, registration details, and beneficial ownership where the provider will disclose it.</li>
+					<li><strong>Licensing and registration status.</strong> Whether the provider holds a licence or registration in its home jurisdiction, and if so which.</li>
+					<li><strong>Published compliance framework.</strong> Whether the provider maintains and publishes an AML policy, a sanctions policy, terms of use and a privacy policy, and whether those documents are coherent and current.</li>
+					<li><strong>Stated verification practices.</strong> The circumstances in which the provider requires identity verification, and how it communicates that to users.</li>
+					<li><strong>Sanctions posture.</strong> Whether the provider screens addresses and counterparties against applicable sanctions lists, and how it handles a match.</li>
+					<li><strong>Adverse media and reputation.</strong> Public reporting, enforcement action, law enforcement seizure history, and unresolved user complaints.</li>
+					<li><strong>Operational track record.</strong> Time in operation, liquidity source, settlement reliability, and responsiveness to support escalation.</li>
+					<li><strong>Contact and escalation path.</strong> A working channel through which we can raise a compliance or user issue and get a response.</li>
+				</ul>
+				<p class="text-base text-gray-300 mt-3">Providers that will not engage with this assessment, or that decline to identify the operating entity, are not listed.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">5. Ongoing Monitoring</strong>
+				<p class="text-base text-gray-300">Listing is not permanent. Partners are subject to periodic review and to event-driven review whenever something material comes to our attention.</p>
+				<p class="text-base text-gray-300 mt-3">Between reviews we monitor settlement failures and delays, unresolved user complaints and support escalations, changes to a provider's published terms or compliance documentation, changes to licensing or corporate status, adverse media, and enforcement or law enforcement action. Patterns of user reports are treated as a monitoring signal in their own right.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">6. Suspension and Removal of Partners</strong>
+				<p class="text-base text-gray-300">We may suspend or remove a provider from the interface at any time and at our sole discretion. Circumstances that will normally trigger removal include:</p>
+				<ul class="text-base text-gray-300 space-y-1 list-disc list-inside mt-3">
+					<li>Credible evidence that the provider is facilitating criminal activity or sanctions evasion.</li>
+					<li>Enforcement action, licence revocation, or a law enforcement seizure affecting the provider.</li>
+					<li>Loss of a licence or registration that the provider previously relied on.</li>
+					<li>A sustained pattern of failed settlements, withheld funds, or unaddressed user complaints.</li>
+					<li>Withdrawal or material weakening of the provider's published compliance framework.</li>
+					<li>Refusal to engage with a compliance enquiry from us.</li>
+					<li>Any conduct that in our judgement makes continued listing inappropriate.</li>
+				</ul>
+				<p class="text-base text-gray-300 mt-3">Suspension takes effect immediately on the interface and does not require notice to the provider.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">7. Sanctions</strong>
+				<p class="text-base text-gray-300">CypherGoat does not make its service available to persons or entities subject to sanctions administered by the United Nations, the United States Office of Foreign Assets Control (OFAC), or equivalent regimes, nor to users located in comprehensively sanctioned jurisdictions. The applicable restrictions and the current jurisdiction list are set out in our <a href="/terms" class="text-gray-200 hover:text-white underline">Terms of Service</a>.</p>
+				<p class="text-base text-gray-300 mt-3">Deposit and destination addresses identified as sanctioned are refused. Where a partner or a competent authority notifies us that a user is subject to sanctions or is circumventing a geographic restriction, we take the steps required to comply and will decline to serve further requests associated with that activity.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">8. Prohibited Activity</strong>
+				<p class="text-base text-gray-300">CypherGoat has zero tolerance for use of its software for any illegal purpose. The prohibited uses set out in section 4 of our <a href="/terms" class="text-gray-200 hover:text-white underline">Terms of Service</a> form part of this policy. We reserve the right to investigate suspected breaches, to refuse or block access to the interface, and to report activity to competent authorities where required or permitted.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">9. Source of Revenue</strong>
+				<p class="text-base text-gray-300">CypherGoat is funded by commission paid by partner providers on completed trades routed through our interface, together with revenue from our commercial API. We do not charge users a fee above the rate quoted by the provider, we do not take a spread on user funds, and we do not receive, hold or route user assets in order to earn revenue.</p>
+				<p class="text-base text-gray-300 mt-3">Commission is received from the providers listed on the interface. The due diligence and monitoring described in sections 4 to 6 are therefore also the controls we apply to the counterparties from which our revenue originates. Commission from a suspended or removed provider is not accepted for periods after removal.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">10. Cooperation with Authorities</strong>
+				<p class="text-base text-gray-300">CypherGoat responds to validly issued legal process served through proper channels and cooperates with lawful requests from competent authorities. Requests should be sent to <a href="mailto:compliance@cyphergoat.com" class="text-gray-200 hover:text-white underline">compliance@cyphergoat.com</a>.</p>
+				<p class="text-base text-gray-300 mt-3">We will state honestly what we do and do not hold. Because we are non-custodial and account-free, the records available to us are limited to the transaction metadata described in our <a href="/privacy" class="text-gray-200 hover:text-white underline">Privacy Policy</a>. Where the information sought sits with an executing provider rather than with us, we will say so and identify the provider.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">11. Record Keeping</strong>
+				<p class="text-base text-gray-300">We retain partner due diligence and review records, records of partner suspensions and removals, records of compliance enquiries and our responses, and the transaction metadata described in our <a href="/privacy" class="text-gray-200 hover:text-white underline">Privacy Policy</a>. Retention periods for user data are set out in that policy. Compliance records relating to partners are retained for at least five years from the end of the relationship.</p>
+			</li>
+			<li class="legal-item">
+				<strong class="text-white text-xl">12. Limits of This Policy</strong>
+				<p class="text-base text-gray-300">We state plainly what a non-custodial interface can and cannot do. CypherGoat cannot screen a transaction it does not hold, cannot freeze funds it never controls, and cannot verify the identity of a user with whom it has no account relationship. Our controls operate at the level of partner selection, sanctions restrictions, prohibited use enforcement and cooperation with authorities. Transaction-level controls sit with the executing provider, and we assess each provider's capacity to apply them as part of the due diligence described above.</p>
+			</li>
+		</ul>
+		<p class="text-base text-center text-gray-400 mt-8">Compliance enquiries, partner due diligence requests and legal process: <a href="mailto:compliance@cyphergoat.com" class="text-gray-300 hover:text-white underline">compliance@cyphergoat.com</a>.</p>
+	</div>
+	@Footer() {
+	}
+}

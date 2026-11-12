@@ -24,7 +24,7 @@ Shield allows CypherGoat to compensate users when a swap fails due to exchange-s
 
 - Exchange infrastructure or backend failures  
 - Execution errors after funds are received  
-- Exchanges holding funds due to KYC or verification issues **without a valid justification**  
+- Exchanges withholding settlement **without a valid justification**  
 
 If Shield applies, the user does **not** need to negotiate with the exchange.  
 CypherGoat intervenes directly.
@@ -76,9 +76,10 @@ Shield does **not** apply to:
 - Market volatility or slippage  
 - Blockchain congestion outside execution guarantees  
 - Funds stolen from a user’s wallet  
+- Sanctions matches, or any case where a provider reports that it suspects the user is a sanctioned person or entity  
 - Claims reported more than **four (4) weeks** after transaction creation  
 
-Shield is about **unfair or failed execution**, not trading risk or user error.
+Shield is about **unfair or failed execution**, not trading risk or user error. It is not insurance against compliance action: where a provider withholds settlement because of an anti-money laundering determination, a sanctions match, a legal order or a law enforcement request, that is a valid justification and Shield does not apply. Where a provider reports a suspected sanctions match, CypherGoat will need to establish that the user is not a sanctioned person before any payment can be made.
 
 
 ## **How Shield Claims Work**

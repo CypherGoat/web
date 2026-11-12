@@ -1,0 +1,535 @@
+// Copyright (C) 2025 CypherGoat
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package views
+
+templ careersStyle() {
+    <style>
+    body {
+        background-color: #0b0d14;
+        font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+        min-height: 100vh;
+    }
+
+    .careers-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 3.5rem 1.5rem 0;
+    }
+
+    .careers-hero {
+        max-width: 52rem;
+        margin: 0 auto 3rem;
+        text-align: center;
+    }
+
+    .careers-title {
+        margin: 1.1rem 0 0;
+        color: #ffffff;
+        font-size: clamp(3rem, 6vw, 5.25rem);
+        line-height: 0.92;
+        font-weight: 500;
+        letter-spacing: -0.06em;
+    }
+
+    .careers-lead {
+        margin: 1.25rem auto 0;
+        max-width: 42rem;
+        color: #98a1b1;
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+
+    .role-link-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        max-width: 42rem;
+        margin: 0 auto;
+    }
+
+    .role-link-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.6rem 2rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .role-link-card:hover {
+        border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .role-link-title {
+        color: #ffffff;
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+
+    .role-link-sub {
+        margin-top: 0.35rem;
+        color: #98a1b1;
+        font-size: 0.92rem;
+    }
+
+    .role-link-arrow {
+        color: #98a1b1;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .role-link-card:hover .role-link-arrow {
+        color: #ffffff;
+        transform: translateX(3px);
+    }
+
+    .role-block {
+        margin-top: 1.4rem;
+        padding: 2rem;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.008)),
+            #11151c;
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    .role-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #98a1b1;
+        font-size: 0.92rem;
+        margin-bottom: 1.5rem;
+        transition: color 0.2s ease;
+    }
+
+    .role-back-link:hover {
+        color: #ffffff;
+    }
+
+    .role-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin-bottom: 1.4rem;
+    }
+
+    .role-tag {
+        padding: 0.4rem 0.85rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        color: #c8cedb;
+        font-size: 0.82rem;
+        font-weight: 500;
+    }
+
+    .role-heading {
+        color: #ffffff;
+        font-size: 1.8rem;
+        font-weight: 500;
+        letter-spacing: -0.04em;
+        margin-bottom: 1rem;
+    }
+
+    .role-intro {
+        color: #98a1b1;
+        font-size: 1rem;
+        line-height: 1.85;
+        margin-bottom: 1.1rem;
+    }
+
+    .role-lead {
+        color: #dfe3ec;
+        font-size: 1.15rem;
+        line-height: 1.75;
+    }
+
+    .role-subheading {
+        color: #ffffff;
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        margin-top: 1.75rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .role-list {
+        list-style: none;
+        margin: 0 0 1.1rem;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    .role-list li {
+        position: relative;
+        padding-left: 1.35rem;
+        color: #98a1b1;
+        font-size: 0.98rem;
+        line-height: 1.65;
+    }
+
+    .role-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.6rem;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+    }
+
+    .role-list strong {
+        color: #dfe3ec;
+    }
+
+    .role-cta {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .role-apply-button {
+        display: inline-block;
+        padding: 0.95rem 2rem;
+        border-radius: 12px;
+        font-size: 0.98rem;
+        font-weight: 600;
+        background: #f3eee2;
+        color: #0b0d14;
+        transition: background 0.2s ease;
+    }
+
+    .role-apply-button:hover {
+        background: #faf7ef;
+    }
+
+    .careers-closing {
+        margin: 2.5rem auto 0;
+        max-width: 42rem;
+        text-align: center;
+        color: #98a1b1;
+        font-size: 0.98rem;
+        line-height: 1.8;
+    }
+
+    .careers-closing a {
+        color: #d9deea;
+        text-decoration: underline;
+    }
+
+    .careers-closing a:hover {
+        color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+        .careers-shell {
+            padding: 2.5rem 1rem 0;
+        }
+
+        .role-block {
+            padding: 1.4rem;
+            border-radius: 18px;
+        }
+
+        .role-link-card {
+            padding: 1.25rem 1.4rem;
+        }
+    }
+    </style>
+}
+
+templ Careers(){
+    @HeaderCustomTitle("Careers at CypherGoat", "https://cyphergoat.com/careers", "Join CypherGoat, a non-custodial crypto exchange aggregator. We're hiring for distribution, partnerships, and institutional business development roles."){
+    }
+    @careersStyle()
+    <div class="careers-shell text-white">
+        <div class="careers-hero">
+            <h1 class="careers-title">Careers</h1>
+            <p class="careers-lead">
+                CypherGoat is a small, founder-led team running a non-custodial crypto exchange aggregator. We're hiring for two commercially-focused roles below. Both are remote and performance-based.
+            </p>
+        </div>
+
+        <div class="role-link-list">
+            <a href="/careers/distribution" class="role-link-card">
+                <div>
+                    <div class="role-link-title">Head of Distribution & Strategic Partnerships</div>
+                    <div class="role-link-sub">Remote · Full-time or high-commitment contractor</div>
+                </div>
+                <span class="role-link-arrow">&rarr;</span>
+            </a>
+            <a href="/careers/institutional" class="role-link-card">
+                <div>
+                    <div class="role-link-title">CypherGoat Pro Growth Partner</div>
+                    <div class="role-link-sub">Remote · Global · Flexible commitment · Performance-based</div>
+                </div>
+                <span class="role-link-arrow">&rarr;</span>
+            </a>
+        </div>
+
+        <p class="careers-closing">
+            Don't see a fit but think you could still help CypherGoat grow? Reach out at <a href="mailto:careers@cyphergoat.com">careers@cyphergoat.com</a>.
+        </p>
+    </div>
+    @Footer(){}
+}
+
+templ CareerDistribution(){
+    @HeaderCustomTitle("Head of Distribution & Strategic Partnerships | CypherGoat Careers", "https://cyphergoat.com/careers/distribution", "CypherGoat is hiring a Head of Distribution & Strategic Partnerships to scale transaction volume through integrations and partnerships."){
+    }
+    @careersStyle()
+    <div class="careers-shell text-white">
+        <a href="/careers" class="role-back-link">&larr; All roles</a>
+
+        <div class="role-block">
+            <div class="role-meta">
+                <span class="role-tag">Remote</span>
+                <span class="role-tag">Full-time or high-commitment contractor</span>
+                <span class="role-tag">Base + significant performance-based upside</span>
+            </div>
+            <h1 class="role-heading">Head of Distribution & Strategic Partnerships</h1>
+            <p class="role-intro">
+                We're looking for a Head of Distribution & Strategic Partnerships to help scale CypherGoat's transaction volume through integrations, partnerships, and strategic distribution. This is not a traditional marketing role. Your responsibility will be to get CypherGoat embedded into the products where crypto users already transact: wallets, applications, exchanges, payment products, trading platforms, and other crypto infrastructure. You will own the entire partnership process from identifying opportunities and reaching decision-makers through commercial negotiation, integration, launch, and ultimately transaction volume.
+            </p>
+
+            <h2 class="role-subheading">What you'll do</h2>
+            <ul class="role-list">
+                <li>Build and manage CypherGoat's strategic partnership pipeline</li>
+                <li>Secure integrations with cryptocurrency wallets, applications, platforms, and infrastructure providers</li>
+                <li>Develop API, affiliate, white-label, and revenue-share partnerships</li>
+                <li>Identify new distribution channels capable of generating meaningful swap volume</li>
+                <li>Reach founders, partnership teams, product teams, and other relevant decision-makers</li>
+                <li>Negotiate commercial terms and partnership structures</li>
+                <li>Work directly with the founder and technical team to move integrations from discussion to production</li>
+                <li>Maintain relationships with existing partners and expand their transaction volume</li>
+                <li>Track partnership performance and optimize integrations after launch</li>
+                <li>Represent CypherGoat at relevant industry events and within the broader crypto ecosystem</li>
+            </ul>
+
+            <h2 class="role-subheading">What we're looking for</h2>
+            <p class="role-intro">We're particularly interested in candidates who have previously worked in crypto wallets, cryptocurrency exchanges, instant exchange or swap platforms, exchange aggregators, crypto payment infrastructure, liquidity or trading infrastructure, or Web3 partnerships or business development.</p>
+            <ul class="role-list">
+                <li>A proven history of closing meaningful crypto partnerships</li>
+                <li>A strong network within the cryptocurrency industry</li>
+                <li>Existing relationships with wallets, exchanges, infrastructure providers, or crypto applications</li>
+                <li>A good understanding of cryptocurrency APIs and product integrations</li>
+                <li>Strong commercial negotiation skills</li>
+                <li>The ability to independently identify and close opportunities</li>
+                <li>An understanding of how partnerships translate into transaction volume</li>
+                <li>Excellent written and spoken English</li>
+            </ul>
+            <p class="role-intro">Technical knowledge is a strong advantage, but you do not need to be an engineer.</p>
+
+            <h2 class="role-subheading">How success will be measured</h2>
+            <p class="role-intro"><strong>New monthly swap volume generated through partnerships you originate and manage</strong> is the primary KPI. We also track qualified partnership opportunities, integrations signed and launched, monthly transaction volume from those integrations, and revenue generated from new distribution channels.</p>
+
+            <h2 class="role-subheading">What we're not looking for</h2>
+            <p class="role-intro">This is not primarily a social media, community management, PR, influencer marketing, or generic sales role. We want someone who can create real distribution.</p>
+
+            <h2 class="role-subheading">Why join CypherGoat</h2>
+            <p class="role-intro">CypherGoat is a small, founder-led company, which means you will have significant autonomy and direct influence over the direction of the business. You'll work directly with the founder, have the ability to move quickly, and play a central role in scaling CypherGoat toward significantly higher monthly transaction volume. For the right person, compensation can include substantial performance-based upside tied directly to the value you create.</p>
+
+            <div class="role-cta">
+                <a href="https://tally.so/r/D4QzME" target="_blank" rel="noopener" class="role-apply-button">Apply for this role</a>
+            </div>
+        </div>
+    </div>
+    @Footer(){}
+}
+
+templ CareerInstitutional(){
+    @HeaderCustomTitle("CypherGoat Pro Growth Partner | CypherGoat Careers", "https://cyphergoat.com/careers/institutional", "CypherGoat is looking for well-connected people across the crypto ecosystem to help grow our high-volume trading business and expand the reach of CypherGoat Pro."){
+    }
+    @careersStyle()
+    <div class="careers-shell text-white">
+        <a href="/careers" class="role-back-link">&larr; All roles</a>
+
+        <div class="role-block">
+            <div class="role-meta">
+                <span class="role-tag">Remote</span>
+                <span class="role-tag">Global</span>
+                <span class="role-tag">Flexible commitment</span>
+                <span class="role-tag">Performance-based</span>
+            </div>
+
+            <h1 class="role-heading">CypherGoat Pro Growth Partner</h1>
+
+            <p class="role-intro role-lead">
+                We're looking for well-connected people across the crypto ecosystem to help grow our high-volume trading business and expand the reach of CypherGoat Pro.
+            </p>
+
+            <p class="role-intro">
+                We've spent the past several years building privacy-focused, non-custodial cryptocurrency trading infrastructure: aggregating exchange providers, routing users toward competitive execution, and building products around the problems crypto-native users actually face. Pro is the next stage of that, designed for serious traders who regularly move larger amounts of cryptocurrency and want a more private, transparent and protected way to execute those trades.
+            </p>
+
+            <p class="role-intro">
+                We believe there's a real gap in the market here. High-volume users are often pushed toward traditional exchanges, opaque OTC relationships, or retail swap products that were never designed for large transactions. Pro combines private access, vetted no-KYC execution, large-trade routing, direct support and backed protection into one experience, and we're looking for people who understand that opportunity and can help us reach the right users.
+            </p>
+
+            <p class="role-intro">
+                This is not a traditional sales job, and you don't need a corporate business development background. We're interested in people who have genuine relationships and credibility within crypto, whether that comes from trading, OTC, Monero and privacy communities, mining, market making, crypto businesses, Telegram groups, forums, Dread, or simply years of being deeply involved in the ecosystem.
+            </p>
+
+            <p class="role-intro">
+                You might know dozens of traders, or only two or three people who move serious size. Either can be extremely valuable.
+            </p>
+
+            <h2 class="role-subheading">What you'll do</h2>
+            <p class="role-intro">Your primary goal is to generate meaningful, recurring transaction volume. You will:</p>
+            <ul class="role-list">
+                <li>Introduce suitable high-volume traders and crypto businesses to Pro</li>
+                <li>Develop relationships with people who regularly execute large cryptocurrency transactions</li>
+                <li>Identify communities, businesses and networks where we could generate meaningful volume</li>
+                <li>Help prospective clients understand CypherGoat, Pro and what makes our approach different</li>
+                <li>Turn initial introductions into active, recurring clients</li>
+                <li>Maintain relationships with clients you originate where appropriate</li>
+                <li>Find new opportunities within your network</li>
+                <li>Share feedback from high-volume traders directly with the team</li>
+                <li>Help us understand what serious crypto users actually want from our products</li>
+                <li>Contribute ideas around distribution, partnerships and new growth opportunities</li>
+            </ul>
+            <p class="role-intro">You'll work directly with the founder. We're a small team, so there's very little distance between spotting an opportunity and actually acting on it.</p>
+
+            <h2 class="role-subheading">What makes CypherGoat Pro interesting</h2>
+            <p class="role-intro">
+                Pro is built specifically around the needs of serious crypto-native traders. Members get access to a private trading terminal that brings together vetted no-KYC exchange liquidity, large-trade execution tools and direct support. For larger transactions, SafeRoute can split an order across multiple vetted venues where doing so improves execution and reduces exposure to a single provider.
+            </p>
+            <p class="role-intro">
+                Pro also includes backed coverage on eligible trades, supported by dedicated reserves and exchange collateral that can be independently verified on-chain. The product is invite-only and designed around privacy from the beginning, and we believe this combination of <strong>privacy, execution quality, transparency, support and protection</strong> is genuinely differentiated within the market.
+            </p>
+            <p class="role-intro">Your job isn't simply to sell it. It's to find the people for whom these features solve a real problem.</p>
+
+            <h2 class="role-subheading">Who we're looking for</h2>
+            <p class="role-intro">There's no single ideal background. You could be:</p>
+            <ul class="role-list">
+                <li>An OTC or exchange salesperson</li>
+                <li>A high-volume trader</li>
+                <li>Active in the Monero or privacy ecosystem</li>
+                <li>A miner</li>
+                <li>A market maker</li>
+                <li>A broker or introducer</li>
+                <li>A crypto business owner</li>
+                <li>A community operator or moderator</li>
+                <li>Well known on Dread, Telegram, X, forums or another crypto community</li>
+                <li>Someone who has built strong personal relationships with high-volume crypto users</li>
+                <li>An experienced crypto-native operator with no formal sales experience</li>
+            </ul>
+            <p class="role-intro">What matters most is that:</p>
+            <ul class="role-list">
+                <li>You understand cryptocurrency</li>
+                <li>You can communicate professionally</li>
+                <li>You know people for whom CypherGoat could genuinely be useful</li>
+                <li>You're excited about what we're building</li>
+            </ul>
+            <p class="role-intro">A corporate CV matters much less to us than credibility and relationships within the ecosystem.</p>
+
+            <h2 class="role-subheading">You do not need</h2>
+            <ul class="role-list">
+                <li>A university degree</li>
+                <li>A traditional CV</li>
+                <li>Previous institutional sales experience</li>
+                <li>Previous employment at an exchange</li>
+                <li>A public LinkedIn presence</li>
+                <li>A large social media following</li>
+            </ul>
+            <p class="role-intro">
+                Pseudonymous applicants are welcome. If you've built a strong reputation under a pseudonym or within a particular community, we're happy to evaluate that rather than requiring a conventional professional profile, though relevant reputation or community identities may be privately verified before working together.
+            </p>
+
+            <h2 class="role-subheading">Who you could introduce</h2>
+            <p class="role-intro">We're particularly interested in relationships with:</p>
+            <ul class="role-list">
+                <li>High-volume individual traders</li>
+                <li>OTC participants</li>
+                <li>Crypto-native businesses</li>
+                <li>Miners</li>
+                <li>Market makers</li>
+                <li>Trading firms</li>
+                <li>Funds</li>
+                <li>Brokers</li>
+                <li>High-net-worth crypto holders</li>
+                <li>Privacy-focused traders</li>
+                <li>Businesses with recurring cryptocurrency conversion requirements</li>
+            </ul>
+            <p class="role-intro">A small number of high-quality relationships can be far more valuable than a large contact list. Someone who knows three people each moving seven figures a month may be substantially more valuable to us than someone with thousands of generic industry contacts.</p>
+
+            <h2 class="role-subheading">Compensation</h2>
+            <p class="role-intro">
+                This opportunity is heavily performance-based. Partners can earn a <strong>substantial share of the net revenue generated by clients they originate</strong>, with uncapped upside. For strong partners, revenue share can reach <strong>up to 50% of attributable net revenue</strong>, depending on the relationship, level of involvement and volume generated.
+            </p>
+            <p class="role-intro">
+                There's no artificial cap on how much you can earn. If you generate significant recurring business, we want you to participate meaningfully in the value you create, and for someone with access to meaningful transaction flow, the potential upside can be considerably higher than a conventional business development salary.
+            </p>
+            <p class="role-intro">More committed candidates may also be considered for arrangements involving a fixed monthly component alongside performance compensation.</p>
+
+            <h2 class="role-subheading">Commitment</h2>
+            <p class="role-intro">We're open to different levels of involvement. You might:</p>
+            <ul class="role-list">
+                <li>Introduce one or two high-value people you already know</li>
+                <li>Refer occasional high-value clients</li>
+                <li>Become our point person within a specific community</li>
+                <li>Actively source new clients every week</li>
+                <li>Build and manage a portfolio of high-value relationships</li>
+                <li>Work with us as a primary business development role</li>
+            </ul>
+            <p class="role-intro">We care about results rather than hours worked.</p>
+
+            <h2 class="role-subheading">How success is measured</h2>
+            <p class="role-intro">The main metrics are:</p>
+            <ul class="role-list">
+                <li>Recurring transaction volume generated</li>
+                <li>Net revenue generated</li>
+                <li>Number of active clients originated</li>
+                <li>Repeat transaction volume</li>
+                <li>Client retention</li>
+                <li>Growth of your portfolio</li>
+            </ul>
+            <p class="role-intro">We care significantly more about real transaction volume than meetings, messages, calls or activity metrics.</p>
+
+            <h2 class="role-subheading">Why join CypherGoat?</h2>
+            <p class="role-intro">
+                CypherGoat sits at an unusual point in the crypto market: we already handle meaningful trading volume, but the product is still evolving quickly enough that a strong idea can turn into something users are relying on within weeks. We’re building around problems that are still poorly solved across the industry, private, non-custodial execution, large-trade routing, execution guarantees, and protecting users from the failure modes that still make crypto swaps unnecessarily risky.
+            </p>
+            <p class="role-intro">
+                The core infrastructure already exists, the products are live, and the next challenge is distribution. As an early Growth Partner, you'll have direct access to the founder, substantial autonomy, the opportunity to help shape how we grow, and meaningful participation in the revenue you create.
+            </p>
+            <p class="role-intro">
+                If you spot an opportunity, we can move quickly. If you open a new distribution channel or client segment, you can own it, and if you generate serious volume, we want you to make serious money alongside us.
+            </p>
+            <p class="role-intro">
+                If you're deeply connected within crypto, excited by what we're building, and think you can help us become a much larger part of the crypto trading ecosystem, we'd like to hear from you.
+            </p>
+
+            <div class="role-cta">
+                <a href="https://tally.so/r/xXKYL5" target="_blank" rel="noopener" class="role-apply-button">Apply for this role</a>
+            </div>
+        </div>
+    </div>
+    @Footer(){}
+}

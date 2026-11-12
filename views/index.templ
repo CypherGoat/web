@@ -585,10 +585,6 @@ footer {
         margin-top: 0;
     }
 
-    #scroll-to-faq-container {
-        bottom: 1rem;
-    }
-
 }
 
 .coin-selection-modal {
@@ -916,17 +912,6 @@ footer {
         transform: rotate(180deg);
     }
 
-    .shield-footer-note {
-        display: flex;
-        align-items: flex-start;
-        gap: 6px;
-        margin-top: 0.75rem;
-        font-size: 0.78rem;
-        color: #6b7280;
-        line-height: 1.4;
-        padding: 0 0.25rem;
-    }
-
     /* Hide datalist when JavaScript is enabled */
     body.js-enabled datalist {
         display: none;
@@ -977,10 +962,10 @@ footer {
     }
 
     .hero-title {
-        max-width: 7ch;
+        max-width: 8ch;
         margin: 1.4rem 0 0;
         color: #ffffff;
-        font-size: clamp(4rem, 6.8vw, 6.5rem);
+        font-size: clamp(3.5rem, 5.6vw, 5.25rem);
         line-height: 0.9;
         font-weight: 500;
         letter-spacing: -0.07em;
@@ -1311,44 +1296,6 @@ footer {
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    #scroll-to-faq-container {
-        position: fixed;
-        bottom: 1.5rem;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 50;
-        text-align: center;
-        max-width: 320px;
-    }
-
-    #scroll-to-faq-container button {
-        letter-spacing: 0.04em;
-        color: #9ca3af;
-        transition: color 0.15s ease;
-    }
-
-    #scroll-to-faq-container button:hover {
-        color: #ffffff;
-    }
-
-    #scroll-to-faq-container .scroll-orb {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: rgba(255, 255, 255, 0.025);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    #scroll-to-faq-container a:hover .scroll-orb {
-        background: rgba(255, 255, 255, 0.05);
-        border-color: rgba(255, 255, 255, 0.12);
-        transform: translateY(2px);
-    }
-
     @media (max-width: 1024px) {
         .hero-stage {
             grid-template-columns: 1fr;
@@ -1484,13 +1431,6 @@ footer {
             margin-top: 0;
         }
 
-        #scroll-to-faq-container {
-            position: static;
-            bottom: auto;
-            left: auto;
-            transform: none;
-            margin: 0 auto 1rem;
-        }
     }
     </style>
 	<div id="error-message" class="bg-red-500 text-white p-4 text-center hidden">
@@ -1526,7 +1466,7 @@ footer {
 					<div class="trust-badges">
 						<span
 							class="trust-badge"
-							data-info="CypherGoat never holds your funds. No account or registration required."
+							data-info="CypherGoat never holds your funds, and our interface needs no account or registration. Partner exchanges apply their own policies."
 							onclick="showBadgeInfo(this)"
 						>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.4 0 2.8 1.1 2.8 2.5V11h1.7v5H7.5v-5h1.7V9.5C9.2 8.1 10.6 7 12 7z"></path></svg>
@@ -1550,11 +1490,11 @@ footer {
 						</span>
 						<a
 							class="trust-badge"
-							data-info="Filter and sort all exchanges by KYC level before you swap."
+							data-info="Every partner is queried live and the best available rate is selected automatically."
 							onclick="showBadgeInfo(this)"
 						>
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="security-icon"><path d="M3 4h18v2.5l-7 7V20l-4-2v-6.5L3 6.5V4z"></path></svg>
-							Sort by KYC level
+							Live rate comparison
 						</a>
 					</div>
 				</div>
@@ -1660,20 +1600,6 @@ footer {
 		</section>
 	</div>
 	@WhyCG()
-	<div class="hide-on-swap" id="scroll-to-faq-container">
-		<button onclick="scrollToFAQ()" class="text-sm font-semibold text-white bg-transparent hover:underline focus:outline-none">
-			Scroll to learn more
-		</button>
-		<a href="#why-section" class="group mt-2 block">
-			<div class="relative inline-block">
-				<div class="scroll-orb">
-					<svg xmlns="http://www.w3.org/2000/svg" class="text-white w-6 h-6 group-hover:translate-y-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-					</svg>
-				</div>
-			</div>
-		</a>
-	</div>
 	<div id="faq-section" class="py-12 mt-8 lower-content">
 		<div class="container2 mx-auto">
 			<div class="faq-layout">
@@ -1704,10 +1630,6 @@ footer {
 							<p class="faq-answer">Yes. CypherGoat does not get access to your funds at any stage of the swap. We are an aggregator interface, and the codebase is fully open source.</p>
 						</div>
 						<div class="faq-item">
-							<h3 class="faq-question">What is the CypherGoat Shield program?</h3>
-							<p class="faq-answer">CypherGoat Shield is a protection program covering failed settlements and certain KYC-related holds. Coverage appears next to supported exchanges. See the <a href="/cyphergoat-shield" class="text-gray-200 hover:text-white underline-offset-4 hover:underline">Shield terms</a>.</p>
-						</div>
-						<div class="faq-item">
 							<h3 class="faq-question">Can I get help with larger swaps?</h3>
 							<p class="faq-answer">Yes. For larger swaps, CypherGoat can help with coordination and monitoring while remaining fully non-custodial. Availability is limited and handled case by case.</p>
 						</div>
@@ -1725,7 +1647,7 @@ footer {
 								</li>
 								<li class="faq-step">
 									<span class="faq-step-number">2</span>
-									<p class="faq-step-text"><strong>Compare offers:</strong> Review rates, timing, and KYC level.</p>
+									<p class="faq-step-text"><strong>Compare offers:</strong> Review rates, settlement time, and provider details.</p>
 								</li>
 								<li class="faq-step">
 									<span class="faq-step-number">3</span>
@@ -2471,42 +2393,12 @@ function updateEstimatedAmountFromFirstCard() {
     
     document.getElementById('crypto-send').classList.remove('hidden');
     document.getElementById('crypto-receive').classList.remove('hidden');
-    const scrollBtn = document.getElementById('scroll-to-faq-container');
-    if (scrollBtn) {
-        scrollBtn.style.display = 'none';
-    }
-    scrollButtonHiddenForever = true;
 });
 
     // Allow users to type in the datalist inputs for better accessibility
     // The modal will still work when they click on it
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const scrollButtonContainer = document.getElementById('scroll-to-faq-container');
-
-    window.addEventListener('scroll', function() {
-        if (!scrollButtonContainer) return;
-        if (scrollButtonHiddenForever) {
-            scrollButtonContainer.classList.add('hidden');
-        }
-    });
-});
-
-function scrollToFAQ() {
-    const sections = ['hero-section', 'why-section', 'faq-section']
-        .map(id => document.getElementById(id))
-        .filter(Boolean);
-    const scrollY = window.scrollY + window.innerHeight * 0.3;
-    let next = sections[sections.length - 1];
-    for (let i = 0; i < sections.length - 1; i++) {
-        if (scrollY < sections[i + 1].getBoundingClientRect().top + window.scrollY) {
-            next = sections[i + 1];
-            break;
-        }
-    }
-    next.scrollIntoView({ behavior: 'smooth' });
-}
 
 let currentMode = 'swap'; // Track current mode
 

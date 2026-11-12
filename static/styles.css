@@ -22,3 +22,14 @@ svg:not([class*="fa-"]) {
     width: 1rem !important;
     height: 1rem !important;
 }
+
+/* Prevent iOS Safari from auto-zooming when a form field is focused.
+   iOS zooms in on any input/select/textarea with font-size < 16px and
+   leaves the page zoomed afterwards. Only applies to touch devices. */
+@media (hover: none) and (pointer: coarse) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+}
