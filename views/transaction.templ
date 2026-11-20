@@ -24,7 +24,7 @@ script toggleQRCodeHandler(msg string) {
   toggleQRCode(msg);
 }
 
-templ TransactionPage(transaction api.Transaction, cgPay bool, largeTradeInviteCode string) {
+templ TransactionPage(transaction api.Transaction, cgPay bool, largeTradeInviteCode string, largeTradeEligible bool) {
 	<!-- TrustBox script -->
 	<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
 	<!-- End TrustBox script -->
@@ -516,10 +516,9 @@ templ TransactionPage(transaction api.Transaction, cgPay bool, largeTradeInviteC
 				<div class="pro-invite-overlay">
 					<div class="pro-invite-modal">
 						<label for="pro-invite-dismiss" class="pro-invite-close" aria-label="Close">×</label>
-						<p style="color: #ffffff; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem;">🔑 You've unlocked a CypherGoat Pro invite</p>
-						<p style="color: #a0a0a0; font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.75rem;">
-							This trade earned an invite to <strong>CypherGoat Pro</strong>, our invite-only trading terminal: numbered accounts with
-							numbered accounts, priority routing, and execution support on large trades.
+						<p style="color: #ffffff; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem;">🔑 You've been invited to CypherGoat Pro</p>
+						<p style="color: #a0a0a0; font-size: 0.9rem; line-height: 1.4; margin-bottom: 0.75rem;">
+							A private trading terminal you can't sign up for. You have to be invited, and this trade earned yours. Every trade insured up to $50,000. Zero KYC, ever.
 						</p>
 						<div class="code-block" style="text-align: center; font-size: 1.1rem; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
 							{ largeTradeInviteCode }
@@ -534,13 +533,18 @@ templ TransactionPage(transaction api.Transaction, cgPay bool, largeTradeInviteC
 							Redeem at pro.cyphergoat.com
 						</a>
 						<p style="color: #a0a0a0; font-size: 0.8rem; margin-top: 0.6rem;">
-							This code is a one-time invite - keep it safe.
+							It's the only door in, and it only opens once. Keep it safe.
 						</p>
 					</div>
 				</div>
 			}
 			<div class="flex items-center justify-center min-h-screen bg-[#121520] pb-4 sm:pb-0">
 				<div class="transaction-card mx-4 my-6">
+					if transaction.Done != true && largeTradeEligible {
+						<div style="border: 1px solid rgba(255,255,255,0.08); border-radius: 0.5rem; padding: 0.5rem 0.75rem; margin-bottom: 1rem;">
+							<p style="color: #8a8a8a; font-size: 0.8rem; line-height: 1.4;">🔑 Complete this trade to receive an invite to <span style="color: #d0d0d0;">CypherGoat Pro</span>, our invite-only terminal.</p>
+						</div>
+					}
 					<h2 class="transaction-header">{ transaction.Provider }</h2>
 					if strings.ToLower(transaction.Provider) == "thorchain" {
 						<div style="background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(255, 140, 0, 0.15)); border: 1px solid rgba(255, 165, 0, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;">

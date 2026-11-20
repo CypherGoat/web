@@ -1517,7 +1517,7 @@ templ AffiliateLogin(errors []string, success string) {
 	@Footer()
 }
 
-templ AffiliateRegister(errors []string, success string, token string) {
+templ AffiliateRegister(errors []string, success string, token string, capEndpoint string) {
 	@Header()
 	@AffiliatePortalStyles()
 	<div class="aff-page aff-page--auth">
@@ -1570,6 +1570,12 @@ templ AffiliateRegister(errors []string, success string, token string) {
 							<label class="aff-label" for="confirm_password">Confirm password</label>
 							<input class="aff-input" type="password" id="confirm_password" name="confirm_password" required placeholder="Confirm your password" autocomplete="new-password"/>
 						</div>
+						if capEndpoint != "" {
+							<div class="aff-form-group">
+								<cap-widget data-cap-api-endpoint={ capEndpoint } required></cap-widget>
+							</div>
+							<script src="https://cdn.jsdelivr.net/npm/cap-widget@0.1.63"></script>
+						}
 						<button type="submit" class="aff-btn">Complete registration</button>
 					</form>
 				}

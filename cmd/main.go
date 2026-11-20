@@ -101,6 +101,10 @@ var knownBotUserAgents = []string{
 }
 
 func newRateLimiter(r rate.Limit, burst int) echo.MiddlewareFunc {
+	return newRateLimiterBy(r, burst, handlers.ClientKey)
+}
+
+func newRateLimiterBy(r rate.Limit, burst int, key func(echo.Context) string) echo.MiddlewareFunc {
 	return middleware.RateLimiterWithConfig(middleware.RateLimiterConfig{
 		Store: middleware.NewRateLimiterMemoryStoreWithConfig(
 			middleware.RateLimiterMemoryStoreConfig{
@@ -110,7 +114,7 @@ func newRateLimiter(r rate.Limit, burst int) echo.MiddlewareFunc {
 			},
 		),
 		IdentifierExtractor: func(c echo.Context) (string, error) {
-			return c.RealIP(), nil
+			return key(c), nil
 		},
 		ErrorHandler: func(c echo.Context, err error) error {
 			return c.String(http.StatusTooManyRequests, "Too many requests")
@@ -167,9 +171,18 @@ func main() {
 	e.Static("/exchanges", "static/exchanges")
 	e.File("/favicon.ico", "static/icons/favicon/dark/favicon.ico")
 
-	e.GET("/", handlers.IndexHandler)
-	// Form only submits on click, so real users stay well under this.
-	e.GET("/estimate", handlers.EstimateHandler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/3), 10))
+	e.GET("/", handlers.IndexHandler, handlers.IssueSession)
+	// Web UI only: requires the session cookie handed out by pages with the
+	// swap form. Form only submits on click, so real users stay well under
+	// these. Short-term limit per client, plus an hourly-ish quota per client
+	// and per session (burst 30, then ~1/min).
+	e.GET("/estimate", handlers.EstimateHandler,
+		BotBlockerMiddleware,
+		handlers.RequireSession,
+		newRateLimiter(rate.Limit(1.0/3), 10),
+		newRateLimiter(rate.Limit(60.0/3600), 30),
+		newRateLimiterBy(rate.Limit(60.0/3600), 30, handlers.SessionKey),
+	)
 	e.GET("/step2", handlers.Step2Handler)
 	e.GET("/step3", handlers.Step3Handler, BotBlockerMiddleware, newRateLimiter(rate.Limit(1.0/10), 5))
 	e.GET("/split/step2", handlers.SplitStep2Handler)
@@ -202,14 +215,14 @@ func main() {
 	e.POST("/affiliate/payout", handlers.AffiliatePayoutHandler)
 	e.GET("/affiliate/payout/history", handlers.AffiliatePayoutHistoryHandler)
 
-	e.GET("/swap/:coin", handlers.CoinExchangeScreenHandler)
+	e.GET("/swap/:coin", handlers.CoinExchangeScreenHandler, handlers.IssueSession)
 
 	e.GET("/robots.txt", handlers.RobotsHandler)
 
 	e.GET("/sitemap.xml", handlers.SitemapHandler)
 
 	e.GET("/exchanges", handlers.ExchangesHandler)
-	e.GET("/exchange/:shortcode", handlers.ExchangeDetailHandler)
+	e.GET("/exchange/:shortcode", handlers.ExchangeDetailHandler, handlers.IssueSession)
 
 	e.GET("/cyphergoat-shield", handlers.CGShieldTermsHandler)
 

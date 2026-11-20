@@ -837,7 +837,7 @@ function updateEstimatedAmountFromFirstCard() {
         const errorMessage = document.getElementById('error-message');
         const errorText = document.getElementById('error-text');
         
-        if (errorMessage && errorText && event.detail.xhr.status === 500) {
+        if (errorMessage && errorText && event.detail.xhr.status === 500 || event.detail.xhr.status === 403 || event.detail.xhr.status === 429) {
             const errText = event.detail.xhr.responseText || 'An internal server error occurred.';
             errorText.innerHTML = errText;
             errorMessage.classList.remove('hidden');

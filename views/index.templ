@@ -2105,7 +2105,7 @@ function updateEstimatedAmountFromFirstCard() {
 
         document.getElementById('loading-spinner').classList.add('spinner-hidden');
         setEstimateStageState(false, false);
-        if (event.detail.xhr.status === 500) {
+        if (event.detail.xhr.status === 500 || event.detail.xhr.status === 403 || event.detail.xhr.status === 429) {
             const errorMessage = event.detail.xhr.responseText || 'An internal server error occurred.';
             document.getElementById('error-text').innerHTML = errorMessage;
             document.getElementById('error-message').classList.remove('hidden');

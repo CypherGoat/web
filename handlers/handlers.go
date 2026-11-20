@@ -183,10 +183,10 @@ func parseGitHubLastPage(link string) int {
 	return 0
 }
 
-func getNojsLimiter(ip string) *rate.Limiter {
+func getNojsLimiter(key string) *rate.Limiter {
 	nojsLimitersMu.Lock()
 	defer nojsLimitersMu.Unlock()
-	if e, ok := nojsLimiters[ip]; ok {
+	if e, ok := nojsLimiters[key]; ok {
 		e.lastSeen = time.Now()
 		return e.limiter
 	}
@@ -195,7 +195,7 @@ func getNojsLimiter(ip string) *rate.Limiter {
 		limiter:  rate.NewLimiter(rate.Every(10*time.Second), 3),
 		lastSeen: time.Now(),
 	}
-	nojsLimiters[ip] = e
+	nojsLimiters[key] = e
 	return e.limiter
 }
 
@@ -466,7 +466,7 @@ func EstimateHandler(c echo.Context) error {
 	}
 
 	if nojs == "true" {
-		if !getNojsLimiter(c.RealIP()).Allow() {
+		if !getNojsLimiter(ClientKey(c)).Allow() {
 			return c.String(http.StatusTooManyRequests, "Too many requests. Please wait a moment before trying again.")
 		}
 
@@ -1038,8 +1038,9 @@ func GetTransactionHandler(c echo.Context) error {
 	}
 
 	largeTradeCode := largeTradeInviteCode(transaction)
+	largeTradeEligible := !transaction.Done && largeTradeInviteEligible(transaction)
 
-	return views.TransactionPage(transaction, cgPay, largeTradeCode).Render(c.Request().Context(), c.Response())
+	return views.TransactionPage(transaction, cgPay, largeTradeCode, largeTradeEligible).Render(c.Request().Context(), c.Response())
 
 }
 
@@ -1061,12 +1062,42 @@ func largeTradeInviteCode(transaction api.Transaction) string {
 	}
 
 	pair := strings.ToUpper(transaction.Coin1) + "/" + strings.ToUpper(transaction.Coin2)
-	code, err := api.RequestLargeTradeInvite(transaction.CGID, pair, estimates.TradeValue_fiat)
+	code, err := api.RequestLargeTradeInvite(transaction.CGID, pair, transaction.DestinationAddress, estimates.TradeValue_fiat)
 	if err != nil {
 		fmt.Printf("large trade invite: %v\n", err)
 		return ""
 	}
 	return code
+}
+
+// largeTradeInviteEligible reports whether an in-flight trade currently
+// qualifies for a Pro invite (threshold, payout address and pair cap are all
+// checked by Pro), so the page can tell the user to complete it. Failures
+// read as "not eligible".
+func largeTradeInviteEligible(transaction api.Transaction) bool {
+	if transaction.CGID == "" {
+		fmt.Printf("large trade banner: transaction has no CGID (id %s)\n", transaction.Id)
+		return false
+	}
+	if transaction.DestinationAddress == "" {
+		fmt.Printf("large trade banner %s: no DestinationAddress on transaction from API\n", transaction.CGID)
+		return false
+	}
+	estimates, err := api.FetchEstimateFromAPI(transaction.Coin1, transaction.Coin2, transaction.SendAmount, false, transaction.Network1, transaction.Network2)
+	if err != nil {
+		fmt.Printf("large trade banner %s: estimate failed: %v\n", transaction.CGID, err)
+		return false
+	}
+	if estimates.TradeValue_fiat < api.LargeTradeThresholdUSD() {
+		fmt.Printf("large trade banner %s: trade value $%.2f is below threshold $%.2f\n", transaction.CGID, estimates.TradeValue_fiat, api.LargeTradeThresholdUSD())
+		return false
+	}
+	pair := strings.ToUpper(transaction.Coin1) + "/" + strings.ToUpper(transaction.Coin2)
+	ok := api.CheckLargeTradeInviteEligible(transaction.CGID, pair, transaction.DestinationAddress, estimates.TradeValue_fiat)
+	if !ok {
+		fmt.Printf("large trade banner %s: Pro says not eligible (value $%.2f, pair %s)\n", transaction.CGID, estimates.TradeValue_fiat, pair)
+	}
+	return ok
 }
 
 func getCoinName(ticker string) string {
@@ -1637,6 +1668,9 @@ func AffiliateLoginHandler(c echo.Context) error {
 		password := c.FormValue("password")
 
 		var errors []string
+		if !verifyCap(c.Request().Context(), c.FormValue("cap-token")) {
+			errors = append(errors, "Captcha verification failed. Please try again.")
+		}
 		if username == "" {
 			errors = append(errors, "Username is required.")
 		}
@@ -1693,7 +1727,7 @@ func AffiliateRegisterHandler(c echo.Context) error {
 		}
 
 		if len(errors) > 0 {
-			return views.AffiliateRegister(errors, "", "").Render(c.Request().Context(), c.Response())
+			return views.AffiliateRegister(errors, "", "", CapEndpoint()).Render(c.Request().Context(), c.Response())
 		}
 
 		err := api.RegisterAffiliate(username, email, password, "")
@@ -1703,13 +1737,13 @@ func AffiliateRegisterHandler(c echo.Context) error {
 			} else {
 				errors = append(errors, "Registration failed: "+err.Error())
 			}
-			return views.AffiliateRegister(errors, "", "").Render(c.Request().Context(), c.Response())
+			return views.AffiliateRegister(errors, "", "", CapEndpoint()).Render(c.Request().Context(), c.Response())
 		}
 
-		return views.AffiliateRegister(nil, "Registration successful! You can now log in.", "").Render(c.Request().Context(), c.Response())
+		return views.AffiliateRegister(nil, "Registration successful! You can now log in.", "", CapEndpoint()).Render(c.Request().Context(), c.Response())
 	}
 
-	return views.AffiliateRegister(nil, "", "").Render(c.Request().Context(), c.Response())
+	return views.AffiliateRegister(nil, "", "", CapEndpoint()).Render(c.Request().Context(), c.Response())
 }
 
 func AffiliateDashboardHandler(c echo.Context) error {

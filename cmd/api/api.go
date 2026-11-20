@@ -71,9 +71,9 @@ type Estimates struct {
 	CGSinStable     bool `json:"CGSinStable"`
 	EstimateId      int  `json:"estimateId,omitempty"`
 	// Set by the web layer for template use.
-	Coin1   string
-	Coin2   string
-	Amount  float64
+	Coin1    string
+	Coin2    string
+	Amount   float64
 	Network1 string
 	Network2 string
 }
@@ -129,27 +129,30 @@ type TransactionResponse struct {
 	Transaction Transaction `json:"transaction"`
 }
 type Transaction struct {
-	Coin1          string    `json:"Coin1,omitempty"`
-	Coin2          string    `json:"Coin2,omitempty"`
-	Network1       string    `json:"Network1,omitempty"`
-	Network2       string    `json:"Network2,omitempty"`
-	Address        string    `json:"Address,omitempty"`
-	EstimateAmount float64   `json:"EstimateAmount,omitempty"`
-	ReceiveAmount  float64   `json:"ReceiveAmount,omitempty"`
-	Provider       string    `json:"Provider,omitempty"`
-	Id             string    `json:"Id,omitempty"`
-	SendAmount     float64   `json:"SendAmount,omitempty"`
-	Track          string    `json:"Track,omitempty"`
-	Status         string    `json:"Status,omitempty"`
-	KYC            string    `json:"KYC,omitempty"`
-	Token          string    `json:"Token,omitempty"`
-	Done           bool      `json:"Done,omitempty"`
-	CGID           string    `json:"CGID,omitempty"`
-	CreatedAt      time.Time `json:"createdAt"`
-	Affiliate      string    `json:"Affiliate,omitempty"`
-	Memo           string    `json:"Memo,omitempty"`
-	IsPayment      bool      `json:"payment,omitempty"`
-	EstimateId     int       `json:"estimateId,omitempty"`
+	Coin1    string `json:"Coin1,omitempty"`
+	Coin2    string `json:"Coin2,omitempty"`
+	Network1 string `json:"Network1,omitempty"`
+	Network2 string `json:"Network2,omitempty"`
+	Address  string `json:"Address,omitempty"`
+	// DestinationAddress is the customer's payout address (Address above is
+	// the provider's deposit address).
+	DestinationAddress string    `json:"DestinationAddress,omitempty"`
+	EstimateAmount     float64   `json:"EstimateAmount,omitempty"`
+	ReceiveAmount      float64   `json:"ReceiveAmount,omitempty"`
+	Provider           string    `json:"Provider,omitempty"`
+	Id                 string    `json:"Id,omitempty"`
+	SendAmount         float64   `json:"SendAmount,omitempty"`
+	Track              string    `json:"Track,omitempty"`
+	Status             string    `json:"Status,omitempty"`
+	KYC                string    `json:"KYC,omitempty"`
+	Token              string    `json:"Token,omitempty"`
+	Done               bool      `json:"Done,omitempty"`
+	CGID               string    `json:"CGID,omitempty"`
+	CreatedAt          time.Time `json:"createdAt"`
+	Affiliate          string    `json:"Affiliate,omitempty"`
+	Memo               string    `json:"Memo,omitempty"`
+	IsPayment          bool      `json:"payment,omitempty"`
+	EstimateId         int       `json:"estimateId,omitempty"`
 }
 
 func SendRequest(url string) ([]byte, error) {
@@ -660,9 +663,9 @@ func GetTransactionFromAPI(id string) (error, Transaction) {
 
 // RequestLargeTradeInvite asks the Pro terminal to mint (or, if this cgid
 // already earned one, re-return) an invite code for a completed trade. The
-// $15k+ threshold and the one-per-day-per-coin-pair cap are enforced on the
+// $15k+ threshold and the one-per-day-per-coin-pair and one-per-payout-address caps are enforced on the
 // Pro side; this call is idempotent per cgid.
-func RequestLargeTradeInvite(cgid string, pair string, tradeValueUSD float64) (string, error) {
+func RequestLargeTradeInvite(cgid string, pair string, address string, tradeValueUSD float64) (string, error) {
 	if LargeTradeAPIKey == "" {
 		return "", fmt.Errorf("large trade invites not configured")
 	}
@@ -670,6 +673,7 @@ func RequestLargeTradeInvite(cgid string, pair string, tradeValueUSD float64) (s
 	payload, err := json.Marshal(map[string]any{
 		"cgid":            cgid,
 		"pair":            pair,
+		"address":         address,
 		"trade_value_usd": tradeValueUSD,
 	})
 	if err != nil {
@@ -704,6 +708,49 @@ func RequestLargeTradeInvite(cgid string, pair string, tradeValueUSD float64) (s
 		return "", fmt.Errorf("large trade invite request failed: %s", resp.Status)
 	}
 	return out.Code, nil
+}
+
+// CheckLargeTradeInviteEligible asks Pro (read-only) whether a trade would
+// currently earn an invite. Any failure reads as "not eligible" so the UI
+// never promises a code it can't deliver.
+func CheckLargeTradeInviteEligible(cgid, pair, address string, tradeValueUSD float64) bool {
+	if LargeTradeAPIKey == "" {
+		fmt.Printf("large trade check %s: LARGE_TRADE_API_KEY is not set\n", cgid)
+		return false
+	}
+	payload, err := json.Marshal(map[string]any{
+		"cgid":            cgid,
+		"pair":            pair,
+		"address":         address,
+		"trade_value_usd": tradeValueUSD,
+	})
+	if err != nil {
+		return false
+	}
+	req, err := http.NewRequest("POST", ProURL+"/api/large-trade-invite/check", bytes.NewReader(payload))
+	if err != nil {
+		return false
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+LargeTradeAPIKey)
+	resp, err := (&http.Client{Timeout: 5 * time.Second}).Do(req)
+	if err != nil {
+		fmt.Printf("large trade check %s: request to Pro failed: %v\n", cgid, err)
+		return false
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		fmt.Printf("large trade check %s: Pro returned %s (is Pro deployed with /api/large-trade-invite/check?)\n", cgid, resp.Status)
+		return false
+	}
+	var out struct {
+		Eligible bool `json:"eligible"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		fmt.Printf("large trade check %s: bad response from Pro: %v\n", cgid, err)
+		return false
+	}
+	return out.Eligible
 }
 
 type AffiliateApplication struct {
