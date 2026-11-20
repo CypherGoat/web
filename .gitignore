@@ -10,3 +10,6 @@ cmd/tmp/
 
 .codex
 hunt*.json
+
+DESIGN_AUDIT.md
+/docs/
